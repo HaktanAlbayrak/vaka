@@ -1,0 +1,29 @@
+@model (string[] States, string Summary)
+@functions {
+    private static string Tone(string state) => state switch
+    {
+        "done" => "border-ok bg-ok",
+        "short" => "border-warn bg-warn",
+        "running" => "border-accent bg-accent",
+        "cut" => "border-danger bg-danger",
+        _ => "border-dashed border-line-strong"
+    };
+
+    private static string Label(string state) => state switch
+    {
+        "done" => "Tamamlandı",
+        "short" => "Tamamlandı - süre altında",
+        "running" => "Devam ediyor",
+        "cut" => "Kesildi",
+        _ => "Bekliyor"
+    };
+}
+<div class="min-w-0">
+    <ol class="flex gap-1" aria-label="Faz durumları">
+        @for (var index = 0; index < Model.States.Length; index++)
+        {
+            <li class="h-3 flex-1 border-2 @Tone(Model.States[index])"><span class="sr-only">Faz @(index + 1): @Label(Model.States[index])</span></li>
+        }
+    </ol>
+    <p class="mt-1.5 text-sm font-semibold">@Model.Summary</p>
+</div>

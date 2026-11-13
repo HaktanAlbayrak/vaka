@@ -1,0 +1,358 @@
+@{
+    ViewData["Title"] = "Yürütme";
+    ViewData["Lead"] = "Sıradaki adımı PIN'inizle başlatın ve bitirin.";
+    ViewData["NavKey"] = "run";
+    ViewData["DemoRole"] = Roles.Operator;
+
+    var scene = Context.Request.Query["scene"].ToString();
+    var demoRole = Context.Request.Query["demo"].ToString();
+    var demoSuffix = demoRole == "" ? "" : "?demo=" + demoRole;
+    var isOpened = scene == "opened";
+    var isBreak = scene == "break";
+    var isBetween = scene == "between";
+    var commandId = "7c1f3e2a-5b84-4d0e-9a37-1f2c6d8e4b90";
+
+    var phases = new List<(string Title, string State, string Steps, string? Net, string? Minimum, int? Value, int? Max, int? LiveSeconds, bool Paused)>();
+    if (isOpened)
+    {
+        phases.Add(("Hazırlık ve söküm", "waiting", "0 / 3 adım", null, "10 dk", null, null, null, false));
+        phases.Add(("Ön durulama", "waiting", "0 / 3 adım", null, "15 dk", null, null, null, false));
+        phases.Add(("Deterjanlı yıkama", "waiting", "0 / 4 adım", null, "20 dk", null, null, null, false));
+        phases.Add(("Dezenfeksiyon ve montaj", "waiting", "0 / 3 adım", null, "15 dk", null, null, null, false));
+    }
+    else
+    {
+        var liveSeconds = isBetween ? 1010 : 875;
+        phases.Add(("Hazırlık ve söküm", "done", "3 / 3 adım", "12:48", "10 dk", 600, 600, null, false));
+        phases.Add(("Ön durulama", "short", "3 / 3 adım", "11:05", "15 dk", 665, 900, null, false));
+        phases.Add(("Deterjanlı yıkama", "running", isBetween ? "2 / 4 adım" : "1 / 4 adım", isBetween ? "16:50" : "14:35", "20 dk", liveSeconds, 1200, liveSeconds, isBreak));
+        phases.Add(("Dezenfeksiyon ve montaj", "waiting", "0 / 3 adım", null, "15 dk", null, null, null, false));
+    }
+
+    var steps = new List<(string No, string Title, string? Hint, string State, string? Meta)>();
+    if (isOpened)
+    {
+        steps.Add(("1.1", "Besleme hattını boşalt", "Hat üzerindeki ürünü toplama kabına al, vanaları kapat.", "ready", null));
+        steps.Add(("1.2", "Ürün temas parçalarını sök", null, "waiting", null));
+        steps.Add(("1.3", "Parçaları yıkama sepetine yerleştir", null, "waiting", null));
+    }
+    else
+    {
+        steps.Add(("3.1", "Deterjan çözeltisini hazırla", null, "done", "Süre 06:10 · Efor 12:20 · Alkali deterjan, lot DT2411-08"));
+        steps.Add(("3.2", "Çözeltiyi devridaimle yıka", "Devridaim pompasını çalıştır, çözelti sıcaklığını ve basıncı kontrol et.", isBetween ? "done" : "running", isBetween ? "Süre 11:08 · Efor 22:16" : null));
+        steps.Add(("3.3", "Temas yüzeylerini fırçala", "Fırçayı yalnız bu makineye ayrılmış kaptan al.", isBetween ? "ready" : "waiting", null));
+        steps.Add(("3.4", "Yıkama sonrası kontrol et", null, "waiting", null));
+    }
+    var phaseHeading = isOpened ? "Faz 1: Hazırlık ve söküm" : "Faz 3: Deterjanlı yıkama";
+
+    var events = isOpened
+        ? new[] { ("09:12", "Kayıt açıldı", "Murat Çelik") }
+        : new[]
+        {
+            (isBetween ? "11:00" : "10:49", isBetween ? "Adım 3.2 bitti" : "Adım 3.2 başladı", "Murat Çelik"),
+            ("10:41", "Adım 3.1 bitti", "Murat Çelik"),
+            ("10:35", "Adım 3.1 başladı", "Burak Yıldız"),
+            ("10:34", "Faz 2 bitti, süre altında", "Murat Çelik"),
+        };
+
+    var guide = new (string Group, (string Key, string Text)[] Items)[]
+    {
+        ("Kayıt", new[]
+        {
+            ("record.open", "Kayıt oluşturuldu, hiçbir adım başlamadı. Makine kilit bitişine kadar tutulur."),
+            ("record.running", "En az bir adım başladı. Makine süresiz kilitli."),
+            ("record.held", "Yönetici bekletti. Makine kilitli, sahip yeni iş açabilir."),
+            ("record.done", "Tüm fazlar tamamlandı."),
+            ("record.expired", "Kilit bitişine kadar başlanmadı. Makine serbest."),
+            ("record.cancelled", "Hatalı kayıt, temizlik sayılmaz."),
+            ("record.aborted", "Başlanmış ama sürdürülemeyen iş. Makine temiz sayılmaz."),
+        }),
+        ("Faz", new[]
+        {
+            ("phase.waiting", "Fazın ilk adımı başlamadı."),
+            ("phase.running", "Fazın ilk adımı başladı."),
+            ("phase.done", "Son adım bitti, net süre minimuma ulaştı ya da minimum tanımsız."),
+            ("phase.short", "Son adım gerekçeyle bitirildi, net süre minimumun altında."),
+            ("phase.cut", "Kayıt iptal edildi ya da yarıda kapatıldı."),
+        }),
+        ("Adım", new[]
+        {
+            ("step.waiting", "Önceki adım bitmeden başlatılamaz."),
+            ("step.ready", "Sıra bu adımda, başlatılabilir."),
+            ("step.running", "Başlatıldı. Mola açıkken de bu durumda kalır, sayaç durur."),
+            ("step.done", "PIN ile bitirildi."),
+            ("step.cut", "Kayıt sonlandırıldığı için kesildi."),
+        }),
+        ("Mola", new[]
+        {
+            ("break.open", "Kayıtta çalışma durur. Yalnız başlatan kişi ya da yönetici bitirir."),
+            ("break.closed", "Mola bitti, sayaçlar devam eder."),
+        }),
+        ("Talep", new[]
+        {
+            ("request.pending", "Yönetici kararını bekliyor."),
+            ("request.approved", "Yönetici onayladı, işlem uygulandı."),
+            ("request.rejected", "Yönetici reddetti."),
+            ("request.withdrawn", "Talebi açan kişi geri çekti."),
+            ("request.invalid", "Kayıt başka yoldan kapandı."),
+        }),
+        ("Tür ve lot", new[]
+        {
+            ("kind.planned", "Planlı temizlik, saha defteri referansı verilir."),
+            ("kind.emergency", "Acil müdahale temizliği, saha defteri referansı yoktur."),
+            ("lot.expired", "Son kullanma tarihi bugünden önce."),
+        }),
+    };
+}
+
+@if (scene == "loading")
+{
+    <div role="status" aria-busy="true">
+        <p class="mb-4 font-semibold text-muted">Yükleniyor…</p>
+        <div class="space-y-5" aria-hidden="true">
+            <div class="panel space-y-3 p-5">
+                <div class="skeleton h-7 w-2/5"></div>
+                <div class="skeleton h-4 w-3/5"></div>
+            </div>
+            <div class="grid gap-2 md:grid-cols-4 md:gap-0">
+                <div class="skeleton h-28 w-full"></div>
+                <div class="skeleton h-28 w-full"></div>
+                <div class="skeleton h-28 w-full"></div>
+                <div class="skeleton h-28 w-full"></div>
+            </div>
+            <div class="skeleton h-40 w-full"></div>
+            <div class="skeleton h-24 w-full"></div>
+        </div>
+    </div>
+}
+else if (scene == "empty")
+{
+    <partial name="_State" model='("empty", "inbox", "Açık işiniz yok", "Şu an sahibi olduğunuz ya da görevli olduğunuz açık kayıt bulunmuyor. Temizliğe başlamak için yeni kayıt açın.", "Yeni kayıt aç", "/prototype/new-record" + demoSuffix)' />
+}
+else if (scene == "error")
+{
+    <partial name="_State" model='("error", "triangle-alert", "Kayıt yüklenemedi", "Kayıt sunucudan alınamadı. Yaptığınız işlem kaybolmaz. Bağlantıyı kontrol edip yeniden deneyin ya da işlerinize dönün.", "Yeniden dene", Context.Request.Path.ToString() + "?scene=error")' />
+}
+else
+{
+    <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_24rem]">
+        <div class="min-w-0 space-y-5">
+            <section class="panel" aria-labelledby="record-title">
+                <div class="panel-body space-y-4">
+                    <div class="flex flex-wrap items-start justify-between gap-3">
+                        <div class="min-w-0">
+                            <h2 id="record-title" class="sr-only">Kayıt bilgisi</h2>
+                            <p class="record-no text-xl md:text-2xl">GBZ-H1-DLM01-P2026-17</p>
+                            <p class="mt-1 text-lg font-semibold">DLM01 Dolum makinesi</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <partial name="_Badge" model='"kind.planned"' />
+                            <partial name="_Badge" model='isOpened ? "record.open" : "record.running"' />
+                        </div>
+                    </div>
+                    <dl class="kv grid-cols-2 md:grid-cols-4">
+                        <div><dt>Yer</dt><dd>Gebze · Hat 1</dd></div>
+                        <div><dt>Tip</dt><dd>Ürün değişimi temizliği, versiyon 4</dd></div>
+                        <div><dt>Sahip</dt><dd>Murat Çelik</dd></div>
+                        <div><dt>Saha defteri</dt><dd class="mono">SD-2026-0412</dd></div>
+                    </dl>
+                </div>
+            </section>
+
+            @if (isOpened)
+            {
+                <div class="notice notice-info">
+                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#lock" /></svg>
+                    <div>
+                        <p class="font-semibold">Makine 11:15'e kadar sizin için kilitli</p>
+                        <p class="mt-0.5 text-sm">İlk adım bu saate kadar başlatılmazsa kayıt Zaman aşımı olur ve makine serbest kalır.</p>
+                    </div>
+                </div>
+            }
+
+            @if (isBreak)
+            {
+                <section class="panel border-warn" aria-labelledby="break-title">
+                    <div class="panel-head border-warn">
+                        <h2 id="break-title" class="panel-title">Kayıtta mola açık</h2>
+                        <partial name="_Badge" model='"break.open"' />
+                    </div>
+                    <div class="panel-body space-y-4">
+                        <p>Çalışma durdu. Faz ve adım sayaçları ilerlemez; devam eden adım <strong>Devam ediyor</strong> olarak kalır. Molayı yalnız başlatan kişi ya da yönetici bitirir.</p>
+                        <dl class="kv grid-cols-2 md:grid-cols-3">
+                            <div><dt>Başlatan</dt><dd>Murat Çelik</dd></div>
+                            <div><dt>Başlangıç</dt><dd class="mono">11:02</dd></div>
+                            <div>
+                                <dt>Mola süresi</dt>
+                                <dd class="mono"><time data-live-counter data-seconds="252" data-paused="false">04:12</time></dd>
+                            </div>
+                        </dl>
+                        <form method="post" class="grid gap-3 sm:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] sm:items-end" data-validate>
+                            <input type="hidden" name="CommandId" value="@commandId" />
+                            <partial name="_PinInput" model='("pin-break", "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                            <button type="submit" name="Action" value="EndBreak" class="btn btn-primary btn-lg" data-requires-online>
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#coffee" /></svg>
+                                Molayı bitir
+                            </button>
+                        </form>
+                    </div>
+                </section>
+            }
+
+            <section aria-labelledby="phases-title">
+                <h2 id="phases-title" class="mb-3 text-xl font-bold">Fazlar</h2>
+                <partial name="_PhaseStrip" model="phases" />
+            </section>
+
+            <section aria-labelledby="steps-title">
+                <h2 id="steps-title" class="mb-3 text-xl font-bold">@phaseHeading</h2>
+                <ol class="step-list">
+                    @foreach (var step in steps)
+                    {
+                        var isRunning = step.State == "running";
+                        var isReady = step.State == "ready";
+                        <li class="step" data-state="@step.State">
+                            <span class="step-stamp">@step.No</span>
+                            <div class="min-w-0 space-y-2">
+                                <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                                    <h3 class="text-lg font-bold leading-tight">@step.Title</h3>
+                                    <partial name="_Badge" model='"step." + step.State' />
+                                </div>
+                                @if (step.Hint is not null && (isRunning || isReady))
+                                {
+                                    <p class="max-w-prose text-muted">@step.Hint</p>
+                                }
+                                @if (step.State == "waiting")
+                                {
+                                    <p class="text-sm text-muted">Önceki adım bitmeden başlatılamaz.</p>
+                                }
+                                @if (step.Meta is not null)
+                                {
+                                    <p class="text-sm">@step.Meta</p>
+                                }
+                                @if (isRunning)
+                                {
+                                    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1">
+                                        <span class="live-dot" data-paused="@(isBreak ? "true" : "false")" aria-hidden="true"></span>
+                                        <time class="step-clock" data-live-counter data-seconds="522" data-paused="@(isBreak ? "true" : "false")">08:42</time>
+                                        <span class="text-sm text-muted">@(isBreak ? "Sayaç durdu, mola açık" : "Başladı 10:49")</span>
+                                    </div>
+                                    <ul class="flex flex-wrap gap-2" aria-label="Görevliler">
+                                        <li class="chip">Murat Çelik, sahip</li>
+                                        <li class="chip">Burak Yıldız, görevli</li>
+                                    </ul>
+                                }
+                            </div>
+
+                            @if (isRunning && isBreak)
+                            {
+                                <div class="step-action">
+                                    <button type="button" class="btn btn-primary btn-lg" disabled aria-describedby="break-reason">Adımı bitir</button>
+                                    <p id="break-reason" class="text-sm font-semibold text-warn">Mola açıkken adım bitirilemez. Önce molayı bitirin.</p>
+                                </div>
+                            }
+                            else if (isRunning || isReady)
+                            {
+                                var finishLabel = isRunning ? "Adımı bitir" : "Adımı başlat";
+                                var finishValue = isRunning ? "FinishStep" : "StartStep";
+                                <form method="post" class="step-action" data-validate>
+                                    <input type="hidden" name="CommandId" value="@commandId" />
+                                    <partial name="_PinInput" model='("pin-" + step.No.Replace(".", "-"), "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                                    <div class="grid gap-2">
+                                        <button type="submit" name="Action" value="@finishValue" class="btn btn-primary btn-lg" data-requires-online>
+                                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#@(isRunning ? "check" : "play")" /></svg>
+                                            @finishLabel
+                                        </button>
+                                        @if (!isOpened)
+                                        {
+                                            <button type="submit" name="Action" value="StartBreak" class="btn btn-secondary" data-requires-online>
+                                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#coffee" /></svg>
+                                                Mola ver
+                                            </button>
+                                        }
+                                    </div>
+                                </form>
+                            }
+                        </li>
+                    }
+                </ol>
+            </section>
+        </div>
+
+        <aside class="min-w-0 space-y-5" aria-label="Kayıt ayrıntısı">
+            <section class="panel" aria-labelledby="material-title">
+                <div class="panel-head"><h2 id="material-title" class="panel-title">Malzeme</h2></div>
+                <dl class="kv panel-body">
+                    <div><dt>Malzeme</dt><dd>Alkali deterjan</dd></div>
+                    <div><dt>Lot</dt><dd class="mono">DT2411-08</dd></div>
+                    <div><dt>Son kullanma</dt><dd class="mono">30.04.2027</dd></div>
+                </dl>
+            </section>
+
+            <section class="panel" aria-labelledby="people-title">
+                <div class="panel-head"><h2 id="people-title" class="panel-title">Görevliler</h2></div>
+                <ul class="divide-y divide-line">
+                    <li class="flex items-center justify-between gap-3 px-4 py-3 md:px-5">
+                        <span class="min-w-0"><span class="block truncate font-semibold">Murat Çelik</span><span class="mono text-xs text-muted">Sicil 30517</span></span>
+                        <span class="chip">Sahip</span>
+                    </li>
+                    @if (!isOpened)
+                    {
+                        <li class="flex items-center justify-between gap-3 px-4 py-3 md:px-5">
+                            <span class="min-w-0"><span class="block truncate font-semibold">Burak Yıldız</span><span class="mono text-xs text-muted">Sicil 30622</span></span>
+                            <span class="chip">Görevli</span>
+                        </li>
+                    }
+                </ul>
+            </section>
+
+            <section class="panel" aria-labelledby="events-title">
+                <div class="panel-head"><h2 id="events-title" class="panel-title">Son olaylar</h2></div>
+                <ol class="divide-y divide-line">
+                    @foreach (var item in events)
+                    {
+                        <li class="grid grid-cols-[3rem_minmax(0,1fr)] gap-3 px-4 py-3 md:px-5">
+                            <span class="mono text-sm font-bold">@item.Item1</span>
+                            <span class="min-w-0 text-sm"><span class="block font-semibold">@item.Item2</span><span class="text-muted">@item.Item3</span></span>
+                        </li>
+                    }
+                </ol>
+            </section>
+        </aside>
+    </div>
+
+    <details class="panel mt-8">
+        <summary class="panel-head cursor-pointer text-lg font-bold">Durum sözlüğü ve PIN bileşeni</summary>
+        <div class="panel-body space-y-8">
+            <div class="grid gap-x-8 gap-y-6 md:grid-cols-2">
+                @foreach (var group in guide)
+                {
+                    <section aria-label="@group.Group durumları">
+                        <h3 class="mb-2 text-lg font-bold">@group.Group</h3>
+                        <dl class="space-y-2">
+                            @foreach (var entry in group.Items)
+                            {
+                                <div class="grid items-start gap-x-3 gap-y-1 sm:grid-cols-[12rem_minmax(0,1fr)]">
+                                    <dt><partial name="_Badge" model="entry.Key" /></dt>
+                                    <dd class="text-sm">@entry.Text</dd>
+                                </div>
+                            }
+                        </dl>
+                    </section>
+                }
+            </div>
+            <div class="grid gap-6 md:grid-cols-2">
+                <div>
+                    <h3 class="mb-2 text-lg font-bold">PIN doğrulama</h3>
+                    <partial name="_PinInput" model='("pin-demo-verify", "PIN", "verify", (int?)null, (string?)null, (string?)null)' />
+                </div>
+                <div>
+                    <h3 class="mb-2 text-lg font-bold">PIN belirleme</h3>
+                    <partial name="_PinInput" model='("pin-demo-set", "Yeni PIN", "set", (int?)6, (string?)null, "PIN tüm haneleri aynı olamaz.")' />
+                </div>
+            </div>
+        </div>
+    </details>
+}
+
+<partial name="_DemoBar" model='("scene", scene, new (string Value, string Text)[] { ("", "Devam ediyor"), ("between", "Adımlar arası"), ("break", "Mola açık"), ("opened", "Açıldı"), ("empty", "Boş"), ("loading", "Yükleniyor"), ("error", "Hata") })' />

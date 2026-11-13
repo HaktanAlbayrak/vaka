@@ -1,0 +1,28 @@
+@using ChartRow = (string Label, int Planned, int Emergency)
+@model (string Caption, ChartRow[] Rows)
+@{
+    var maxTotal = Model.Rows.Max(row => row.Planned + row.Emergency);
+}
+<figure>
+    <figcaption class="mb-3 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
+        <span class="font-semibold">@Model.Caption</span>
+        <span class="inline-flex items-center gap-1.5"><svg width="12" height="12" aria-hidden="true"><rect width="12" height="12" class="fill-chart-1" /></svg>Planlı</span>
+        <span class="inline-flex items-center gap-1.5"><svg width="12" height="12" aria-hidden="true"><rect width="12" height="12" class="fill-chart-2" /></svg>Acil</span>
+    </figcaption>
+    <ul class="grid grid-cols-[4.25rem_minmax(0,1fr)_auto] gap-x-3 gap-y-1.5">
+        @foreach (var row in Model.Rows)
+        {
+            var plannedWidth = row.Planned * 100.0 / maxTotal;
+            var emergencyWidth = row.Emergency * 100.0 / maxTotal;
+            <li class="col-span-3 grid grid-cols-subgrid items-center text-sm">
+                <span class="font-semibold">@row.Label</span>
+                <svg viewBox="0 0 100 12" preserveAspectRatio="none" class="h-5 w-full" aria-hidden="true">
+                    <rect x="0" y="0" width="100" height="12" class="fill-sunken" />
+                    <rect x="0" y="0" width="@plannedWidth.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)" height="12" class="fill-chart-1" />
+                    <rect x="@plannedWidth.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)" y="0" width="@emergencyWidth.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)" height="12" class="fill-chart-2" />
+                </svg>
+                <span class="mono whitespace-nowrap text-right font-bold">@(row.Planned + row.Emergency)<span class="font-normal text-muted"> (@row.Emergency acil)</span></span>
+            </li>
+        }
+    </ul>
+</figure>

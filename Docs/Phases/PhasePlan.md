@@ -9,7 +9,7 @@
 | Faz | Başlık | Kullanıcının göreceği çıktı | Paralel | Durum |
 |---|---|---|---|---|
 | 0 | Analiz ve faz planı | Brief, Kusur, Requirements, plan | - | TAMAMLANDI (2026-11-13) |
-| T | Tasarım DNA'sı ve kabuk prototipi | DNA kartı, demo veriyle 5 prototip sayfa | Hayır | BEKLİYOR |
+| T | Tasarım DNA'sı ve kabuk prototipi | DNA kartı, demo veriyle 5 prototip sayfa | Hayır | TESLİM ALINDI (tur 3, 2026-11-13) |
 | 1 | Giriş, PIN, kullanıcılar ve Süper admin | Giriş, ilk giriş, PIN, kullanıcı yönetimi, Süper admin | Evet | BEKLİYOR |
 | 2 | Tesis yapısı, vardiya ve malzeme | Tesis, hat, makine, vardiya, malzeme ve lot ekranları | Evet | BEKLİYOR |
 | 3 | Temizlik tipi ve prosedür versiyonu | Tip, makine eşleme, taslak düzenleyici, yayınlama | Evet | BEKLİYOR |
@@ -158,11 +158,14 @@ Onay `Decisions.md`'ye işlenir, ardından `Docs/Local/ProjeOzeti.md` açılır.
 - [ ] TK3: qa-tester her prototip sayfanın 1440, 768 ve 390 px görüntüsünü alır; özgünlük kapısı (`DesignDna.md §5`) geçer, anti-slop taraması temiz.
 - [ ] TK4: Yürütme ve İşlerim prototipleri 360 px'te yatay kaydırmasız; birincil düğmeler en az 44 px.
 - [ ] TK5: Yürütme prototipinde Brief §6'daki kayıt, faz ve adım durumlarının her biri en az bir kez görünür ve metinle ayrılır; aynı rozet biçimi tüm sayfalarda.
-- [ ] TK6: Kabukta kişi adı, sicil no yeri ve "Kullanıcı değiştir" 390 ve 1440 px'te görünür; tarayıcı çevrimdışı moduna alınınca bağlantı göstergesi değişir.
+- [ ] TK6: Kabukta kişi adı, sicil no yeri ve "Kullanıcı değiştir" 360, 390, 768 ve 1440 px'te çekmece ya da menü açılmadan görünür; "Kullanıcı değiştir" görünür metin etiketi taşır, hedefi en az 44 px ve tek dokunuşla tetiklenir (PL-20); tarayıcı çevrimdışı moduna alınınca bağlantı göstergesi değişir.
 - [ ] TK7: Açık ve koyu temada metin kontrastı AA; `prefers-reduced-motion` açıkken hareket kapanır (MOTION > 3 ise).
 - [ ] TK8: Kullanıcı DNA kartını ve görüntüleri onaylar; analist onayı `Decisions.md`'ye işler. Onaysız Faz 1 başlamaz.
 - [ ] TK9: `Authorization/Roles.cs` dört tekil ve dört birleşik sabiti içerir; birleşik sabitlerde tekil sabit dışında rol metni yoktur; projede `Roles.cs` dışında rol adı metni geçmez.
 **Kapsam dışı:** Kimlik doğrulama, veritabanı, gerçek veri.
+
+**Sonuç (2026-11-13):** TESLİM ALINDI (tur 3; tur 1 İADE, tur 3 kullanıcı onaylı ek tur, PL-22). TK8 onayı O-02. Ertelenen DÜŞÜK bulgular
+Faz 1, 4 ve 5'in "Faz T'den devreden" satırlarında (PL-21, PL-23). Rapor: `Docs/Delivery/Faz-T-Teslim.md`.
 
 ---
 
@@ -228,6 +231,12 @@ Tüm `/users` istekleri SK-9 kapsamına göre serviste kontrol edilir; kapsam d�
 - [ ] K12a: Ayar tablosu beş ayarı (medya boyutu fotoğraf ve video ayrı) ve boş değişiklik geçmişi tablosunu içerir; seed değerleri Requirements §9'da kullanıcının verdiği değerlerdir.
 - [ ] K13: Operatör ve Yönetici rollerine birlikte sahip kullanıcı iki rolün menüsünü birlikte görür (K-29).
 - [ ] K14: Prototip kabuğu gerçek kabukla değişmiştir; prototip sayfaları Development'ta açılmaya devam eder (PL-10).
+
+**Faz T'den devreden (PL-21, PL-23):**
+
+- [ ] T-B15 (BE): Genel antiforgery filtresi etkin; G5 bu fazın tüm POST'larında 400 verir; prototip action'ları `[HttpGet]` ya da token doğrulayan biçimdedir.
+- [ ] T-B16 (FE): Production'da oturumsuz açılan `/error/404` ve `/error/403` sayfalarında demo kişi adı, sicil no ve `/prototype/*` bağlantısı yoktur (K14 ile).
+- [ ] T-B21 (FE): `Docs/Design/Dna.md` veri dili satırındaki kart sütun sayısı (768 px altı, 768-1279 px) ve tablo satır yüksekliği uygulamayla aynıdır ya da uygulama karttakine uyar; E-03 tablosu bu satıra göre kurulur.
 
 **Kapsam dışı:** Kullanıcıya tesis ya da yönetici bağı (K-20, K-40), kurumsal dizin, parola karmaşıklık politikası iş biriminden gelmedikçe ASP.NET varsayılanı,
 Sistem ayarları ekranı (Faz 9), Süper admin hesabının uygulama dışından kurtarılması.
@@ -411,6 +420,11 @@ Yürütme ekranı yalnız Operatör'e açıktır; Yönetici ve Denetçi kaydı F
 - [ ] K19: Aktif kaydı olan makine kullanımdan kaldırılamaz ve tipi pasifleştirilemez; sahibi pasifleştirilemez; ekranlar engelleyen kaydı bağlantıyla listeler (BR-35, BR-36).
 - [ ] K20: Operatör `/` adresinde `/my-work`'e yönlenir; aktif kaydı varsa kart numara, makine, durum ve kilit bitişiyle görünür; Yönetici rolü tek başına olan kullanıcı `/records/create` ve `/my-work` için 403 alır (K-29).
 
+**Faz T'den devreden (PL-21, PL-23):**
+
+- [ ] T-B14 (BE, FE): Süre biçimleyicinin çıktısında rakam ve birim ayrı işaretlenir; ekranda yalnız rakam mono, birim sans yazılır.
+- [ ] T-B22 (FE): Yürütme ekranı kayıt başlığında 1024-1279 px'te iki ray açıkken alan değerleri en çok iki satıra bölünür; saha referansı ve kayıt no satır içinde bölünmez.
+
 **Kapsam dışı:** Adım yürütme (Faz 5), kayıt detayı ve listesi (Faz 6), acil kayıt (Faz 8).
 
 ---
@@ -484,6 +498,10 @@ adım, görevli ve mola servisleri, `Services/DurationCalculator.cs`, `ViewModel
 - [ ] K19: QA kopyasında dolu adım başlangıç zamanı SQL UPDATE ile değiştirilemez (BR-28).
 - [ ] K20: `IDurationCalculator`'da SH-17, SH-01, SH-02, SH-03, SH-04, SH-06, SH-07, SH-08, SH-09, SH-11, SH-12, SH-14 kimliklerinin her biri formülüyle XML yorumunda bulunur.
 - [ ] K21: Adımın fotoğrafı ve videosu yürütme ekranında açılır; yürütme ekranı 360 px'te yatay kaydırmasız, başlat ve bitir 44 px (FR-06, NFR-04).
+
+**Faz T'den devreden (PL-23):**
+
+- [ ] T-B20 (FE): Mola panelindeki ve mola ekranındaki "Molayı bitir" 320-1920 px'te tek satır ve 56 px yüksekliğindedir; adım eylem düğmeleriyle aynı ızgarayı kullanır.
 
 **Kapsam dışı:** Yöneticinin molayı bitirmesi ve beklemeye alma (Faz 7), kayıt detayı (Faz 6), kişi düzeyi mola ve adımın ayrıca duraklatılması (K-39, K-21).
 

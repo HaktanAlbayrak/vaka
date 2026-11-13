@@ -9,6 +9,7 @@
 | Tarih | Kimlik | Karar | Durum |
 |---|---|---|---|
 | 2026-11-13 | O-01 | Faz 0 planı onaylandı: kullanıcı K-38, K-39, K-40 ve PL-05'i yanıtladı, diğer varsayılanları kabul etti, "sonrasında bir şey kalmıyorsa devam" dedi. Yanıtlar bu dosyaya, Kusur, Brief, Requirements ve PhasePlan'a işlendi; ilk kod fazı Faz T. | Karar |
+| 2026-11-13 | O-02 | Faz T TK8: kullanıcı tasarım dilini (`Docs/Design/Dna.md` kartı ve Faz T tur 2 kanıt görüntüleri, `Docs/Delivery/Evidence/Faz-T/`) onayladı. Faz 1 başlangıç şartı sağlandı. | Karar |
 
 ## İş birimi kararları
 
@@ -86,3 +87,7 @@
 | 2026-11-13 | PL-17 | Sistem ayarları tablosu Faz 1'de oluşur ve seed'den dolar; Sistem ayarları ekranı (E-33) Faz 9'a eklendi (Faz 1-8'de ekran sınırı dolu). Faz 9'a kadar değer değişikliği seed ya da QA kopyasında yapılır. | Karar |
 | 2026-11-13 | PL-18 | Ayar değişikliğinin etkisi: oturum süresi ve PIN deneme sınırı sonraki istekte; PIN uzunluğu yalnız yeni belirlenen PIN'de (mevcut PIN'ler geçerli, PIN doğrulama alanı uzunluk sınırı koymaz); medya boyutu yeni yüklemede; azami kilit süresi aktif planlı tiplerin varsayılan kilit süresinin altına inemez ve açık kayıtların kilit bitişini değiştirmez. | Karar |
 | 2026-11-13 | PL-19 | Adım molası SH-17 eklendi; adım tablosunda adım mola süresi kolonu Faz 4'te önden gelir (PL-02), mola tablosu molanın başladığı anda devam eden adımı tutar (Faz 5). | Karar |
+| 2026-11-13 | PL-20 | Faz T B5: TK6 geçerli, DNA kartı güncellenir. lg altında "Kullanıcı değiştir" çekmece açılmadan görünür, görünür metinli, 44 px, tek dokunuş (Faz 1 K11). Neden: paylaşılan tablette sıradaki kişi önceki oturumda kalırsa işlemleri ona yazılır ve girdiği kendi PIN'i önceki kişinin hatalı deneme sayacını doldurup PIN'ini kilitler (NFR-09, K-42); çekmece adımı bu riski büyütür. | Karar |
+| 2026-11-13 | PL-21 | Faz T tur 1 İADE. Ertelenen DÜŞÜK: B14 süre biçimi (rakam ve birim ayrımı) Faz 4 biçimleyici sözleşmesine, B15 antiforgery Faz 1 G5'e, B16 Production hata sayfası kabuğu Faz 1 K14'e. | Karar |
+| 2026-11-13 | PL-22 | Faz T tur 2'de B18 YÜKSEK ve B19 ORTA kaldı; `Workflow.md §3` gereği kullanıcıya soruldu, kullanıcı B18, B19 ve gerileme ile sınırlı 3. turu onayladı. İki tur sınırının tek seferlik istisnasıdır, kural değişmez. | Karar |
+| 2026-11-13 | PL-23 | Faz T tur 3 TESLİM ALINDI. Yeni DÜŞÜK'ler ertelendi: B21 (`Dna.md` veri dili sütun ve satır ayrıntısı) Faz 1, B22 (yürütme başlık ızgarası) Faz 4, B20 (mola paneli düğmesi) Faz 5; sahibi frontend-engineer. Commit şartı: `Dna.md:21` durum satırı onaylı yazılır. | Karar |

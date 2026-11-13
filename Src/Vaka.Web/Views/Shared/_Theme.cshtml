@@ -1,0 +1,69 @@
+@{
+    const string lightTokens = """
+        --bg: 236 240 242;
+        --surface: 247 249 250;
+        --sunken: 224 230 234;
+        --line: 202 210 216;
+        --line-strong: 120 135 148;
+        --ink: 20 30 40;
+        --muted: 79 92 105;
+        --accent: 33 82 160;
+        --accent-ink: 247 249 250;
+        --accent-soft: 219 230 245;
+        --ok: 22 110 66;
+        --ok-soft: 220 240 229;
+        --warn: 146 74 6;
+        --warn-soft: 250 235 210;
+        --danger: 170 32 22;
+        --danger-soft: 249 224 220;
+        --chart-1: 33 82 160;
+        --chart-2: 196 112 14;
+        --chart-3: 96 108 120;
+        """;
+
+    const string darkTokens = """
+        --bg: 15 20 25;
+        --surface: 23 30 37;
+        --sunken: 31 40 49;
+        --line: 46 58 69;
+        --line-strong: 112 128 142;
+        --ink: 228 234 239;
+        --muted: 150 163 176;
+        --accent: 122 170 235;
+        --accent-ink: 12 18 24;
+        --accent-soft: 28 44 70;
+        --ok: 98 198 144;
+        --ok-soft: 22 50 38;
+        --warn: 236 164 76;
+        --warn-soft: 58 42 20;
+        --danger: 246 130 116;
+        --danger-soft: 62 28 26;
+        --chart-1: 122 170 235;
+        --chart-2: 236 164 76;
+        --chart-3: 150 163 176;
+        """;
+}
+<style>
+    :root {
+        --font-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+        --font-sans: "Hanken Grotesk", system-ui, sans-serif;
+        --font-mono: "JetBrains Mono", ui-monospace, monospace;
+        --radius-ui: 2px;
+        --radius-card: 2px;
+        --rail-width: 15.5rem;
+        --rail-collapsed: 4.5rem;
+        --bottom-bar: 4rem;
+        color-scheme: light;
+        @Html.Raw(lightTokens)
+    }
+    @@media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+            color-scheme: dark;
+            @Html.Raw(darkTokens)
+        }
+    }
+    :root[data-theme="dark"] {
+        color-scheme: dark;
+        @Html.Raw(darkTokens)
+    }
+</style>

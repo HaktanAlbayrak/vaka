@@ -1,0 +1,255 @@
+@{
+    var isAuthenticated = User.Identity?.IsAuthenticated == true;
+    var demoQuery = Context.Request.Query["demo"].ToString();
+    var demoRole = ViewData["DemoRole"] as string ?? Roles.Operator;
+    foreach (var candidate in new[] { Roles.Operator, Roles.Manager, Roles.SuperAdmin })
+    {
+        if (string.Equals(demoQuery, candidate, StringComparison.OrdinalIgnoreCase))
+        {
+            demoRole = candidate;
+        }
+    }
+
+    bool InRole(string role) => isAuthenticated ? User.IsInRole(role) : demoRole == role;
+
+    var isOperator = InRole(Roles.Operator);
+    var isManager = InRole(Roles.Manager);
+    var isSuperAdmin = InRole(Roles.SuperAdmin);
+
+    var personName = isAuthenticated ? User.Identity!.Name ?? "" : demoRole switch
+    {
+        Roles.Manager => "Selin Aksoy",
+        Roles.SuperAdmin => "Hasan Polat",
+        _ => "Murat Çelik"
+    };
+    var registryNo = demoRole switch
+    {
+        Roles.Manager => "10246",
+        Roles.SuperAdmin => "10001",
+        _ => "30517"
+    };
+    var roleLabel = isManager ? "Yönetici" : isSuperAdmin && !isOperator ? "Süper admin" : "Operatör";
+    var initials = string.Concat(personName.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(part => part[0]));
+
+    var demoSuffix = isAuthenticated ? "" : "?demo=" + demoRole;
+    string Href(string path) => path + demoSuffix;
+
+    var navItems = new List<(string Group, string Label, string Icon, string? Href, string Key)>();
+    if (isOperator)
+    {
+        navItems.Add(("", "İşlerim", "layout-list", Href("/prototype/my-work"), "my-work"));
+        navItems.Add(("", "Açık iş", "play", Href("/prototype/run"), "run"));
+        navItems.Add(("", "Yeni kayıt", "file-plus", Href("/prototype/new-record"), "new-record"));
+        navItems.Add(("", "Makine panosu", "factory", null, "machine-board"));
+        navItems.Add(("", "Taleplerim", "inbox", null, "my-requests"));
+    }
+    if (isManager)
+    {
+        navItems.Add(("İzleme", "Pano", "layout-dashboard", Href("/prototype/dashboard"), "dashboard"));
+        navItems.Add(("İzleme", "Kayıtlar", "list-checks", Href("/prototype/records"), "records"));
+        navItems.Add(("İzleme", "Makine panosu", "factory", null, "machine-board"));
+        navItems.Add(("İzleme", "Talepler", "inbox", null, "requests"));
+        navItems.Add(("Tanımlar", "Tesisler", "layers", null, "facilities"));
+        navItems.Add(("Tanımlar", "Makineler", "cog", null, "machines"));
+        navItems.Add(("Tanımlar", "Vardiyalar", "clock", null, "shifts"));
+        navItems.Add(("Tanımlar", "Malzemeler", "package", null, "materials"));
+        navItems.Add(("Tanımlar", "Temizlik tipleri", "clipboard-list", null, "cleaning-types"));
+        navItems.Add(("Yönetim", "Kullanıcılar", "users", null, "users"));
+        navItems.Add(("Yönetim", "Raporlar", "chart-column", null, "reports"));
+    }
+    if (isSuperAdmin && !isManager)
+    {
+        navItems.Add(("", "Kullanıcılar", "users", null, "users"));
+    }
+    if (isSuperAdmin)
+    {
+        navItems.Add((isManager ? "Yönetim" : "", "Sistem ayarları", "settings", null, "settings"));
+    }
+
+    var bottomItems = navItems.Where(item => item.Href is not null).Take(3).ToList();
+    var currentKey = ViewData["NavKey"] as string ?? "";
+    var nextRole = demoRole switch
+    {
+        Roles.Operator => Roles.Manager,
+        Roles.Manager => Roles.SuperAdmin,
+        _ => Roles.Operator
+    };
+    var switchHref = Context.Request.Path + "?demo=" + nextRole;
+    var statusMessage = ViewData["StatusMessage"] as string;
+}
+<!DOCTYPE html>
+<html lang="tr" data-online="true">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <title>@ViewData["Title"] - Vaka</title>
+    <partial name="_Theme" />
+    <script>
+        (function () {
+            var root = document.documentElement;
+            try {
+                var theme = localStorage.getItem("vaka-theme");
+                if (theme !== "dark" && theme !== "light") {
+                    theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                }
+                root.dataset.theme = theme;
+                if (localStorage.getItem("vaka-rail") === "collapsed") { root.dataset.rail = "collapsed"; }
+            } catch (error) { }
+            if (navigator.onLine === false) { root.dataset.online = "false"; }
+        })();
+    </script>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/HankenGrotesk-Latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Archivo-Latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+    <script type="module" src="~/js/App.js" asp-append-version="true" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">İçeriğe geç</a>
+
+    <div class="shell">
+        <aside class="rail" aria-label="Kenar çubuğu">
+            <div class="rail-brand">
+                <span class="brand-mark" aria-hidden="true"><svg class="icon icon-lg"><use href="/lib/icons/Icons.svg#droplets" /></svg></span>
+                <span class="brand-name">Vaka</span>
+            </div>
+            <nav class="rail-nav" aria-label="Ana menü">
+                <partial name="_NavList" model="navItems" />
+            </nav>
+            <div class="rail-foot">
+                <div class="flex items-center gap-3">
+                    <span class="person-avatar" aria-hidden="true">@initials</span>
+                    <span class="rail-person-text min-w-0">
+                        <span class="person-name">@personName</span>
+                        <span class="person-meta">Sicil @registryNo</span>
+                        <span class="person-meta">@roleLabel</span>
+                    </span>
+                </div>
+                <a class="btn btn-secondary btn-block" href="@switchHref" data-switch-user>
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-left-right" /></svg>
+                    <span class="nav-label">Kullanıcı değiştir</span>
+                </a>
+                <button type="button" class="btn btn-quiet btn-block" data-rail-toggle aria-expanded="true">
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#panel-left-close" /></svg>
+                    <span class="nav-label">Daralt</span>
+                </button>
+            </div>
+        </aside>
+
+        <div class="flex min-w-0 flex-col">
+            <header class="topbar">
+                <a class="brand-mark h-11 w-11 lg:hidden max-[359px]:hidden" href="@Href("/prototype/my-work")" aria-label="Vaka ana sayfa">
+                    <svg class="icon icon-lg" aria-hidden="true"><use href="/lib/icons/Icons.svg#droplets" /></svg>
+                </a>
+                <div class="person-chip">
+                    <span class="person-avatar max-sm:hidden lg:hidden" aria-hidden="true">@initials</span>
+                    <span class="min-w-0">
+                        <span class="person-name">@personName</span>
+                        <span class="person-meta">Sicil @registryNo</span>
+                    </span>
+                </div>
+                <a class="switch-btn" href="@switchHref" data-switch-user>
+                    <svg class="icon max-[399px]:hidden" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-left-right" /></svg>
+                    <span class="max-w-[4.5rem]">Kullanıcı değiştir</span>
+                </a>
+                <span class="conn-chip" data-connection role="status">
+                    <span class="conn-online inline-flex items-center gap-2 text-ok">
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi" /></svg>
+                        <span class="max-sm:sr-only">Bağlı</span>
+                    </span>
+                    <span class="conn-offline items-center gap-2">
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                        <span>Bağlantı yok</span>
+                    </span>
+                </span>
+                <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label="Koyu tema">
+                    <svg class="icon theme-moon" aria-hidden="true"><use href="/lib/icons/Icons.svg#moon" /></svg>
+                    <svg class="icon theme-sun" aria-hidden="true"><use href="/lib/icons/Icons.svg#sun" /></svg>
+                </button>
+            </header>
+
+            <div class="conn-banner" role="alert">
+                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                <p class="font-semibold">Bağlantı yok. Adım başlatma, bitirme ve kayıt açma yapılamaz. Bağlantı gelince bu uyarı kapanır, işlemi yeniden yapın.</p>
+            </div>
+
+            <main id="main" class="page" tabindex="-1">
+                <div class="page-head">
+                    <div class="min-w-0">
+                        <h1 class="page-title">@ViewData["Title"]</h1>
+                        @if (ViewData["Lead"] is string lead)
+                        {
+                            <p class="page-lead">@lead</p>
+                        }
+                    </div>
+                    @await RenderSectionAsync("Actions", required: false)
+                </div>
+
+                <div aria-live="polite" role="status">
+                    @if (!string.IsNullOrEmpty(statusMessage))
+                    {
+                        <p class="notice notice-info mb-5">
+                            <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#info" /></svg>
+                            <span>@statusMessage</span>
+                        </p>
+                    }
+                </div>
+
+                @RenderBody()
+
+                @if (!isAuthenticated)
+                {
+                    <p class="mt-10 text-sm text-muted">Prototip sayfası. Kişiler, kayıt numaraları ve süreler örnektir, gerçek kayıt değildir.</p>
+                }
+            </main>
+        </div>
+    </div>
+
+    <nav class="bottom-bar" aria-label="Alt gezinme">
+        @foreach (var item in bottomItems)
+        {
+            <a class="bottom-link" href="@item.Href" aria-current="@(item.Key == currentKey ? "page" : null)">
+                <svg class="icon icon-lg" aria-hidden="true"><use href="/lib/icons/Icons.svg#@item.Icon" /></svg>
+                <span>@item.Label</span>
+            </a>
+        }
+        <a class="bottom-link" href="#menu" data-drawer-open aria-controls="menu" aria-expanded="false">
+            <svg class="icon icon-lg" aria-hidden="true"><use href="/lib/icons/Icons.svg#menu" /></svg>
+            <span>Menü</span>
+        </a>
+    </nav>
+
+    <div id="menu" class="drawer" data-drawer role="dialog" aria-modal="true" aria-label="Menü">
+        <a class="drawer-scrim" href="#main" tabindex="-1" aria-label="Menüyü kapat" data-drawer-close></a>
+        <div class="drawer-panel">
+            <div class="rail-brand justify-between">
+                <span class="flex items-center gap-3">
+                    <span class="brand-mark" aria-hidden="true"><svg class="icon icon-lg"><use href="/lib/icons/Icons.svg#droplets" /></svg></span>
+                    <span class="brand-name">Vaka</span>
+                </span>
+                <a class="icon-btn" href="#main" data-drawer-close aria-label="Menüyü kapat">
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#x" /></svg>
+                </a>
+            </div>
+            <nav class="flex-1 px-2 py-3" aria-label="Tüm menü">
+                <partial name="_NavList" model="navItems" />
+            </nav>
+            <div class="space-y-3 border-t border-line p-3">
+                <div class="flex items-center gap-3">
+                    <span class="person-avatar" aria-hidden="true">@initials</span>
+                    <span class="min-w-0">
+                        <span class="person-name">@personName</span>
+                        <span class="person-meta">Sicil @registryNo</span>
+                        <span class="person-meta">@roleLabel</span>
+                    </span>
+                </div>
+                <a class="btn btn-secondary btn-block" href="@switchHref" data-switch-user>
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-left-right" /></svg>
+                    <span>Kullanıcı değiştir</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

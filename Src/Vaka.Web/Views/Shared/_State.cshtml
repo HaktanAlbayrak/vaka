@@ -1,0 +1,12 @@
+@model (string Kind, string Icon, string Title, string Text, string? ActionLabel, string? ActionHref)
+<div class="state-box" data-kind="@Model.Kind" role="@(Model.Kind == "error" ? "alert" : null)">
+    <span class="state-icon"><svg class="icon icon-lg" aria-hidden="true"><use href="/lib/icons/Icons.svg#@Model.Icon" /></svg></span>
+    <div class="max-w-prose">
+        <h2 class="text-xl font-bold">@Model.Title</h2>
+        <p class="mt-1 text-muted">@Model.Text</p>
+    </div>
+    @if (Model.ActionLabel is not null)
+    {
+        <a class="btn btn-primary btn-lg" href="@Model.ActionHref">@Model.ActionLabel</a>
+    }
+</div>

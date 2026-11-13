@@ -1,0 +1,16 @@
+@using DemoOption = (string Value, string Text)
+@model (string Param, string Current, DemoOption[] Options)
+@{
+    var demoRole = Context.Request.Query["demo"].ToString();
+}
+<nav class="demo-bar" aria-label="Demo durumu">
+    <span class="font-semibold text-ink">Demo durumu:</span>
+    @foreach (var option in Model.Options)
+    {
+        var query = new List<string>();
+        if (option.Value != "") query.Add(Model.Param + "=" + option.Value);
+        if (demoRole != "") query.Add("demo=" + demoRole);
+        var href = Context.Request.Path + (query.Count > 0 ? "?" + string.Join("&", query) : "");
+        <a class="scene-link" href="@href" aria-current="@(option.Value == Model.Current ? "true" : null)">@option.Text</a>
+    }
+</nav>

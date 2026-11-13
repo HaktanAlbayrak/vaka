@@ -1,0 +1,38 @@
+@model IReadOnlyList<(string Title, string State, string Steps, string? Net, string? Minimum, int? Value, int? Max, int? LiveSeconds, bool Paused)>
+<ol class="phase-strip" aria-label="Fazlar">
+    @for (var index = 0; index < Model.Count; index++)
+    {
+        var phase = Model[index];
+        var progressId = "phase-progress-" + (index + 1);
+        <li class="phase-cell" data-state="@phase.State" aria-current="@(phase.State == "running" ? "step" : null)">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="phase-num">Faz @(index + 1)</span>
+                <partial name="_Badge" model='"phase." + phase.State' />
+            </div>
+            <p class="phase-title">@phase.Title</p>
+            <p class="text-sm text-muted">@phase.Steps</p>
+            @if (phase.Max is not null)
+            {
+                <progress id="@progressId" class="meter" value="@phase.Value" max="@phase.Max" aria-label="Faz net süresi, minimuma göre"
+                          data-tone="@(phase.State == "short" ? "warn" : phase.State == "done" ? "ok" : null)"></progress>
+            }
+            <p class="text-sm">
+                @if (phase.LiveSeconds is not null)
+                {
+                    <span class="live-dot" data-paused="@(phase.Paused ? "true" : "false")" aria-hidden="true"></span>
+                    <span>Net</span>
+                    <time class="mono font-bold" data-live-counter data-seconds="@phase.LiveSeconds" data-paused="@(phase.Paused ? "true" : "false")"
+                          data-progress-target="@progressId" data-progress-max="@phase.Max">@phase.Net</time>
+                }
+                else if (phase.Net is not null)
+                {
+                    <span>Net <span class="mono font-bold">@phase.Net</span></span>
+                }
+                @if (phase.Minimum is not null)
+                {
+                    <span class="text-muted"> · minimum @phase.Minimum</span>
+                }
+            </p>
+        </li>
+    }
+</ol>

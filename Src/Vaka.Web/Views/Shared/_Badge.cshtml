@@ -1,0 +1,42 @@
+@model string
+@functions {
+    private static readonly Dictionary<string, (string Label, string Icon, string Tone)> Vocabulary = new()
+    {
+        ["record.open"] = ("Açıldı", "lock", "badge-outline"),
+        ["record.running"] = ("Devam ediyor", "play", "badge-solid"),
+        ["record.held"] = ("Beklemede", "pause", "badge-warn"),
+        ["record.done"] = ("Tamamlandı", "check", "badge-ok"),
+        ["record.expired"] = ("Zaman aşımı", "timer-off", "badge-muted"),
+        ["record.cancelled"] = ("İptal edildi", "ban", "badge-danger"),
+        ["record.aborted"] = ("Yarıda kapatıldı", "octagon-x", "badge-danger"),
+
+        ["phase.waiting"] = ("Bekliyor", "circle-dashed", "badge-dashed"),
+        ["phase.running"] = ("Devam ediyor", "play", "badge-solid"),
+        ["phase.done"] = ("Tamamlandı", "check", "badge-ok"),
+        ["phase.short"] = ("Tamamlandı - süre altında", "triangle-alert", "badge-warn"),
+        ["phase.cut"] = ("Kesildi", "circle-slash", "badge-danger"),
+
+        ["step.waiting"] = ("Bekliyor", "lock", "badge-dashed"),
+        ["step.ready"] = ("Hazır", "circle-arrow-right", "badge-outline"),
+        ["step.running"] = ("Devam ediyor", "play", "badge-solid"),
+        ["step.done"] = ("Tamamlandı", "check", "badge-ok"),
+        ["step.cut"] = ("Kesildi", "circle-slash", "badge-danger"),
+
+        ["break.open"] = ("Mola açık", "coffee", "badge-warn"),
+        ["break.closed"] = ("Mola kapandı", "check", "badge-muted"),
+
+        ["request.pending"] = ("Bekliyor", "hourglass", "badge-warn"),
+        ["request.approved"] = ("Onaylandı", "check", "badge-ok"),
+        ["request.rejected"] = ("Reddedildi", "circle-x", "badge-danger"),
+        ["request.withdrawn"] = ("Geri çekildi", "undo-2", "badge-muted"),
+        ["request.invalid"] = ("Geçersiz", "circle-slash", "badge-muted"),
+
+        ["kind.planned"] = ("Planlı", "clipboard-list", "badge-muted"),
+        ["kind.emergency"] = ("Acil", "triangle-alert", "badge-danger"),
+        ["lot.expired"] = ("SKT geçmiş", "timer-off", "badge-danger"),
+    };
+}
+@{
+    var badge = Vocabulary[Model];
+}
+<span class="badge @badge.Tone"><svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#@badge.Icon" /></svg><span>@badge.Label</span></span>
