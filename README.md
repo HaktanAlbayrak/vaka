@@ -1,6 +1,8 @@
 # Vaka
 
-Rol bazlı yetkilendirmeli admin dashboard: özgün tasarım, responsive ve erişilebilir arayüz.
+Üretim tesislerinde makine temizliğinin dijital kaydı. Temizlik, versiyonlu bir prosedüre bağlı olarak adım adım ve sunucu saatiyle
+kaydedilir; kayıt sonradan değiştirilemez ve denetimde kanıt olarak kullanılır. Operatör sahada tablet ya da telefonla çalışır,
+yönetici tanımları, talepleri ve raporları yönetir.
 
 | Katman | Teknoloji |
 |---|---|
@@ -14,13 +16,23 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 
 | Faz | Başlık | Durum | Tarih | Commit | Teslim raporu |
 |---|---|---|---|---|---|
-| - | Proje yapısı ve Claude yönetimi | Hazır | 2026-11-13 | - | - |
-| 0 | Analiz ve faz planı | Bekliyor | | | |
+| 0 | Analiz ve faz planı | Tamamlandı | 2026-11-13 | 9b8eb67 | - (analiz fazı, QA yok) |
+| T | Tasarım DNA'sı ve kabuk prototipi | Sırada | | | |
+| 1 | Giriş, PIN ve kullanıcılar | Bekliyor | | | |
+| 2 | Tesis yapısı, vardiya ve malzeme | Bekliyor | | | |
+| 3 | Temizlik tipi ve prosedür versiyonu | Bekliyor | | | |
+| 4 | Kayıt açma ve makine kilidi | Bekliyor | | | |
+| 5 | Adım yürütme, görevli ve mola | Bekliyor | | | |
+| 6 | Kayıt listesi, detay ve yönetici panosu | Bekliyor | | | |
+| 7 | Talep, müdahale ve beklemeye alma | Bekliyor | | | |
+| 8 | Acil müdahale, bildirim ve düzeltme | Bekliyor | | | |
+| 9 | Raporlar ve denetim çıktısı | Bekliyor | | | |
 
 ## Son Değişiklikler
 
 | Tarih | Commit | Değişiklik |
 |---|---|---|
+| 2026-11-13 | 9b8eb67 | Faz 0: analiz, kusur listesi, gereksinimler ve onaylı faz planı |
 
 ## Çalıştırma
 
@@ -40,7 +52,7 @@ CLAUDE.md                    Koordinatör kuralları (ajan akışı, commit kura
   settings.json
 Docs/
   Process/                   Workflow, CodingStandards, DbProtocol
-  Analysis/                  Requirements.md (analist)
+  Analysis/                  Brief.md, Kusur.md, Requirements.md (analist)
   Phases/                    PhasePlan.md, Decisions.md
   Design/Dna.md              Tasarım DNA kartı
   Db/                        DbChanges.md indeksi + DB-<yıl>-<sıra>.md kayıtları
