@@ -17,8 +17,8 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 | Faz | Başlık | Durum | Tarih | Commit | Teslim raporu |
 |---|---|---|---|---|---|
 | 0 | Analiz ve faz planı | Tamamlandı | 2026-11-13 | 9b8eb67 | - (analiz fazı, QA yok) |
-| T | Tasarım DNA'sı ve kabuk prototipi | Sırada | | | |
-| 1 | Giriş, PIN ve kullanıcılar | Bekliyor | | | |
+| T | Tasarım DNA'sı ve kabuk prototipi | Tamamlandı | 2026-11-13 | 947be60 | [Faz-T-Teslim.md](Docs/Delivery/Faz-T-Teslim.md) |
+| 1 | Giriş, PIN ve kullanıcılar | Sırada | | | |
 | 2 | Tesis yapısı, vardiya ve malzeme | Bekliyor | | | |
 | 3 | Temizlik tipi ve prosedür versiyonu | Bekliyor | | | |
 | 4 | Kayıt açma ve makine kilidi | Bekliyor | | | |
@@ -32,11 +32,24 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 
 | Tarih | Commit | Değişiklik |
 |---|---|---|
+| 2026-11-13 | 947be60 | Faz T: onaylı tasarım DNA'sı, uygulama iskeleti ve beş prototip sayfa |
 | 2026-11-13 | 9b8eb67 | Faz 0: analiz, kusur listesi, gereksinimler ve onaylı faz planı |
 
 ## Çalıştırma
 
-Uygulama iskeleti ilk geliştirme fazında oluşturulur. O zamana kadar bu bölüm boştur; faz tesliminde güncellenir.
+```bash
+dotnet run --project Src/Vaka.Web          # Development, http://localhost:5080
+```
+
+Derlenmiş CSS, yazı tipleri ve ikonlar depodadır. Stil değiştirilirse:
+
+```bash
+npm ci --prefix Src/Vaka.Web
+npm run build:css --prefix Src/Vaka.Web    # yazı tipi ve ikon için: build:assets
+```
+
+Prototip sayfaları yalnız Development ortamında açılır: `/prototype/my-work`, `/prototype/run`, `/prototype/new-record`,
+`/prototype/records`, `/prototype/dashboard`.
 
 Gereksinimler: .NET SDK 10, Node.js 20+, QA için `@playwright/cli` (`npm i -g @playwright/cli`).
 
@@ -58,7 +71,7 @@ Docs/
   Db/                        DbChanges.md indeksi + DB-<yıl>-<sıra>.md kayıtları
   Delivery/                  Faz-<N>-Teslim.md raporları, Evidence/
   Handover/                  Ajan devir notları
-Src/Vaka.Web/                Uygulama (ilk geliştirme fazında oluşur)
+Src/Vaka.Web/                Uygulama (Controllers, Views, Styles, wwwroot)
 ```
 
 ## Geliştirme Süreci
