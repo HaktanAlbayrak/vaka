@@ -1,0 +1,30 @@
+{
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
+  "permissions": {
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push -f *)",
+      "Bash(dotnet ef database drop*)",
+      "PowerShell(dotnet ef database drop*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell|Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/Guard.mjs\"",
+            "timeout": 15,
+            "statusMessage": "Commit ve DB kuralları denetleniyor"
+          }
+        ]
+      }
+    ]
+  }
+}
