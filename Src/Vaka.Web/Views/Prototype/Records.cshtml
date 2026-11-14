@@ -118,11 +118,11 @@ else
                     @foreach (var row in rows)
                     {
                         <tr role="row">
-                            <td role="cell" data-label="" class="stack-wide"><span class="record-no text-sm xl:whitespace-nowrap">@row.No</span></td>
+                            <td role="cell" data-label=""><span class="record-no text-sm xl:whitespace-nowrap">@row.No</span></td>
                             <td role="cell" data-label="Makine" class="stack-wide max-w-xs break-words font-semibold">@row.Machine</td>
                             <td role="cell" data-label="Tür"><partial name="_Badge" model="row.Kind" /></td>
                             <td role="cell" data-label="Sahip" class="max-w-[12rem] break-words">@row.Owner</td>
-                            <td role="cell" data-label="Durum" class="stack-wide">
+                            <td role="cell" data-label="Durum">
                                 <div class="flex flex-wrap items-center gap-2">
                                     <partial name="_Badge" model="row.Status" />
                                     @if (row.Warning is not null)
@@ -139,25 +139,7 @@ else
                 </tbody>
             </table>
         </div>
-        <nav class="flex flex-wrap items-center justify-between gap-3 border-t-2 border-line px-4 py-3 md:px-5" aria-label="Sayfalar">
-            <p class="text-sm text-muted">118 kayıt · Sayfa @pageNo / 12</p>
-            <div class="flex flex-wrap items-center gap-2">
-                @if (pageNo > 1)
-                {
-                    <a class="btn btn-secondary" href="@PageHref(pageNo - 1)">
-                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-left" /></svg>
-                        Önceki
-                    </a>
-                }
-                @if (pageNo < 12)
-                {
-                    <a class="btn btn-secondary" href="@PageHref(pageNo + 1)">
-                        Sonraki
-                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-right" /></svg>
-                    </a>
-                }
-            </div>
-        </nav>
+        <partial name="_Pagination" model='(pageNo, 10, 118, "kayıt", (Func<int, string>)PageHref)' />
     </div>
 }
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Vaka.Web.Controllers;
 
 [AllowAnonymous]
+[IgnoreAntiforgeryToken]
 [Route("error")]
 public sealed class ErrorController : Controller
 {

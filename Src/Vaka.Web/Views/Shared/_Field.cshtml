@@ -1,0 +1,40 @@
+@model (string Name, string Label, string? Value, string Type, string? Autocomplete, string? Hint, bool Required, bool ReadOnly)
+@{
+    var id = Model.Name.Replace('.', '-');
+    var hintId = id + "-hint";
+    var errorId = id + "-error";
+    var error = ViewData.ModelState.TryGetValue(Model.Name, out var entry) && entry.Errors.Count > 0 ? entry.Errors[0].ErrorMessage : null;
+    var describedBy = string.Join(' ', new[] { Model.Hint is null ? null : hintId, error is null ? null : errorId }.Where(part => part is not null));
+    var isPassword = Model.Type == "password";
+}
+<div class="field" data-field>
+    <label class="field-label" for="@id">@Model.Label</label>
+    @if (isPassword)
+    {
+        <div class="relative" data-reveal>
+            <input id="@id" name="@Model.Name" class="input pr-14" type="password" inputmode="text" autocomplete="@(Model.Autocomplete ?? "off")"
+                   spellcheck="false" autocapitalize="none" required="@Model.Required" data-required-message="@Model.Label alanını doldurun."
+                   aria-describedby="@(describedBy == "" ? null : describedBy)" aria-invalid="@(error is null ? null : "true")" data-reveal-input />
+            <button type="button" class="icon-btn absolute right-0 top-0 h-12 w-12" data-reveal-toggle aria-pressed="false" aria-label="Parolayı göster">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#eye" /></svg>
+            </button>
+        </div>
+    }
+    else
+    {
+        <input id="@id" name="@Model.Name" class="input" type="@Model.Type" value="@Model.Value" inputmode="text" autocomplete="@(Model.Autocomplete ?? "off")"
+               spellcheck="false" autocapitalize="none" required="@Model.Required" readonly="@Model.ReadOnly" data-required-message="@Model.Label alanını doldurun."
+               aria-describedby="@(describedBy == "" ? null : describedBy)" aria-invalid="@(error is null ? null : "true")" />
+    }
+    @if (Model.Hint is not null)
+    {
+        <p id="@hintId" class="field-hint">@Model.Hint</p>
+    }
+    @if (error is not null)
+    {
+        <p id="@errorId" class="field-error">
+            <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+            <span>@error</span>
+        </p>
+    }
+</div>

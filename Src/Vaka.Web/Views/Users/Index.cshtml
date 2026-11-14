@@ -1,0 +1,144 @@
+@using Vaka.Web.ViewModels.Users
+@model UserListViewModel
+@{
+    ViewData["Title"] = "Kullanıcılar";
+    ViewData["Lead"] = "Hesapları ekleyin, rollerini ve durumlarını yönetin.";
+    ViewData["NavKey"] = "users";
+    ViewData["StatusMessage"] = Model.StatusMessage;
+
+    var statusValue = Model.Status.ToString();
+    var isFiltered = !string.IsNullOrWhiteSpace(Model.Query) || Model.Status != UserStatusFilter.Active;
+
+    string PageHref(int target) =>
+        "/users?page=" + target
+        + (string.IsNullOrWhiteSpace(Model.Query) ? "" : "&query=" + Uri.EscapeDataString(Model.Query))
+        + "&status=" + statusValue;
+
+    var statusOptions = new (string Value, string Text)[]
+    {
+        (nameof(UserStatusFilter.Active), "Etkin"),
+        (nameof(UserStatusFilter.Inactive), "Pasif"),
+        (nameof(UserStatusFilter.All), "Tümü"),
+    };
+}
+
+@section Actions {
+    <a class="btn btn-primary" href="/users/create">
+        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-plus" /></svg>
+        Kullanıcı ekle
+    </a>
+}
+
+<form method="get" action="/users" class="panel mb-5" aria-label="Kullanıcı filtresi" data-busy-form>
+    <div class="grid gap-4 p-4 md:grid-cols-2 md:p-5 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_auto] xl:items-end">
+        <div class="field">
+            <label class="field-label" for="query">Sicil no ya da ad</label>
+            <input id="query" name="query" type="search" class="input" value="@Model.Query" autocomplete="off" spellcheck="false" inputmode="search" />
+        </div>
+        <div class="field">
+            <label class="field-label" for="status">Durum</label>
+            <select id="status" name="status" class="input">
+                @foreach (var option in statusOptions)
+                {
+                    <option value="@option.Value" selected="@(option.Value == statusValue)">@option.Text</option>
+                }
+            </select>
+        </div>
+        <div class="flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#funnel" /></svg>
+                Filtrele
+            </button>
+            <a class="btn btn-secondary" href="/users">Filtreleri temizle</a>
+        </div>
+    </div>
+</form>
+
+<div role="status" aria-busy="true" data-loading hidden>
+    <p class="mb-3 font-semibold text-muted">Yükleniyor…</p>
+    <div class="panel divide-y divide-line" aria-hidden="true">
+        @for (var index = 0; index < 6; index++)
+        {
+            <div class="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)_minmax(0,1fr)] gap-4 p-4">
+                <div class="skeleton h-5 w-full"></div>
+                <div class="skeleton h-5 w-full"></div>
+                <div class="skeleton h-5 w-full"></div>
+            </div>
+        }
+    </div>
+</div>
+
+<div data-loading-target>
+    @if (!Model.Items.Any())
+    {
+        if (isFiltered)
+        {
+            <partial name="_State" model='("empty", "search", "Filtreye uyan kullanıcı yok", "Aramayı ya da durum seçimini değiştirin. Pasif hesapları görmek için durumu Pasif ya da Tümü yapın.", "Filtreleri temizle", "/users")' />
+        }
+        else
+        {
+            <partial name="_State" model='("empty", "users", "Henüz kullanıcı yok", "Hesaplar siz ekledikçe burada listelenir. İlk hesabı ekleyin, kullanıcı ilk girişte parola ve PIN belirler.", "Kullanıcı ekle", "/users/create")' />
+        }
+    }
+    else
+    {
+        <div class="panel">
+            <table class="data-table table-stack">
+                <caption class="sr-only">Kullanıcılar, toplam @Model.Total kayıt, sayfa @Model.Page</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Sicil no</th>
+                        <th scope="col">Ad soyad</th>
+                        <th scope="col">Roller</th>
+                        <th scope="col">Durum</th>
+                        <th scope="col">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td data-label="Sicil no"><span class="record-no text-sm">@item.RegistryNo</span></td>
+                            <td data-label="Ad soyad" class="max-w-xs break-words font-semibold stack-wide stack-lead">@item.FullName</td>
+                            <td data-label="Roller">
+                                <ul class="flex flex-wrap gap-1.5">
+                                    @foreach (var role in item.Roles)
+                                    {
+                                        <li class="chip">@Roles.Label(role)</li>
+                                    }
+                                </ul>
+                            </td>
+                            <td data-label="Durum">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <partial name="_Badge" model='item.IsActive ? "user.active" : "user.inactive"' />
+                                    @if (item.IsPinLocked)
+                                    {
+                                        <partial name="_Badge" model='"user.pinlocked"' />
+                                    }
+                                    @if (item.MustChangePassword || item.MustSetPin)
+                                    {
+                                        <partial name="_Badge" model='"user.firstlogin"' />
+                                    }
+                                </div>
+                            </td>
+                            <td data-label="İşlem">
+                                @if (item.CanManage)
+                                {
+                                    <a class="btn btn-secondary" href="/users/edit/@item.Id" aria-label="@item.FullName hesabını düzenle">
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
+                                        Düzenle
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="chip"><svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#lock" /></svg>Yalnız görüntüleme</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <partial name="_Pagination" model='(Model.Page, Model.PageSize, Model.Total, "kullanıcı", (Func<int, string>)PageHref)' />
+        </div>
+    }
+</div>

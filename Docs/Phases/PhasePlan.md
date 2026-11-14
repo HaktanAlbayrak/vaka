@@ -10,7 +10,7 @@
 |---|---|---|---|---|
 | 0 | Analiz ve faz planı | Brief, Kusur, Requirements, plan | - | TAMAMLANDI (2026-11-13) |
 | T | Tasarım DNA'sı ve kabuk prototipi | DNA kartı, demo veriyle 5 prototip sayfa | Hayır | TESLİM ALINDI (tur 3, 2026-11-13) |
-| 1 | Giriş, PIN, kullanıcılar ve Süper admin | Giriş, ilk giriş, PIN, kullanıcı yönetimi, Süper admin | Evet | BEKLİYOR |
+| 1 | Giriş, PIN, kullanıcılar ve Süper admin | Giriş, ilk giriş, PIN, kullanıcı yönetimi, Süper admin | Evet | TESLİM ALINDI (tur 3, 2026-11-14) |
 | 2 | Tesis yapısı, vardiya ve malzeme | Tesis, hat, makine, vardiya, malzeme ve lot ekranları | Evet | BEKLİYOR |
 | 3 | Temizlik tipi ve prosedür versiyonu | Tip, makine eşleme, taslak düzenleyici, yayınlama | Evet | BEKLİYOR |
 | 4 | Kayıt açma ve makine kilidi | Yeni kayıt, İşlerim, Açıldı hali, makine panosu, zaman aşımı | Evet | BEKLİYOR |
@@ -36,6 +36,7 @@ Durum değerleri: BEKLİYOR, GELİŞTİRMEDE, QA'DA, İADE, TESLİM ALINDI. Faz 
 - PL-05 Süper admin: Faz T (rol sabitleri, menü varyantı), Faz 1 (hesap kapsamı kuralı, seed, kabul kriterleri), Faz 2-9 (G10: Süper admin 403).
 - K-39 adım sürerken mola: Faz 4 (adım mola kolonu önden), Faz 5 (kural, SH-17, sayaç durması, kabul kriterleri), Faz 6 ve 7 (gösterim, müdahale).
 - K-47 ayar ekranı: Faz 1 (ayar tablosu ve servis), Faz 9 (E-33, Faz 1-8'de ekran sınırı dolu olduğu için, PL-17).
+- PL-24, PL-25 ayar değerleri: Faz 1 seed'i üç satır (oturum 30 dakika, PIN 4 hane, 5 deneme); Faz 3 kalan üç satırı seed ekleme olarak getirir.
 
 ---
 
@@ -106,6 +107,21 @@ Her metodun XML `<summary>`'sinde formül ve SH kimliği yazılır; bu, ilgili f
 - [ ] G8 (Faz 4 ve sonrası): `Controllers/` ve `Views/` altında `TimeSpan` aritmetiği, `.Subtract(` ya da `AtUtc` alanları arasında çıkarma yok; süreler yalnız `IDurationCalculator`'dan.
 - [ ] G9 (Faz 4 ve sonrası): Fazın her yeni komutu aynı `CommandId` ile iki kez gönderildiğinde tek etki ve tek olay üretir (BR-33).
 - [ ] G10 (Faz 2 ve sonrası): Yalnız `SuperAdmin` rolüne sahip kullanıcı fazın yeni adreslerinin tümünde (GET ve POST) 403 alır ve menüde bu ekranları görmez; istisna Faz 9'daki `/settings` (BR-34, PL-15).
+- [ ] G11 (Faz 2 ve sonrası, UI fazları): Fazın her yeni liste ekranı 360, 768, 1024 ve 1440 px'te aşağıdaki yerleşim imzasını taşır; qa-tester imzayı
+  Faz 1 `MekanikEval.txt` yöntemiyle `Alan:sütun@satır` biçiminde ölçer ve frontend devir notundaki beklenen imzayla karşılaştırır (PL-28, PL-33).
+  - 768 px altı satır kartı: 2 sütun; varsa tek uzun metin alanı kart başlığından sonraki ilk satırda tam satır; kalan alanlar ikişer yan yana;
+    boş yarım hücre yalnız alan sayısı tekse ve yalnız son satırda.
+  - 768-1279 px satır kartı: 4 sütun; uzun metin alanı en çok 2 sütun; tam satır hücre yok.
+  - 1280 px ve üstü: tablo, satır en az 56 px.
+  - Form ve detay ekranları: lg ve üstünde ana kolon ve bağlam rayı yan yana, lg altında ray ana kolonun altında.
+
+**UI fazlarında yerleşim (PL-33)**
+
+- frontend-engineer tarayıcıda ölçmediği yerleşim için devir notunda "DNA ile aynı" yazmaz. Her yeni liste ekranı için G11 imzasını genişlik başına
+  "beklenen" olarak yazar (ör. 360: `Ad:2@1 Kod:1@2 Durum:1@2 İşlem:1@3`) ve hangi alanın uzun metin alanı olduğunu belirtir.
+- Ekran G11 kalıbına uymayan bir yerleşim gerektiriyorsa frontend bunu devir notunda gerekçesiyle yazar; kabul analist kararıdır (`Decisions.md`).
+- Analist iade ederken düzeltme maddesini ve qa-tester'ın yeniden denetim şartını aynı imzayla yazar. Yerleşim iadesinde yeniden denetim
+  ekranın dört genişlikteki imzasının tamamını kapsar, yalnız kalan hücreyi değil.
 
 ---
 
@@ -174,72 +190,96 @@ Faz 1, 4 ve 5'in "Faz T'den devreden" satırlarında (PL-21, PL-23). Rapor: `Doc
 **Amaç:** Kişinin sicil no ve parolayla girdiği, ilk girişte parola ve PIN belirlediği, Süper admin'in yönetici hesaplarını, yöneticinin
 Operatör ve Denetçi hesaplarını yönettiği kimlik katmanı; sistem ayarlarının veritabanından okunması.
 
+**Ayar başlangıç değerleri (PL-24, Requirements §6):** `<OturumSüresi>` 30 dakika, `<PinUzunluğu>` 4 hane, `<PinDenemeSınırı>` 5.
+Kod ve sözleşme yer tutucu adıyla yazılır; değer yalnız seed'de ve ayar tablosundadır.
+
 **Kapsam**
 
 | # | Tür | İş kalemi | Sahibi |
 |---|---|---|---|
-| 1 | DB | Kullanıcı ve kullanıcı rolleri tabloları (Brief §7.g `User`); sicil no benzersiz; PIN hatalı deneme sayacı, PIN kilit anı, parola değiştirme ve PIN belirleme bayrakları bu fazda. Seed: tek Süper admin (PL-05), geçici parola özetli, geliştirme parolası yalnız README'de; başka kullanıcı seed'lenmez | backend-engineer talebi, dbadmin |
-| 2 | DB | Sistem ayarları tablosu (beş ayar, medya boyutu fotoğraf ve video ayrı; tamsayı değer) ve ayar değişiklik geçmişi tablosu (eski, yeni, yapan, zaman) (K-47, PL-17). Seed değerleri kullanıcıdan gelir (Requirements §9); gelmeden bu kalem kapanmaz | backend-engineer talebi, dbadmin |
-| 3 | BE | Ayar servisi: beş değeri veritabanından okur; bu fazda yazma yok (ekran Faz 9). Oturum süresi ve PIN değerleri her istekte servisten okunur | backend-engineer |
-| 4 | BE | Cookie kimlik doğrulama, sicil no + parola, işlemsizlikte `<OturumSüresi>` kayan süre; claim'ler: `UserId`, ad, sicil no, roller | backend-engineer |
-| 5 | BE | İlk giriş kapısı: parola değiştirilmemiş ya da PIN'i olmayan kullanıcı `/account/first-login`, `/account/logout` ve statik dosya dışındaki her istekte ilk girişe yönlenir (BR-55). Yetki politikası değil, istek filtresi | backend-engineer |
-| 6 | BE | PIN servisi: biçim kuralı yalnız yeni PIN belirlenirken (BR-49: yalnız rakam, `<PinUzunluğu>` hane, tüm haneleri aynı ya da ardışık artan/azalan dizi reddedilir), doğrulama uzunluktan bağımsız, `<PinDenemeSınırı>` hatalı denemede kilit ve oturum kapatma; PIN düz metin günlüklenmez (NFR-15) | backend-engineer |
-| 7 | BE | Kullanıcı servisi: ekleme, düzenleme, rol atama, geçici parola, pasifleştirme ve yeniden etkinleştirme, PIN ve parola sıfırlama (PIN ister, PL-06). Kapsam kuralı SK-9: Yönetici yalnız `Manager` ve `SuperAdmin` rolü taşımayan hesapları yönetir ve yalnız `Operator`, `Auditor` atar; Süper admin tümünü; kimse kendini pasifleştiremez ve kendi rollerini değiştiremez; son aktif Süper admin pasifleştirilemez ve rolü kaldırılamaz (PL-05, PL-16). Kural serviste, işlemi yapanın ve hedefin rolleri veritabanından okunarak uygulanır; policy yok. Açık iş listesi arayüzü (`OpenWork`), bu fazda boş döner, Faz 4, 5, 7'de genişler; `Url` yalnız görüntüleyenin erişebildiği ekrana verilir | backend-engineer |
+| 1 | DB | Kullanıcı ve kullanıcı rolleri tabloları (Brief §7.g `User`); sicil no benzersiz, oluşturulduktan sonra değişmez (PL-27); PIN hatalı deneme sayacı, PIN kilit anı, parola değiştirme ve PIN belirleme bayrakları bu fazda. PIN yalnız özet olarak saklanır; özet metin üzerinden alınır, baştaki sıfır anlamlıdır. Seed: tek Süper admin (PL-05), geçici parola özetli, geliştirme parolası yalnız README'de; başka kullanıcı seed'lenmez | backend-engineer talebi, dbadmin |
+| 2 | DB | Sistem ayarları tablosu, ayar başına bir satır (anahtar, tam sayı değer, birim; değer pozitif, veritabanı kısıtıyla) ve ayar değişiklik geçmişi tablosu (eski, yeni, yapan, zaman) (K-47, PL-17, PL-25). Seed yalnız üç satır yazar: `<OturumSüresi>` 30, `<PinUzunluğu>` 4, `<PinDenemeSınırı>` 5 (PL-24). Medya boyutu ve azami kilit süresi satırı yazılmaz, boş ya da yer tutucu değerli satır yoktur; bu satırlar Faz 3'te seed ekleme olarak gelir | backend-engineer talebi, dbadmin |
+| 3 | BE | Ayar servisi: Faz 1'in üç değerini veritabanından okur; bu fazda yazma yok (ekran Faz 9). Oturum süresi ve PIN değerleri her istekte servisten okunur; satırı olmayan ayar istenirse varsayılan değer uydurulmaz, açık hata verilir | backend-engineer |
+| 4 | BE | Cookie kimlik doğrulama, sicil no + parola. Oturum son kullanıcı isteğinden `<OturumSüresi>` sonra kapanır; çerezi sürenin yarısı geçince yenileyen hazır kayan süre bu kuralı karşılamaz, son istek anı ölçülür. Claim'ler: ad (`ClaimTypes.Name`), roller (`ClaimTypes.Role`), `VakaClaimTypes.UserId`, `VakaClaimTypes.RegistryNo` | backend-engineer |
+| 5 | BE | İlk giriş kapısı: parola değiştirilmemiş ya da PIN'i olmayan kullanıcı `/account/first-login`, `/account/logout`, `/account/access-denied`, `/error/*` ve statik dosya dışındaki her istekte ilk girişe yönlenir (BR-55). Yetki politikası değil, istek filtresi | backend-engineer |
+| 6 | BE | PIN servisi: biçim kuralı yalnız yeni PIN belirlenirken (BR-49: yalnız rakam, `<PinUzunluğu>` hane, tüm haneleri aynı ya da ardışık artan/azalan dizi reddedilir), doğrulama uzunluktan bağımsız; art arda `<PinDenemeSınırı>` hatalı denemede kilit ve oturum kapatma, doğru PIN sayacı sıfırlar; PIN düz metin günlüklenmez (NFR-15) | backend-engineer |
+| 7 | BE | Kullanıcı servisi: ekleme, düzenleme, rol atama, geçici parola (işlemi yapan girer, BR-55), pasifleştirme ve yeniden etkinleştirme, PIN ve parola sıfırlama; son dördü işlemi yapanın PIN'ini ister (Requirements §3, PL-06). PIN sıfırlama PIN'i, sayacı ve kilidi temizler, PIN belirleme bayrağını açar; parola sıfırlama yeni geçici parola yazar, parola değiştirme bayrağını açar. Kapsam kuralı SK-9: Yönetici yalnız `Manager` ve `SuperAdmin` rolü taşımayan hesapları yönetir ve yalnız `Operator`, `Auditor` atar; Süper admin tümünü; kimse kendini pasifleştiremez ve kendi rollerini değiştiremez; son aktif Süper admin pasifleştirilemez ve rolü kaldırılamaz (PL-05, PL-16). Kural serviste, işlemi yapanın ve hedefin rolleri veritabanından okunarak uygulanır; policy yok. Açık iş listesi arayüzü (`OpenWork`), bu fazda boş döner, Faz 4, 5, 7'de genişler; `Url` yalnız görüntüleyenin erişebildiği ekrana verilir | backend-engineer |
 | 8 | BE | Ana sayfa yönlendirmesi: yalnız `SuperAdmin` rolü olan kullanıcı `/` adresinde `/users`'a yönlenir; diğer roller Faz 4 ve 6'ya kadar `HomeViewModel` görür | backend-engineer |
-| 9 | FE | E-01 Giriş, E-02 Parola ve PIN (iki mod), E-03 Kullanıcılar, E-04 Kullanıcı formu ve pasifleştirme onayı, 403 sayfası; kabukta gerçek kişi adı ve rol bazlı menü (Süper admin menüsünde yalnız Kullanıcılar ve hesap) | frontend-engineer |
+| 9 | BE | İlk iş, frontend bunlara karşı derler: sözleşmedeki ViewModel sınıfları; `Authorization/VakaClaimTypes.cs` (`UserId`, `RegistryNo`); `Roles.Label(string role)`: `Operator` "Operatör", `Manager` "Yönetici", `Auditor` "Denetçi", `SuperAdmin` "Süper admin". Görünümde rolün Türkçe adı yalnız bu metottan gelir | backend-engineer |
+| 10 | BE | T-B15: genel antiforgery filtresi; `PrototypeController` action'ları `[HttpGet]` | backend-engineer |
+| 11 | FE | E-01 Giriş, E-02 Parola ve PIN (iki mod), E-03 Kullanıcılar, E-04 Kullanıcı formu (sıfırlama ve etkinleştirme bölümleriyle) ve pasifleştirme onayı, 403 sayfası; kabukta gerçek kişi adı, sicil no ve rol bazlı menü (Süper admin menüsünde yalnız Kullanıcılar ve hesap). Menü yalnız var olan ve kullanıcının erişebildiği adreslere bağlantı verir; sonraki fazların kalemleri o fazda eklenir, bağlantısız kalem gösterilmez. "Kullanıcı değiştir" antiforgery token'lı `POST /account/logout` formudur | frontend-engineer |
+| 12 | FE | T-B16 oturumsuz hata ve 403 sayfaları gerçek kabukla; T-B21 `Dna.md` veri dili satırı ile E-03 tablosunun eşlenmesi | frontend-engineer |
 
-**Paralel:** Evet. Gerekçe: şema Brief §7.g'de belli (K-40 kararıyla kullanıcıya yönetici alanı eklenmez; roller ayrı tabloda); route ve ViewModel aşağıda; dosyalar ayrık.
+**Paralel:** Evet. Gerekçe: şema Brief §7.g'de belli (K-40 kararıyla kullanıcıya yönetici alanı eklenmez; roller ayrı tabloda); route, ViewModel,
+alt tip, form alanı adı ve rol aşağıda; dosyalar ayrık. Frontend veritabanına bağlı değildir; derlemesi BE 9'a bağlıdır, BE 9 backend'in ilk işidir.
 
 **Sözleşme**
 
+ViewModel ad alanları `Vaka.Web.ViewModels.Account`, `Vaka.Web.ViewModels.Home`, `Vaka.Web.ViewModels.Users`; klasörler `ViewModels/Account/`,
+`ViewModels/Home/`, `ViewModels/Users/`. `?` boş olabilir demektir. Rol alanları `Roles` sabitlerinin değerini taşır; görünüm rol adını `Roles.Label` ile yazar.
+
 | Route | Action | Rol | ViewModel (alanlar) | Görünüm |
 |---|---|---|---|---|
-| GET, POST `/account/login` | `AccountController.Login` | anonim | `LoginViewModel { RegistryNo, Password, ReturnUrl, ErrorMessage }` | `Views/Account/Login.cshtml` |
-| POST `/account/logout` | `AccountController.Logout` | Any | - | - |
-| GET `/account/access-denied` | `AccountController.AccessDenied` | anonim | - | `Views/Account/AccessDenied.cshtml` |
-| GET, POST `/account/first-login` | `AccountController.FirstLogin` | Any | `FirstLoginViewModel { FullName, MustChangePassword, MustSetPin, CurrentPassword, NewPassword, ConfirmPassword, NewPin, ConfirmPin, PinLength }` | `Views/Account/FirstLogin.cshtml` |
-| GET `/account/security`; POST `/account/change-password`, `/account/change-pin` | `AccountController.Security`, `.ChangePassword`, `.ChangePin` | Any | `SecurityViewModel { PinLength, StatusMessage, Password { CurrentPassword, NewPassword, ConfirmPassword }, Pin { CurrentPin, NewPin, ConfirmPin } }` | `Views/Account/Security.cshtml` |
+| GET, POST `/account/login` | `AccountController.Login` | anonim | `LoginViewModel { RegistryNo, Password, ReturnUrl?, ErrorMessage?, StatusMessage? }`. `StatusMessage` oturumun neden kapandığını söyler (süre doldu, PIN kilitlendi, çıkış yapıldı) | `Views/Account/Login.cshtml` |
+| POST `/account/logout` | `AccountController.Logout` | anonim (oturumu düşmüş kişi de basabilir, K11a) | - ; `/account/login`'e yönlenir | - |
+| GET `/account/access-denied` | `AccountController.AccessDenied` | anonim | - ; yanıt durum kodu 403 | `Views/Account/AccessDenied.cshtml` |
+| GET, POST `/account/first-login` | `AccountController.FirstLogin` | Any | `FirstLoginViewModel { FullName, MustChangePassword, MustSetPin, CurrentPassword, NewPassword, ConfirmPassword, NewPin, ConfirmPin, PinLength }`; bitince `/`'a yönlenir | `Views/Account/FirstLogin.cshtml` |
+| GET `/account/security`; POST `/account/change-password`, `/account/change-pin` | `AccountController.Security`, `.ChangePassword`, `.ChangePin` | Any | `SecurityViewModel { PinLength, StatusMessage?, Password: ChangePasswordViewModel { CurrentPassword, NewPassword, ConfirmPassword }, Pin: ChangePinViewModel { CurrentPin, NewPin, ConfirmPin } }`. Form alanı adları önekli (`Password.CurrentPassword`, `Pin.NewPin`); POST'lar `[Bind(Prefix = "Password")]` ve `[Bind(Prefix = "Pin")]` ile bağlar | `Views/Account/Security.cshtml` |
 | GET `/` | `HomeController.Index` | Any | `HomeViewModel { FullName, Roles[] }` (Faz 4 ve 6'da role göre yönlendirmeye döner) | `Views/Home/Index.cshtml` |
-| GET `/users` | `UsersController.Index` | ManagerOrSuperAdmin | `UserListViewModel { Items[] { Id, RegistryNo, FullName, Roles[], IsActive, IsPinLocked, MustChangePassword, CanManage }, Query, Status (Active, Inactive, All), Page, PageSize, Total }` | `Views/Users/Index.cshtml` |
-| GET, POST `/users/create`, `/users/edit/{id}` | `UsersController.Create`, `.Edit` | ManagerOrSuperAdmin | `UserFormViewModel { Id?, RegistryNo, FullName, SelectedRoles[], AvailableRoles[] (işlemi yapanın atayabildiği roller), RolesLocked (kendi hesabı), TemporaryPassword (yalnız Create), IsActive, CanResetPin, CanResetPassword, CanDeactivate }` | `Views/Users/Form.cshtml` |
-| GET, POST `/users/deactivate/{id}` | `UsersController.Deactivate` | ManagerOrSuperAdmin | `UserDeactivateViewModel { UserId, FullName, RegistryNo, OpenWork[] { Kind, Title, Url? }, CanDeactivate, BlockReason, Pin }` | `Views/Users/Deactivate.cshtml` |
-| POST `/users/activate/{id}` | `UsersController.Activate` | ManagerOrSuperAdmin | - | - |
-| POST `/users/reset-pin/{id}`, `/users/reset-password/{id}` | `UsersController.ResetPin`, `.ResetPassword` | ManagerOrSuperAdmin | `UserResetViewModel { UserId, TemporaryPassword (yalnız parola), Pin }` | `Views/Users/Form.cshtml` içinde |
+| GET `/users?query=&status=&page=` | `UsersController.Index` | ManagerOrSuperAdmin | `UserListViewModel { Items: UserListItemViewModel[] { Id, RegistryNo, FullName, Roles[], IsActive, IsPinLocked, MustChangePassword, MustSetPin, CanManage }, Query?, Status: UserStatusFilter (Active, Inactive, All; varsayılan Active), Page, PageSize, Total, StatusMessage? }` | `Views/Users/Index.cshtml` |
+| GET, POST `/users/create`, `/users/edit/{id}` | `UsersController.Create`, `.Edit` | ManagerOrSuperAdmin | `UserFormViewModel { Id?, RegistryNo (Edit'te salt okunur, PL-27), FullName, SelectedRoles[], AvailableRoles[] (işlemi yapanın atayabildiği roller), RolesLocked (kendi hesabı), TemporaryPassword (yalnız Create), IsActive, IsPinLocked, MustChangePassword, MustSetPin, CanResetPin, CanResetPassword, CanDeactivate, CanActivate, StatusMessage?, ResetPin: UserResetViewModel, ResetPassword: UserResetViewModel, Activate: UserResetViewModel }` | `Views/Users/Form.cshtml` |
+| GET, POST `/users/deactivate/{id}` | `UsersController.Deactivate` | ManagerOrSuperAdmin | `UserDeactivateViewModel { UserId, FullName, RegistryNo, OpenWork: OpenWorkItemViewModel[] { Kind, Title, Url? }, CanDeactivate, BlockReason?, Pin }` | `Views/Users/Deactivate.cshtml` |
+| POST `/users/activate/{id}`, `/users/reset-pin/{id}`, `/users/reset-password/{id}` | `UsersController.Activate`, `.ResetPin`, `.ResetPassword` | ManagerOrSuperAdmin | `UserResetViewModel { TemporaryPassword? (yalnız parola sıfırlamada), Pin }`; hedef `{id}`'den. Form alanı adları önekli: `Activate.Pin`, `ResetPin.Pin`, `ResetPassword.TemporaryPassword`, `ResetPassword.Pin` | `Views/Users/Form.cshtml` içinde |
 
-Tüm `/users` istekleri SK-9 kapsamına göre serviste kontrol edilir; kapsam dışı hedefte istek işlem yapmaz ve 403 sayfası döner.
+Ortak davranış:
 
-**Dosya sınırı:** frontend `Views/Account/**`, `Views/Users/**`, `Views/Home/**`, `Views/Shared/**`, `wwwroot/js/PinInput.js`; backend
-`Controllers/AccountController.cs`, `Controllers/HomeController.cs`, `Controllers/UsersController.cs`, `Services/` (kullanıcı, PIN, parola, ayar okuma),
-`ViewModels/Account/**`, `ViewModels/Users/**`, `Authorization/**`, `Program.cs`, `appsettings*.json`.
+- Alan hatası `ModelState`'te alan adıyla (önekliyse önekiyle) gelir; alana bağlı olmayan iş kuralı reddi (ör. yanlış PIN, açık iş) boş anahtarla gelir ve form özetinde gösterilir.
+- Başarılı POST aynı ekranın GET'ine yönlenir; sonuç metni `StatusMessage` alanında gelir. Başarısız POST aynı görünümü aynı ViewModel'le yeniden çizer;
+  `Activate`, `ResetPin`, `ResetPassword` başarısızlığında `Form` görünümü tam `UserFormViewModel` ile çizilir.
+- Tüm `/users` istekleri SK-9 kapsamına göre serviste kontrol edilir; kapsam dışı hedefte istek işlem yapmaz ve 403 döner. Rol yetkisizliğinde de
+  kapsam reddinde de son yanıt 403 durum kodlu `/account/access-denied` içeriğidir (`/error/403` ile aynı bileşen).
+- PIN'in kilitlendiği istekte oturum kapanır ve `/account/login`'e `StatusMessage` ile yönlenir.
+- İstemci arka planda sunucuya istek atmaz; bağlantı göstergesi `navigator.onLine` ile çalışır. İşlemsizlik süresini yalnız kullanıcının isteği yeniler.
+- PIN bileşeni: `FirstLogin` ve `Security` yeni PIN alanları belirleme modunda `PinLength` ile; diğer tüm PIN alanları doğrulama modunda, uzunluk sınırı olmadan (PL-18).
+
+**Dosya sınırı:** frontend `Views/**` (`Account`, `Users`, `Home`, `Shared`, `Error`, `Prototype`, `_ViewImports.cshtml`, `_ViewStart.cshtml`), `Styles/**`,
+`wwwroot/**`, `tailwind.config.js`, `Docs/Design/Dna.md`; backend `Controllers/AccountController.cs`, `Controllers/HomeController.cs`,
+`Controllers/UsersController.cs`, `Controllers/PrototypeController.cs` (T-B15), `Controllers/ErrorController.cs` (yalnız gerekirse), `Services/` (kullanıcı,
+PIN, parola, ayar okuma), `ViewModels/Account/**`, `ViewModels/Home/**`, `ViewModels/Users/**`, `Authorization/**` (`Roles.cs`, `VakaClaimTypes.cs`,
+ilk giriş filtresi), `Program.cs`, `appsettings*.json`, `Docs/Db/DB-<yıl>-<sıra>.md` talebi; dbadmin `Domain/Entities/**`, `Data/**`.
 
 **Kabul kriterleri**
 
 - [ ] K1: Oturumsuz istek `/users` için `/account/login?ReturnUrl=%2Fusers` adresine 302 döner.
 - [ ] K2: Seed'de yalnız bir kullanıcı vardır ve rolü Süper admin'dir. Süper admin geçici parolayla girince `/account/first-login` açılır; parola ve PIN belirlenmeden `/`, `/users` ve `/account/security` istekleri ilk girişe yönlenir; bitince `/` adresi `/users`'a yönlenir (SC-34, SC-38).
-- [ ] K3: İlk giriş ve PIN değiştirmede `<PinUzunluğu>` dışı uzunluk, rakam dışı karakter, tüm haneleri aynı ve ardışık artan ya da azalan PIN alan altında nedeniyle reddedilir.
-- [ ] K4: Süper admin `/users/create` ile Yönetici rolünde kullanıcı açar; o Yönetici `/users/create` ile Operatör ve Denetçi açar; aynı sicil no ile ikinci kayıt "Bu sicil no kayıtlı" hatasıyla reddedilir; yeni kullanıcılar ilk girişte parola ve PIN belirler.
-- [ ] K5: Operatör ve Denetçi rolündeki kullanıcı `/users`, `/users/create`, `/users/edit/{id}`, `/users/deactivate/{id}`, `/users/activate/{id}`, `/users/reset-pin/{id}`, `/users/reset-password/{id}` GET ve POST isteklerinde 403 alır; menüde Kullanıcılar yoktur (SC-17).
-- [ ] K6: Yönetici ve Süper admin pasifleştirmede yanlış PIN girerse kullanıcı aktif kalır; doğru PIN'le pasif olur; pasif kullanıcı doğru parolayla giremez.
-- [ ] K7: Art arda `<PinDenemeSınırı>` hatalı PIN'de PIN kilitlenir ve oturum kapanır; yeniden girişte PIN isteyen işlem "PIN kilitli" ile reddedilir. Kilitli Operatör'ün PIN'ini Yönetici, kilitli Yönetici'nin PIN'ini Süper admin sıfırlar; kullanıcı sonraki girişte ilk giriş ekranında yalnız yeni PIN belirler (SC-31 kimlik kısmı).
+- [ ] K3: İlk giriş ve PIN değiştirmede, seed değeri `<PinUzunluğu>` 4 ile: 3 ve 5 haneli PIN, rakam dışı karakterli PIN (`12a4`), tüm haneleri aynı PIN (`1111`), ardışık artan (`1234`) ve azalan (`4321`) PIN alan altında nedeniyle reddedilir; `1357` ve `0482` kabul edilir, `0482` sonraki doğrulamada aynı değerle geçer.
+- [ ] K4: Süper admin `/users/create` ile Yönetici rolünde kullanıcı açar; o Yönetici `/users/create` ile Operatör ve Denetçi açar; aynı sicil no ile ikinci kayıt "Bu sicil no kayıtlı" hatasıyla reddedilir; yeni kullanıcılar ilk girişte parola ve PIN belirler. `/users/edit/{id}` formunda sicil no değiştirilemez; istek değiştirilerek gönderilen sicil no kaydı değiştirmez (PL-27).
+- [ ] K5: Operatör ve Denetçi rolündeki kullanıcı `/users`, `/users/create`, `/users/edit/{id}`, `/users/deactivate/{id}`, `/users/activate/{id}`, `/users/reset-pin/{id}`, `/users/reset-password/{id}` GET ve POST isteklerinde son yanıt olarak 403 durum kodlu sayfa alır; menüde Kullanıcılar yoktur (SC-17).
+- [ ] K6: Yönetici ve Süper admin pasifleştirmede ve yeniden etkinleştirmede yanlış PIN girerse hesabın durumu değişmez; doğru PIN'le değişir; pasif kullanıcı doğru parolayla giremez.
+- [ ] K7: Seed değeri `<PinDenemeSınırı>` 5 ile: art arda 4 hatalı PIN'den sonra PIN kilitli değildir; 5. hatalı denemede PIN kilitlenir, oturum kapanır ve giriş sayfası nedeni gösterir. 4 hatalı denemeden sonra girilen doğru PIN sayacı sıfırlar. Yeniden girişte PIN isteyen işlem "PIN kilitli" ile reddedilir. Kilitli Operatör'ün PIN'ini Yönetici, kilitli Yönetici'nin PIN'ini Süper admin sıfırlar; kullanıcı sonraki girişte ilk giriş ekranında yalnız yeni PIN belirler (SC-31 kimlik kısmı).
 - [ ] K8: Son aktif Süper admin'in pasifleştirme ve Süper admin rolünü kaldırma isteği nedeniyle reddedilir; ikinci bir Süper admin açıldıktan sonra biri pasifleştirilebilir. Kullanıcı kendi hesabını pasifleştiremez ve kendi rollerini değiştiremez (PL-05, PL-16).
 - [ ] K8a: Yönetici'nin formunda Yönetici ve Süper admin rolleri sunulmaz; istek değiştirilerek gönderilen `Manager` ya da `SuperAdmin` rolü reddedilir. Yönetici, `Manager` ya da `SuperAdmin` rolü taşıyan bir hesap için düzenleme, pasifleştirme, etkinleştirme, PIN ve parola sıfırlama isteği gönderince 403 alır ve hesap değişmez; listede bu hesaplarda işlem bağlantısı yoktur (SK-9).
-- [ ] K8b: Süper admin rolü tek başına olan kullanıcının menüsünde yalnız Kullanıcılar ve hesap bağlantıları vardır.
+- [ ] K8b: Süper admin rolü tek başına olan kullanıcının menüsünde yalnız Kullanıcılar ve hesap bağlantıları vardır. Hiçbir rolün menüsünde bu fazda var olmayan adrese bağlantı ya da bağlantısız kalem yoktur.
 - [ ] K9: Kullanıcı `/account/security`'de eski PIN'le yeni PIN belirler; eski PIN yanlışsa PIN değişmez ve hatalı deneme sayılır (K-42).
 - [ ] K10: Veritabanında parola ve PIN düz metin olarak bulunmaz; uygulama günlüğünde girilen PIN geçmez (NFR-15).
 - [ ] K11: Kabukta oturumdaki kişinin adı ve sicil no 360, 768 ve 1440 px'te görünür; "Kullanıcı değiştir" tek dokunuşla oturumu kapatıp giriş ekranını açar (NFR-09).
-- [ ] K12: QA kopyasında ayar tablosundaki `<OturumSüresi>` kısa bir değere ayarlanır; o süre işlemsizlikten sonraki istek giriş sayfasına yönlenir. `<PinUzunluğu>` ve `<PinDenemeSınırı>` da ayar tablosundan okunur; kaynak kodda ve `appsettings*.json`'da bu değerler yoktur (K-47).
-- [ ] K12a: Ayar tablosu beş ayarı (medya boyutu fotoğraf ve video ayrı) ve boş değişiklik geçmişi tablosunu içerir; seed değerleri Requirements §9'da kullanıcının verdiği değerlerdir.
-- [ ] K13: Operatör ve Yönetici rollerine birlikte sahip kullanıcı iki rolün menüsünü birlikte görür (K-29).
+- [ ] K11a: Oturum süresi dolduktan sonra sayfada kalan kişi "Kullanıcı değiştir"e basınca 400 değil giriş ekranını görür.
+- [ ] K12: Seed'li veritabanında oturum son istekten 30 dakika sonra kapanır (`<OturumSüresi>`, PL-24). QA kopyasında ayar kısa bir değere (ör. 2 dakika) ayarlanır: süreden kısa aralıklarla yapılan istekler, toplamı süreyi aşsa da oturumu açık tutar; süreden uzun işlemsizlikten sonraki istek giriş sayfasına yönlenir. `<PinUzunluğu>` ve `<PinDenemeSınırı>` da ayar tablosundan okunur; QA kopyasında değiştirilen değer sonraki istekte uygulanır; kaynak kodda, `appsettings*.json`'da ve görünümde bu değerler yoktur (K-47, PL-18).
+- [ ] K12a: Ayar tablosunda tam üç satır vardır, değerleri `<OturumSüresi>` 30, `<PinUzunluğu>` 4, `<PinDenemeSınırı>` 5'tir (PL-24); medya boyutu ve azami kilit süresi satırı yoktur (PL-25); değişiklik geçmişi tablosu boştur. QA kopyasında sıfır ya da negatif değer yazma veritabanı kısıtıyla reddedilir.
+- [ ] K13: Operatör ve Yönetici rollerine birlikte sahip kullanıcı iki rolün menüsünü birlikte görür ve `/users`'a erişir; yalnız Operatör rolü olan kullanıcı Kullanıcılar'ı görmez (K-29).
 - [ ] K14: Prototip kabuğu gerçek kabukla değişmiştir; prototip sayfaları Development'ta açılmaya devam eder (PL-10).
 
 **Faz T'den devreden (PL-21, PL-23):**
 
 - [ ] T-B15 (BE): Genel antiforgery filtresi etkin; G5 bu fazın tüm POST'larında 400 verir; prototip action'ları `[HttpGet]` ya da token doğrulayan biçimdedir.
-- [ ] T-B16 (FE): Production'da oturumsuz açılan `/error/404` ve `/error/403` sayfalarında demo kişi adı, sicil no ve `/prototype/*` bağlantısı yoktur (K14 ile).
+- [ ] T-B16 (FE): Production'da oturumsuz açılan `/error/404`, `/error/403`, `/error` ve `/account/access-denied` sayfalarında demo kişi adı, sicil no ve `/prototype/*` bağlantısı yoktur (K14 ile).
 - [ ] T-B21 (FE): `Docs/Design/Dna.md` veri dili satırındaki kart sütun sayısı (768 px altı, 768-1279 px) ve tablo satır yüksekliği uygulamayla aynıdır ya da uygulama karttakine uyar; E-03 tablosu bu satıra göre kurulur.
 
 **Kapsam dışı:** Kullanıcıya tesis ya da yönetici bağı (K-20, K-40), kurumsal dizin, parola karmaşıklık politikası iş biriminden gelmedikçe ASP.NET varsayılanı,
-Sistem ayarları ekranı (Faz 9), Süper admin hesabının uygulama dışından kurtarılması.
+Sistem ayarları ekranı (Faz 9), Süper admin hesabının uygulama dışından kurtarılması, sicil no değiştirme (PL-27).
+
+**Sonuç (2026-11-14):** TESLİM ALINDI (tur 3; tur 1 İADE, tur 2'de B7 kaldı, tur 3 kullanıcı onaylı ek tur, PL-31). Kabul kriterleri 28/28;
+T-B15, T-B16, T-B21 kapandı. Faz 4'e devreden iki kalem Faz 4'ün "Faz 1'den devreden" satırlarında (PL-32). Rapor: `Docs/Delivery/Faz-1-Teslim.md`.
 
 ---
 
@@ -291,7 +331,8 @@ Sistem ayarları ekranı (Faz 9), Süper admin hesabının uygulama dışından 
 - [ ] K5: Yönetici makineyi kullanımdan kaldırır; liste "Kullanımdan kaldırıldı" ve anını gösterir; makine silinmez (FR-02, BR-05).
 - [ ] K6: SKT'si bugünden önce olan lot listede metinli "SKT geçmiş" rozetiyle görünür; bugünkü SKT geçmiş sayılmaz.
 - [ ] K7: Operatör ve Denetçi bu fazın tüm adreslerinde 403 alır (BR-34).
-- [ ] K8: Liste ekranlarında sayfalama ve filtre sunucuda çalışır; 1440 px'te tablo, 390 px'te yatay kaydırmasız görünüm.
+- [ ] K8: Liste ekranlarında sayfalama ve filtre sunucuda çalışır. E-05, E-06, E-07 ve E-08 liste ekranları 360, 768, 1024 ve 1440 px'te G11
+  imzasını taşır ve frontend devir notundaki beklenen imzayla aynıdır; 360 ve 390 px'te yatay kaydırma yok; 1440 px'te tablo.
 
 **Kapsam dışı:** Toplu içe aktarım (K-19), kullanıcıya tesis ataması (K-20).
 
@@ -305,7 +346,8 @@ Sistem ayarları ekranı (Faz 9), Süper admin hesabının uygulama dışından 
 
 | # | Tür | İş kalemi | Sahibi |
 |---|---|---|---|
-| 1 | DB | Temizlik tipi (tür: Planlı, Acil), makine eşlemesi, prosedür versiyonu, faz, adım, adım medyası tabloları; tip başına tek "Yürürlükte" ve tek "Taslak" için kısmi unique index; yayınlanmış versiyonun faz, adım ve medya satırlarında UPDATE ve DELETE'i reddeden tetikleyiciler (BR-04). Seed: bir planlı ve bir acil tip, yayınlanmış birer versiyon | backend-engineer talebi, dbadmin |
+| 1 | DB | Ayar tablosuna `<AzamiMedyaBoyutu>` fotoğraf, video ve `<AzamiKilitSüresi>` satırları seed ekleme olarak, kullanıcının verdiği değerlerle (PL-25); Faz 1 satırları değişmez. Değerler gelmeden Faz 3 başlamaz (Requirements §9) | backend-engineer talebi, dbadmin |
+| 1a | DB | Temizlik tipi (tür: Planlı, Acil), makine eşlemesi, prosedür versiyonu, faz, adım, adım medyası tabloları; tip başına tek "Yürürlükte" ve tek "Taslak" için kısmi unique index; yayınlanmış versiyonun faz, adım ve medya satırlarında UPDATE ve DELETE'i reddeden tetikleyiciler (BR-04). Seed: bir planlı ve bir acil tip, yayınlanmış birer versiyon | backend-engineer talebi, dbadmin |
 | 2 | BE | Tip servisi: varsayılan kilit süresi yalnız planlı tipte zorunlu ve `<AzamiKilitSüresi>`'ni (ayar servisinden) aşamaz (BR-45); tür oluşturulduktan sonra değişmez (PL-04); acil tip makine eşlemesi almaz (BR-50) | backend-engineer |
 | 3 | BE | Versiyon servisi: yeni taslak yürürlüktekinin derin kopyasıdır (Brief §7.e); taslakta faz ve adım ekleme, düzenleme, sıralama, çıkarma (PL-03); yayınlama tek transaction'da eskisini Arşiv yapar, versiyon no sistemce artar, PIN ister; yayın koşulu: en az bir faz, her fazda en az bir adım, planlı tipte her fazda minimum süre (PL-14) | backend-engineer |
 | 4 | BE | Medya: JPEG, PNG, WebP, MP4 (K-26), `<AzamiMedyaBoyutu>` (ayar servisinden, fotoğraf ve video ayrı), `wwwroot` dışında içerik özetiyle adlandırılmış dosya, yetkili action üzerinden sunum, video için aralıklı okuma (Brief §9.6) | backend-engineer |
@@ -350,6 +392,7 @@ backend `Controllers/CleaningTypesController.cs`, `Controllers/ProcedureVersions
 - [ ] K9: `/media/{id}` oturumsuz istekte giriş sayfasına yönlenir.
 - [ ] K10: Denetçi `/procedure-versions/details/{id}` açar, düzenleme route'larında 403 alır; Operatör tüm bu fazın ekranlarında 403 alır.
 - [ ] K11: Düzenleyici 1024 px'te ve klavyeyle kullanılabilir (sıralama düğmeleri odaklanabilir, odak görünür).
+- [ ] K12: Ayar tablosuna üç satır eklenmiştir ve değerleri Requirements §6'daki başlangıç değerleridir; Faz 1'in üç satırı ve değişiklik geçmişi değişmemiştir; migration'da `UPDATE` yoktur (PL-25).
 
 **Kapsam dışı:** Yayın için ikinci onay ve ileri tarihli yürürlük (K-24), adım sonuç alanları (K-27).
 
@@ -424,6 +467,13 @@ Yürütme ekranı yalnız Operatör'e açıktır; Yönetici ve Denetçi kaydı F
 
 - [ ] T-B14 (BE, FE): Süre biçimleyicinin çıktısında rakam ve birim ayrı işaretlenir; ekranda yalnız rakam mono, birim sans yazılır.
 - [ ] T-B22 (FE): Yürütme ekranı kayıt başlığında 1024-1279 px'te iki ray açıkken alan değerleri en çok iki satıra bölünür; saha referansı ve kayıt no satır içinde bölünmez.
+
+**Faz 1'den devreden (PL-32):**
+
+- [ ] F1-A1 (QA): Sahibi olduğu aktif kaydı olan kullanıcının `/users/deactivate/{id}` ekranı açık işi listeler, pasifleştirme düğmesi yoktur;
+  kayıt bağlantısı yalnız görüntüleyenin erişebildiği ekrana verilir, Süper admin görüntülerken bağlantı yoktur (K-04, PL-16, Faz 1 kalem 7).
+- [ ] F1-A2 (BE): PIN isteyen her işlemde (Faz 1 hesap işlemleri dahil) PIN doğrulaması ve iş eylemi aynı veritabanı işleminde yapılır; doğru
+  PIN'den sonra iş kuralı reddinde kısmi yazma kalmaz, yanlış PIN'de hatalı deneme sayacı yine yazılır (BR-48).
 
 **Kapsam dışı:** Adım yürütme (Faz 5), kayıt detayı ve listesi (Faz 6), acil kayıt (Faz 8).
 

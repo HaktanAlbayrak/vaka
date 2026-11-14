@@ -139,7 +139,7 @@
 - Etki: NFR-09, Faz 1 giriş ekranı ve kimlik altyapısı, Faz T saha kabuğu (kullanıcı değiştirme). Kart okuyucu ya da kurumsal dizin (ör. Active Directory) istenirse mevcut yığının (cookie kimlik doğrulama, yerel kullanıcı tablosu) dışına çıkılır ve kapsam büyür.
 - Öneri: **Varsayılan:** sicil no + parola ile cookie oturumu; işlemsizlikte `<OturumSüresi>` sonra oturum kapanır (değeri iş birimi verir); kabukta oturumdaki kişinin adı sürekli görünür ve tek dokunuşla "kullanıcı değiştir" vardır. **Alternatifler:** (a) sicil no + kısa PIN (sahada hızlı, parola politikası zayıflar); (b) kurumsal dizin ile tek oturum (entegrasyon fazı gerekir); (c) kart okuyucu (donanım ve entegrasyon gerekir).
 - Öncelik: Engelleyici
-- **Karar (2026-11-13):** Giriş sicil no + parola ile. Yönetici kullanıcıyı geçici parolayla açar; kullanıcı ilk girişte parolasını değiştirir ve kişisel PIN belirler, bunlar bitmeden başka ekrana geçemez. Kritik işlemlerde işlemi yapanın PIN'i istenir; liste Brief BR-48. PIN biçimi ve hatalı deneme kuralı K-42. İşlemsizlikte `<OturumSüresi>` sonra oturum kapanır.
+- **Karar (2026-11-13):** Giriş sicil no + parola ile. Yönetici kullanıcıyı geçici parolayla açar; kullanıcı ilk girişte parolasını değiştirir ve kişisel PIN belirler, bunlar bitmeden başka ekrana geçemez. Kritik işlemlerde işlemi yapanın PIN'i istenir; liste Brief BR-48. PIN biçimi ve hatalı deneme kuralı K-42. İşlemsizlikte `<OturumSüresi>` sonra oturum kapanır (başlangıç değeri 30 dakika, 2026-11-13, PL-24).
 
 ### K-10: Yardımcı personelin kaynağı ve katılımının kanıtı
 - Kaynak: doc.txt satır 37, 50-53, 112
@@ -406,6 +406,7 @@ K-38..K-40 Engelleyiciydi; 2026-11-13'te karara bağlandı. Diğerlerinin öneri
 - Öneri: **Varsayılan:** yalnız rakam, `<PinUzunluğu>` hane; tüm haneleri aynı ya da ardışık PIN reddedilir; `<PinDenemeSınırı>` art arda hatalı denemede PIN kilitlenir ve oturum kapanır; yönetici PIN'i sıfırlar, kullanıcı sonraki girişte yeni PIN belirler; kullanıcı eski PIN'iyle kendi PIN'ini değiştirebilir. Değerler iş birimi ve BT'den. **Alternatif:** süreli kilit (belirli süre sonra kendiliğinden açılır).
 - Öncelik: Önemli
 - **Not (2026-11-13):** Varsayılan kabul edildi. "Yönetici sıfırlar" PL-05 ile şöyle okunur: Operatör ve Denetçi hesabını Yönetici ya da Süper admin, Yönetici ve Süper admin hesabını yalnız Süper admin sıfırlar.
+- **Not (2026-11-13):** Kullanıcı değerleri verdi: `<PinUzunluğu>` 4 hane, `<PinDenemeSınırı>` 5; art arda 5. hatalı denemede PIN kilitlenir, doğru PIN sayacı sıfırlar. Değerler seed'e girer, Sistem ayarlarından değişir (PL-24, Requirements §6).
 
 ### K-43: Bildirim kanalı
 - Kaynak: K-14 yanıtı ("aciliyet durumu bildirimi olabilir"), K-37.
@@ -442,6 +443,7 @@ K-38..K-40 Engelleyiciydi; 2026-11-13'te karara bağlandı. Diğerlerinin öneri
 - Öneri: **Varsayılan:** sistem geneli değerler sunucu ayar dosyasındadır, BT değiştirir; tip bazlı değerler (varsayılan kilit süresi, faz minimum süresi, malzeme zorunluluğu) yönetici ekranındadır. **Alternatif:** yönetici ayar ekranı (Faz 9'a bir ekran eklenir).
 - Öncelik: Sonra netleşebilir
 - **Karar (2026-11-13):** Kullanıcı: değerler "yönetici ayarlarından değiştirilebilir olmalı"; alternatif seçildi. `<OturumSüresi>`, `<PinUzunluğu>`, `<PinDenemeSınırı>`, `<AzamiMedyaBoyutu>` (fotoğraf ve video ayrı) ve `<AzamiKilitSüresi>` veritabanındaki sistem ayarları tablosundadır. Yönetici ve Süper admin bunları Sistem ayarları ekranından (E-33, Faz 9) PIN ile değiştirir; her değişiklik eski değer, yeni değer, yapan ve zamanla geçmişe yazılır. Tablo Faz 1'de oluşur ve seed'den dolar (PL-17); değişikliğin etkisi PL-18. Kullanıcı değer vermedi: değerler yer tutucu kalır, uydurma değer yazılmaz; ilgili fazdan önce gerekir (Requirements §9). Süper admin kurulumda değerleri ilk yapılandıran kişidir (seed'de tek kullanıcı olduğu için ekran yetkisi ona da verildi).
+- **Not (2026-11-13):** Faz 1 başlangıç değerleri kullanıcıdan geldi: `<OturumSüresi>` 30 dakika, `<PinUzunluğu>` 4 hane, `<PinDenemeSınırı>` 5 (PL-24). `<AzamiMedyaBoyutu>` ve `<AzamiKilitSüresi>` Faz 3 öncesi açık; satırları değer gelince eklenir (PL-25). Değerlerin tek yeri Requirements §6.
 
 ### K-48: Denetçi rolü
 - Kaynak: Brief §3.1 (öneri), satır 4, 123.

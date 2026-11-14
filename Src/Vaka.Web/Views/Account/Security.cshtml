@@ -1,0 +1,52 @@
+@model Vaka.Web.ViewModels.Account.SecurityViewModel
+@{
+    ViewData["Title"] = "Parola ve PIN";
+    ViewData["Lead"] = "Parolanızı ve PIN'inizi buradan değiştirin.";
+    ViewData["NavKey"] = "security";
+    ViewData["StatusMessage"] = Model.StatusMessage;
+}
+
+<partial name="_FormSummary" model='"Değişiklik kaydedilemedi"' />
+
+<div class="grid items-start gap-5 xl:grid-cols-2">
+    <form method="post" action="/account/change-password" asp-antiforgery="true" class="panel min-w-0" data-validate data-busy-form aria-labelledby="password-title">
+        <div class="panel-head">
+            <h2 id="password-title" class="panel-title">Parola</h2>
+        </div>
+        <div class="panel-body space-y-5">
+            <partial name="_Field" model='("Password.CurrentPassword", "Mevcut parola", (string?)null, "password", "current-password", (string?)null, true, false)' />
+            <partial name="_Field" model='("Password.NewPassword", "Yeni parola", (string?)null, "password", "new-password", (string?)null, true, false)' />
+            <partial name="_Field" model='("Password.ConfirmPassword", "Yeni parola, tekrar", (string?)null, "password", "new-password", (string?)null, true, false)' />
+            <div class="border-t-2 border-line pt-5">
+                <button type="submit" class="btn btn-primary btn-lg" data-requires-online>
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#key-round" /></svg>
+                    Parolayı değiştir
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <form method="post" action="/account/change-pin" asp-antiforgery="true" class="panel min-w-0" data-validate data-busy-form aria-labelledby="pin-title">
+        <div class="panel-head">
+            <h2 id="pin-title" class="panel-title">PIN</h2>
+        </div>
+        <div class="panel-body space-y-5">
+            <div class="max-w-xs">
+                <partial name="_PinInput" model='("Pin-CurrentPin", "Mevcut PIN", "verify", (int?)null, "Pin.CurrentPin", (string?)null)' />
+            </div>
+            <div class="max-w-xs">
+                <partial name="_PinInput" model='("Pin-NewPin", "Yeni PIN", "set", (int?)Model.PinLength, "Pin.NewPin", (string?)null)' />
+            </div>
+            <div class="max-w-xs">
+                <partial name="_PinInput" model='("Pin-ConfirmPin", "Yeni PIN, tekrar", "set", (int?)Model.PinLength, "Pin.ConfirmPin", (string?)null)' />
+            </div>
+            <p class="text-sm text-muted">Mevcut PIN yanlışsa PIN değişmez ve hatalı deneme sayılır. Üst üste yanlışta PIN kilitlenir.</p>
+            <div class="border-t-2 border-line pt-5">
+                <button type="submit" class="btn btn-primary btn-lg" data-requires-online>
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#shield-check" /></svg>
+                    PIN'i değiştir
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,209 @@
+@using Vaka.Web.ViewModels.Users
+@model UserFormViewModel
+@{
+    var isCreate = Model.Id is null;
+    ViewData["Title"] = isCreate ? "Kullanıcı ekle" : "Kullanıcıyı düzenle";
+    ViewData["Lead"] = isCreate
+        ? "Hesabı açın, geçici parolayı kullanıcıya iletin. Parola ve PIN'i kullanıcı ilk girişte kendisi belirler."
+        : Model.FullName + ", sicil " + Model.RegistryNo;
+    ViewData["NavKey"] = "users";
+    ViewData["StatusMessage"] = Model.StatusMessage;
+
+    var path = Context.Request.Path.Value ?? "";
+    var openPin = path.Contains("/reset-pin/");
+    var openPassword = path.Contains("/reset-password/");
+    var openActivate = path.Contains("/activate/");
+
+    var roleOrder = new[] { Roles.Operator, Roles.Manager, Roles.Auditor, Roles.SuperAdmin };
+    var shownRoles = roleOrder.Where(role => Model.AvailableRoles.Contains(role) || Model.SelectedRoles.Contains(role)).ToList();
+    var roleHints = new Dictionary<string, string>
+    {
+        [Roles.Operator] = "Temizlik kaydı açar, adımları yürütür.",
+        [Roles.Manager] = "Kayıtları izler, tanımları yönetir.",
+        [Roles.Auditor] = "Kayıtları salt okur.",
+        [Roles.SuperAdmin] = "Yönetici hesaplarını ve sistem ayarlarını yönetir."
+    };
+    var roleError = ViewData.ModelState.TryGetValue("SelectedRoles", out var roleEntry) && roleEntry.Errors.Count > 0 ? roleEntry.Errors[0].ErrorMessage : null;
+}
+
+<partial name="_FormSummary" model='isCreate ? "Kullanıcı eklenemedi" : "İşlem tamamlanamadı"' />
+
+<div class="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_24rem]">
+    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard aria-labelledby="account-title">
+        <div class="panel-head">
+            <h2 id="account-title" class="panel-title">Hesap bilgileri</h2>
+        </div>
+        <div class="panel-body space-y-6">
+            @if (!isCreate && !Model.IsActive)
+            {
+                <p class="notice notice-warn">
+                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#ban" /></svg>
+                    <span>Bu hesap pasif. Kullanıcı giriş yapamaz.</span>
+                </p>
+            }
+
+            <div class="grid gap-5 md:grid-cols-2">
+                <partial name="_Field" model='("RegistryNo", "Sicil no", Model.RegistryNo, "text", "off", isCreate ? "Oluşturduktan sonra değiştirilemez." : "Sicil no değiştirilemez.", true, !isCreate)' />
+                <partial name="_Field" model='("FullName", "Ad soyad", Model.FullName, "text", "off", (string?)null, true, false)' />
+            </div>
+
+            <fieldset class="field" data-field aria-describedby="@(roleError is null ? null : "roles-error")">
+                <legend class="field-label">Roller</legend>
+                @if (Model.RolesLocked)
+                {
+                    <p class="field-hint">Kendi rollerinizi değiştiremezsiniz.</p>
+                }
+                <div class="grid gap-2 md:grid-cols-2">
+                    @foreach (var role in shownRoles)
+                    {
+                        var selected = Model.SelectedRoles.Contains(role);
+                        var fixedRole = Model.RolesLocked || !Model.AvailableRoles.Contains(role);
+                        <label class="choice">
+                            <input type="checkbox" name="SelectedRoles" id="SelectedRoles-@role" value="@role" checked="@selected" disabled="@fixedRole" />
+                            <span class="min-w-0">
+                                <span class="block font-bold">@Roles.Label(role)</span>
+                                <span class="mt-0.5 block text-sm text-muted">@roleHints[role]</span>
+                            </span>
+                        </label>
+                        if (fixedRole && selected)
+                        {
+                            <input type="hidden" name="SelectedRoles" value="@role" />
+                        }
+                    }
+                </div>
+                @if (roleError is not null)
+                {
+                    <p id="roles-error" class="field-error">
+                        <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+                        <span>@roleError</span>
+                    </p>
+                }
+            </fieldset>
+
+            @if (isCreate)
+            {
+                <div class="max-w-md">
+                    <partial name="_Field" model='("TemporaryPassword", "Geçici parola", (string?)null, "password", "new-password", "Kullanıcı ilk girişte değiştirir. Ona yüz yüze iletin.", true, false)' />
+                </div>
+            }
+
+            <div class="flex flex-wrap items-center gap-3 border-t-2 border-line pt-5">
+                <button type="submit" class="btn btn-primary btn-lg" data-requires-online>
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#@(isCreate ? "user-plus" : "save")" /></svg>
+                    @(isCreate ? "Kullanıcıyı ekle" : "Değişiklikleri kaydet")
+                </button>
+                <a class="btn btn-secondary btn-lg" href="/users">Vazgeç</a>
+            </div>
+        </div>
+    </form>
+
+    @if (!isCreate)
+    {
+        <aside class="min-w-0 space-y-5" aria-label="Hesap işlemleri">
+            <section class="panel" aria-labelledby="state-title">
+                <div class="panel-head"><h2 id="state-title" class="panel-title">Hesap durumu</h2></div>
+                <div class="flex flex-wrap items-center gap-2 p-4 md:p-5">
+                    <partial name="_Badge" model='Model.IsActive ? "user.active" : "user.inactive"' />
+                    @if (Model.IsPinLocked)
+                    {
+                        <partial name="_Badge" model='"user.pinlocked"' />
+                    }
+                    @if (Model.MustChangePassword || Model.MustSetPin)
+                    {
+                        <partial name="_Badge" model='"user.firstlogin"' />
+                    }
+                </div>
+                @if (Model.MustChangePassword || Model.MustSetPin)
+                {
+                    <p class="px-4 pb-4 text-sm text-muted md:px-5 md:pb-5">
+                        Sonraki girişte kullanıcı
+                        @(Model.MustChangePassword && Model.MustSetPin ? "yeni parola ve PIN" : Model.MustChangePassword ? "yeni parola" : "yeni PIN")
+                        belirler.
+                    </p>
+                }
+            </section>
+
+            @if (Model.CanResetPin)
+            {
+                <details class="panel disclosure" open="@openPin">
+                    <summary>
+                        <span>PIN'i sıfırla</span>
+                        <svg class="icon disclosure-chevron" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </summary>
+                    <form method="post" action="/users/reset-pin/@Model.Id" asp-antiforgery="true" class="space-y-5 p-4 md:p-5" data-validate data-busy-form>
+                        <p class="text-sm text-muted">Kullanıcının PIN'i, hatalı deneme sayacı ve kilidi temizlenir. Kullanıcı sonraki girişte yeni PIN belirler.</p>
+                        <div class="max-w-xs">
+                            <partial name="_PinInput" model='("ResetPin-Pin", "PIN", "verify", (int?)null, "ResetPin.Pin", (string?)null)' />
+                        </div>
+                        <button type="submit" class="btn btn-secondary" data-requires-online>
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#rotate-ccw" /></svg>
+                            PIN'i sıfırla
+                        </button>
+                    </form>
+                </details>
+            }
+
+            @if (Model.CanResetPassword)
+            {
+                <details class="panel disclosure" open="@openPassword">
+                    <summary>
+                        <span>Parolayı sıfırla</span>
+                        <svg class="icon disclosure-chevron" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </summary>
+                    <form method="post" action="/users/reset-password/@Model.Id" asp-antiforgery="true" class="space-y-5 p-4 md:p-5" data-validate data-busy-form>
+                        <p class="text-sm text-muted">Yeni geçici parolayı siz yazarsınız. Kullanıcı sonraki girişte değiştirir.</p>
+                        <partial name="_Field" model='("ResetPassword.TemporaryPassword", "Yeni geçici parola", (string?)null, "password", "new-password", (string?)null, true, false)' />
+                        <div class="max-w-xs">
+                            <partial name="_PinInput" model='("ResetPassword-Pin", "PIN", "verify", (int?)null, "ResetPassword.Pin", (string?)null)' />
+                        </div>
+                        <button type="submit" class="btn btn-secondary" data-requires-online>
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#key-round" /></svg>
+                            Parolayı sıfırla
+                        </button>
+                    </form>
+                </details>
+            }
+
+            @if (Model.CanActivate)
+            {
+                <details class="panel disclosure" open="@openActivate">
+                    <summary>
+                        <span>Yeniden etkinleştir</span>
+                        <svg class="icon disclosure-chevron" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </summary>
+                    <form method="post" action="/users/activate/@Model.Id" asp-antiforgery="true" class="space-y-5 p-4 md:p-5" data-validate data-busy-form>
+                        <p class="text-sm text-muted">Hesap yeniden giriş yapabilir. Parola ve PIN olduğu gibi kalır.</p>
+                        <div class="max-w-xs">
+                            <partial name="_PinInput" model='("Activate-Pin", "PIN", "verify", (int?)null, "Activate.Pin", (string?)null)' />
+                        </div>
+                        <button type="submit" class="btn btn-secondary" data-requires-online>
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-check" /></svg>
+                            Yeniden etkinleştir
+                        </button>
+                    </form>
+                </details>
+            }
+
+            @if (Model.IsActive)
+            {
+                <section class="panel" aria-labelledby="deactivate-title">
+                    <div class="panel-head"><h2 id="deactivate-title" class="panel-title">Pasifleştir</h2></div>
+                    <div class="space-y-4 p-4 md:p-5">
+                        @if (Model.CanDeactivate)
+                        {
+                            <p class="text-sm text-muted">Pasif hesap giriş yapamaz. Geçmiş kayıtlar korunur. Sonradan yeniden etkinleştirebilirsiniz.</p>
+                            <a class="btn btn-danger" href="/users/deactivate/@Model.Id">
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-x" /></svg>
+                                Pasifleştirmeye geç
+                            </a>
+                        }
+                        else
+                        {
+                            <p class="text-sm text-muted">@(Model.DeactivateBlockReason ?? "Bu hesap pasifleştirilemez. Kendi hesabınız ve son etkin Süper admin pasifleştirilemez.")</p>
+                        }
+                    </div>
+                </section>
+            }
+        </aside>
+    }
+</div>

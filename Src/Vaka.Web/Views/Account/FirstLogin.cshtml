@@ -1,0 +1,81 @@
+@model Vaka.Web.ViewModels.Account.FirstLoginViewModel
+@{
+    ViewData["Title"] = "İlk giriş";
+    ViewData["Focus"] = true;
+    ViewData["Lead"] = (Model.MustChangePassword, Model.MustSetPin) switch
+    {
+        (true, true) => "Geçici parolanızı değiştirin ve PIN belirleyin. Bitirince çalışmaya geçersiniz.",
+        (true, false) => "Geçici parolanızı değiştirin. Bitirince çalışmaya geçersiniz.",
+        _ => "Yeni PIN belirleyin. Bitirince çalışmaya geçersiniz."
+    };
+    var step = 0;
+}
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+    <form method="post" class="panel min-w-0" data-validate data-busy-form aria-label="İlk giriş formu">
+        <div class="panel-body space-y-8">
+            <partial name="_FormSummary" model='"Kaydedilemedi"' />
+
+            @if (Model.MustChangePassword)
+            {
+                step++;
+                <fieldset class="space-y-5">
+                    <legend class="mb-4 flex items-center gap-3">
+                        <span class="step-stamp" aria-hidden="true">@step</span>
+                        <span class="panel-title">Yeni parola</span>
+                    </legend>
+                    <partial name="_Field" model='("CurrentPassword", "Geçici parola", (string?)null, "password", "current-password", "Size verilen geçici parolayı girin.", true, false)' />
+                    <partial name="_Field" model='("NewPassword", "Yeni parola", (string?)null, "password", "new-password", (string?)null, true, false)' />
+                    <partial name="_Field" model='("ConfirmPassword", "Yeni parola, tekrar", (string?)null, "password", "new-password", (string?)null, true, false)' />
+                </fieldset>
+            }
+
+            @if (Model.MustSetPin)
+            {
+                step++;
+                <fieldset class="space-y-5">
+                    <legend class="mb-4 flex items-center gap-3">
+                        <span class="step-stamp" aria-hidden="true">@step</span>
+                        <span class="panel-title">PIN</span>
+                    </legend>
+                    <div class="max-w-xs">
+                        <partial name="_PinInput" model='("NewPin", "Yeni PIN", "set", (int?)Model.PinLength, "NewPin", (string?)null)' />
+                    </div>
+                    <div class="max-w-xs">
+                        <partial name="_PinInput" model='("ConfirmPin", "Yeni PIN, tekrar", "set", (int?)Model.PinLength, "ConfirmPin", (string?)null)' />
+                    </div>
+                </fieldset>
+            }
+
+            <div class="flex flex-wrap items-center gap-3 border-t-2 border-line pt-5">
+                <button type="submit" class="btn btn-primary btn-lg" data-requires-online>
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#save" /></svg>
+                    Kaydet ve devam et
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <aside class="min-w-0 space-y-5" aria-label="Bilgi">
+        <section class="panel" aria-labelledby="who-title">
+            <div class="panel-head"><h2 id="who-title" class="panel-title">Hesap</h2></div>
+            <dl class="kv p-4 md:p-5">
+                <div>
+                    <dt>Ad soyad</dt>
+                    <dd>@Model.FullName</dd>
+                </div>
+            </dl>
+        </section>
+        @if (Model.MustSetPin)
+        {
+            <section class="panel" aria-labelledby="pin-info-title">
+                <div class="panel-head"><h2 id="pin-info-title" class="panel-title">PIN ne işe yarar</h2></div>
+                <div class="space-y-2 p-4 md:p-5">
+                    <p>PIN, adım başlatma ve bitirme gibi işlemleri sizin adınıza onaylar. Kimseyle paylaşmayın.</p>
+                    <p>Tüm hanelerin aynı olduğu ve ardışık artan ya da azalan PIN kabul edilmez.</p>
+                    <p>Üst üste yanlış girerseniz PIN kilitlenir. Kilidi yöneticiniz açar.</p>
+                </div>
+            </section>
+        }
+    </aside>
+</div>

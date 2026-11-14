@@ -1,0 +1,20 @@
+@model Vaka.Web.ViewModels.Home.HomeViewModel
+@{
+    ViewData["Title"] = "Ana sayfa";
+    ViewData["Lead"] = Model.FullName + ", rolünüz için açık bir çalışma ekranı henüz yok.";
+    ViewData["NavKey"] = "home";
+}
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+    <partial name="_State" model='("empty", "layout-list", "Bu hesapta yapılacak iş yok", "Temizlik kayıtları ve makine ekranları açıldığında burada görünür. Şimdilik parola ve PIN ayarlarınızı güncelleyebilirsiniz.", "Parola ve PIN", "/account/security")' />
+
+    <section class="panel" aria-labelledby="roles-title">
+        <div class="panel-head"><h2 id="roles-title" class="panel-title">Rolleriniz</h2></div>
+        <ul class="flex flex-wrap gap-2 p-4 md:p-5">
+            @foreach (var role in Model.Roles)
+            {
+                <li class="chip">@Roles.Label(role)</li>
+            }
+        </ul>
+    </section>
+</div>

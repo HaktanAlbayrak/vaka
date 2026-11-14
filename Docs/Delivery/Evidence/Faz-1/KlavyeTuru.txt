@@ -1,0 +1,55 @@
+Faz 1 klavye ve etkileşim turu, playwright-cli 0.1.22 (Chromium), Production 5111, 2026-11-14
+Biçim: odaktaki öğe [ad] ring=odak halkası, top=öğenin üst konumu, underTopbar=yapışkan üst barın altında kalıyor mu
+
+login tab1: A[��eri�e ge�] ring=3px solid top=-68 underTopbar=false
+skip -> MAIN[Giri� Sicil numaran�z ve p] ring=3px solid top=64 underTopbar=false
+login tab: INPUT[RegistryNo] ring=3px solid top=317 underTopbar=false
+login tab: INPUT[Password] ring=3px solid top=415 underTopbar=false
+login tab: BUTTON[Parolay� g�ster] ring=3px solid top=415 underTopbar=false
+login tab: BUTTON[Giri� yap] ring=3px solid top=483 underTopbar=false
+login tab: BODY[��eri�e ge� Vaka Ba�l� Ba�] ring=NONE top=0 underTopbar=true
+login tab: A[��eri�e ge�] ring=3px solid top=-68 underTopbar=false
+login empty submit: url=/account/login focus=INPUT[RegistryNo] ring=3px solid top=317 underTopbar=false errors=Sicil no alan�n� doldurun.|Parola alan�n� doldurun.
+login wrong pw: focus=DIV[Sicil no ya da parola hata] ring=3px solid top=287 underTopbar=false msg=Sicil no ya da parola hatal� ya da hesap pasif. pwValue=
+create empty submit: url=/users/create focus=INPUT[RegistryNo] ring=3px solid top=317 underTopbar=false errors=Sicil no alan�n� doldurun.|Ad soyad alan�n� doldurun.|Ge�ici parola alan�n� doldurun.
+create server errors: focus=INPUT[RegistryNo] ring=3px solid top=525 underTopbar=false summary=Kullan�c� eklenemedi Bu sicil no kay�tl�. En az bir rol se�in. Parola en az 6 karakter olmal�. fieldErrors=Bu sicil no kay�tl�.|En az bir rol se�in.|Parola en az 6 karakter olmal�. tempPwValue=
+
+Kullanıcı formu (/users/edit/5), Ad soyad değiştirildikten sonra menüden Parola ve PIN bağlantısına tıklama:
+  playwright-cli: Modal state - ["beforeunload" dialog]; dialog-dismiss sonrası URL /users/edit/5, alan değeri korunmuş (UnsavedGuard çalışıyor)
+
+edit pin inputs: ResetPin.Pin:max=null ResetPassword.Pin:max=null
+deactivate pin: Pin:max=null
+deactivate empty submit: url=/users/deactivate/5 focus=INPUT[Pin] ring=3px solid top=359 underTopbar=false
+security pins: Pin.CurrentPin:max=null Pin.NewPin:max=4 Pin.ConfirmPin:max=4
+online again: online=true disabledBtns=0
+drawer before: expanded=false
+  drawer tab: A[Parola ve PIN] in=true
+  drawer tab: A[Parola ve PIN] in=true
+mobile tab issues: none
+after switch /users -> /account/login?ReturnUrl=%2Fusers
+Binary file (standard input) matches
+loading (süzgeç formu requestSubmit sonrası, aynı tik): afterSubmit loadingHidden=false targetHidden=true; sayfa bağlantısı (data-busy-link) tıklaması: loadingHidden=false. Gezinme yerelde 400 ms altında bittiği için iskelet ancak bu anda görülür
+
+K11a tarayıcıda (390x844): OturumSüresi QA kopyasında 1 dakika; Operatör /account/security açık, 70 sn bekleme, üst bardaki Kullanıcı değiştir tıklandı:
+  logoutStatus=302 final=/account/login?reason=signed-out h1=Giriş notice=Oturum kapatıldı. (400 değil). Ayar sonra 30'a geri yazıldı.
+
+
+== Tur 2 (2026-11-14), Production 5121: B6 çevrimdışı ve K11 (playwright context.setOffline)
+Biçim: yer:durum[:vis]  (bar = üst bar, rail = ray, drawer = çekmece; DIS = disabled; vis = görünür; noAttr = data-requires-online yok)
+op / 360 çevrimiçi:  rail:en bar:en:vis drawer:en | şerit yok | data-requires-online devre dışı 0/3 | özniteliksiz POST düğmesi: yok
+op / 360 ÇEVRİMDIŞI: rail:DIS bar:DIS:vis drawer:DIS | şerit: "Bağlantı yok. Kayıt, onay ve kullanıcı değiştirme yapılamaz. Bağlantı gelince bu uyarı kapanır, işlemi yeniden yapın." | 3/3
+op / 360 ÇEVRİMDIŞI çekmece açık: çekmecedeki "Kullanıcı değiştir" DIS 291x44
+op / 360 bağlantı geldi: rail:en bar:en:vis drawer:en | şerit yok | 0/3
+op / 1440 çevrimiçi: rail:en:vis bar:en drawer:en | 0/3
+op / 1440 ÇEVRİMDIŞI: rail:DIS:vis bar:DIS drawer:DIS | şerit görünür (aynı metin) | 3/3
+op / 1440 bağlantı geldi: rail:en:vis bar:en drawer:en | şerit yok | 0/3
+op /account/security 768 ÇEVRİMDIŞI: rail:DIS bar:DIS:vis drawer:DIS | şerit görünür | 5/5 (iki form düğmesi dahil); çekmece açık: DIS 326x44; bağlantı geldi: 0/5
+ilk giriş (odak kipi, 3102) 1440 ve 360 ÇEVRİMDIŞI: bar:DIS:vis | şerit görünür | 2/2; bağlantı geldi: bar:en:vis, 0/2
+Her durumda özniteliksiz POST düğmesi: yok (tur 1 de "Kullanıcı değiştir" x3 idi)
+K11 360: bağlantı geldikten sonra üst bar "Kullanıcı değiştir" tek dokunuş -> /account/login?reason=signed-out; ardından /account/security -> /account/login?ReturnUrl=... (oturum kapandı)
+K11 1440: ray "Kullanıcı değiştir" tek dokunuş -> /account/login?reason=signed-out
+
+==== Tur 3 (2026-11-14) - /users?page=2&status=Active, main içinde Tab turu ====
+360x800, 320x640, 640x400 (1280 px %200), 768x1024: 13 odak durağı; sıra: Kullanıcı ekle, arama, durum, Filtrele, Filtreleri temizle, 7 x "<ad> hesabını düzenle", Önceki
+Geri giden (yukarı sıçrayan) odak: 0 / 4 genişlik; odak halkası olmayan durak: 0; görünür alana kaydırılmayan durak: 0
+Kart içindeki odak durağı yalnız İşlem bağlantısı (satır başına 1); order ile öne alınan Ad soyad hücresi odaklanmaz, görsel sırayla çelişki yok

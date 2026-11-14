@@ -23,13 +23,18 @@ public sealed class PrototypeController : Controller
         }
     }
 
+    [HttpGet]
     public IActionResult MyWork() => View();
 
+    [HttpGet]
     public IActionResult Run() => View();
 
+    [HttpGet]
     public IActionResult NewRecord() => View();
 
+    [HttpGet]
     public IActionResult Records() => View();
 
+    [HttpGet]
     public IActionResult Dashboard() => View();
 }

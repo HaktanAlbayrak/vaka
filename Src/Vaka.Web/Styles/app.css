@@ -157,7 +157,10 @@
     padding-top: env(safe-area-inset-top);
   }
   .switch-btn {
-    @apply inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-ui border-2 border-line-strong bg-surface px-2 text-left text-xs font-bold leading-tight text-ink transition-colors duration-150 hover:bg-sunken lg:hidden;
+    @apply inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-ui border-2 border-line-strong bg-surface px-2 text-left text-xs font-bold leading-tight text-ink transition-colors duration-150 hover:bg-sunken disabled:cursor-not-allowed disabled:opacity-50 lg:hidden;
+  }
+  .switch-btn.switch-btn-show {
+    @apply lg:inline-flex;
   }
   .person-chip {
     @apply flex min-w-0 flex-1 items-center gap-3 text-left;
@@ -239,6 +242,9 @@
       padding-bottom: 3rem;
     }
   }
+  .page.page-public {
+    @apply max-w-xl;
+  }
   .page-head {
     @apply mb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-3 md:mb-7;
   }
@@ -276,6 +282,25 @@
 
   .panel {
     @apply rounded-card border-2 border-line bg-surface;
+  }
+  .panel-tag {
+    border-top-width: 6px;
+    @apply border-t-accent;
+  }
+  .disclosure > summary {
+    @apply flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-lg font-bold md:px-5;
+  }
+  .disclosure > summary::-webkit-details-marker {
+    display: none;
+  }
+  .disclosure[open] > summary {
+    @apply border-b-2 border-line;
+  }
+  .disclosure-chevron {
+    @apply transition-transform duration-150;
+  }
+  .disclosure[open] .disclosure-chevron {
+    @apply rotate-180;
   }
   .panel-head {
     @apply flex flex-wrap items-center justify-between gap-2 border-b-2 border-line px-4 py-3 md:px-5;
@@ -532,12 +557,18 @@
     content: none;
   }
   .table-stack .stack-wide {
-    @apply max-xl:col-span-full;
+    @apply max-xl:col-span-2;
+  }
+  .table-stack .stack-lead {
+    @apply max-md:order-first;
   }
   .table-stack td.num {
     @apply max-xl:text-left;
   }
   @screen xl {
+    .data-table td {
+      @apply h-14;
+    }
     .table-stack td::before {
       content: none;
     }

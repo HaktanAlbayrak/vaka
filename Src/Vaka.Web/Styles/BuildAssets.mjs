@@ -22,6 +22,7 @@ const icons = [
   "arrow-left-right", "plus", "search", "chevron-right", "chevron-left", "chevron-down",
   "panel-left-close", "panel-left-open", "info", "circle-alert", "eye", "eye-off", "droplets",
   "user-round", "funnel", "shield-check", "refresh-cw", "timer", "circle-check", "layers",
+  "house", "key-round", "user-plus", "pencil", "user-check", "user-x", "rotate-ccw", "save",
 ];
 
 const symbols = icons.map((name) => {

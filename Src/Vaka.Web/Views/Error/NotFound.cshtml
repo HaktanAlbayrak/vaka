@@ -1,5 +1,6 @@
 @{
     ViewData["Title"] = "Sayfa bulunamadı";
     ViewData["Lead"] = "Adres yanlış olabilir ya da sayfa kaldırılmış olabilir.";
+    var isAuthenticated = User.Identity?.IsAuthenticated == true;
 }
-<partial name="_State" model='("empty", "search", "Aradığınız sayfa yok", "Adresi kontrol edin ya da ana sayfadan devam edin.", "Ana sayfaya dön", "/prototype/my-work")' />
+<partial name="_State" model='("empty", "search", "Aradığınız sayfa yok", "Adresi kontrol edin ya da ana sayfadan devam edin.", isAuthenticated ? "Ana sayfaya dön" : "Girişe dön", isAuthenticated ? "/" : "/account/login")' />

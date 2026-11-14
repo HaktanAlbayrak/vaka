@@ -132,7 +132,7 @@ Alan listesi Brief §7.g'deki taslaktır; tablo ve kolon adları dbadmin'in kara
 | Varlık | İçerik | Kural ve kısıt | Faz |
 |---|---|---|---|
 | User, kullanıcı rolleri | Sicil no, ad, parola ve PIN özeti, ilk giriş bayrakları, PIN hatalı deneme sayacı ve kilidi, aktiflik; roller Operator, Manager, Auditor, SuperAdmin | Sicil no benzersiz; parola ve PIN tek yönlü özet (NFR-15); silinmez (BR-05); son aktif Süper admin pasifleşmez ve rolünü kaybetmez (SK-9). Seed: tek Süper admin | 1 |
-| SystemSetting, SettingChange | Beş sistem ayarı (medya boyutu fotoğraf ve video ayrı); her değişiklikte eski, yeni değer, yapan, zaman | Değerler pozitif tam sayı; seed değerleri kullanıcıdan gelir; ekran Faz 9 (PL-17) | 1 |
+| SystemSetting, SettingChange | Ayar başına bir satır (anahtar, değer, birim): Faz 1'de oturum süresi, PIN uzunluğu, PIN deneme sınırı; Faz 3'te fotoğraf boyutu, video boyutu, azami kilit süresi (PL-25). Her değişiklikte eski, yeni değer, yapan, zaman | Değerler pozitif tam sayı; seed değerleri kullanıcıdan gelir (§6); yeni ayar satır eklenerek gelir, kolon eklenmez; ekran Faz 9 (PL-17) | 1 |
 | Facility, ProductionLine, Machine | Kod, ad, aktiflik; makinede kullanımdan kaldırılma anı | BR-54 kod benzersizliği, kod tire içermez; kod ve makinenin hattı oluşturulduktan sonra değişmez (PL-04) | 2 |
 | Shift | Tesis, ad, başlangıç ve bitiş saati, aktiflik | Aynı tesiste aktif vardiyalar çakışmaz, gece yarısını geçebilir, aralık başlangıç dahil bitiş hariç (K-38) | 2 |
 | Material, MaterialLot | Malzeme kodu ve adı; lot no ve SKT | Lot no malzeme içinde benzersiz | 2 |
@@ -156,19 +156,21 @@ Alan listesi Brief §7.g'deki taslaktır; tablo ve kolon adları dbadmin'in kara
 Değerler iş birimi ve BT'den gelir; plan, seed ve kodda uydurma değer kullanılmaz. Sistem geneli değerler veritabanındaki ayar tablosundadır,
 Yönetici ve Süper admin Sistem ayarları ekranından değiştirir (K-47); tip bazlı değerler yönetici tanım ekranlarındadır.
 
-| Yer tutucu | Birim | Nerede | Okunduğu faz | İlk değeri sağlayan |
-|---|---|---|---|---|
-| `<OturumSüresi>` | dakika | Sistem ayarları | 1 | BT, iş birimi |
-| `<PinUzunluğu>` | hane | Sistem ayarları | 1 | BT, iş birimi |
-| `<PinDenemeSınırı>` | deneme | Sistem ayarları | 1 | BT, iş birimi |
-| `<AzamiMedyaBoyutu>` (fotoğraf ve video ayrı) | MB | Sistem ayarları | 3 | BT (K-26) |
-| `<AzamiKilitSüresi>` | dakika | Sistem ayarları | 3 | İş birimi (K-46) |
-| Varsayılan kilit süresi, faz minimum süresi, malzeme zorunluluğu | dakika, evet/hayır | Tip ve versiyon ekranları | 3 | İş birimi, yönetici girer |
-| Tesis, hat, makine kodları ve vardiyalar | - | Tanım ekranları ya da seed | 2 | İş birimi (K-19) |
-| Olay özeti anahtarı | - | Ortam değişkeni, veritabanı ve ayar dosyası dışında | 4 | BT (K-23) |
+Yer tutucu adı ayarın kimliğidir; dokümanlar kuralı bu adla yazar, değer ayar tablosundan okunur. "Başlangıç değeri" seed'e giren değerdir.
+
+| Yer tutucu | Birim | Nerede | Okunduğu faz | Başlangıç değeri | Kaynak |
+|---|---|---|---|---|---|
+| `<OturumSüresi>` | dakika | Sistem ayarları | 1 | 30 (son istekten sonraki işlemsizlik) | Kullanıcı, 2026-11-13 (PL-24) |
+| `<PinUzunluğu>` | hane | Sistem ayarları | 1 | 4 | Kullanıcı, 2026-11-13 (PL-24) |
+| `<PinDenemeSınırı>` | deneme | Sistem ayarları | 1 | 5 (art arda 5. hatalı denemede kilit) | Kullanıcı, 2026-11-13 (PL-24) |
+| `<AzamiMedyaBoyutu>` (fotoğraf ve video ayrı) | MB | Sistem ayarları | 3 | Açık | BT (K-26) |
+| `<AzamiKilitSüresi>` | dakika | Sistem ayarları | 3 | Açık | İş birimi (K-46) |
+| Varsayılan kilit süresi, faz minimum süresi, malzeme zorunluluğu | dakika, evet/hayır | Tip ve versiyon ekranları | 3 | Yönetici girer | İş birimi |
+| Tesis, hat, makine kodları ve vardiyalar | - | Tanım ekranları ya da seed | 2 | Nötr demo veri | İş birimi (K-19) |
+| Olay özeti anahtarı | - | Ortam değişkeni, veritabanı ve ayar dosyası dışında | 4 | Açık | BT (K-23) |
 
 Sistem ayarları ekranı Faz 9'da gelir (PL-17); o zamana kadar değerler seed'den okunur, QA farklı değeri QA kopyasındaki ayar tablosunda dener.
-Değişikliğin etkisi PL-18'dedir.
+Değişikliğin etkisi PL-18'dedir. Açık değerlerin satırı, değer gelene kadar tabloya yazılmaz; Faz 3'te seed ekleme olarak gelir (PL-25).
 
 ## 7. Kapsam dışı
 
@@ -197,14 +199,17 @@ Brief §12 (V-01..V-18) geçerlidir; V-08 ve V-15 2026-11-13 yanıtlarıyla gün
 ayrıntılar `Decisions.md` PL-15..PL-19'dadır: birleşik rol sabitleri, kendi hesabını pasifleştirme yasağı, ayar ekranının Faz 9'a
 yerleşmesi, ayar değişikliğinin etkisi ve ayar birimleri (dakika, hane, deneme, MB), adım molası kolonu.
 
+Analistin makul varsayılanları (`Decisions.md` durumu "Varsayım"; itiraz gelirse yeni satırla değişir):
+
+- PL-27: Sicil no hesap oluşturulduktan sonra değişmez; yanlış sicil noyla açılan hesap pasifleştirilir, doğrusuyla yeni hesap açılır.
+
 ## 9. Açık konular
 
 Engelleyici soru yoktur; plan 2026-11-13'te onaylandı (O-01). Aşağıdakiler ilgili fazdan önce gerekir, yoksa o faz başlamaz.
 
 | Konu | Gerektiği an | Sahibi | Not |
 |---|---|---|---|
-| `<OturumSüresi>`, `<PinUzunluğu>`, `<PinDenemeSınırı>` ilk değerleri | Faz 1 başlamadan (seed) | Kullanıcı, BT, iş birimi | Uydurma değer yazılmaz; sonradan ekrandan değişir |
-| `<AzamiMedyaBoyutu>` (fotoğraf, video), `<AzamiKilitSüresi>` ilk değerleri | Faz 3 başlamadan | Kullanıcı, BT, iş birimi | Aynı |
+| `<AzamiMedyaBoyutu>` (fotoğraf, video), `<AzamiKilitSüresi>` başlangıç değerleri | Faz 3 başlamadan | Kullanıcı, BT, iş birimi | Uydurma değer yazılmaz; sonradan ekrandan değişir. Faz 1 değerleri 2026-11-13'te geldi (§6, PL-24) |
 | Olay özeti anahtarının üretimi ve saklanacağı ortam | Faz 4 başlamadan | BT | K-23 |
 | Gerçek tesis, hat, makine, vardiya, malzeme listesi | İstendiğinde | İş birimi | Gelene kadar nötr demo veri (K-19, V-13) |
 | Tek Süper admin riski | Kurulumdan sonra | Kullanıcı | Tek Süper admin parolasını unutur ya da PIN'ini kilitlerse uygulama içinden açılamaz; ikinci bir Süper admin hesabı açılması önerilir |

@@ -1,0 +1,190 @@
+Faz 1 kabul akışı, curl ile, Production (Release, .qa/build), http://127.0.0.1:5111, DB .qa/qa.db (App_Data/vaka.db kopyası), 2026-11-14
+Biçim: <istek> -> <durum kodu> <yönlendirme>. Parola ve PIN değerleri yalnız test kopyasındaki QA hesaplarına aittir; seed geliştirme parolası yazılmadı.
+DB sorguları python sqlite3 ile .qa/qa.db üzerinde.
+
+Başlangıç (kopya alınır alınmaz)
+  Users: (1, '0001', 'Süper Admin', MustChangePassword=1, MustSetPin=1, PinHash=None, IsActive=1); UserRoles: (1, 'SuperAdmin')
+  SystemSettings: (1,'SessionMinutes',30,'dakika') (2,'PinLength',4,'hane') (3,'PinAttemptLimit',5,'deneme'); SettingChanges: 0 satır
+  __EFMigrationsHistory: 20261114121621_AddUsersRolesAndSettings
+
+K1  oturumsuz GET /users -> 302 /account/login?ReturnUrl=%2Fusers  (/, /users/create, /users/edit/1, /account/security aynı biçimde 302)
+
+K2  POST /account/login 0001 + seed geliştirme parolası -> 302 /
+    GET / -> 302 /account/first-login ; GET /users -> 302 /account/first-login ; GET /account/security -> 302 /account/first-login ; GET /users/create -> 302 /account/first-login
+    ilk giriş tamamlandı (yeni parola + PIN 0482) -> 302 / ; GET / -> 302 /users ; GET /users -> 200
+
+K3  POST /account/first-login, NewPin alanı altındaki hata (id="NewPin-error"):
+      123   -> "PIN 4 haneli olmalı."        12345 -> "PIN 4 haneli olmalı."
+      12a4  -> "PIN yalnız rakamlardan oluşmalı."
+      1111  -> "PIN'in tüm haneleri aynı olamaz."
+      1234  -> "PIN ardışık rakamlardan oluşamaz."   4321 -> "PIN ardışık rakamlardan oluşamaz."
+    Reddedilen her denemede MustChangePassword=1, MustSetPin=1 kaldı (yarım kayıt yok).
+    0482 kabul (Süper admin), 1357 kabul (Yönetici 2001). 0482 sonraki doğrulamada geçti: Süper admin pasifleştirme/etkinleştirme Pin=0482 -> 302 (başarılı).
+    /account/change-pin: aynı biçim kuralları "Pin.NewPin" alanında; maxlength = PinLength (Pin.NewPin:max=4, Pin.CurrentPin sınırsız).
+
+K4  Süper admin POST /users/create 2001 Selin Aksoy [Manager] -> 302 /users (2002 [Manager,Operator], 2003 [Manager], 1002 [SuperAdmin] aynı)
+    Yönetici 2001 formunda sunulan roller: SelectedRoles-Operator, SelectedRoles-Auditor (Yönetici ve Süper admin yok)
+    Yönetici POST /users/create 3001 [Operator], 3002 [Auditor], 3003, 3004 [Operator] -> 302 /users
+    Yönetici POST /users/create RegistryNo=3001 (tekrar) -> 200, alan hatası "Bu sicil no kayıtlı."
+    Yeni kullanıcı ilk girişte GET /users -> 302 /account/first-login; parola + PIN belirleyince 302 /
+    Yönetici POST /users/edit/5 FullName=... RegistryNo=9999 -> 302 /users/edit/5 ; DB: (5, '3001', ...) sicil değişmedi; formda RegistryNo readonly, "Sicil no değiştirilemez."
+
+K5  Operatör (3001) ve Denetçi (3002): GET /users, /users/create, /users/edit/2, /users/deactivate/2, /users/edit/5, /users/deactivate/5
+      -> 302 /account/access-denied?ReturnUrl=... -> son yanıt 403
+    POST (token'lı) /users/create, /users/edit/6, /users/deactivate/6, /users/activate/6, /users/reset-pin/6, /users/reset-password/6 -> son yanıt 403
+    DB: hedef 6 değişmedi (6, 'Elif Demir', IsActive=1, PinHash dolu, MustChangePassword=0)
+    Menü: Operatör ve Denetçi sayfasında href="/users" 0 adet; Yönetici, Yönetici+Operatör ve Süper admin sayfasında 3 adet (ray, alt çubuk, çekmece)
+
+K6  Yönetici POST /users/deactivate/7 Pin=9999 -> 200 "PIN hatalı." (form özeti ve alan altında); DB IsActive=1
+    Yönetici POST /users/deactivate/7 doğru PIN -> 302 /users; DB IsActive=0
+    pasif 3003 doğru parolayla POST /account/login -> 200 "Sicil no ya da parola hatalı ya da hesap pasif."
+    Yönetici POST /users/activate/7 Activate.Pin=1111 -> 200 "PIN hatalı."; DB IsActive=0 ; doğru PIN -> 302 /users/edit/7; DB IsActive=1
+    Oturumu açık 3003 pasifleştirilince sonraki GET / -> 302 /account/login?ReturnUrl=%2F&reason=inactive
+    Süper admin aynı akışı Yönetici 2003 için: yanlış PIN 200 ve değişmedi; doğru PIN 302, IsActive 0 -> 1
+
+K7  Operatör 3001 /account/change-pin yanlış eski PIN 4 kez -> 200 x4; DB PinFailedCount=4, PinLockedAtUtc=None; oturum GET /account/security -> 200
+    doğru PIN -> 302 /account/security; DB PinFailedCount=0
+    yanlış PIN 4 kez -> 200 x4; 5. yanlış -> 302 /account/login?reason=pin-locked; DB (5, kilitli=1); eski oturum GET -> 302 /account/login
+    giriş sayfası: "PIN kilitlendi ve oturum kapatıldı. PIN'inizi sıfırlatmak için yöneticinize başvurun."
+    yeniden giriş -> 302 /; doğru PIN'le change-pin -> 200, alan hatası "PIN kilitli. PIN'inizi sıfırlatmak için yöneticinize başvurun."
+    Yönetici listesinde: "Murat Çelik Operatör Etkin PIN kilitli Düzenle"
+    Yönetici POST /users/reset-pin/5 ResetPin.Pin=<kendi PIN> -> 302 /users/edit/5; DB PinHash=None, PinFailedCount=0, PinLockedAtUtc=None, MustSetPin=1, MustChangePassword=0
+    Operatör yeniden giriş: ilk giriş formunda yalnız NewPin, ConfirmPin alanları; PIN belirleyince 302 /, GET / -> 200
+    Yönetici 2003 kilitlendi (change-pin 5 yanlış, 5. -> pin-locked); Yönetici 2001 POST /users/reset-pin/4 -> 403; Süper admin POST /users/reset-pin/4 -> 302;
+      2003 girişte yalnız NewPin, ConfirmPin
+    Yönetici 2001 kullanıcı işleminde (pasifleştirme) 5 yanlış PIN -> 5. istekte 302 /account/login?reason=pin-locked; yeniden girişte pasifleştirme ve parola sıfırlama
+      doğru PIN'le "PIN kilitli..." alan hatası, hedef değişmedi; Süper admin sıfırladı.
+
+K8  Süper admin GET /users/deactivate/1 (kendisi): "Kendi hesabınızı pasifleştiremezsiniz."; POST -> 200 aynı hata; DB IsActive=1, PinFailedCount=0
+    Süper admin POST /users/edit/1 SelectedRoles=Operator -> 302; DB rolleri (1,'SuperAdmin') değişmedi; formda rol kutuları disabled, "Kendi rollerinizi değiştiremezsiniz."
+    İkinci Süper admin 1002 açıldı ve ilk girişi yaptı.
+    0001 POST /users/deactivate/9 (1002) -> 302 /users; DB IsActive=0; 1002'nin oturumu -> reason=inactive
+    0001, 1002'yi etkinleştirdi; 1002 POST /users/deactivate/1 -> 302; 0001'in oturumu -> reason=inactive (iki Süper adminle biri pasifleştirilebilir)
+    Rol kaldırma kolu: 1002, 0001'in rolünü Manager yaptı (iki aktif Süper admin varken) -> 302; DB (1,'Manager')
+      0001 artık Yönetici: GET /users/edit/9 -> 403; POST /users/edit/9 SelectedRoles=Manager -> 403, DB (9,'SuperAdmin') değişmedi
+      1002 (tek aktif Süper admin) kendi rolünü Manager yapma POST -> 302 ama DB (9,'SuperAdmin') değişmedi (kendi rolleri yok sayılır)
+      1002, 0001'e SuperAdmin rolünü geri verdi.
+    Not: tek aktif Süper admin'i hedef alabilecek tek kişi kendisidir; "Son aktif Süper admin" mesajı sıralı istekle tetiklenemez. Eşzamanlı istek: SuperAdminYarisi.txt.
+
+K8a Yönetici 2001 token'lı POST /users/reset-pin/4, /users/reset-password/4, /users/activate/4, /users/deactivate/4, /users/edit/4 (hedef Yönetici)
+      -> 302 /account/access-denied (son 403); GET /users/edit/1, /users/edit/3, /users/edit/4 ve deactivate karşılıkları -> 403
+    DB: 1, 3, 4 numaralı hesapların ad, rol, durum, parola ve PIN bayrakları değişmedi; Yönetici'nin PinFailedCount=0 (PIN'e gelmeden reddedildi)
+    Yönetici listesinde (status=All) düzenleme bağlantısı yalnız /users/edit/5, 6, 7, 8 (Operatör ve Denetçi); Süper admin listesinde 1-8 hepsi
+    Yönetici POST /users/create SelectedRoles=Manager -> 200 "Seçilen rolü atayamazsınız."; SelectedRoles=SuperAdmin+Operator -> aynı; DB'de kayıt yok
+
+K9  Denetçi /account/change-pin eski PIN yanlış -> 200; PinHash değişmedi, PinFailedCount=1
+    onay uyuşmazlığı -> 200; doğru eski PIN -> 302, "PIN değiştirildi.", PinFailedCount=0; yeni PIN sonraki değişimde doğrulandı (302)
+
+K10 qa.db ve App_Data/vaka.db içinde kullanılan dört parola metni: 0 eşleşme (grep -a -F)
+    Users.PasswordHash ve PinHash: hepsi "AQAAAAIAAYag..." 84 karakter (PasswordHasher V3); PIN atanmamışta None
+    run.log (14311 satır): kullanılan 12 PIN değeri 0 eşleşme; EF parametreleri '?' ile gizli (Parameters=[@registryNo='?' (Size = 4)])
+
+K12 OturumSüresi QA kopyasında 2 dakika:
+      15:37:13 başla 200 ; 15:38:03 (50 sn) 200 ; 15:38:53 200 ; 15:39:43 200 (toplam 150 sn > 120 sn, oturum açık)
+      15:41:48 (125 sn işlemsizlik) -> 302 /account/login?ReturnUrl=%2Faccount%2Fsecurity&reason=expired
+    PinLength 5: /account/security Pin.NewPin maxlength=5; 4 haneli yeni PIN "PIN 5 haneli olmalı."; 5 haneli kabul; PinLength 4'e dönünce 5 haneli mevcut PIN doğrulandı (PL-18)
+    PinAttemptLimit 2: 2. yanlış denemede 302 reason=pin-locked, DB (2, kilitli)
+    Ayar satırı yokken (Key geçici olarak değiştirildi): /account/security -> 500 hata sayfası, günlükte InvalidOperationException "Sistem ayarı tanımlı değil: PinLength." (varsayılan uydurulmadı)
+    Kaynakta sabit değer: SessionMinutes/PinLength/PinAttemptLimit yalnız SettingKeys sabiti ve seed (Data/Seed/SettingSeed.cs:10-12); appsettings*.json ve Views içinde 0
+
+K12a update PinLength=0 -> "CHECK constraint failed: CK_SystemSettings_Value"; -1 aynı; insert Value=0 aynı. Satırlar 3, geçmiş 0.
+
+K11a OturumSüresi 2 dk, 125 sn işlemsizlik sonrası eski token'la POST /account/logout -> 302 /account/login?reason=signed-out -> 200 (400 değil)
+
+K13 Yönetici+Operatör 2002: GET / 200, GET /users 200, menü / /users /account/security; yalnız Operatör 3001: /users 403, menüde /users yok
+
+K14/TK2 Production: /prototype/run, /prototype/my-work -> 404. Development (aynı yayın, port 5112): /prototype/my-work, run, new-record, records, dashboard -> 200;
+    oturumlu kişi prototip sayfasında gerçek kabuğu görür (person-name "Elif Demir"); oturumsuzken demo kabuk ve "Prototip sayfası" notu.
+
+T-B16 Production oturumsuz /error/404, /error/403, /error, /account/access-denied: person-chip 0, "Sicil " 0, "prototype" 0, demo adları 0
+
+Ek gözlemler (bulgu kanıtı)
+  B3 Kimlik değişince açık formun token'ı geçersiz: Yönetici+Operatör 2002 /account/security açıkken token alındı; Süper admin 2002'nin adını değiştirdi (POST /users/edit/3 -> 302);
+     2002 aynı token'la POST /account/change-password -> 400, "Bir hata oluştu" sayfası. Ad geri alındı.
+     Ayrıca eşzamanlı rol denemesinde rolü değişen tarafın isteği 400 aldı (5/5 deneme, B:400).
+  B4 run.log: 1771 adet "Executed DbCommand" Information kaydı (14311 satır); appsettings.json Logging.Default=Information, EF Core için ayrı düzey yok.
+
+
+== Tur 2 (2026-11-14), Production 5121, .qa/t2f1/qa2.db (App_Data/vaka.db kopyası; kurulum uygulama üzerinden: 0001 ilk girişi, 26 hesap, 5 ilk giriş)
+Parola ve PIN değerleri dosyaya yazılmadı; betikler ortam değişkeninden okur.
+
+-- B3: Yönetici (2001) Operatör 3001 in adını ve rollerini değiştirir; 3001 in önceden açık /account/security formundan POST
+Sıra: 3001 formu açar (token) -> 2001 değiştirir -> 3001 eski token la gönderir. Tur 1 de bu POST 400 ve genel hata sayfasıydı.
+op login: 302 http://127.0.0.1:5121/
+m1 login: 302 http://127.0.0.1:5121/
+(5, 'Murat Çelik', PinHash 'AQAAAAIAAYagAAAAEHlWeS...')
+('Operator',)
+op form token alındı (198 kr)
+m1 ad değiştir: 302 http://127.0.0.1:5121/users/edit/5
+op eski formdan change-pin (geçersiz onay, durum değiştirmez): 200 
+m1 rol değiştir (Operatör + Denetçi): 302 http://127.0.0.1:5121/users/edit/5
+('Auditor,Operator',)
+op eski formdan change-pin (gerçek değişiklik): 302 http://127.0.0.1:5121/account/security
+(PinHash 'AQAAAAIAAYagAAAAEBmZFr...', önceki ile farklı)
+m1 ad + rol (yalnız Operatör, ad geri): 302 http://127.0.0.1:5121/users/edit/5
+op eski formdan change-password (yanlış mevcut parola, durum değiştirmez): 200 
+G5 op token'sız change-pin: 400
+G5 m1 token'sız edit/5: 400
+(5, 'Murat Çelik', 1, 0)
+('Operator',)
+Sonuç: ad değişiminden sonra 200 (alan hatası "PIN'ler aynı değil."), rol değişiminden sonra 302 ve PIN hash i değişti, ad + rol değişiminden sonra parola formu 200 (alan hatası). 400 yok. G5: token sız POST 400.
+
+-- G5 (token sız POST, yetkili oturum)
+Süper admin: /users/create, /users/edit/5, /users/deactivate/5, /users/activate/5, /users/reset-pin/5, /users/reset-password/5, /account/change-password, /account/change-pin, /account/first-login: 9/9 400
+Operatör: /account/change-password, /account/change-pin: 2/2 400; oturumsuz /account/login: 400
+
+-- B4 / K10: Production günlüğü (logs/run-prod.log, tur 2 nin tamamı: kurulum, eval, yarış, B3, K8, K11a)
+"Executed DbCommand": 0 | "Microsoft.EntityFrameworkCore.Database.Command": 0 | satır sayısı: 8 (yalnız Microsoft.Hosting.Lifetime başlangıç kayıtları) | fail/crit: 0
+K10: kullanılan PIN değerleri (3 değer) ve parolalar (4 değer) günlükte 0 eşleşme.
+build/appsettings.json: "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
+
+-- B5
+Src/ altında Roles.cs ve Data/Migrations/ dışında 'Operator' | 'Manager' | 'Auditor' | 'SuperAdmin' metni: 0 (çift tırnaklı rol adı da 0). Data/Migrations/ içinde 3 eşleşme (üretilmiş migration, Designer, snapshot; PL-30 istisnası).
+UserRoleConfiguration.cs:13-15 CHECK ifadesi $"\"Role\" IN ('{Roles.Operator}', '{Roles.Manager}', '{Roles.Auditor}', '{Roles.SuperAdmin}')".
+Data/Migrations/: 3 dosya (20261114121621_AddUsersRolesAndSettings.cs, .Designer.cs, VakaDbContextModelSnapshot.cs), değişiklik zamanı 15:16 (tur 1 ile aynı); yeni dosya yok.
+dotnet ef migrations has-pending-model-changes --configuration Release --no-build: "No changes have been made to the model since the last migration."
+
+-- K8 sıralı ve K8a (gerileme)
+== K8 sıralı
+0001 -> 1002 pasifleştir (iki aktif SA): 302 http://127.0.0.1:5121/users
+(1,)
+0001 -> 1002 etkinleştir: 302 http://127.0.0.1:5121/users/edit/2
+(2,)
+0001 -> 1002 SA rolünü kaldır (iki aktif SA): 302 http://127.0.0.1:5121/users/edit/2
+(1, '0001', 1, 'SuperAdmin')
+(2, '1002', 1, 'Manager')
+(1,)
+geri: 302 http://127.0.0.1:5121/users/edit/2
+(2,)
+0001 kendi hesabını pasifleştir: Kendi hesabınızı pasifleştiremezsiniz.
+0001 kendi rolünü Yönetici yap (yok sayılmalı): 302 http://127.0.0.1:5121/users/edit/1
+('SuperAdmin',)
+(1,)
+== K8a Yönetici (2001)
+create formundaki rol seçenekleri: value="Operator" value="Auditor" 
+değiştirilmiş istek (SelectedRoles=SuperAdmin): Seçilen rolü atayamazsınız.
+(0,)
+değiştirilmiş istek (SelectedRoles=Manager): Seçilen rolü atayamazsınız.
+(0,)
+GET /users/edit/2: 302 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fedit%2F2
+GET /users/deactivate/2: 302 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fdeactivate%2F2
+GET /users/edit/4: 302 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fedit%2F4
+GET /users/edit/1: 302 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fedit%2F1
+POST edit/2: 302 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fedit%2F2
+POST deactivate/2: 302 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fdeactivate%2F2
+POST reset-pin/2: 302 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Freset-pin%2F2
+POST edit/4 (Yönetici+Operatör): 302 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fedit%2F4
+(2, 1, 0)
+(4, 1, 0)
+(2, 'SuperAdmin')
+(4, 'Manager,Operator')
+listede düzenle bağlantıları: href="/users/edit/10" href="/users/edit/11" href="/users/edit/12" href="/users/edit/13" href="/users/edit/14" href="/users/edit/15" href="/users/edit/16" href="/users/edit/17" href="/users/edit/18" href="/users/edit/19" href="/users/edit/20" href="/users/edit/5" href="/users/edit/6" href="/users/edit/7" href="/users/edit/8" href="/users/edit/9" 
+Sonuç: iki aktif Süper admin varken pasifleştirme ve rol kaldırma geçiyor, kendi hesabını pasifleştirme engelli, kendi rol değişikliği yok sayılıyor (rol SuperAdmin kaldı). Yönetici formunda yalnız Operator ve Auditor; değiştirilmiş istek "Seçilen rolü atayamazsınız." ve kayıt oluşmadı; Yönetici nin Süper admin / Yönetici / Yönetici+Operatör hesaplarına GET ve POST u 403, hesaplar değişmedi; listede bu hesaplara düzenle bağlantısı yok.
+
+-- K11a (oturum süresi kopyada 1 dk; sonra 30 a geri alındı)
+16:27:12 start: 200 
+16:28:18 logout with stale session + token after 66s idle: 302 http://127.0.0.1:5121/account/login?reason=signed-out
+16:29:25 GET after 66s idle (other session): 302 http://127.0.0.1:5121/account/login?ReturnUrl=%2Faccount%2Fsecurity&reason=expired
+(30,)
+Tarayıcı (360 px, 3001): 70 sn işlemsizlik sonra üst bar "Kullanıcı değiştir" -> /account/login?reason=signed-out, h1 "Giriş".
+Sonuç: oturum düşmüş (aynı sürede başka oturum reason=expired), eski token la "Kullanıcı değiştir" 302 giriş ekranı; 400 yok.

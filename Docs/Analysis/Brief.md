@@ -181,7 +181,7 @@ ve PIN doğrulaması bir yetki politikası değil, **verinin iş kuralıdır** v
 | FR-52 | Acil müdahale açıldığında ve yeni talep geldiğinde yöneticiler uygulama içinde bildirim alır. | K-14, K-43 | Önemli |
 | FR-53 | SKT'si geçmiş lot uyarı ve gerekçeyle kullanılabilir; kullanım kayıtta ve raporda işaretlenir. | 21, K-12 | Zorunlu |
 | FR-54 | Süper admin Yönetici hesaplarını açar, pasifleştirir, parolalarını ve PIN kilitlerini sıfırlar; seed tek Süper admin içerir; son aktif Süper admin pasifleştirilemez. | kullanıcı yanıtı, PL-05 | Zorunlu |
-| FR-55 | Sistem geneli ayarlar (`<OturumSüresi>`, `<PinUzunluğu>`, `<PinDenemeSınırı>`, `<AzamiMedyaBoyutu>`, `<AzamiKilitSüresi>`) Yönetici ve Süper admin tarafından ekrandan PIN ile değiştirilir; değişiklik geçmişi tutulur. | kullanıcı yanıtı, K-47 | Önemli |
+| FR-55 | Sistem geneli ayarlar (`<OturumSüresi>`, `<PinUzunluğu>`, `<PinDenemeSınırı>`, `<AzamiMedyaBoyutu>`, `<AzamiKilitSüresi>`) Yönetici ve Süper admin tarafından ekrandan PIN ile değiştirilir; değişiklik geçmişi tutulur. Başlangıç değerleri Requirements §6'dadır. | kullanıcı yanıtı, K-47, PL-24 | Önemli |
 
 ### 4.2 İşlevsel olmayan isterler
 
@@ -195,7 +195,7 @@ ve PIN doğrulaması bir yetki politikası değil, **verinin iş kuralıdır** v
 | NFR-06 | Yetki yalnız rol bazlıdır; sahiplik kuralı servis katmanında iş kuralı olarak uygulanır. | türetilmiş (CLAUDE.md) | Zorunlu |
 | NFR-07 | Hiçbir tanım ve kayıt fiziksel olarak silinmez; pasifleştirme ve durum kullanılır. | 31, 33 | Zorunlu |
 | NFR-08 | Aynı komutun tekrar gönderilmesi (çift dokunma, yeniden deneme) ikinci kez etki üretmez. | türetilmiş (73, 87) | Zorunlu |
-| NFR-09 | Paylaşılan cihazda oturumdaki kişinin kimliği her ekranda görünür; oturum `<OturumSüresi>` işlemsizlikte kapanır; kritik işlemler PIN ile yeniden doğrulanır. | türetilmiş (48, 111), K-09 | Zorunlu |
+| NFR-09 | Paylaşılan cihazda oturumdaki kişinin kimliği her ekranda görünür; oturum `<OturumSüresi>` (başlangıç 30 dakika) işlemsizlikte kapanır; kritik işlemler PIN ile yeniden doğrulanır. | türetilmiş (48, 111), K-09, PL-24 | Zorunlu |
 | NFR-10 | Medya dosyaları değişmezdir; bir versiyona bağlanan dosya sonradan değişemez. | 16, 32 | Önemli |
 | NFR-11 | Arayüz dili Türkçedir. | türetilmiş, K-31 | Önemli |
 | NFR-12 | POST işlemlerinde antiforgery, sırlar (ör. özet anahtarı) `appsettings.json` dışında tutulur. | türetilmiş (CodingStandards) | Zorunlu |
@@ -290,7 +290,7 @@ Değeri iş biriminden gelecekler `<...>` yer tutucusuyla gösterilmiştir; sist
 **Kimlik ve PIN**
 
 - **BR-48:** PIN isteyen işlemler. Operatör: kayıt açma, acil müdahale açma, görevli ekleme ve çıkarma (sahibin PIN'i) ile katılım onayı (eklenen kişinin PIN'i), malzeme ekleme ve çıkarma, adım başlatma, adım bitirme, mola başlatma ve bitirme, talep açma ve geri çekme, beklemeden devam. Yönetici: talep onayı ve reddi, iptal, yarıda kapatma, beklemeye alma, açık molayı bitirme, düzeltme, prosedür versiyonu yayınlama, kullanıcı pasifleştirme, PIN sıfırlama, parola sıfırlama (PL-06), sistem ayarı değiştirme. Süper admin: kullanıcı pasifleştirme, PIN sıfırlama, parola sıfırlama, sistem ayarı değiştirme. PIN istenmeyenler: giriş, okuma ekranları, tanım ekleme ve düzenleme, bildirimi okundu işaretleme (K-09).
-- **BR-49:** PIN yalnız rakamdır, `<PinUzunluğu>` hanedir; tüm haneleri aynı ya da ardışık PIN reddedilir. `<PinDenemeSınırı>` art arda hatalı denemede PIN kilitlenir ve oturum kapanır; hesabı yönetebilen kullanıcı (SK-9) sıfırlar, kullanıcı sonraki girişte yeni PIN belirler. Uzunluk kuralı yalnız yeni PIN belirlenirken uygulanır; `<PinUzunluğu>` değişse de mevcut PIN'ler geçerlidir (PL-18). Hatalı PIN'li istek işlem yapmaz ve kayıt olay günlüğüne yazılmaz (K-42 varsayılanı).
+- **BR-49:** PIN yalnız rakamdır, `<PinUzunluğu>` hanedir; tüm haneleri aynı ya da ardışık PIN reddedilir. `<PinDenemeSınırı>` art arda hatalı denemede PIN kilitlenir ve oturum kapanır; hesabı yönetebilen kullanıcı (SK-9) sıfırlar, kullanıcı sonraki girişte yeni PIN belirler. Uzunluk kuralı yalnız yeni PIN belirlenirken uygulanır; `<PinUzunluğu>` değişse de mevcut PIN'ler geçerlidir (PL-18). Hatalı PIN'li istek işlem yapmaz ve kayıt olay günlüğüne yazılmaz (K-42 varsayılanı). Başlangıç değerleri `<PinUzunluğu>` 4, `<PinDenemeSınırı>` 5: art arda 5. hatalı denemede kilit, doğru PIN sayacı sıfırlar (PL-24).
 - **BR-55:** Yönetici ya da Süper admin kullanıcıyı geçici parolayla açar (kapsam SK-9). Kullanıcı ilk girişte parolasını değiştirir ve PIN belirler; bu iki adım bitmeden başka ekran açılmaz (K-09).
 
 **Acil müdahale ve bildirim**
@@ -1257,7 +1257,7 @@ Eski seçenek karşılaştırması (adım toplamı, boşluk eşiği, duraklat/de
 
 ### 9.8 Kimlik doğrulama ve PIN (K-09, K-10 kararları)
 
-- Cookie kimlik doğrulama, sicil no + parola; işlemsizlikte `<OturumSüresi>` sonra oturum kapanır; kabukta oturumdaki kişinin adı her zaman görünür ve tek dokunuşla "kullanıcı değiştir" vardır.
+- Cookie kimlik doğrulama, sicil no + parola; işlemsizlikte `<OturumSüresi>` (başlangıç 30 dakika) sonra oturum kapanır; kabukta oturumdaki kişinin adı her zaman görünür ve tek dokunuşla "kullanıcı değiştir" vardır.
 - İlk giriş: Yönetici ya da Süper admin geçici parolayla açar (SK-9); kullanıcı parolasını değiştirir ve PIN belirler (BR-55). Bu adım tamamlanmadan diğer ekranlar ilk giriş ekranına yönlenir.
 - PIN, işlem isteğinin bir alanıdır ve aynı transaction'da doğrulanır; ayrı bir "PIN oturumu" tutulmaz. Parola ve PIN tek yönlü özetle saklanır (NFR-15).
 - Yardımcının katılım onayı (SK-4) görevli ekleme isteğinde eklenen kişinin PIN'iyle yapılır; hatalı deneme o kişinin sayacına yazılır.
@@ -1311,7 +1311,7 @@ Aşağıdakiler makul varsayılanla doldurulmuştur; kullanıcı aksini söylers
 | V-12 | Bir adımın en az bir görevlisi olmalıdır. | BR-17 |
 | V-13 | Seed verisi, gerçek tesis verisi gelene kadar nötr demo verisidir; jenerik isim ve uydurma kurum adı kullanılmaz. | K-19 |
 | V-14 | Rapor ve denetim çıktısı ilk sürümde yazdırılabilir HTML + CSV'dir; sunucu tarafı PDF yoktur. | K-28 |
-| V-15 | Tip bazlı değerler (varsayılan kilit süresi, faz minimum süresi, malzeme zorunluluğu) yönetici ekranından; sistem geneli değerler (`<OturumSüresi>`, `<PinUzunluğu>`, `<PinDenemeSınırı>`, `<AzamiMedyaBoyutu>`, `<AzamiKilitSüresi>`) Sistem ayarları ekranından değişir; başlangıç değerlerini iş birimi ve BT verir (2026-11-13 K-47 kararıyla değişti). | K-47 |
+| V-15 | Tip bazlı değerler (varsayılan kilit süresi, faz minimum süresi, malzeme zorunluluğu) yönetici ekranından; sistem geneli değerler (`<OturumSüresi>`, `<PinUzunluğu>`, `<PinDenemeSınırı>`, `<AzamiMedyaBoyutu>`, `<AzamiKilitSüresi>`) Sistem ayarları ekranından değişir; başlangıç değerlerini iş birimi ve BT verir (2026-11-13 K-47 kararıyla değişti). Faz 1 değerleri kullanıcıdan geldi (PL-24, Requirements §6); medya boyutu ve azami kilit süresi açık. | K-47 |
 | V-16 | Tüm saha personeli sistem kullanıcısıdır; giriş yapmayan personel kaydı yoktur. | K-10 |
 | V-17 | Bir kayıtta mola ve bekleme sayısı sınırsızdır. | K-39, K-45 |
 | V-18 | Talep kararı tek yöneticinin kararıdır; ikinci onay yoktur. | K-40 |

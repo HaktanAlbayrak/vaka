@@ -1,0 +1,86 @@
+@using Vaka.Web.ViewModels.Users
+@model UserDeactivateViewModel
+@{
+    ViewData["Title"] = "Kullanıcıyı pasifleştir";
+    ViewData["Lead"] = "Pasif hesap giriş yapamaz. Geçmiş kayıtlar korunur.";
+    ViewData["NavKey"] = "users";
+}
+
+<partial name="_FormSummary" model='"Pasifleştirilemedi"' />
+
+<div class="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_24rem]">
+    <form method="post" class="panel min-w-0" data-validate data-busy-form aria-labelledby="deactivate-title">
+        <div class="panel-head">
+            <h2 id="deactivate-title" class="panel-title">Onay</h2>
+        </div>
+        <div class="panel-body space-y-6">
+            <dl class="kv sm:grid-cols-2">
+                <div>
+                    <dt>Ad soyad</dt>
+                    <dd>@Model.FullName</dd>
+                </div>
+                <div>
+                    <dt>Sicil no</dt>
+                    <dd class="mono">@Model.RegistryNo</dd>
+                </div>
+            </dl>
+
+            @if (Model.OpenWork.Any())
+            {
+                <section aria-labelledby="open-work-title" class="space-y-3">
+                    <h3 id="open-work-title" class="text-lg font-bold">Açık işleri var</h3>
+                    <ul class="divide-y divide-line border-2 border-line">
+                        @foreach (var work in Model.OpenWork)
+                        {
+                            <li class="flex flex-wrap items-center justify-between gap-2 p-3">
+                                <span class="min-w-0 break-words font-semibold">@work.Title</span>
+                                <span class="flex flex-wrap items-center gap-2">
+                                    <span class="chip">@work.Kind</span>
+                                    @if (work.Url is not null)
+                                    {
+                                        <a class="btn btn-secondary" href="@work.Url">Aç</a>
+                                    }
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                </section>
+            }
+
+            @if (!Model.CanDeactivate)
+            {
+                <p class="notice notice-danger" role="alert">
+                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#lock" /></svg>
+                    <span>@(Model.BlockReason ?? "Bu hesap şu an pasifleştirilemez.")</span>
+                </p>
+                <div class="border-t-2 border-line pt-5">
+                    <a class="btn btn-secondary btn-lg" href="/users/edit/@Model.UserId">Hesaba dön</a>
+                </div>
+            }
+            else
+            {
+                <div class="max-w-xs">
+                    <partial name="_PinInput" model='("Pin", "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                </div>
+                <div class="flex flex-wrap items-center gap-3 border-t-2 border-line pt-5">
+                    <button type="submit" class="btn btn-danger btn-lg" data-requires-online>
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-x" /></svg>
+                        Kullanıcıyı pasifleştir
+                    </button>
+                    <a class="btn btn-secondary btn-lg" href="/users/edit/@Model.UserId">Vazgeç</a>
+                </div>
+            }
+        </div>
+    </form>
+
+    <aside class="min-w-0" aria-label="Bilgi">
+        <section class="panel" aria-labelledby="effect-title">
+            <div class="panel-head"><h2 id="effect-title" class="panel-title">Pasifleştirince</h2></div>
+            <ul class="list-inside list-disc space-y-2 p-4 md:p-5">
+                <li>Kullanıcı parolasıyla giriş yapamaz.</li>
+                <li>Kullanıcı listesinde Pasif durumunda kalır.</li>
+                <li>Hesap geri açılabilir; parola ve PIN olduğu gibi kalır.</li>
+            </ul>
+        </section>
+    </aside>
+</div>

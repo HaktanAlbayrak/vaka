@@ -3,7 +3,8 @@
     var isSetMode = Model.Mode == "set";
     var hintId = Model.Id + "-hint";
     var errorId = Model.Id + "-error";
-    var describedBy = Model.Error is null ? hintId : hintId + " " + errorId;
+    var error = Model.Error ?? (Model.Name is not null && ViewData.ModelState.TryGetValue(Model.Name, out var entry) && entry.Errors.Count > 0 ? entry.Errors[0].ErrorMessage : null);
+    var describedBy = error is null ? hintId : hintId + " " + errorId;
 }
 <div class="field" data-pin>
     <label class="field-label" for="@Model.Id">@Model.Label</label>
@@ -11,7 +12,7 @@
         <input id="@Model.Id" name="@Model.Name" class="input pin-input pr-14" type="password" inputmode="numeric" pattern="[0-9]*"
                autocomplete="off" spellcheck="false" required
                maxlength="@(isSetMode ? Model.Length : null)"
-               aria-describedby="@describedBy" aria-invalid="@(Model.Error is null ? null : "true")" data-pin-input />
+               aria-describedby="@describedBy" aria-invalid="@(error is null ? null : "true")" data-pin-input />
         <button type="button" class="icon-btn absolute right-0 top-0 h-12 w-12" data-pin-reveal aria-pressed="false" aria-label="PIN'i göster">
             <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#eye" /></svg>
         </button>
@@ -26,11 +27,11 @@
         </div>
     }
     <p id="@hintId" class="field-hint">@(isSetMode ? $"{Model.Length} hane, yalnız rakam." : "Kendi PIN'inizi girin.")</p>
-    @if (Model.Error is not null)
+    @if (error is not null)
     {
         <p id="@errorId" class="field-error">
             <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
-            <span>@Model.Error</span>
+            <span>@error</span>
         </p>
     }
 </div>

@@ -1,0 +1,23 @@
+@model (int Page, int PageSize, int Total, string Noun, Func<int, string> PageHref)
+@{
+    var pageCount = Math.Max(1, (int)Math.Ceiling(Model.Total / (double)Math.Max(1, Model.PageSize)));
+}
+<nav class="flex flex-wrap items-center justify-between gap-3 border-t-2 border-line px-4 py-3 md:px-5" aria-label="Sayfalar">
+    <p class="text-sm text-muted">@Model.Total @Model.Noun · Sayfa @Model.Page / @pageCount</p>
+    <div class="flex flex-wrap items-center gap-2">
+        @if (Model.Page > 1)
+        {
+            <a class="btn btn-secondary" href="@Model.PageHref(Model.Page - 1)" data-busy-link>
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-left" /></svg>
+                Önceki
+            </a>
+        }
+        @if (Model.Page < pageCount)
+        {
+            <a class="btn btn-secondary" href="@Model.PageHref(Model.Page + 1)" data-busy-link>
+                Sonraki
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-right" /></svg>
+            </a>
+        }
+    </div>
+</nav>

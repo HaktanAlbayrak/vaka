@@ -1,0 +1,40 @@
+Faz 1 yetki matrisi, Production (Release, .qa/build), port 5111, DB .qa/qa.db kopyası, 2026-11-14
+Hücre: ilk yanıt > yönlendirme izlenince son yanıt. Roller: anon=oturumsuz, op=Operatör(3001), au=Denetçi(3002), m1=Yönetici(2001), sa=Süper admin(0001), mo=Yönetici+Operatör(2002)
+Hedefler: 5=Operatör hesabı (3001), 2=Yönetici hesabı (2001), 999=yok
+
+GET                         anon      op        au        m1        sa        mo        
+/                           302>200   200>200   200>200   200>200   302>200   200>200   
+/account/login              200>200   302>200   302>200   302>200   302>200   302>200   
+/account/access-denied      403>403   403>403   403>403   403>403   403>403   403>403   
+/account/first-login        302>200   302>200   302>200   302>200   302>200   302>200   
+/account/security           302>200   200>200   200>200   200>200   200>200   200>200   
+/users                      302>200   302>403   302>403   200>200   200>200   200>200   
+/users?status=All           302>200   302>403   302>403   200>200   200>200   200>200   
+/users/create               302>200   302>403   302>403   200>200   200>200   200>200   
+/users/edit/5               302>200   302>403   302>403   200>200   200>200   200>200   
+/users/edit/2               302>200   302>403   302>403   302>403   200>200   302>403   
+/users/edit/999             302>200   302>403   302>403   404>404   404>404   404>404   
+/users/deactivate/5         302>200   302>403   302>403   200>200   200>200   200>200   
+/users/deactivate/2         302>200   302>403   302>403   302>403   200>200   302>403   
+/error/404                  404>404   404>404   404>404   404>404   404>404   404>404   
+/error/403                  403>403   403>403   403>403   403>403   403>403   403>403   
+/prototype/run              404>404   404>404   404>404   404>404   404>404   404>404   
+
+POST: tokenli (geçersiz form verisi, durum değiştirmez) ilk>son | tokensiz ilk. /account/logout bilinçli istisna (K11a), en son çalıştırıldı.
+POST                        anon          op            au            m1            sa            mo            
+/account/login              400>400|400   200>200|400   200>200|400   200>200|400   200>200|400   200>200|400   
+/account/first-login        302>200|302   302>200|400   302>200|400   302>200|400   302>200|400   302>200|400   
+/account/change-password    302>200|302   200>200|400   200>200|400   200>200|400   200>200|400   200>200|400   
+/account/change-pin         302>200|302   200>200|400   200>200|400   200>200|400   200>200|400   200>200|400   
+/users/create               302>200|302   302>403|302   302>403|302   200>200|400   200>200|400   200>200|400   
+/users/edit/5               302>200|302   302>403|302   302>403|302   200>200|400   200>200|400   200>200|400   
+/users/edit/2               302>200|302   302>403|302   302>403|302   302>403|400   200>200|400   302>403|400   
+/users/deactivate/5         302>200|302   302>403|302   302>403|302   200>200|400   200>200|400   200>200|400   
+/users/deactivate/2         302>200|302   302>403|302   302>403|302   302>403|400   200>200|400   302>403|400   
+/users/activate/5           302>200|302   302>403|302   302>403|302   200>200|400   200>200|400   200>200|400   
+/users/reset-pin/5          302>200|302   302>403|302   302>403|302   200>200|400   200>200|400   200>200|400   
+/users/reset-password/5     302>200|302   302>403|302   302>403|302   200>200|400   200>200|400   200>200|400   
+/users/reset-pin/2          302>200|302   302>403|302   302>403|302   302>403|400   200>200|400   302>403|400   
+/account/logout (tokensiz)  302>/account/login?reason=signed-out  302>/account/login?reason=signed-out  302>/account/login?reason=signed-out  302>/account/login?reason=signed-out  302>/account/login?reason=signed-out  302>/account/login?reason=signed-out
+
+Durum değişmedi kontrolü (hedef 2 ve 5): (2, 1, 0, 0, 0) (5, 1, 0, 0, 0) 

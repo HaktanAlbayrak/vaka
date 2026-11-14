@@ -1,0 +1,39 @@
+@model (string Kind, string? DemoHref)
+@{
+    var icon = "/lib/icons/Icons.svg#arrow-left-right";
+}
+@if (Model.DemoHref is not null)
+{
+    if (Model.Kind == "bar")
+    {
+        <a class="switch-btn" href="@Model.DemoHref">
+            <svg class="icon max-[399px]:hidden" aria-hidden="true"><use href="@icon" /></svg>
+            <span class="max-w-[4.5rem]">Kullanıcı değiştir</span>
+        </a>
+    }
+    else
+    {
+        <a class="btn btn-secondary btn-block" href="@Model.DemoHref">
+            <svg class="icon" aria-hidden="true"><use href="@icon" /></svg>
+            <span class="nav-label">Kullanıcı değiştir</span>
+        </a>
+    }
+}
+else if (Model.Kind == "bar" || Model.Kind == "bar-always")
+{
+    <form method="post" action="/account/logout" asp-antiforgery="true" class="contents">
+        <button type="submit" data-requires-online class="switch-btn @(Model.Kind == "bar-always" ? "switch-btn-show" : "")">
+            <svg class="icon max-[399px]:hidden" aria-hidden="true"><use href="@icon" /></svg>
+            <span class="max-w-[4.5rem]">Kullanıcı değiştir</span>
+        </button>
+    </form>
+}
+else
+{
+    <form method="post" action="/account/logout" asp-antiforgery="true">
+        <button type="submit" data-requires-online class="btn btn-secondary btn-block">
+            <svg class="icon" aria-hidden="true"><use href="@icon" /></svg>
+            <span class="nav-label">Kullanıcı değiştir</span>
+        </button>
+    </form>
+}

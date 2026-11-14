@@ -1,0 +1,4 @@
+@{
+    var isAuthenticated = User.Identity?.IsAuthenticated == true;
+}
+<partial name="_State" model='("error", "lock", "Bu sayfaya erişemezsiniz", "Hesabınızın rolü bu işleme izin vermiyor ya da hedef hesap sizin yetki alanınızın dışında. Yetki gerekiyorsa yöneticinize başvurun.", isAuthenticated ? "Ana sayfaya dön" : "Girişe dön", isAuthenticated ? "/" : "/account/login")' />

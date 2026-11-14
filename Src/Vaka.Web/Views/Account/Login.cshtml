@@ -1,0 +1,34 @@
+@model Vaka.Web.ViewModels.Account.LoginViewModel
+@{
+    ViewData["Title"] = "Giriş";
+    ViewData["Lead"] = "Sicil numaranız ve parolanızla girin.";
+    ViewData["StatusMessage"] = Model.StatusMessage;
+}
+
+<form method="post" class="panel panel-tag" data-validate data-busy-form aria-labelledby="login-title">
+    <div class="panel-head">
+        <h2 id="login-title" class="panel-title">Sicil girişi</h2>
+    </div>
+    <div class="panel-body space-y-5">
+        <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="notice notice-danger" role="alert" tabindex="-1" data-form-summary>
+                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+                <p class="font-semibold">@Model.ErrorMessage</p>
+            </div>
+        }
+        <partial name="_FormSummary" model='"Giriş yapılamadı"' />
+
+        <partial name="_Field" model='("RegistryNo", "Sicil no", Model.RegistryNo, "text", "username", (string?)null, true, false)' />
+        <partial name="_Field" model='("Password", "Parola", (string?)null, "password", "current-password", (string?)null, true, false)' />
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block" data-requires-online>
+            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#shield-check" /></svg>
+            Giriş yap
+        </button>
+    </div>
+</form>
+
+<p class="mt-5 text-sm text-muted">Parolanızı unuttuysanız yöneticinizden yeni geçici parola isteyin. Oturum işlemsizlikte kendiliğinden kapanır.</p>

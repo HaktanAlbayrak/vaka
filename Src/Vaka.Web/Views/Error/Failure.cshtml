@@ -1,5 +1,6 @@
 @{
     ViewData["Title"] = "Bir hata oluştu";
     ViewData["Lead"] = "İşleminiz tamamlanamadı.";
+    var isAuthenticated = User.Identity?.IsAuthenticated == true;
 }
-<partial name="_State" model='("error", "triangle-alert", "Sunucuda bir sorun var", "Yaptığınız işlem kaydedilmemiş olabilir. Birkaç dakika sonra yeniden deneyin. Sorun sürerse yöneticinize bildirin.", "Ana sayfaya dön", "/prototype/my-work")' />
+<partial name="_State" model='("error", "triangle-alert", "Sunucuda bir sorun var", "Yaptığınız işlem kaydedilmemiş olabilir. Birkaç dakika sonra yeniden deneyin. Sorun sürerse yöneticinize bildirin.", isAuthenticated ? "Ana sayfaya dön" : "Girişe dön", isAuthenticated ? "/" : "/account/login")' />

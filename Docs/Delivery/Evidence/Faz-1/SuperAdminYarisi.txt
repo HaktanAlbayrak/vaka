@@ -1,0 +1,163 @@
+Son aktif Süper admin kuralı (PL-05, K8): eşzamanlı istek denemesi, 2026-11-14, Production 5111, .qa/qa.db kopyası
+Kullanıcılar: Id 1 = 0001 (Süper admin), Id 9 = 1002 (Süper admin). İki ayrı oturum, her biri kendi PIN'iyle diğerini pasifleştirir; iki POST aynı anda gönderilir.
+Sıralı gönderimde ikinci kişinin oturumu ilk işlemle düşer (hesabı pasif), kural ihlal edilemez. Eşzamanlı gönderimde:
+
+Deneme 1 önce: ('1:IsActive=1 9:IsActive=1',)
+A(0001->1002):302 http://127.0.0.1:5111/users
+B(1002->0001):302 http://127.0.0.1:5111/users
+Deneme 1 sonra: ('1:IsActive=0 9:IsActive=0',)  aktif Süper admin sayısı: (0,)
+
+Deneme 2 önce: ('1:IsActive=1 9:IsActive=1',)
+A(0001->1002):302 http://127.0.0.1:5111/users
+B(1002->0001):302 http://127.0.0.1:5111/users
+Deneme 2 sonra: ('1:IsActive=0 9:IsActive=0',)  aktif Süper admin sayısı: (0,)
+
+Deneme 3 önce: ('1:IsActive=1 9:IsActive=1',)
+A(0001->1002):302 http://127.0.0.1:5111/users
+B(1002->0001):302 http://127.0.0.1:5111/users
+Deneme 3 sonra: ('1:IsActive=0 9:IsActive=0',)  aktif Süper admin sayısı: (0,)
+
+Her denemeden sonra QA kopyasında IsActive=1 elle geri yazıldı (uygulama içinden geri dönüş yolu yok: aktif Süper admin kalmadığında Yönetici ve Süper admin hesaplarını yönetecek kimse yok).
+
+Sıralı kontrol (aynı veriyle): A önce, sonra B
+A: 302 http://127.0.0.1:5111/users
+B: 302 http://127.0.0.1:5111/account/login?ReturnUrl=%2Fusers  (B'nin oturumu A'nın işlemiyle düştü)
+Kod: Services/UserAdministration.cs:150 GetDeactivateBlockAsync okuma, :161 PIN doğrulama, :167-168 yazma; okuma ile yazma arasında kilit ya da yeniden denetim yok. Rol kaldırma kolu (UpdateAsync :113-137) aynı okuma-sonra-yazma biçiminde.
+
+
+== Tur 2 (2026-11-14), Production 5121, .qa/t2f1/qa2.db
+Kullanıcılar: Id 1 = 0001 (Süper admin), Id 2 = 1002 (Süper admin). Her denemede önce iki taze oturum ve iki token alınır, iki POST arka planda aynı anda gönderilir (curl -L, son yanıt; "sayfa" = son sayfanın h1 i).
+Her denemenin sonunda: (Id, sicil, IsActive, roller) ve aktif + SuperAdmin rollü hesap sayısı. Geri alma uygulama içinden (etkinleştirme / rol verme); DB ye elle yazılmadı.
+
+== Başlangıç
+(1, '0001', 1, 'SuperAdmin')
+(2, '1002', 1, 'SuperAdmin')
+(2,)
+== A1 karşılıklı pasifleştirme (0001 -> 1002, 1002 -> 0001)
+0001 pasifleştir 1002: 200 http://127.0.0.1:5121/users (ilk yanıt süresi 0.084702s)
+   sayfa: Kullanıcılar 
+1002 pasifleştir 0001: 403 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fdeactivate%2F1 (ilk yanıt süresi 0.080172s)
+   sayfa: Yetkiniz yok 
+(1, '0001', 1, 'SuperAdmin')
+(2, '1002', 0, 'SuperAdmin')
+(1,)
+  geri al: 0001 1002'yi etkinleştirir: 302 http://127.0.0.1:5121/users/edit/2
+(2,)
+== A2 karşılıklı pasifleştirme (0001 -> 1002, 1002 -> 0001)
+0001 pasifleştir 1002: 200 http://127.0.0.1:5121/users (ilk yanıt süresi 0.074419s)
+   sayfa: Kullanıcılar 
+1002 pasifleştir 0001: 403 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fdeactivate%2F1 (ilk yanıt süresi 0.078253s)
+   sayfa: Yetkiniz yok 
+(1, '0001', 1, 'SuperAdmin')
+(2, '1002', 0, 'SuperAdmin')
+(1,)
+  geri al: 0001 1002'yi etkinleştirir: 302 http://127.0.0.1:5121/users/edit/2
+(2,)
+== A3 karşılıklı pasifleştirme (0001 -> 1002, 1002 -> 0001)
+0001 pasifleştir 1002: 200 http://127.0.0.1:5121/users (ilk yanıt süresi 0.071101s)
+   sayfa: Kullanıcılar 
+1002 pasifleştir 0001: 403 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fdeactivate%2F1 (ilk yanıt süresi 0.067232s)
+   sayfa: Yetkiniz yok 
+(1, '0001', 1, 'SuperAdmin')
+(2, '1002', 0, 'SuperAdmin')
+(1,)
+  geri al: 0001 1002'yi etkinleştirir: 302 http://127.0.0.1:5121/users/edit/2
+(2,)
+== B1 pasifleştirme + rol kaldırma (0001 -> 1002 pasifleştirir; 1002 0001'in Süper admin rolünü Yönetici ile değiştirir)
+0001 pasifleştir 1002: 403 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fdeactivate%2F2 (ilk yanıt süresi 0.066279s)
+   sayfa: Yetkiniz yok 
+1002 rol kaldır 0001: 200 http://127.0.0.1:5121/users/edit/1 (ilk yanıt süresi 0.007664s)
+   sayfa: Kullanıcıyı düzenle 
+(1, '0001', 1, 'Manager')
+(2, '1002', 1, 'SuperAdmin')
+(1,)
+  geri al: 1002 0001'e Süper admin rolü verir: 302 http://127.0.0.1:5121/users/edit/1
+(2,)
+== B2 pasifleştirme + rol kaldırma (1002 -> 0001 pasifleştirir; 0001 1002'in Süper admin rolünü Yönetici ile değiştirir)
+1002 pasifleştir 0001: 403 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fdeactivate%2F1 (ilk yanıt süresi 0.071478s)
+   sayfa: Yetkiniz yok 
+0001 rol kaldır 1002: 200 http://127.0.0.1:5121/users/edit/2 (ilk yanıt süresi 0.008692s)
+   sayfa: Kullanıcıyı düzenle 
+(1, '0001', 1, 'SuperAdmin')
+(2, '1002', 1, 'Manager')
+(1,)
+  geri al: 0001 1002'ye Süper admin rolü verir: 302 http://127.0.0.1:5121/users/edit/2
+(2,)
+== B3 pasifleştirme + rol kaldırma (0001 -> 1002 pasifleştirir; 1002 0001'in Süper admin rolünü Yönetici ile değiştirir)
+0001 pasifleştir 1002: 403 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fdeactivate%2F2 (ilk yanıt süresi 0.073702s)
+   sayfa: Yetkiniz yok 
+1002 rol kaldır 0001: 200 http://127.0.0.1:5121/users/edit/1 (ilk yanıt süresi 0.008988s)
+   sayfa: Kullanıcıyı düzenle 
+(1, '0001', 1, 'Manager')
+(2, '1002', 1, 'SuperAdmin')
+(1,)
+  geri al: 1002 0001'e Süper admin rolü verir: 302 http://127.0.0.1:5121/users/edit/1
+(2,)
+
+
+-- Gecikmeli varyant (pasifleştirme önce, rol kaldırma d sn sonra; kilidi bekleyen düzenleme isteğinin yolu)
+== B+ gecikmeli: 0001 -> 1002 pasifleştirir; 0.015s sonra 1002 0001'in Süper admin rolünü Yönetici ile değiştirir
+0001 pasifleştir 1002: 403 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fdeactivate%2F2 (ilk yanıt süresi 0.072708s)
+   sayfa: Yetkiniz yok 
+1002 rol kaldır 0001: 200 http://127.0.0.1:5121/users/edit/1 (ilk yanıt süresi 0.006896s)
+   sayfa: Kullanıcıyı düzenle 
+(1, '0001', 1, 'Manager')
+(2, '1002', 1, 'SuperAdmin')
+(1,)
+  geri al: 1002 0001'e Süper admin rolü verir: 302 http://127.0.0.1:5121/users/edit/1
+(2,)
+== B+ gecikmeli: 0001 -> 1002 pasifleştirir; 0.02s sonra 1002 0001'in Süper admin rolünü Yönetici ile değiştirir
+0001 pasifleştir 1002: 200 http://127.0.0.1:5121/users (ilk yanıt süresi 0.058534s)
+1002 rol kaldır 0001: 200 http://127.0.0.1:5121/account/login?ReturnUrl=%2Fusers%2Fedit%2F1&reason=inactive (ilk yanıt süresi 0.003769s)
+   sayfa: Giriş 
+(1, '0001', 1, 'SuperAdmin')
+(2, '1002', 0, 'SuperAdmin')
+(1,)
+  geri al: 0001 1002'yi etkinleştirir: 302 http://127.0.0.1:5121/users/edit/2
+(2,)
+== B+ gecikmeli: 0001 -> 1002 pasifleştirir; 0.025s sonra 1002 0001'in Süper admin rolünü Yönetici ile değiştirir
+0001 pasifleştir 1002: 200 http://127.0.0.1:5121/users (ilk yanıt süresi 0.062514s)
+1002 rol kaldır 0001: 403 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fedit%2F1 (ilk yanıt süresi 0.160692s)
+   sayfa: Yetkiniz yok 
+(1, '0001', 1, 'SuperAdmin')
+(2, '1002', 0, 'SuperAdmin')
+(1,)
+  geri al: 0001 1002'yi etkinleştirir: 302 http://127.0.0.1:5121/users/edit/2
+(2,)
+== B+ gecikmeli: 0001 -> 1002 pasifleştirir; 0.03s sonra 1002 0001'in Süper admin rolünü Yönetici ile değiştirir
+0001 pasifleştir 1002: 200 http://127.0.0.1:5121/users (ilk yanıt süresi 0.067567s)
+1002 rol kaldır 0001: 200 http://127.0.0.1:5121/account/login?ReturnUrl=%2Fusers%2Fedit%2F1&reason=inactive (ilk yanıt süresi 0.002956s)
+   sayfa: Giriş 
+(1, '0001', 1, 'SuperAdmin')
+(2, '1002', 0, 'SuperAdmin')
+(1,)
+  geri al: 0001 1002'yi etkinleştirir: 302 http://127.0.0.1:5121/users/edit/2
+(2,)
+== B+ gecikmeli: 0001 -> 1002 pasifleştirir; 0.035s sonra 1002 0001'in Süper admin rolünü Yönetici ile değiştirir
+0001 pasifleştir 1002: 200 http://127.0.0.1:5121/users (ilk yanıt süresi 0.064578s)
+1002 rol kaldır 0001: 200 http://127.0.0.1:5121/account/login?ReturnUrl=%2Fusers%2Fedit%2F1&reason=inactive (ilk yanıt süresi 0.003242s)
+   sayfa: Giriş 
+(1, '0001', 1, 'SuperAdmin')
+(2, '1002', 0, 'SuperAdmin')
+(1,)
+  geri al: 0001 1002'yi etkinleştirir: 302 http://127.0.0.1:5121/users/edit/2
+(2,)
+
+
+-- A4: karşılıklı pasifleştirme, 1002 önce başlatıldı
+== A4 karşılıklı pasifleştirme, 1002 önce başlatılır
+1002 pasifleştir 0001: 200 http://127.0.0.1:5121/users (ilk yanıt süresi 0.102486s)
+   sayfa: Kullanıcılar 
+0001 pasifleştir 1002: 403 http://127.0.0.1:5121/account/access-denied?ReturnUrl=%2Fusers%2Fdeactivate%2F2 (ilk yanıt süresi 0.077279s)
+   sayfa: Yetkiniz yok 
+(1, '0001', 0, 'SuperAdmin')
+(2, '1002', 1, 'SuperAdmin')
+(1,)
+  geri al: 1002 0001'i etkinleştirir: 302 http://127.0.0.1:5121/users/edit/1
+(2,)
+
+
+Özet: 4 karşılıklı pasifleştirme, 3 eşzamanlı ve 5 gecikmeli pasifleştirme + rol kaldırma; 12 denemenin 12 sinde sonda aktif Süper admin tam 1, isteklerden biri değişiklik yapmadı.
+Kaybeden yanıtı: 403 "Yetkiniz yok" (kilit içinde yeniden okumada işlemi yapan artık aktif değil ya da Yönetici ye düştü) ya da oturumun düşmesi (/account/login?reason=inactive).
+0,025 sn gecikmede düzenleme isteği 0,16 sn kilit bekledi ve 403 aldı (kilit içi yeniden denetim, düzenleme yolu).
+Uygulama günlüğü: fail/crit 0, 500 yok (run-prod.log yalnız başlangıç kayıtları).

@@ -1,0 +1,126 @@
+Faz 1 UI matrisi, mekanik eval (UiDelivery §3), Production 5111, playwright-cli 0.1.22 (Chromium), 2026-11-14
+Hücreler: 360x800, 768x1024, 1024x768, 1440x900, 1920x1080 x açık/koyu; 800x360 yatay; 320x640 ve 720x450 (%200 yakınlaştırma karşılığı); 390x844 ve 1440x900 reduced-motion
+Toplam ölçüm: 450 sayfa x hücre; 30 sayfa/durum
+
+h1 != 1: 0 | skip yok: 0 | imgNoAlt: 0 | imgNoSize: 0 | inputNoLabel: 0 | iconBtnNoName: 0
+emdash: 0 | hScroll: 0 | dış kaynak: 0 | font yüklenmedi: 0 | body font: ['"Hanken Grotesk"']
+smallTargets (<40px): 0 | <24px: 0 | AA altı kontrast: 0 | en düşük kontrast: 5.28
+overflowing: yalnız 360 ve 320 px /users kart görünümünde sr-only thead (tr, th; konum absolute, görünmez): 18 hücre; başka taşma 0
+üst bar yüksekliği: {64: 450} | mobil gövde < 16px: 0
+reduced-motion hücrelerinde animasyon: 0 | 1920 içerik genişliği (oturumlu kabuk): [1600] (oturumsuz: [576] )
+Oturumsuz sayfalarda kişi alanı / prototype bağlantısı: 0 / 0
+
+Sayfa | son URL | durum kodu | menü bağlantıları | "Kullanıcı değiştir" üst bar (genişlik: boyut; rayda = lg ve üstünde rayın altında 222x44; yok = oturumsuz genel kip) | kişi + sicil
+anon /account/access-denied | /account/access-denied | 403 | - | 360:yok, 768:yok, 1024:yok, 1440:yok | -
+anon /account/login | /account/login | 200 | - | 360:yok, 768:yok, 1024:yok, 1440:yok | -
+anon /account/login?reason=expired | /account/login?reason=expired | 200 | - | 360:yok, 768:yok, 1024:yok, 1440:yok | -
+anon /account/login?reason=pin-locked | /account/login?reason=pin-locked | 200 | - | 360:yok, 768:yok, 1024:yok, 1440:yok | -
+anon /error | /error | 500 | - | 360:yok, 768:yok, 1024:yok, 1440:yok | -
+anon /error/403 | /error/403 | 403 | - | 360:yok, 768:yok, 1024:yok, 1440:yok | -
+anon /error/404 | /error/404 | 404 | - | 360:yok, 768:yok, 1024:yok, 1440:yok | -
+flfull /account/first-login | /account/first-login | 200 | - | 360:92x44, 768:118x44, 1024:118x44, 1440:118x44 | Ayşe Koç|Sicil 3004
+flpin /account/first-login | /account/first-login | 200 | - | 360:92x44, 768:118x44, 1024:118x44, 1440:118x44 | Nazan Kaya|Sicil 2003
+m1 / | / | 200 | / /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Selin Aksoy|Sicil 2001
+m1 /users | /users | 200 | / /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Selin Aksoy|Sicil 2001
+m1 /users/edit/5 | /users/edit/5 | 200 | / /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Selin Aksoy|Sicil 2001
+mo / | / | 200 | / /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Kemal Arslan|Sicil 2002
+mo /users | /users | 200 | / /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Kemal Arslan|Sicil 2002
+op / | / | 200 | / /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Murat Çelik|Sicil 3001
+op /account/access-denied | /account/access-denied | 403 | / /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Murat Çelik|Sicil 3001
+op /account/security | /account/security | 200 | / /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Murat Çelik|Sicil 3001
+op /users | /account/access-denied?ReturnUrl=%2Fusers | 403 | / /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Murat Çelik|Sicil 3001
+sa /error/404 | /error/404 | 404 | /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Süper Admin|Sicil 0001
+sa /users | /users | 200 | /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Süper Admin|Sicil 0001
+sa /users/create | /users/create | 200 | /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Süper Admin|Sicil 0001
+sa /users/deactivate/1 | /users/deactivate/1 | 200 | /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Süper Admin|Sicil 0001
+sa /users/deactivate/5 | /users/deactivate/5 | 200 | /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Süper Admin|Sicil 0001
+sa /users/edit/1 | /users/edit/1 | 200 | /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Süper Admin|Sicil 0001
+sa /users/edit/29 | /users/edit/29 | 200 | /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Süper Admin|Sicil 0001
+sa /users/edit/5 | /users/edit/5 | 200 | /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Süper Admin|Sicil 0001
+sa /users?page=2&status=Active | /users?page=2&status=Active | 200 | /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Süper Admin|Sicil 0001
+sa /users?query=Abdurrahman&status=All | /users?query=Abdurrahman&status=All | 200 | /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Süper Admin|Sicil 0001
+sa /users?query=zzzz&status=Active | /users?query=zzzz&status=Active | 200 | /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Süper Admin|Sicil 0001
+sa /users?status=Inactive | /users?status=Inactive | 200 | /users /account/security #menu | 360:92x44, 768:118x44, 1024:rayda, 1440:rayda | Süper Admin|Sicil 0001
+
+Kullanıcı listesi veri dili (T-B21): hücre, görünüm, en kısa satır yüksekliği, grid sütun sayısı / ilk satırın hücre genişlikleri (px)
+  sa 360x800-light: card h286 2/142,300,300,300,300
+  sa 768x1024-light: card h286 4/161,320,692,692,692
+  sa 1024x768-light: card h286 4/163,320,700,700,700
+  sa 1440x900-light: table h69 1/110,174,257,368,216
+  sa 1920x1080-light: table h69 1/150,237,350,501,294
+  m1 360x800-light: card h268 2/142,300,300,300,300
+  m1 768x1024-light: card h268 4/161,320,692,692,692
+  m1 1024x768-light: card h268 4/163,320,700,700,700
+  m1 1440x900-light: table h56 1/105,165,245,350,259
+  m1 1920x1080-light: table h56 1/143,225,333,477,353
+
+
+== Tur 2 (2026-11-14): Production 5121, Development 5122 (yalnız prototip), playwright-cli 0.1.22 (Chromium)
+DB: .qa/t2f1/qa2.db (App_Data/vaka.db kopyası; 27 hesap uygulama üzerinden kuruldu, 3199 = 108 karakterlik ad)
+
+B1 / T-B21 hücre yerleşimi (yöntem: tur 1 son bölüm; ek olarak her hücrenin kapladığı sütun ve kart içindeki satırı)
+Biçim: sayfa | hücre | görünüm | yatay kaydırma | main içinde 44 px altı hedef | satır yüksekliği aralığı | sütun sayısı (sütun genişliği) | ilk satırın hücreleri: etiket:kapladığı sütun@kart içi satır(genişlik px) || uzun ad satırı
+Ad soyad hesaplanan grid-column-end her kart hücresinde "span 2"; Sicil no, Roller, Durum, İşlem "auto". 1279 px te Ad soyad dikdörtgeni 320 px (max-w-xs), alanı iki sütun.
+
+/users                                 360x800          st200 card  hScroll=False sub44=0 rows=20 rowH=234-285 tracks=2(142px) | Sicil no:1@1(142) Ad soyad:2@2(300) Roller:1@3(142) Durum:1@3(142) İşlem:1@4(142)
+/users?page=2&status=Active            360x800          st200 card  hScroll=False sub44=0 rows=7 rowH=285-325 tracks=2(142px) | Sicil no:1@1(142) Ad soyad:2@2(300) Roller:1@3(142) Durum:1@3(142) İşlem:1@4(142) || long: nameW=300 lines=3 ovf=False rowH=325 [Sicil no:1@1 Ad soyad:2@2 Roller:1@3 Durum:1@3 İşlem:1@4]
+/users                                 768x1024         st200 card  hScroll=False sub44=0 rows=20 rowH=140-160 tracks=4(161px) | Sicil no:1@1(161) Ad soyad:2@1(320) Roller:1@1(161) Durum:1@2(161) İşlem:1@2(161)
+/users?page=2&status=Active            768x1024         st200 card  hScroll=False sub44=0 rows=7 rowH=160-194 tracks=4(161px) | Sicil no:1@1(161) Ad soyad:2@1(320) Roller:1@1(161) Durum:1@2(161) İşlem:1@2(161) || long: nameW=320 lines=3 ovf=False rowH=194 [Sicil no:1@1 Ad soyad:2@1 Roller:1@1 Durum:1@2 İşlem:1@2]
+/users                                 1024x768         st200 card  hScroll=False sub44=0 rows=20 rowH=140-160 tracks=4(163px) | Sicil no:1@1(163) Ad soyad:2@1(320) Roller:1@1(163) Durum:1@2(163) İşlem:1@2(163)
+/users?page=2&status=Active            1024x768         st200 card  hScroll=False sub44=0 rows=7 rowH=160-194 tracks=4(163px) | Sicil no:1@1(163) Ad soyad:2@1(320) Roller:1@1(163) Durum:1@2(163) İşlem:1@2(163) || long: nameW=320 lines=3 ovf=False rowH=194 [Sicil no:1@1 Ad soyad:2@1 Roller:1@1 Durum:1@2 İşlem:1@2]
+/users                                 1279x900         st200 card  hScroll=False sub44=0 rows=20 rowH=140-140 tracks=4(227px) | Sicil no:1@1(227) Ad soyad:1@1(320) Roller:1@1(227) Durum:1@2(227) İşlem:1@2(227)
+/users?page=2&status=Active            1279x900         st200 card  hScroll=False sub44=0 rows=7 rowH=140-174 tracks=4(227px) | Sicil no:1@1(227) Ad soyad:1@1(320) Roller:1@1(227) Durum:1@2(227) İşlem:1@2(227) || long: nameW=320 lines=3 ovf=False rowH=174 [Sicil no:1@1 Ad soyad:1@1 Roller:1@1 Durum:1@2 İşlem:1@2]
+/users                                 1280x900         st200 table hScroll=False sub44=0 rows=20 rowH=69-69 tablo | Sicil no:1@1(93) Ad soyad:1@1(156) Roller:1@1(218) Durum:1@1(313) İşlem:1@1(183)
+/users?page=2&status=Active            1280x900         st200 table hScroll=False sub44=0 rows=7 rowH=69-85 tablo | Sicil no:1@1(81) Ad soyad:1@1(346) Roller:1@1(109) Durum:1@1(270) İşlem:1@1(158) || long: nameW=346 lines=3 ovf=False rowH=85 [Sicil no:1@1 Ad soyad:1@1 Roller:1@1 Durum:1@1 İşlem:1@1]
+/users                                 1440x900         st200 table hScroll=False sub44=0 rows=20 rowH=69-69 tablo | Sicil no:1@1(109) Ad soyad:1@1(182) Roller:1@1(255) Durum:1@1(365) İşlem:1@1(214)
+/users?page=2&status=Active            1440x900         st200 table hScroll=False sub44=0 rows=7 rowH=69-85 tablo | Sicil no:1@1(94) Ad soyad:1@1(404) Roller:1@1(127) Durum:1@1(315) İşlem:1@1(184) || long: nameW=404 lines=3 ovf=False rowH=85 [Sicil no:1@1 Ad soyad:1@1 Roller:1@1 Durum:1@1 İşlem:1@1]
+/users                                 320x640-zoom200  st200 card  hScroll=False sub44=0 rows=20 rowH=234-285 tracks=2(122px) | Sicil no:1@1(122) Ad soyad:2@2(260) Roller:1@3(122) Durum:1@3(122) İşlem:1@4(122)
+/users?page=2&status=Active            320x640-zoom200  st200 card  hScroll=False sub44=0 rows=7 rowH=285-345 tracks=2(122px) | Sicil no:1@1(122) Ad soyad:2@2(260) Roller:1@3(122) Durum:1@3(122) İşlem:1@4(122) || long: nameW=260 lines=4 ovf=False rowH=345 [Sicil no:1@1 Ad soyad:2@2 Roller:1@3 Durum:1@3 İşlem:1@4]
+/prototype/records                     360x800          st200 card  hScroll=False sub44=0 rows=10 rowH=266-320 tracks=2(142px) | no:1@1(142) Makine:2@2(300) Tür:1@3(142) Sahip:1@3(142) Durum:1@4(142) Açılış:1@4(142) Net süre:1@5(142) Efor:1@5(142)
+/prototype/records                     768x1024         st200 card  hScroll=False sub44=0 rows=10 rowH=172-206 tracks=4(161px) | no:1@1(161) Makine:2@1(320) Tür:1@1(161) Sahip:1@2(161) Durum:1@2(161) Açılış:1@2(161) Net süre:1@2(161) Efor:1@3(161)
+/prototype/records                     1024x768         st200 card  hScroll=False sub44=0 rows=10 rowH=172-206 tracks=4(163px) | no:1@1(163) Makine:2@1(320) Tür:1@1(163) Sahip:1@2(163) Durum:1@2(163) Açılış:1@2(163) Net süre:1@2(163) Efor:1@3(163)
+/prototype/records                     1279x900         st200 card  hScroll=False sub44=0 rows=10 rowH=172-206 tracks=4(227px) | no:1@1(227) Makine:1@1(320) Tür:1@1(227) Sahip:1@2(192) Durum:1@2(227) Açılış:1@2(227) Net süre:1@2(227) Efor:1@3(227)
+/prototype/records                     1280x900         st200 table hScroll=False sub44=0 rows=10 rowH=65-205 tablo | no:1@1(193) Makine:1@1(106) Tür:1@1(101) Sahip:1@1(78) Durum:1@1(154) Açılış:1@1(116) Net süre:1@1(108) Efor:1@1(108)
+/prototype/records                     1440x900         st200 table hScroll=False sub44=0 rows=10 rowH=56-105 tablo | no:1@1(193) Makine:1@1(181) Tür:1@1(101) Sahip:1@1(108) Durum:1@1(209) Açılış:1@1(116) Net süre:1@1(108) Efor:1@1(108)
+/prototype/records                     320x640-zoom200  st200 card  hScroll=False sub44=0 rows=10 rowH=266-335 tracks=2(122px) | no:1@1(122) Makine:2@2(260) Tür:1@3(122) Sahip:1@3(122) Durum:1@4(122) Açılış:1@4(122) Net süre:1@5(122) Efor:1@5(122)
+
+Süzgeçli boş (/users?query=zzzz&status=Active) 360, 768, 1024, 1279, 1280, 1440, 320: tablo yok, "Filtreye uyan kullanıcı yok" durumu, yatay kaydırma yok, 44 px altı hedef 0.
+
+Sonuç:
+- 768 ve 1024 (ve 1279): 4 sütun; tam satır hücre yok; Ad soyad 2 sütun, diğer dört hücre birer sütun; kart iki satır (Sicil, Ad soyad, Roller / Durum, İşlem). 1024 kart yüksekliği tur 1 de 268-286 px, tur 2 de 140-160 px (uzun ad 194 px).
+- 360 ve 320: 2 sütun; Ad soyad tam satır (2 sütun). Diğer dört hücre ikişer yan yana DEĞİL: Sicil no 1. satırda tek (sağ yarım boş), Roller + Durum 3. satırda yan yana, İşlem 4. satırda tek. (B7). Prototip Records: kayıt no (etiketsiz kart başlığı) 1. satırda tek, Makine tam satır, diğer altı hücre ikişer yan yana; 768-1279 da Makine 2 sütun, diğerleri birer sütun.
+- 108 karakterlik ad: 360 da 3, 320 de 4, 768/1024/1279 da 3, 1280/1440 ta 3 satıra kırılıyor; hücrede taşma yok.
+- 1280 ve 1440: tablo; en kısa satır 69 px (Süper admin oturumu, tur 1 ile aynı); 56 px altı satır yok.
+- Yatay kaydırma 0, main içinde 44 px altı etkileşimli öğe 0 (tüm hücreler).
+
+§3 mekanik eval yeniden (B1 CSS i ortak olduğu için): 360x800, 768x1024, 1024x768 açık ve koyu; 320x640 (%200); 390x844 reduced-motion
+6 grup (anon, op, sa, m1, mo; prototip Development te oturumsuz), 31 sayfa/durum, 248 ölçüm
+h1 != 1: 0 | skip yok: 0 | imgNoAlt/imgNoSize/inputNoLabel/iconBtnNoName: 0 | emdash: 0 | hScroll: 0 | dış kaynak: 0 | font yüklenmedi: 0 (gövde Hanken Grotesk)
+smallTargets (<40px): 0 | <24px: 0 | AA altı kontrast: 0 | en düşük kontrast 5.28 | üst bar 64 px (248/248) | 768 altı gövde < 16 px: 0 | reduced-motion animasyon: 0
+overflowing: yalnız 360 ve 320 /users kart görünümünde sr-only thead (tr, th), 15 ölçüm; başka taşma 0 (tur 1 ile aynı yanlış pozitif)
+navNoHref: gerçek kabukta yalnız grup başlığı li (role=presentation); prototipte Faz T aria-disabled kalemleri (Development); tur 1 ile aynı sayılar
+Konsol: yalnız belge durum kodları (/account/access-denied 403 x24, /error/404 404 x16, /error/403 403 x8, /error 500 x8); başka hata/uyarı 0
+Kullanıcı değiştir üst barda: 360/390/320: 92x44, 768: 118x44, 1024: rayda
+
+==== Tur 3 (2026-11-14) - B7 ve gerileme ====
+Ortam: .qa/f1t3/build (Release), Production 5131, Development 5132 (yalnız prototip), DB .qa/f1t3/qa3.db (App_Data/vaka.db kopyası, md5 615db04b...)
+Betikler: .qa/f1t3/b7.tmpl.js (b7.json), kbd.tmpl.js (kbd.json), m.tmpl.js (r-*.json, m.out)
+
+B7 /users kartı, 4 URL (dolu, sayfa 2, uzun ad süzgeci, Tümü) x açık ve koyu; imza = görsel sıra (satır, sol), "etiket:sütun@satır"
+320x640 (%200)  card 2 sütun | Ad soyad:2@1 Sicil no:1@2 Roller:1@2 Durum:1@3 İşlem:1@3 | boş hücre 0 | kart 186-221 px (tur 2: 234-285), uzun ad 281 px (tur 2: 345)
+360x800         card 2 sütun | Ad soyad:2@1 Sicil no:1@2 Roller:1@2 Durum:1@3 İşlem:1@3 | boş hücre 0 | kart 186-221 px (tur 2: 234-285), uzun ad 261 px (tur 2: 325)
+390x844         card 2 sütun | Ad soyad:2@1 Sicil no:1@2 Roller:1@2 Durum:1@3 İşlem:1@3 | boş hücre 0 | kart 186-206 px, uzun ad 246 px
+640x400 (1280 px %200) card 2 sütun | aynı imza
+768x1024        card 4 sütun | Sicil no:1@1 Ad soyad:2@1 Roller:1@1 Durum:1@2 İşlem:1@2 | kart 140-160 px, uzun ad 194 px (tur 2 ile aynı)
+1024x768        card 4 sütun | aynı imza | kart 140-160 px, uzun ad 194 px (tur 2 ile aynı)
+1279x900        card 4 sütun | Sicil no@1 Ad soyad@1 Roller@1 Durum@2 İşlem@2 | kart 140 px, uzun ad 174 px (tur 2 ile aynı; Ad soyad span 2, max-w-xs ile 320 px)
+1280x900, 1440x900 table | satır 69-85 px, en kısa 69 (tur 2 ile aynı)
+4 URL x 16 hücre (8 genişlik x 2 tema), her sayfadaki tüm satırlar (20, 7, 1, 20): genişlik başına imza tek, taşan hücre 0, hScroll false; açık zemin rgb(236,240,242), koyu rgb(15,20,25)
+108 karakterlik ad: 320'de 4, 360/390'da 3, 768-1440'ta 3 satır; taşma yok
+Kartta odaklanabilir öğe: her satırda yalnız "İşlem" hücresindeki bağlantı (a:İşlem), tüm genişliklerde
+
+§3 mekanik eval yeniden: 360x800, 768x1024, 1024x768 açık ve koyu; 320x640 (%200); 390x844 reduced-motion; 6 grup, 31 sayfa/durum, 248 ölçüm
+Çözümleme çıktısı (an.py) tur 2 ile satır satır karşılaştırıldı: tek fark /users kart yüksekliği 360/320'de (186 / 221 / 261-281 px; tur 2: 234 / 285 / 325-345)
+h1, skip, img, input, ikon düğme, emdash, hScroll, dış kaynak, font, <40 px ve <24 px hedef, kontrast (en düşük 5.28), üst bar 64 px, reduced-motion animasyon: tur 2 ile aynı, 0 ihlal
+Konsol: 56 kayıt, yalnız belge durum kodları (tur 2 ile aynı sayı); fail/crit günlük satırı 0
+Prototip Records 360: tur 2 ile aynı (kayıt no 1. satır, Makine tam satır, diğerleri ikişer); stack-lead yalnız Views/Users/Index.cshtml:102
