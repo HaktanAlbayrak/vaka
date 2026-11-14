@@ -85,6 +85,13 @@
         {
             navItems.Add(("", "Ana sayfa", "house", "/", "home"));
         }
+        if (User.IsInRole(Roles.Manager))
+        {
+            navItems.Add(("Tanımlar", "Tesisler", "building-2", "/facilities", "facilities"));
+            navItems.Add(("Tanımlar", "Makineler", "cog", "/machines", "machines"));
+            navItems.Add(("Tanımlar", "Vardiyalar", "clock", "/shifts", "shifts"));
+            navItems.Add(("Tanımlar", "Malzemeler", "package", "/materials", "materials"));
+        }
         if (User.IsInRole(Roles.Manager) || User.IsInRole(Roles.SuperAdmin))
         {
             navItems.Add(("Yönetim", "Kullanıcılar", "users", "/users", "users"));

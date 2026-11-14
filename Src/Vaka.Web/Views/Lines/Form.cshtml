@@ -1,0 +1,56 @@
+@using Vaka.Web.ViewModels.Definitions
+@model LineFormViewModel
+@{
+    var isCreate = Model.Id is null;
+    ViewData["Title"] = isCreate ? "Hat ekle" : "Hattı düzenle";
+    ViewData["Lead"] = Model.FacilityName + (isCreate ? " tesisine yeni hat." : ", hat kodu " + Model.Code);
+    ViewData["NavKey"] = "facilities";
+}
+
+<partial name="_FormSummary" model='isCreate ? "Hat eklenemedi" : "Hat kaydedilemedi"' />
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard aria-labelledby="line-form-title">
+        <div class="panel-head">
+            <h2 id="line-form-title" class="panel-title">Hat bilgileri</h2>
+        </div>
+        <div class="panel-body space-y-6">
+            <input type="hidden" name="FacilityId" value="@Model.FacilityId" />
+            <dl class="kv">
+                <div><dt>Tesis</dt><dd>@Model.FacilityName</dd></div>
+            </dl>
+
+            <div class="grid gap-5 md:grid-cols-2">
+                <partial name="_Field" model='("Code", "Kod", Model.Code, "text", "off", Model.CodeLocked ? "Kod değiştirilemez." : "Tire içermez, tesis içinde benzersizdir.", true, Model.CodeLocked)' />
+                <partial name="_Field" model='("Name", "Ad", Model.Name, "text", "off", (string?)null, true, false)' />
+            </div>
+
+            <label class="choice max-w-md">
+                <input type="hidden" name="IsActive" value="false" />
+                <input type="checkbox" name="IsActive" value="true" checked="@Model.IsActive" />
+                <span class="min-w-0">
+                    <span class="block font-bold">Aktif</span>
+                    <span class="mt-0.5 block text-sm text-muted">Pasif hattın makineleri yeni kayıtta seçilemez.</span>
+                </span>
+            </label>
+
+            <div class="flex flex-wrap items-center gap-3 border-t-2 border-line pt-5">
+                <button type="submit" class="btn btn-primary btn-lg" data-requires-online>
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#save" /></svg>
+                    @(isCreate ? "Hattı ekle" : "Değişiklikleri kaydet")
+                </button>
+                <a class="btn btn-secondary btn-lg" href="/facilities/details/@Model.FacilityId">Vazgeç</a>
+            </div>
+        </div>
+    </form>
+
+    <aside class="min-w-0" aria-label="Bilgi">
+        <section class="panel" aria-labelledby="line-help-title">
+            <div class="panel-head"><h2 id="line-help-title" class="panel-title">Bilmeniz gerekenler</h2></div>
+            <ul class="list-inside list-disc space-y-2 p-4 md:p-5">
+                <li>Hat kodu kaydedildikten sonra değişmez.</li>
+                <li>Makineler bu hatta bağlanır ve sonradan başka hatta taşınamaz.</li>
+            </ul>
+        </section>
+    </aside>
+</div>

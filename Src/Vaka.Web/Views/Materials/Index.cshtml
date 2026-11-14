@@ -1,0 +1,112 @@
+@using Vaka.Web.ViewModels.Definitions
+@model MaterialListViewModel
+@{
+    ViewData["Title"] = "Malzemeler";
+    ViewData["Lead"] = "Kayıtta kullanılan malzemeleri ve lotlarını tanımlayın. SKT'si geçmiş lotlar listede işaretlenir.";
+    ViewData["NavKey"] = "materials";
+    ViewData["StatusMessage"] = Model.StatusMessage;
+
+    var isFiltered = !string.IsNullOrWhiteSpace(Model.Query) || Model.ShowInactive;
+
+    string PageHref(int target) =>
+        "/materials?page=" + target
+        + (string.IsNullOrWhiteSpace(Model.Query) ? "" : "&query=" + Uri.EscapeDataString(Model.Query))
+        + (Model.ShowInactive ? "&showInactive=true" : "");
+}
+
+@section Actions {
+    <a class="btn btn-primary" href="/materials/create">
+        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#plus" /></svg>
+        Malzeme ekle
+    </a>
+}
+
+<form method="get" action="/materials" class="panel mb-5" aria-label="Malzeme filtresi" data-busy-form>
+    <div class="grid gap-4 p-4 md:grid-cols-2 md:p-5 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_auto] xl:items-end">
+        <div class="field">
+            <label class="field-label" for="query">Malzeme kodu ya da adı</label>
+            <input id="query" name="query" type="search" class="input" value="@Model.Query" autocomplete="off" spellcheck="false" inputmode="search" />
+        </div>
+        <label class="choice min-h-12">
+            <input type="checkbox" name="showInactive" value="true" checked="@Model.ShowInactive" />
+            <span class="font-bold">Pasifleri de göster</span>
+        </label>
+        <div class="flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#funnel" /></svg>
+                Filtrele
+            </button>
+            <a class="btn btn-secondary" href="/materials">Filtreleri temizle</a>
+        </div>
+    </div>
+</form>
+
+<partial name="_ListSkeleton" />
+
+<div data-loading-target>
+    @if (!Model.Items.Any())
+    {
+        if (Model.Total > 0)
+        {
+            <partial name="_State" model='("empty", "search", "Bu sayfada kayıt yok.", "Toplam " + Model.Total + " malzeme var. Listenin ilk sayfasına dönün.", "1. sayfaya dön", PageHref(1))' />
+        }
+        else if (isFiltered)
+        {
+            <partial name="_State" model='("empty", "search", "Filtreye uyan malzeme yok", "Aramayı değiştirin ya da pasifleri de göstermeyi deneyin.", "Filtreleri temizle", "/materials")' />
+        }
+        else
+        {
+            <partial name="_State" model='("empty", "package", "Henüz malzeme yok", "Kayıt açarken malzeme ve lot seçilir. Önce malzemeyi, sonra lotlarını ekleyin.", "Malzeme ekle", "/materials/create")' />
+        }
+    }
+    else
+    {
+        <div class="panel">
+            <table class="data-table table-stack">
+                <caption class="sr-only">Malzemeler, toplam @Model.Total kayıt, sayfa @Model.Page</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Kod</th>
+                        <th scope="col">Ad</th>
+                        <th scope="col">Lotlar</th>
+                        <th scope="col">Durum</th>
+                        <th scope="col">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td data-label="Kod"><span class="record-no text-sm">@item.Code</span></td>
+                            <td data-label="Ad" class="max-w-xs break-words font-semibold stack-wide stack-lead">@item.Name</td>
+                            <td data-label="Lotlar">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="mono">@item.LotCount lot</span>
+                                    @if (item.ExpiredLotCount > 0)
+                                    {
+                                        <partial name="_Badge" model='"lot.expired"' />
+                                        <span class="mono text-sm">@item.ExpiredLotCount lot</span>
+                                    }
+                                </div>
+                            </td>
+                            <td data-label="Durum"><partial name="_Badge" model='item.IsActive ? "def.active" : "def.inactive"' /></td>
+                            <td data-label="İşlem">
+                                <div class="flex flex-wrap gap-2">
+                                    <a class="btn btn-secondary" href="/materials/details/@item.Id" aria-label="@item.Name lotlarını göster">
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#list" /></svg>
+                                        Lotlar
+                                    </a>
+                                    <a class="btn btn-secondary" href="/materials/edit/@item.Id" aria-label="@item.Name malzemesini düzenle">
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
+                                        Düzenle
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <partial name="_Pagination" model='(Model.Page, Model.PageSize, Model.Total, "malzeme", (Func<int, string>)PageHref)' />
+        </div>
+    }
+</div>

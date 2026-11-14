@@ -1,0 +1,97 @@
+@using Vaka.Web.ViewModels.Definitions
+@model MachineRetireViewModel
+@{
+    ViewData["Title"] = "Makineyi kullanımdan kaldır";
+    ViewData["Lead"] = "Makine silinmez. Yeni kayıtta seçilemez, geçmiş kayıtları korunur.";
+    ViewData["NavKey"] = "machines";
+    var retiredAt = Model.RetiredAtLocal;
+}
+
+<partial name="_FormSummary" model='"Makine kullanımdan kaldırılamadı"' />
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <form method="post" class="panel min-w-0" data-validate data-busy-form aria-labelledby="retire-title">
+        <div class="panel-head">
+            <h2 id="retire-title" class="panel-title">Onay</h2>
+        </div>
+        <div class="panel-body space-y-6">
+            <dl class="kv sm:grid-cols-2">
+                <div>
+                    <dt>Kod</dt>
+                    <dd class="mono">@Model.Code</dd>
+                </div>
+                <div>
+                    <dt>Ad</dt>
+                    <dd>@Model.Name</dd>
+                </div>
+            </dl>
+
+            @if (retiredAt is not null)
+            {
+                <p class="notice notice-info" role="status">
+                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#power-off" /></svg>
+                    <span>Makine <span class="mono font-bold">@retiredAt.Value.ToString("dd.MM.yyyy HH:mm")</span> tarihinde kullanımdan kaldırıldı.</span>
+                </p>
+                <div class="border-t-2 border-line pt-5">
+                    <a class="btn btn-secondary btn-lg" href="/machines?showRetired=true">Makine listesine dön</a>
+                </div>
+            }
+            else
+            {
+                if (Model.BlockingRecords.Any())
+                {
+                    <section aria-labelledby="blocking-title" class="space-y-3">
+                        <h3 id="blocking-title" class="text-lg font-bold">Engelleyen kayıtlar</h3>
+                        <ul class="divide-y divide-line border-2 border-line">
+                            @foreach (var record in Model.BlockingRecords)
+                            {
+                                <li class="flex flex-wrap items-center justify-between gap-2 p-3">
+                                    <span class="record-no break-all">@record.RecordNo</span>
+                                    <span class="flex flex-wrap items-center gap-2">
+                                        <span class="chip">@record.StatusLabel</span>
+                                        @if (record.Url is not null)
+                                        {
+                                            <a class="btn btn-secondary" href="@record.Url" aria-label="@record.RecordNo kaydını aç">Aç</a>
+                                        }
+                                    </span>
+                                </li>
+                            }
+                        </ul>
+                    </section>
+                }
+
+                if (!Model.CanRetire)
+                {
+                    <p class="notice notice-danger" role="alert">
+                        <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#lock" /></svg>
+                        <span>Aktif ya da beklemedeki kaydı olan makine kullanımdan kaldırılamaz. Önce yukarıdaki kayıtları tamamlayın ya da kapatın.</span>
+                    </p>
+                    <div class="border-t-2 border-line pt-5">
+                        <a class="btn btn-secondary btn-lg" href="/machines/edit/@Model.MachineId">Makineye dön</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="flex flex-wrap items-center gap-3 border-t-2 border-line pt-5">
+                        <button type="submit" class="btn btn-danger btn-lg" data-requires-online>
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#power-off" /></svg>
+                            Kullanımdan kaldır
+                        </button>
+                        <a class="btn btn-secondary btn-lg" href="/machines/edit/@Model.MachineId">Vazgeç</a>
+                    </div>
+                }
+            }
+        </div>
+    </form>
+
+    <aside class="min-w-0" aria-label="Bilgi">
+        <section class="panel" aria-labelledby="retire-effect-title">
+            <div class="panel-head"><h2 id="retire-effect-title" class="panel-title">Kaldırınca</h2></div>
+            <ul class="list-inside list-disc space-y-2 p-4 md:p-5">
+                <li>Makine yeni kayıt seçiminde görünmez.</li>
+                <li>Geçmiş kayıtlar makinenin adı ve koduyla görünmeye devam eder.</li>
+                <li>Makine listesinde kaldırılma anıyla işaretli kalır.</li>
+            </ul>
+        </section>
+    </aside>
+</div>

@@ -7,6 +7,7 @@ import { LiveCounter } from "./LiveCounter.js";
 import { FormValidation } from "./FormValidation.js";
 import { FormBusy, bindBusyLinks } from "./FormBusy.js";
 import { UnsavedGuard } from "./UnsavedGuard.js";
+import { CascadeSelect } from "./CascadeSelect.js";
 
 new ThemeToggle(document.querySelector("[data-theme-toggle]"));
 new ShellNav(document);
@@ -17,5 +18,6 @@ document.querySelectorAll("[data-live-counter]").forEach((element) => new LiveCo
 document.querySelectorAll("form[data-validate]").forEach((form) => new FormValidation(form));
 document.querySelectorAll("form[data-busy-form]").forEach((form) => new FormBusy(form));
 document.querySelectorAll("form[data-unsaved-guard]").forEach((form) => new UnsavedGuard(form));
+document.querySelectorAll("select[data-cascade-url]").forEach((select) => new CascadeSelect(select));
 bindBusyLinks(document);
 (document.querySelector('main [aria-invalid="true"]') ?? document.querySelector("main [data-form-summary]"))?.focus();

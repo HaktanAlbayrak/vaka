@@ -17,6 +17,164 @@ namespace Vaka.Web.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.15");
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.Facility", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT")
+                        .UseCollation("NOCASE");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Facilities", (string)null);
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.Machine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT")
+                        .UseCollation("NOCASE");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductionLineId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("RetiredAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductionLineId", "Code")
+                        .IsUnique();
+
+                    b.ToTable("Machines", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Machines_RetiredInactive", "\"RetiredAtUtc\" IS NULL OR \"IsActive\" = 0");
+                        });
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.Material", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT")
+                        .UseCollation("NOCASE");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Materials", (string)null);
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.MaterialLot", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("ExpiryDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LotNo")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT")
+                        .UseCollation("NOCASE");
+
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaterialId", "LotNo")
+                        .IsUnique();
+
+                    b.ToTable("MaterialLots", (string)null);
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProductionLine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT")
+                        .UseCollation("NOCASE");
+
+                    b.Property<int>("FacilityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FacilityId", "Code")
+                        .IsUnique();
+
+                    b.ToTable("ProductionLines", (string)null);
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.SettingChange", b =>
                 {
                     b.Property<int>("Id")
@@ -45,6 +203,41 @@ namespace Vaka.Web.Data.Migrations
                     b.HasIndex("SettingId", "ChangedAtUtc");
 
                     b.ToTable("SettingChanges", (string)null);
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.Shift", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<TimeOnly>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FacilityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FacilityId");
+
+                    b.ToTable("Shifts", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Shifts_StartNotEnd", "\"StartTime\" <> \"EndTime\"");
+                        });
                 });
 
             modelBuilder.Entity("Vaka.Web.Domain.Entities.SystemSetting", b =>
@@ -199,6 +392,39 @@ namespace Vaka.Web.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.Machine", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.ProductionLine", "Line")
+                        .WithMany("Machines")
+                        .HasForeignKey("ProductionLineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Line");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.MaterialLot", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.Material", "Material")
+                        .WithMany("Lots")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Material");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProductionLine", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.Facility", "Facility")
+                        .WithMany("Lines")
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Facility");
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.SettingChange", b =>
                 {
                     b.HasOne("Vaka.Web.Domain.Entities.User", "ChangedByUser")
@@ -218,6 +444,17 @@ namespace Vaka.Web.Data.Migrations
                     b.Navigation("Setting");
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.Shift", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.Facility", "Facility")
+                        .WithMany("Shifts")
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Facility");
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.UserRole", b =>
                 {
                     b.HasOne("Vaka.Web.Domain.Entities.User", "User")
@@ -227,6 +464,23 @@ namespace Vaka.Web.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.Facility", b =>
+                {
+                    b.Navigation("Lines");
+
+                    b.Navigation("Shifts");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.Material", b =>
+                {
+                    b.Navigation("Lots");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProductionLine", b =>
+                {
+                    b.Navigation("Machines");
                 });
 
             modelBuilder.Entity("Vaka.Web.Domain.Entities.User", b =>

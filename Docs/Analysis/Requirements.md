@@ -110,11 +110,11 @@ Route'lar taslaktır; kesin liste ve ViewModel alanları PhasePlan sözleşmeler
 | E-19 | Kayıtlar | `/records` | RecordReaders | FR-38 | 6 |
 | E-20 | Kayıt detayı | `/records/details/{id}` | RecordReaders | FR-31, FR-34 | 6 |
 | E-21 | Bütünlük doğrulama | `/records/integrity/{id}` | ManagerOrAuditor | FR-32 | 6 |
-| E-22 | Yönetici panosu | `/dashboard` | ManagerOrAuditor | İÖ-07 | 6 |
+| E-22 | Yönetici panosu | `/dashboard` | ManagerOrAuditor | İÖ-07 | 7 (PL-46) |
 | E-23 | Talep formu (E-15 ve E-20 içinde) | `/requests/create` | Operator | FR-43 | 7 |
 | E-24 | Taleplerim | `/requests/mine` | Operator | FR-43 | 7 |
 | E-25 | Talepler ve karar | `/requests`, `/requests/decide/{id}` | Manager (Auditor salt okunur liste) | FR-44 | 7 |
-| E-26 | Müdahale formu (iptal, yarıda kapatma, beklemeye alma, mola bitirme) | `/interventions/create`, `/interventions/end-break/{id}` | Manager | FR-28, BR-40 | 7 |
+| E-26 | Müdahale formu (iptal, yarıda kapatma, beklemeye alma, mola bitirme) | `/interventions/create`, `/interventions/end-break/{id}` | Manager | FR-28, BR-40 | 6 (iptal, yarıda kapatma, mola bitirme), 7 (beklemeye alma); PL-46 |
 | E-27 | Acil müdahale | `/emergencies/create` | Operator | FR-51 | 8 |
 | E-28 | Bildirimler | `/notifications` | Manager | FR-52 | 8 |
 | E-29 | Düzeltme | `/corrections/create` | Manager | BR-29 | 8 |
@@ -123,7 +123,10 @@ Route'lar taslaktır; kesin liste ve ViewModel alanları PhasePlan sözleşmeler
 | E-32 | Denetim çıktısı | `/records/audit/{id}` | ManagerOrAuditor | FR-35 | 9 |
 | E-33 | Sistem ayarları ve değişiklik geçmişi | `/settings` | ManagerOrSuperAdmin | FR-55 | 9 |
 
-Sistem sayfaları: 403 (`/account/access-denied`), hata sayfası, ana sayfa `/` (rolüne göre İşlerim, Yönetici panosu ya da Kullanıcılar'a yönlenir).
+Sistem sayfaları: 403 (`/account/access-denied`), hata sayfası, ana sayfa `/` (rolüne göre İşlerim, Yönetici panosu ya da Kullanıcılar'a yönlenir;
+Yönetici ve Denetçi Faz 6'dan Faz 7'ye kadar Kayıtlar'a, PL-46).
+
+Salı (2026-11-17) takvimi: Faz 7, 8 ve 9 Salı'dan sonradır (O-03); ekran envanteri ve rol matrisi değişmedi.
 
 ## 5. Veri varlıkları
 
@@ -163,14 +166,15 @@ Yer tutucu adı ayarın kimliğidir; dokümanlar kuralı bu adla yazar, değer a
 | `<OturumSüresi>` | dakika | Sistem ayarları | 1 | 30 (son istekten sonraki işlemsizlik) | Kullanıcı, 2026-11-13 (PL-24) |
 | `<PinUzunluğu>` | hane | Sistem ayarları | 1 | 4 | Kullanıcı, 2026-11-13 (PL-24) |
 | `<PinDenemeSınırı>` | deneme | Sistem ayarları | 1 | 5 (art arda 5. hatalı denemede kilit) | Kullanıcı, 2026-11-13 (PL-24) |
-| `<AzamiMedyaBoyutu>` (fotoğraf ve video ayrı) | MB | Sistem ayarları | 3 | Açık | BT (K-26) |
-| `<AzamiKilitSüresi>` | dakika | Sistem ayarları | 3 | Açık | İş birimi (K-46) |
+| `<AzamiMedyaBoyutu>` (fotoğraf ve video ayrı) | MB (1 MB = 1 048 576 bayt, PL-51) | Sistem ayarları | 3 | Fotoğraf 10, video 100 | Kullanıcı, 2026-11-14 (PL-47) |
+| `<AzamiKilitSüresi>` | dakika | Sistem ayarları | 3 | 120 | Kullanıcı, 2026-11-14 (PL-34) |
 | Varsayılan kilit süresi, faz minimum süresi, malzeme zorunluluğu | dakika, evet/hayır | Tip ve versiyon ekranları | 3 | Yönetici girer | İş birimi |
 | Tesis, hat, makine kodları ve vardiyalar | - | Tanım ekranları ya da seed | 2 | Nötr demo veri | İş birimi (K-19) |
-| Olay özeti anahtarı | - | Ortam değişkeni, veritabanı ve ayar dosyası dışında | 4 | Açık | BT (K-23) |
+| Olay özeti anahtarı | - | Yapılandırma anahtarı `EventChain:HmacKey`; Development'ta user-secrets, üretimde ortam değişkeni; veritabanı, ayar dosyası ve repo dışında | 4 | Salı demosu için geliştirme anahtarı; üretim anahtarı sonra | Kullanıcı, 2026-11-14 (PL-48); üretim anahtarı BT (K-23) |
 
 Sistem ayarları ekranı Faz 9'da gelir (PL-17); o zamana kadar değerler seed'den okunur, QA farklı değeri QA kopyasındaki ayar tablosunda dener.
-Değişikliğin etkisi PL-18'dedir. Açık değerlerin satırı, değer gelene kadar tabloya yazılmaz; Faz 3'te seed ekleme olarak gelir (PL-25).
+Değişikliğin etkisi PL-18'dedir. Faz 1'den sonra kalan satırlar (`<AzamiKilitSüresi>`, iki `<AzamiMedyaBoyutu>` satırı) Faz 3'te seed
+ekleme olarak gelir (PL-25); üç değer de geldi (PL-34, PL-47).
 
 ## 7. Kapsam dışı
 
@@ -202,6 +206,7 @@ yerleşmesi, ayar değişikliğinin etkisi ve ayar birimleri (dakika, hane, dene
 Analistin makul varsayılanları (`Decisions.md` durumu "Varsayım"; itiraz gelirse yeni satırla değişir):
 
 - PL-27: Sicil no hesap oluşturulduktan sonra değişmez; yanlış sicil noyla açılan hesap pasifleştirilir, doğrusuyla yeni hesap açılır.
+- PL-51: 1 MB = 1 048 576 bayt ve sınıra eşit dosya kabul; demo versiyonlarda yayınlayan "Kurulum verisi"; tip kodu değiştirilebilir; Denetçi taslak versiyonu göremez.
 
 ## 9. Açık konular
 
@@ -209,8 +214,7 @@ Engelleyici soru yoktur; plan 2026-11-13'te onaylandı (O-01). Aşağıdakiler i
 
 | Konu | Gerektiği an | Sahibi | Not |
 |---|---|---|---|
-| `<AzamiMedyaBoyutu>` (fotoğraf, video), `<AzamiKilitSüresi>` başlangıç değerleri | Faz 3 başlamadan | Kullanıcı, BT, iş birimi | Uydurma değer yazılmaz; sonradan ekrandan değişir. Faz 1 değerleri 2026-11-13'te geldi (§6, PL-24) |
-| Olay özeti anahtarının üretimi ve saklanacağı ortam | Faz 4 başlamadan | BT | K-23 |
+| Üretim olay özeti anahtarı | Üretime kurulumdan önce | BT | Faz 4 geliştirme anahtarıyla başlar (PL-48); üretim anahtarı ortam değişkeniyle gelir, kod değişmez. Geliştirme anahtarıyla yazılmış zincir üretimde doğrulanmaz, demo veritabanı taşınmaz |
 | Gerçek tesis, hat, makine, vardiya, malzeme listesi | İstendiğinde | İş birimi | Gelene kadar nötr demo veri (K-19, V-13) |
 | Tek Süper admin riski | Kurulumdan sonra | Kullanıcı | Tek Süper admin parolasını unutur ya da PIN'ini kilitlerse uygulama içinden açılamaz; ikinci bir Süper admin hesabı açılması önerilir |
 | Ölçek sayıları | Performans ölçümünden önce | İş birimi | K-33 |

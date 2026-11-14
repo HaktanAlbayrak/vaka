@@ -1,0 +1,239 @@
+Faz 2 kabul kriterleri, çalışan uygulama. Release, port 5161, DB .qa/f2/qa.db. İstemci .qa/f2/qa.py (urllib, Yönetici 2001,
+geçerli antiforgery belirteci). Satır biçimi: deneme -> durum yönlendirme {alan: hata} GENEL: özet hatası. Türkiye tarihi 2026-11-14.
+
+== K1 tesis (k12.py)
+tesis T1 yinelenen -> 200  {"Code": "Bu tesis kodu kayıtlı."}
+tesis t1 kucuk harf -> 200  {"Code": "Bu tesis kodu kayıtlı."}
+tesis A-B tireli -> 200  {"Code": "Tesis kodu tire içeremez."}
+tesis bos kod -> 200  {"Code": "Tesis kodu girin.", "Name": "Tesis adı girin."}
+tesis 17 karakter -> 200  {"Code": "Tesis kodu en çok 16 karakter olabilir."}
+tesis T5 yeni -> 302 /facilities/details/3      hedef 200 durum: Tesis eklendi.
+== K1 hat
+hat H1 yinelenen T1 -> 200  {"Code": "Bu hat kodu tesiste kayıtlı."}
+hat h1 T1 -> 200  {"Code": "Bu hat kodu tesiste kayıtlı."}
+hat H-9 tireli -> 200  {"Code": "Hat kodu tire içeremez."}
+hat H1 yeni tesiste serbest -> 302 /facilities/details/3      hedef 200 durum: Hat eklendi.
+pasif tesise (T2) hat -> 200   GENEL:Pasif tesise hat eklenemez.
+== K1 makine
+makine M01 yinelenen H1 -> 200  {"Code": "Bu makine kodu hatta kayıtlı."}
+makine m01 kucuk -> 200  {"Code": "Bu makine kodu hatta kayıtlı."}
+makine M-1 tireli -> 200  {"Code": "Makine kodu tire içeremez."}
+makine M02 kaldirilmis M02 olan H2 -> 200  {"Code": "Bu makine kodu hatta kayıtlı."}
+makine pasif tesis T2 -> 200  {"FacilityId": "Aktif bir tesis seçin."}
+makine M09 yeni -> 302 /machines      hedef 200 durum: Makine eklendi.
+pasif hatta makine (hat 5 pasife alındı) -> 200  {"LineId": "Pasif hatta makine eklenemez."}; /machines/lines?facilityId=1 pasif hattı listelemedi
+
+== K2 (k2.py)
+GET /facilities/edit/3, /lines/edit/4, /machines/edit/6: Code input readonly=True; makinede FacilityId ve LineId select disabled
+tesis kod T9 -> 200  {"Code": "Tesis kodu kayıttan sonra değiştirilemez."}
+tesis kod t5 (kucuk harf) -> 200  {"Code": "Tesis kodu kayıttan sonra değiştirilemez."}
+tesis kod bos, ad degisir -> 302 /facilities/details/3
+tesis kod yok, ad degisir -> 302 /facilities/details/3
+hat kod H8 -> 200  {"Code": "Hat kodu kayıttan sonra değiştirilemez."}
+hat FacilityId=1 gonderildi, kod ayni -> 302 /facilities/details/3   (DB: hat 4 yine tesis 3'te)
+makine kod M10 -> 200  {"Code": "Makine kodu kayıttan sonra değiştirilemez."}
+makine hat 2 -> 200  {"LineId": "Makinenin hattı kayıttan sonra değiştirilemez."}
+makine tesis 3 hat ayni -> 200  {"LineId": "Makinenin hattı kayıttan sonra değiştirilemez."}
+makine baska tesisin hatti 4 -> 200  {"LineId": "Makinenin hattı kayıttan sonra değiştirilemez."}
+makine kod/hat bos, ad degisir -> 302 /machines
+DB sonrası: (3, 'T5', 'QA tesisi 3', 1) | (4, 3, 'H1', 'QA hatti 2', 1) | (6, 1, 'M09', 'QA makinesi 2', 1, None)
+
+== K3 (k3.py, HTTP)
+JSON 1 200 [{"id":1,"label":"H1 - Hazırlık hattı"},{"id":2,"label":"H2 - Dolum hattı"}]
+  GET create?facilityId=1 hat: [('', 'Hat seçin'), ('1', 'H1 - Hazırlık hattı'), ('2', 'H2 - Dolum hattı')]
+JSON 2 200 []                        (T2 pasif)
+JSON 3 200 [{"id":4,"label":"H1 - QA hatti 2"}]
+  GET create?facilityId=3 hat: [('', 'Hat seçin'), ('4', 'H1 - QA hatti 2')]
+GET create tesis: [('', 'Tesis seçin'), ('1', 'T1 - Ana tesis'), ('3', 'T5 - QA tesisi 3')]   (pasif T2 yok)
+GET create?facilityId=3&lineId=1&code=M77: code= M77 name= Yeni ad hat: [('', 'Hat seçin'), ('4', 'H1 - QA hatti 2')]
+POST tesis 3 + T1 hatti 1 -> 200  {"LineId": "Seçilen hat bu tesise ait değil."}
+  yeniden cizim tesis: [('3', 'T5 - QA tesisi 3', seçili)] hat: [('', 'Hat seçin'), ('4', 'H1 - QA hatti 2')] kod: M77
+POST tesis 1 + hat 0 -> 200  {"LineId": "Hat seçin."}
+POST tesis 1 + yok hat 999 -> 200  {"LineId": "Hat seçin."}
+DB: M77, M78 kayıt sayısı (0,)
+== K3 (k3b.js, Chromium JS kapalı, 390x844)
+1 bos form hat: :Hat seçin
+2 yenile -> /machines/create parametreler=FacilityId,LineId,Code,Name,__RequestVerificationToken | hat: :Hat seçin, 4:H1 - QA hatti 2, 6:H2 - Sıcak dolum ... | kod=M88 ad=JS kapali makine tesis=3
+3 eski hatla kaydet -> /machines/create?facilityId=1 | hata: Seçilen hat bu tesise ait değil. | hat: :Hat seçin, 4:..., 6:... | tesis=3 kod=M91
+4 dogru hatla kaydet -> /machines | durum: Makine eklendi.
+5 liste filtresi JS kapali tesis degisti eski hat -> /machines?query=&facilityId=3&lineId=1 | satir=3 | secili hat=(boş, eski hat yok sayıldı)
+JS açık (kbdB.js): klavyeyle tesis seçimi -> hatlar=,1,2,5; durum bölgesi role=status #line-status; hat, kod, ad, Enter -> /machines "Makine eklendi."
+JS açık: tesis 1 -> 3 değişince hat değeri boşalır, hatlar=,4,6. Hat isteği 500 -> "Hatlar yüklenemedi. Sayfayı yenileyip tekrar deneyin.";
+hatsız tesis -> "Bu tesiste hat yok."; bekleme -> "Hatlar yükleniyor…" ve hat seçimi disabled.
+
+== K4 (k4.py, tesis 3)
+A 06-14 aktif -> 302 /shifts?facilityId=3
+B 13-20 aktif (A ile cakisir) -> 200   GENEL:Bu aralık "QA A" vardiyasıyla çakışıyor.
+C 14-22 aktif (A bitisi = C baslangici) -> 302 /shifts?facilityId=3
+D 22-06 aktif (gece, iki sinir) -> 302 /shifts?facilityId=3
+E 05-06:30 aktif (D ve A ile cakisir) -> 200   GENEL:Bu aralık "QA A" vardiyasıyla çakışıyor.
+F 13-20 pasif -> 302 /shifts?facilityId=3
+G 10-10 ayni saat -> 200  {"EndTime": "Bitiş saati başlangıç saatiyle aynı olamaz."}
+H bos saat -> 200  {"StartTime": "Başlangıç saatini girin.", "EndTime": "Bitiş saatini girin."}
+I cozulemeyen saat (25:99, abc) -> 200  {"StartTime": "Başlangıç saatini girin.", "EndTime": "Bitiş saatini girin."}
+T2 pasif tesise -> 200   GENEL:Pasif tesise vardiya eklenemez.
+  liste: QA A 06:00 14:00 Aktif | QA F 13:00 20:00 Pasif | QA C 14:00 22:00 Aktif | QA D 22:00 06:00 Ertesi gün biter Aktif
+F pasiften aktife (cakisir) -> 200   GENEL:Bu aralık "QA A" vardiyasıyla çakışıyor.
+A aktiften pasife -> 302 /shifts?facilityId=3
+J 07-09 aktif (yalniz pasif A ile kesisir) -> 302 /shifts?facilityId=3
+  T1 liste: Gündüz 07:00 15:00 Aktif | Akşam 15:00 23:00 Aktif | Gece 23:00 07:00 Ertesi gün biter Aktif
+
+== K5 (k5.py)
+GET retire/6: "Makineyi kullanımdan kaldır ... Kod M09 Ad QA makinesi 2 Kullanımdan kaldır Vazgeç"; PIN alanı yok; form alanları ['__RequestVerificationToken']
+POST retire/6 -> 302 /machines   liste durum: Makine kullanımdan kaldırıldı. | M09 normal listede: False
+  showRetired: M09 QA makinesi 2 Ana tesis Hazırlık hattı Kullanımdan kaldırıldı 14.11.2026 18:00 Düzenle
+  showRetired: M02 Etiketleme makinesi Ana tesis Dolum hattı Kullanımdan kaldırıldı 30.09.2026 12:00 Düzenle
+POST retire/6 ikinci -> 200   GENEL:Makine zaten kullanımdan kaldırılmış.
+DB: (6, 'M09', 'QA makinesi 2', IsActive 0, RetiredAtUtc '2026-11-14 15:00:01.0551793')  satır silinmedi
+GET retire/4 (seed kaldırılmış): "Aktif ya da beklemedeki kaydı olan makine kullanımdan kaldırılamaz. Önce yukarıdaki kayıtları tamamlayın ya da kapatın."
+  (engelleyen kayıt listesi boş; bkz. B3, KaldirilmisMakine-Retire.png)
+GET edit/4: "Makineyi düzenle ... Değişiklikleri kaydet Vazgeç ... Kullanımdan kaldır" (kaldırılmış durumu görünmüyor)
+POST edit/4 ad degisikligi (kaldirilmis makine) -> 302 /machines
+
+== K6 (k6.py, malzeme 1)
+dun SKT 2026-11-13 -> 302 /materials/details/1
+bugun SKT 2026-11-14 -> 302 /materials/details/1
+yarin SKT 2026-11-15 -> 302 /materials/details/1
+yinelenen L2026-001 -> 200  {"LotNo": "Bu lot no malzemede kayıtlı."}
+yinelenen kucuk l2026-001 -> 200  {"LotNo": "Bu lot no malzemede kayıtlı."}
+bos SKT -> 200  {"ExpiryDate": "SKT girin."}
+cozulemeyen SKT -> 200  {"ExpiryDate": "SKT girin."}
+baska malzemede ayni no serbest -> 302 /materials/details/2
+details durum: Lot eklendi.
+  lot: L2026-001 30.06.2026 SKT geçmiş | QA-DUN 13.11.2026 SKT geçmiş | QA-BUGUN 14.11.2026 Kullanılabilir | QA-YARIN 15.11.2026 Kullanılabilir
+  malzeme: MLZ001 Yüzey dezenfektanı 6 lot SKT geçmiş 2 lot Aktif
+mlz001 yinelenen -> 200  {"Code": "Bu malzeme kodu kayıtlı."}
+tireli kod MLZ-QA serbest -> 302 /materials/details/4
+33 karakter -> 200  {"Code": "Malzeme kodu en çok 32 karakter olabilir."}
+
+== K7: YetkiMatrisi.txt
+
+== K8 (k8.py; mk.py ile 25 makine, 25 malzeme, uzun ad ve kod eklendi)
+/machines                           satir=20 | sayfa=['/machines?page=2'] | 29 kayıt, sayfa 1
+/machines?page=2                    satir=9  | sayfa=['/machines?page=1'] | 29 kayıt, sayfa 2
+/machines?page=3                    satir=0  | durum=['Henüz makine yok']   (bkz. B6)
+/machines?showRetired=true&page=2   satir=11 | sayfa=['/machines?page=1&showRetired=true'] | 31 kayıt, sayfa 2
+/machines?facilityId=1&lineId=2     satir=1  M01 | secili=['T1 - Ana tesis', 'H2 - Dolum hattı']
+/machines?facilityId=2&lineId=1     satir=1  M01 | secili=['T2 - Yedek tesis']  (başka tesisin hattı yok sayıldı)
+/machines?query=uzun                satir=1  M10
+/machines?query=M1&facilityId=1     satir=10 M10..M19
+/materials                          satir=20 | 28 kayıt, sayfa 1
+/materials?page=2                   satir=8  | 28 kayıt, sayfa 2
+/materials?showInactive=true&page=2 satir=9  | 29 kayıt, sayfa 2
+/materials?query=MLZ00              satir=2  MLZ001 MLZ002
+/materials?query=yok-boyle          satir=0  | durum=['Filtreye uyan malzeme yok']
+/facilities                         satir=3  T1 T3 T5
+/facilities?showInactive=true       satir=4  T1 T2 T3 T5
+/shifts                             satir=4  | secili=['Ana tesis']
+/shifts?facilityId=3                satir=5  | secili=['QA tesisi 3']
+/shifts?facilityId=2                satir=0  | durum=['Bu tesiste vardiya yok']
+/shifts?facilityId=999              satir=4  | secili=['Ana tesis']
+G11 imzaları: MekanikEval.txt
+
+== K9
+Services/IDurationCalculator.cs:16-20 EndsNextDay (K-38) "Ertesi gün biter: Bitiş < Başlangıç"; kod DurationCalculator.cs:24 end < start
+Services/IDurationCalculator.cs:22-31 DoShiftsOverlap (K-38, FR-49) aralık ve bölme formülü; kod DurationCalculator.cs:31-46, 97-100 aynı
+Services/IDurationCalculator.cs:33-44 FindShiftAt (K-38; SH-13, SH-16) üç durumlu formül; kod DurationCalculator.cs:54-80 aynı
+Services/IDurationCalculator.cs:46-51 IsLotExpired (BR-12, K-12) "SKT < bugün"; kod DurationCalculator.cs:86 expiryDate < today
+Çağıranlar: ShiftService.cs:47 EndsNextDay, :158 DoShiftsOverlap; MaterialService.cs:60, :118 IsLotExpired.
+grep Controllers/Views/ViewModels (DateTime.Now|Today|UtcNow, ExpiryDate <>, StartTime/EndTime <>=, TimeSpan, .Subtract): yalnız atama
+satırları (ShiftsController.cs:99-100), karşılaştırma 0. Görünüm yalnız IsExpired ve EndsNextDay bayraklarını okur.
+
+
+== Tur 2 (2026-11-14)
+Release yayını (build6, çalışma ağacı), port 5201 Production, DB .qa/f2t2/qa.db (ön tur kopyası: tur 1 verisi + uzun veriler). 2026-11-14.
+
+== B3, B5, K2, K5 (b35.py)
+== B3/B5 kaldırılmış makine 4 (M02)
+GET /machines/retire/4 200 | bildirim: [] | submit düğmesi: 0 | engel metni: False | liste bağlantısı: [('/machines?showRetired=true', 'Makine listesine dön')]
+GET /machines/edit/4 200 | h1: Makine | bildirim: []
+   submit: 0 | kaldır bağlantısı: False | data-unsaved-guard: True | alanlar: [('FacilityId', False, False), ('FacilityId', False, True), ('LineId', False, False), ('LineId', False, True), ('Code', True, False), ('Name', True, False)]
+POST /machines/edit/4 (geçerli belirteç, ad değişikliği) -> 200  | özet: Makine kaydedilemedi Kullanımdan kaldırılmış makine değiştirilemez. | alan: {}
+POST /machines/edit/4 (yalnız Name) -> 200  | özet: Makine kaydedilemedi Kullanımdan kaldırılmış makine değiştirilemez.
+   DB önce [(4, 'M02', 'Etiketleme makinesi QA', 2, 0, '2026-09-30 09:00:00')] sonra [(4, 'M02', 'Etiketleme makinesi QA', 2, 0, '2026-09-30 09:00:00')]
+POST /machines/retire/4 -> 200  | özet: Makine kullanımdan kaldırılamadı Makine zaten kullanımdan kaldırılmış. | bildirim: ['Makine kullanımdan kaldırılamadı Makine zaten kullanımdan kaldırılmış.']
+liste satırı: M02 Tartı ünitesi Ana tesis Hazırlık hattı Aktif Düzenle Kaldır | eylem bağlantıları: ['/machines/edit/2', '/machines/retire/2']
+liste satırı: M09 QA makinesi 2 Ana tesis Hazırlık hattı Kullanımdan kaldırıldı 14.11.2026 18:00 Görüntüle | eylem bağlantıları: ['/machines/edit/6']
+
+== K2 gerilemesi, aktif makine 1
+GET /machines/edit/1 200 submit: 1 kaldır bağlantısı: True Code readonly: True select disabled: 2
+   kod M99 -> 200  {'Code': 'Makine kodu kayıttan sonra değiştirilemez.'}
+   hat 2 -> 200  {'LineId': 'Makinenin hattı kayıttan sonra değiştirilemez.'}
+   başka tesisin hattı 4 -> 200  {'LineId': 'Makinenin hattı kayıttan sonra değiştirilemez.'}
+   ad değişikliği -> 302 /machines 
+   ad geri -> 302 /machines 
+   DB: [(1, 'M01', 'Karıştırıcı', 1)]
+
+== K5 gerilemesi: yeni makine ekle, kaldır
+create -> 302 /machines
+GET retire 200 submit: 1 PIN alanı: False
+POST retire -> 302 /machines
+   durum: [] | normal listede: False
+POST retire ikinci -> 200  | bildirim: ['Makine kullanımdan kaldırılamadı Makine zaten kullanımdan kaldırılmış.'] | özet: Makine kullanımdan kaldırılamadı Makine zaten kullanımdan kaldırılmış.
+   DB: [(38, 'QAT2K5', 0, '2026-11-14 20:16:53.0498931')]
+
+== B6, B9, B10 (b6.py; boş kopya port 5202 .qa/f2t2/qa-empty.db)
+== B6 (dolu kopya, 5201)
+/machines?page=3 200 (0, ['Bu sayfada kayıt yok.'], [('/machines/create', 'Makine ekle'), ('/machines?page=1', '1. sayfaya dön')])
+/machines?page=99 200 (0, ['Bu sayfada kayıt yok.'], [('/machines/create', 'Makine ekle'), ('/machines?page=1', '1. sayfaya dön')])
+/machines?page=99&facilityId=1 200 (0, ['Bu sayfada kayıt yok.'], [('/machines/create', 'Makine ekle'), ('/machines?page=1&amp;facilityId=1', '1. sayfaya dön')])
+/machines?page=99&showRetired=true 200 (0, ['Bu sayfada kayıt yok.'], [('/machines/create', 'Makine ekle'), ('/machines?page=1&amp;showRetired=true', '1. sayfaya dön')])
+/materials?page=99 200 (0, ['Bu sayfada kayıt yok.'], [('/materials/create', 'Malzeme ekle'), ('/materials?page=1', '1. sayfaya dön')])
+/materials?page=99&query=MLZ 200 (0, ['Bu sayfada kayıt yok.'], [('/materials/create', 'Malzeme ekle'), ('/materials?page=1&amp;query=MLZ', '1. sayfaya dön')])
+/machines?page=2 200 (15, [], [('/machines/create', 'Makine ekle'), ('/machines?page=1', 'Önceki')])
+/materials?page=2 200 (8, [], [('/materials/create', 'Malzeme ekle'), ('/materials?page=1', 'Önceki')])
+== Boş kopya (5202)
+/machines 200 (0, ['Henüz makine yok'], [('/machines/create', 'Makine ekle'), ('/machines/create', 'Makine ekle')])
+/machines?page=99 200 (0, ['Henüz makine yok'], [('/machines/create', 'Makine ekle'), ('/machines/create', 'Makine ekle')])
+/materials 200 (0, ['Henüz malzeme yok'], [('/materials/create', 'Malzeme ekle'), ('/materials/create', 'Malzeme ekle')])
+/materials?page=99 200 (0, ['Henüz malzeme yok'], [('/materials/create', 'Malzeme ekle'), ('/materials/create', 'Malzeme ekle')])
+/facilities 200 (0, ['Henüz tesis yok'], [])
+/shifts 200 (0, ['Önce tesis ekleyin'], [])
+
+== B10 hat etiketleri
+/machines ['Tüm hatlar', 'T1-H1 - Hazırlık hattı', 'T1-H2 - Dolum hattı', 'T1-H3 - Çok uzun adlı ambalajlama ve etiketleme hattı Abdurrahmanoğullarıkarşıyakalılar Çok uzun adlı ambalajlama ve etiketleme', 'T1-HATKODUUZUN16XYZ - Kuzey yerleşkesi ikinci kat sıvı ürün dolum ve kapak sıkma hattı']
+/machines?facilityId=1 ['Tüm hatlar', 'H1 - Hazırlık hattı', 'H2 - Dolum hattı', 'H3 - Çok uzun adlı ambalajlama ve etiketleme hattı Abdurrahmanoğullarıkarşıyakalılar Çok uzun adlı ambalajlama ve etiketleme', 'HATKODUUZUN16XYZ - Kuzey yerleşkesi ikinci kat sıvı ürün dolum ve kapak sıkma hattı']
+/machines/create?facilityId=1 ['Hat seçin', 'H1 - Hazırlık hattı', 'H2 - Dolum hattı', 'H3 - Çok uzun adlı ambalajlama ve etiketleme hattı Abdurrahmanoğullarıkarşıyakalılar Çok uzun adlı ambalajlama ve etiketleme', 'HATKODUUZUN16XYZ - Kuzey yerleşkesi ikinci kat sıvı ürün dolum ve kapak sıkma hattı']
+/machines/lines?facilityId=1 200 [{"id":1,"label":"H1 - Haz\u0131rl\u0131k hatt\u0131"},{"id":2,"label":"H2 - Dolum hatt\u0131"},{"id":5,"label":"H3 - \u00C7ok uzun adl\u0131 ambalajlama ve etiketleme hatt\u0131 Abdurrahmano\u011Full
+includeId grep (Src/**/*.cs): 0; MachineService.cs 269 satır
+
+== B7 / K3 JS kapalı (k3.js, Chromium, 390x844)
+1 GET create?facilityId=1 yedek düğme: BUTTON name=refresh value=true formmethod=- formaction=- hidden=false görünür=true | hat: :Hat seçin, 1:H1 - Hazırlık hattı, 2:H2 - Dolum hattı, 5:H3 - Çok uzun adlı a, 7:HATKODUUZUN16XYZ - K
+2 yenile -> /machines/create?facilityId=1 | tesis=3 kod=M88T2 ad=JS kapali makine | hat: :Hat seçin, 4:H1 - QA hatti 2, 6:H2 - Sıcak dolum ve  | hata: 0
+3 tesis 1 seçili, tesis 3 hattı (4) ile kaydet -> /machines/create?facilityId=1 | hata: Makine eklenemedi Seçilen hat bu tesise ait değil. | Seçilen hat bu tesise ait değil. | tesis=1 kod=M91T2 ad=JS kapali makine | hat: :Hat seçin, 1:H1 - Hazırlık hattı, 2:H2 - Dolum hattı, 5:H3 - Çok uzun adlı a, 7:HATKODUUZUN16XYZ - K
+4 doğru hatla (tesis 1, hat 1) kaydet -> /machines | durum: Makine eklendi. | Makine eklendi. | Yükleniyor…
+Gezinme istekleri: GET /machines/create?facilityId=1 || POST /machines/create?facilityId=1 gövde=FacilityId,LineId,Code,Name,refresh,__RequestVerificationToken || POST /machines/create?facilityId=1 gövde=FacilityId,LineId,Code,Name,__RequestVerificationToken || POST /machines/create?facilityId=1 gövde=FacilityId,LineId,Code,Name,__RequestVerificationToken || GET /machines
+Adres çubuklarında belirteç: false
+Sunucu günlüğü (Hosting.Diagnostics Information, run-5201.log) içinde __RequestVerificationToken: 0
+DB: M88T2 (yalnız yenileme) 0 kayıt; M91T2 1 kayıt (doğru hatla)
+
+== B8 /machines süzgeç hizası (align.js)
+768 /machines L:Makine k@46,294 | INPUT:query@46,324 | L:Tesis@46,388 | SELECT:facilityId@46,418 | L:Hat@392,388 | SELECT:lineId@392,418 | L:Kullanım@46,488
+     etiket üst kenarları: ["294","388"] alan üst kenarları: ["324","418"]
+768 /machines?facilityId=1 L:Makine k@46,294 | INPUT:query@46,324 | L:Tesis@46,388 | SELECT:facilityId@46,418 | L:Hat@392,388 | SELECT:lineId@392,418 | L:Kullanım@46,488
+     etiket üst kenarları: ["294","388"] alan üst kenarları: ["324","418"]
+1024 /machines L:Makine k@294,294 | INPUT:query@294,324 | L:Tesis@294,388 | SELECT:facilityId@294,418 | L:Hat@644,388 | SELECT:lineId@644,418 | L:Kullanım@294,488
+     etiket üst kenarları: ["294","388"] alan üst kenarları: ["324","418"]
+1024 /machines?facilityId=1 L:Makine k@294,294 | INPUT:query@294,324 | L:Tesis@294,388 | SELECT:facilityId@294,418 | L:Hat@644,388 | SELECT:lineId@644,418 | L:Kullanım@294,488
+     etiket üst kenarları: ["294","388"] alan üst kenarları: ["324","418"]
+1280 /machines L:Makine k@302,238 | INPUT:query@302,268 | L:Tesis@685,238 | SELECT:facilityId@685,268 | L:Hat@964,238 | SELECT:lineId@964,268 | L:Kullanım@302,338
+     etiket üst kenarları: ["238"] alan üst kenarları: ["268"]
+1280 /machines?facilityId=1 L:Makine k@302,238 | INPUT:query@302,268 | L:Tesis@685,238 | SELECT:facilityId@685,268 | L:Hat@964,238 | SELECT:lineId@964,268 | L:Kullanım@302,338
+     etiket üst kenarları: ["238"] alan üst kenarları: ["268"]
+1440 /machines L:Makine k@302,238 | INPUT:query@302,268 | L:Tesis@751,238 | SELECT:facilityId@751,268 | L:Hat@1077,238 | SELECT:lineId@1077,268 | L:Kullanım@302,338
+     etiket üst kenarları: ["238"] alan üst kenarları: ["268"]
+1440 /machines?facilityId=1 L:Makine k@302,238 | INPUT:query@302,268 | L:Tesis@751,238 | SELECT:facilityId@751,268 | L:Hat@1077,238 | SELECT:lineId@1077,268 | L:Kullanım@302,338
+     etiket üst kenarları: ["238"] alan üst kenarları: ["268"]
+1920 /machines L:Makine k@338,238 | INPUT:query@338,268 | L:Tesis@955,238 | SELECT:facilityId@955,268 | L:Hat@1401,238 | SELECT:lineId@1401,268 | L:Kullanım@338,338
+     etiket üst kenarları: ["238"] alan üst kenarları: ["268"]
+1920 /machines?facilityId=1 L:Makine k@338,238 | INPUT:query@338,268 | L:Tesis@955,238 | SELECT:facilityId@955,268 | L:Hat@1401,238 | SELECT:lineId@1401,268 | L:Kullanım@338,338
+     etiket üst kenarları: ["238"] alan üst kenarları: ["268"]
+
+== Klavye ve kaydedilmemiş değişiklik (kbd.js, 1440)
+/machines/retire/4 main içi Tab sırası: A[Makine listesine dön] ring=3px solid > A[Makine listesine dön] ring=3px solid > A[Makine listesine dön] ring=3px solid
+   main içi odaklanabilir: A:Makine listesine dön
+/machines/edit/4 main içi Tab sırası: INPUT[Code] ring=3px solid > INPUT[Name] ring=3px solid > A[Makine listesine dön] ring=3px solid > INPUT[Code] ring=3px solid > INPUT[Name] ring=3px solid > A[Makine listesine dön] ring=3px solid
+   main içi odaklanabilir: INPUT(readonly):Code, INPUT(readonly):Name, A:Makine listesine dön
+kaldırılmış edit/4: ad alanına yazma denemesi sonrası değer=(sayfa değişti), menü tıklaması -> /facilities, beforeunload diyaloğu=0
+aktif edit/7: ad değişti, menü tıklaması -> /machines/edit/7, beforeunload diyaloğu=1
+konsol hatası: 0

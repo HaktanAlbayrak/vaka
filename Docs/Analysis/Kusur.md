@@ -435,6 +435,7 @@ K-38..K-40 Engelleyiciydi; 2026-11-13'te karara bağlandı. Diğerlerinin öneri
 - Etki: BR-45, BR-46, SH-13, Faz 3 tip formu, Faz 4 sihirbaz.
 - Öneri: **Varsayılan:** operatör tipin varsayılanından farklı süre girebilir ama `<AzamiKilitSüresi>` (sistem ayarı) aşılamaz; süre açılış anından sayılır; yalnız ilk adımın başlatılması kilidi kalıcı yapar; görevli ya da malzeme eklemek süreyi uzatmaz. **Alternatif:** her işlem sayacı yeniden başlatır (kilit bitişi = son işlem + kilit süresi).
 - Öncelik: Önemli
+- **Not (2026-11-14):** `<AzamiKilitSüresi>` başlangıç değeri kullanıcıdan geldi: 120 dakika (PL-34). Satır Faz 3 seed eklemesiyle gelir (PL-25).
 
 ### K-47: Sistem geneli ayarların yeri
 - Kaynak: Brief V-15.
@@ -444,6 +445,7 @@ K-38..K-40 Engelleyiciydi; 2026-11-13'te karara bağlandı. Diğerlerinin öneri
 - Öncelik: Sonra netleşebilir
 - **Karar (2026-11-13):** Kullanıcı: değerler "yönetici ayarlarından değiştirilebilir olmalı"; alternatif seçildi. `<OturumSüresi>`, `<PinUzunluğu>`, `<PinDenemeSınırı>`, `<AzamiMedyaBoyutu>` (fotoğraf ve video ayrı) ve `<AzamiKilitSüresi>` veritabanındaki sistem ayarları tablosundadır. Yönetici ve Süper admin bunları Sistem ayarları ekranından (E-33, Faz 9) PIN ile değiştirir; her değişiklik eski değer, yeni değer, yapan ve zamanla geçmişe yazılır. Tablo Faz 1'de oluşur ve seed'den dolar (PL-17); değişikliğin etkisi PL-18. Kullanıcı değer vermedi: değerler yer tutucu kalır, uydurma değer yazılmaz; ilgili fazdan önce gerekir (Requirements §9). Süper admin kurulumda değerleri ilk yapılandıran kişidir (seed'de tek kullanıcı olduğu için ekran yetkisi ona da verildi).
 - **Not (2026-11-13):** Faz 1 başlangıç değerleri kullanıcıdan geldi: `<OturumSüresi>` 30 dakika, `<PinUzunluğu>` 4 hane, `<PinDenemeSınırı>` 5 (PL-24). `<AzamiMedyaBoyutu>` ve `<AzamiKilitSüresi>` Faz 3 öncesi açık; satırları değer gelince eklenir (PL-25). Değerlerin tek yeri Requirements §6.
+- **Not (2026-11-14):** `<AzamiKilitSüresi>` 120 dakika geldi (PL-34). `<AzamiMedyaBoyutu>` (fotoğraf, video) kullanıcı kararıyla Faz 3 öncesine kadar açık.
 
 ### K-48: Denetçi rolü
 - Kaynak: Brief §3.1 (öneri), satır 4, 123.

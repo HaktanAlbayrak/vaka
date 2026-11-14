@@ -1,0 +1,207 @@
+Faz 2 mekanik eval (UiDelivery §3) ve G11 imzaları. Release, port 5161 (prototipler Development, port 5163). Chromium (playwright-cli).
+Ölçüm betiği .qa/f2/m2.tmpl.js (ön tur betiği + kontrast, animasyon, gövde punto). Hücreler (full): 360x800, 768x1024, 1024x768,
+1440x900, 1920x1080 açık ve koyu; 800x360 yatay; 320x640 ve 640x400 (%200 yakınlaştırma karşılığı); 390x844 ve 1440x900 reduced-motion.
+g11 hücreleri: 360, 390, 768, 1024, 1279, 1280, 1440 (açık). Onay kutusu ve radyo düğmesi küçük hedef sayılmadı (etiketleri 52 px).
+Kart modunda görsel olarak gizli thead (sr-only, clip 0) içindeki TR/TH "overflowing" sayılmadı; bu hücrelerde hScroll false.
+
+== Toplu sonuç (ölçüm sayısı, sonuç sınıfları, en düşük kontrast, üst bar azami)
+Faz 2 listeler (11 adres)                 165 ölçüm  {'temiz': 165}  kontrast>=5.28  üst bar<=64 px
+   KALDI: /materials/details/5 320x640-light-zoom200 ['hScroll', 'overflow'] ['DIV', 'DT', 'DD.mono', 'DIV', 'DT', 'DD']
+Faz 2 ayrıntılar (8 adres)                120 ölçüm  {'temiz': 119, 'hScroll+overflow': 1}  kontrast>=5.28  üst bar<=64 px
+Faz 2 formlar ve kaldırma (16 adres)      240 ölçüm  {'temiz': 240}  kontrast>=5.43  üst bar<=64 px
+JS kapalı (6 adres, g11 hücreleri)         42 ölçüm  {'temiz': 42}  kontrast>=5.28  üst bar<=64 px
+G11 hücreleri (10 adres)                   70 ölçüm  {'temiz': 70}  kontrast>=5.28  üst bar<=64 px
+Faz 1 gerileme, Yönetici (6 adres)         90 ölçüm  {'temiz': 90}  kontrast>=5.28  üst bar<=64 px
+Faz 1 gerileme, oturumsuz (6 adres)        90 ölçüm  {'temiz': 90}  kontrast>=5.95  üst bar<=64 px
+Prototipler, Development (5 adres)         75 ölçüm  {'temiz': 75}  kontrast>=5.28  üst bar<=64 px
+Toplam 892 ölçüm. Konsol: 403/404 sayfalarındaki tarayıcının kendi "Failed to load resource" satırı dışında hata/uyarı 0.
+Ağ (net.js, 26 sayfa + hat isteği): 4xx/5xx 0, dış istek 0.
+
+== G11 imzaları (Alan:sütun@satır; ilk satır || uzun içerikli satır)
+/facilities                    360x800-light          tablo0 card  2x142px h=286-326 | Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:1@4 boşluk=4(son) || uzun(h326): Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:1@4 boşluk=4(son)
+/facilities?showInactive=true  360x800-light          tablo0 card  2x142px h=286-326 | Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:1@4 boşluk=4(son) || uzun(h326): Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:1@4 boşluk=4(son)
+/shifts                        360x800-light          tablo0 card  2x142px h=184-218 | Ad:2@1 Başlangıç:1@2 Bitiş:1@2 Durum:1@3 İşlem:1@3 || uzun(h204): Ad:2@1 Başlangıç:1@2 Bitiş:1@2 Durum:1@3 İşlem:1@3
+/shifts?facilityId=3           360x800-light          tablo0 card  2x142px h=184-218 | Ad:2@1 Başlangıç:1@2 Bitiş:1@2 Durum:1@3 İşlem:1@3
+/machines                      360x800-light          tablo0 card  2x142px h=252-312 | Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:1@3 || uzun(h312): Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:1@3
+/machines?page=2               360x800-light          tablo0 card  2x142px h=252-252 | Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:1@3
+/materials                     360x800-light          tablo0 card  2x142px h=232-296 | Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:1@3
+/materials?query=MLZUZUN       360x800-light          tablo0 card  2x142px h=292-292 | Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:1@3 || uzun(h292): Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:1@3
+/facilities                    768x1024-light         tablo0 card  4x161px h=186-226 | Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:1@2 boşluk=2(son) || uzun(h226): Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/facilities?showInactive=true  768x1024-light         tablo0 card  4x161px h=186-226 | Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:1@2 boşluk=2(son) || uzun(h226): Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/shifts                        768x1024-light         tablo0 card  4x161px h=138-172 | Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son) || uzun(h154): Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/shifts?facilityId=3           768x1024-light         tablo0 card  4x161px h=138-172 | Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/machines                      768x1024-light         tablo0 card  4x161px h=206-246 | Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son) || uzun(h246): Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/machines?page=2               768x1024-light         tablo0 card  4x161px h=206-206 | Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/materials                     768x1024-light         tablo0 card  4x161px h=186-250 | Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/materials?query=MLZUZUN       768x1024-light         tablo0 card  4x161px h=226-226 | Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son) || uzun(h226): Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/facilities                    1024x768-light         tablo0 card  4x163px h=186-226 | Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:1@2 boşluk=2(son) || uzun(h226): Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/facilities?showInactive=true  1024x768-light         tablo0 card  4x163px h=186-226 | Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:1@2 boşluk=2(son) || uzun(h226): Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/shifts                        1024x768-light         tablo0 card  4x163px h=138-172 | Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son) || uzun(h154): Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/shifts?facilityId=3           1024x768-light         tablo0 card  4x163px h=138-172 | Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/machines                      1024x768-light         tablo0 card  4x163px h=206-246 | Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son) || uzun(h246): Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/machines?page=2               1024x768-light         tablo0 card  4x163px h=206-206 | Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/materials                     1024x768-light         tablo0 card  4x163px h=186-250 | Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/materials?query=MLZUZUN       1024x768-light         tablo0 card  4x163px h=226-226 | Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son) || uzun(h226): Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/facilities                    1440x900-light         tablo0 table  h=69-69 | Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1 || uzun(h69): Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1
+/facilities?showInactive=true  1440x900-light         tablo0 table  h=69-69 | Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1 || uzun(h69): Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1
+/shifts                        1440x900-light         tablo0 table  h=69-69 | Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@1 İşlem:1@1 || uzun(h69): Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@1 İşlem:1@1
+/shifts?facilityId=3           1440x900-light         tablo0 table  h=69-69 | Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@1 İşlem:1@1
+/machines                      1440x900-light         tablo0 table  h=69-85 | Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@1 İşlem:1@1 || uzun(h85): Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@1 İşlem:1@1
+/machines?page=2               1440x900-light         tablo0 table  h=69-69 | Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@1 İşlem:1@1
+/materials                     1440x900-light         tablo0 table  h=69-69 | Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@1 İşlem:1@1
+/materials?query=MLZUZUN       1440x900-light         tablo0 table  h=85-85 | Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@1 İşlem:1@1 || uzun(h85): Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@1 İşlem:1@1
+/facilities                    1920x1080-light        tablo0 table  h=69-69 | Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1 || uzun(h69): Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1
+/facilities?showInactive=true  1920x1080-light        tablo0 table  h=69-69 | Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1 || uzun(h69): Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1
+/shifts                        1920x1080-light        tablo0 table  h=69-69 | Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@1 İşlem:1@1 || uzun(h69): Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@1 İşlem:1@1
+/shifts?facilityId=3           1920x1080-light        tablo0 table  h=69-69 | Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@1 İşlem:1@1
+/machines                      1920x1080-light        tablo0 table  h=69-69 | Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@1 İşlem:1@1 || uzun(h69): Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@1 İşlem:1@1
+/machines?page=2               1920x1080-light        tablo0 table  h=69-69 | Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@1 İşlem:1@1
+/materials                     1920x1080-light        tablo0 table  h=69-69 | Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@1 İşlem:1@1
+/materials?query=MLZUZUN       1920x1080-light        tablo0 table  h=85-85 | Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@1 İşlem:1@1 || uzun(h85): Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@1 İşlem:1@1
+/facilities                    320x640-light-zoom200  tablo0 card  2x122px h=310-370 | Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:1@4 boşluk=4(son) || uzun(h370): Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:1@4 boşluk=4(son)
+/facilities?showInactive=true  320x640-light-zoom200  tablo0 card  2x122px h=310-370 | Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:1@4 boşluk=4(son) || uzun(h370): Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:1@4 boşluk=4(son)
+/shifts                        320x640-light-zoom200  tablo0 card  2x122px h=208-262 | Ad:2@1 Başlangıç:1@2 Bitiş:1@2 Durum:1@3 İşlem:1@3 || uzun(h248): Ad:2@1 Başlangıç:1@2 Bitiş:1@2 Durum:1@3 İşlem:1@3
+/shifts?facilityId=3           320x640-light-zoom200  tablo0 card  2x122px h=208-262 | Ad:2@1 Başlangıç:1@2 Bitiş:1@2 Durum:1@3 İşlem:1@3
+/machines                      320x640-light-zoom200  tablo0 card  2x122px h=276-336 | Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:1@3 || uzun(h336): Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:1@3
+/machines?page=2               320x640-light-zoom200  tablo0 card  2x122px h=276-276 | Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:1@3
+/materials                     320x640-light-zoom200  tablo0 card  2x122px h=256-320 | Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:1@3
+/materials?query=MLZUZUN       320x640-light-zoom200  tablo0 card  2x122px h=356-356 | Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:1@3 || uzun(h356): Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:1@3
+/facilities                    390x844-light          tablo0 card  2x157px h=286-326 | Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:1@4 boşluk=4(son) || uzun(h326): Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:1@4 boşluk=4(son)
+/shifts                        390x844-light          tablo0 card  2x157px h=184-218 | Ad:2@1 Başlangıç:1@2 Bitiş:1@2 Durum:1@3 İşlem:1@3 || uzun(h204): Ad:2@1 Başlangıç:1@2 Bitiş:1@2 Durum:1@3 İşlem:1@3
+/machines                      390x844-light          tablo0 card  2x157px h=252-312 | Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:1@3 || uzun(h312): Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:1@3
+/materials                     390x844-light          tablo0 card  2x157px h=232-296 | Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:1@3
+/materials?query=MLZUZUN       390x844-light          tablo0 card  2x157px h=292-292 | Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:1@3 || uzun(h292): Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:1@3
+/facilities/details/1          390x844-light          tablo0[ray] card  2x157px h=180-220 | Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3 || uzun(h220): Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3
+/materials/details/1           390x844-light          tablo0[ray] card  2x157px h=134-194 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2 || uzun(h194): Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2
+/materials/details/2           390x844-light          tablo0[ray] card  2x157px h=134-154 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2
+/facilities                    1279x900-light         tablo0 card  4x227px h=186-226 | Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:1@2 boşluk=1(ARA),2(son) || uzun(h226): Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:1@2 boşluk=1(ARA),2(son)
+/shifts                        1279x900-light         tablo0 card  4x227px h=138-154 | Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:1@2 boşluk=1(ARA),2(son) || uzun(h154): Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:1@2 boşluk=1(ARA),2(son)
+/machines                      1279x900-light         tablo0 card  4x227px h=206-246 | Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@2 İşlem:1@2 boşluk=1(ARA),2(son) || uzun(h246): Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@2 İşlem:1@2 boşluk=1(ARA),2(son)
+/materials                     1279x900-light         tablo0 card  4x227px h=186-194 | Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@2 İşlem:1@2 boşluk=1(ARA),2(son)
+/materials?query=MLZUZUN       1279x900-light         tablo0 card  4x227px h=226-226 | Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@2 İşlem:1@2 boşluk=1(ARA),2(son) || uzun(h226): Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@2 İşlem:1@2 boşluk=1(ARA),2(son)
+/facilities/details/1          1279x900-light         tablo0[ray] card  2x284px h=180-220 | Ad:1@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3 boşluk=1(ARA) || uzun(h220): Ad:1@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3 boşluk=1(ARA)
+/materials/details/1           1279x900-light         tablo0[ray] card  2x284px h=134-154 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2 || uzun(h154): Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2
+/materials/details/2           1279x900-light         tablo0[ray] card  2x284px h=134-134 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2
+/facilities                    1280x900-light         tablo0 table  h=69-85 | Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1 || uzun(h85): Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1
+/shifts                        1280x900-light         tablo0 table  h=69-69 | Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@1 İşlem:1@1 || uzun(h69): Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@1 İşlem:1@1
+/machines                      1280x900-light         tablo0 table  h=69-85 | Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@1 İşlem:1@1 || uzun(h85): Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@1 İşlem:1@1
+/materials                     1280x900-light         tablo0 table  h=69-69 | Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@1 İşlem:1@1
+/materials?query=MLZUZUN       1280x900-light         tablo0 table  h=121-121 | Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@1 İşlem:1@1 || uzun(h121): Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@1 İşlem:1@1
+/facilities/details/1          1280x900-light         tablo0[ray] table  h=93-125 | Kod:1@1 Ad:1@1 Makine:1@1 Durum:1@1 İşlem:1@1 || uzun(h125): Kod:1@1 Ad:1@1 Makine:1@1 Durum:1@1 İşlem:1@1
+/materials/details/1           1280x900-light         tablo0[ray] table  h=117-117 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:1@1 || uzun(h117): Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:1@1
+/materials/details/2           1280x900-light         tablo0[ray] table  h=93-93 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:1@1
+/facilities/details/1          360x800-light          tablo0[ray] card  2x142px h=180-220 | Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3 || uzun(h220): Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3
+/facilities/details/2          360x800-light          tablo0[ray] card  2x142px h=180-180 | Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3
+/facilities/details/3          360x800-light          tablo0[ray] card  2x142px h=180-220 | Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3
+/materials/details/1           360x800-light          tablo0[ray] card  2x142px h=134-194 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2 || uzun(h194): Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2
+/materials/details/2           360x800-light          tablo0[ray] card  2x142px h=134-154 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2
+/facilities/details/1          768x1024-light         tablo0[ray] card  4x161px h=134-174 | Kod:1@1 Ad:2@1 Makine:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son) || uzun(h174): Kod:1@1 Ad:2@1 Makine:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/facilities/details/2          768x1024-light         tablo0[ray] card  4x161px h=134-134 | Kod:1@1 Ad:2@1 Makine:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/facilities/details/3          768x1024-light         tablo0[ray] card  4x161px h=134-154 | Kod:1@1 Ad:2@1 Makine:1@1 Durum:1@2 İşlem:1@2 boşluk=2(son)
+/materials/details/1           768x1024-light         tablo0[ray] card  4x161px h=88-124 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:1@1 || uzun(h124): Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:1@1
+/materials/details/2           768x1024-light         tablo0[ray] card  4x161px h=88-88 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:1@1
+/facilities/details/1          1024x768-light         tablo0[ray] card  2x156px h=180-220 | Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3 || uzun(h220): Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3
+/facilities/details/2          1024x768-light         tablo0[ray] card  2x156px h=180-180 | Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3
+/facilities/details/3          1024x768-light         tablo0[ray] card  2x156px h=180-200 | Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3
+/materials/details/1           1024x768-light         tablo0[ray] card  2x156px h=134-194 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2 || uzun(h194): Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2
+/materials/details/2           1024x768-light         tablo0[ray] card  2x156px h=134-154 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2
+/facilities/details/1          1440x900-light         tablo0[ray] table  h=69-85 | Kod:1@1 Ad:1@1 Makine:1@1 Durum:1@1 İşlem:1@1 || uzun(h85): Kod:1@1 Ad:1@1 Makine:1@1 Durum:1@1 İşlem:1@1
+/facilities/details/2          1440x900-light         tablo0[ray] table  h=69-69 | Kod:1@1 Ad:1@1 Makine:1@1 Durum:1@1 İşlem:1@1
+/facilities/details/3          1440x900-light         tablo0[ray] table  h=69-69 | Kod:1@1 Ad:1@1 Makine:1@1 Durum:1@1 İşlem:1@1
+/materials/details/1           1440x900-light         tablo0[ray] table  h=93-93 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:1@1 || uzun(h93): Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:1@1
+/materials/details/2           1440x900-light         tablo0[ray] table  h=69-69 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:1@1
+/facilities/details/1          320x640-light-zoom200  tablo0[ray] card  2x122px h=204-244 | Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3 || uzun(h244): Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3
+/facilities/details/2          320x640-light-zoom200  tablo0[ray] card  2x122px h=204-204 | Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3
+/facilities/details/3          320x640-light-zoom200  tablo0[ray] card  2x122px h=204-244 | Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3
+/materials/details/1           320x640-light-zoom200  tablo0[ray] card  2x122px h=174-238 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2 || uzun(h238): Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2
+/materials/details/2           320x640-light-zoom200  tablo0[ray] card  2x122px h=174-178 | Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2
+
+== Beklenen imza (Archive/frontend-engineer-20261114-2330.md, -2359.md; frontend-engineer-20261115-0100.md) ile karşılaştırma
+E-05 /facilities 360 Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:1@4; 768/1024 Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:1@2; 1440 tablo: AYNI
+E-06 /shifts 360 Ad:2@1 Başlangıç:1@2 Bitiş:1@2 Durum:1@3 İşlem:1@3; 768/1024 Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:1@2; 1440 tablo: AYNI
+E-07 /machines 360 Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:1@3; 768/1024 Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:1@2; 1440 tablo: AYNI
+E-08 /materials 360 Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:1@3; 768/1024 Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:1@2; 1440 tablo: AYNI
+Hat tablosu (ray) 360 ve 1024 Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3; 768 Kod:1@1 Ad:2@1 Makine:1@1 Durum:1@2 İşlem:1@2; 1440 tablo: AYNI (ön tur bulgusu 1 kapandı)
+Lot tablosu (ray) 360 ve 1024 Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@2 İşlem:1@2; 768 dördü @1; 1440 tablo: AYNI
+1280 ve üstü tablo modunda satır en az 69 px. Form ve ayrıntı iskeleti: 1024 ve üstü yan yana (ana 356 px, ray 352 px), altında ray altta.
+Not: 1100-1279 px kart modunda "Ad" hücresi 2 sütunluk alanda max-w-xs (320 px) ile sınırlı; ızgara yerleşimi imzayla aynı (Faz 1 /users ile aynı).
+
+== JS kapalı yedek düğme (Seçilen tesisin hatlarını getir)
+360x800-light yedek=BUTTON:hidden/görünmez | eylem: Makineyi ekle:192x56@1 | Vazgeç:109x56@2
+768x1024-light yedek=BUTTON:hidden/görünmez | eylem: Makineyi ekle:192x56@1 | Vazgeç:109x56@1
+1440x900-light yedek=BUTTON:hidden/görünmez | eylem: Makineyi ekle:192x56@1 | Vazgeç:109x56@1
+360x800-light-jsoff yedek=BUTTON:açık/görünür | eylem: Makineyi ekle:192x56@1 | Seçilen tesisin hatlarını getir:292x76@2 | Vazgeç:109x56@3
+768x1024-light-jsoff yedek=BUTTON:açık/görünür | eylem: Makineyi ekle:192x56@1 | Seçilen tesisin hatlarını getir:311x56@1 | Vazgeç:109x56@1
+1440x900-light-jsoff yedek=BUTTON:açık/görünür | eylem: Makineyi ekle:192x56@1 | Seçilen tesisin hatlarını getir:311x56@1 | Vazgeç:109x56@1
+
+== Klavye turu (kbdA.js, kbdB.js, kbdC.js; 1440 ve 360)
+/facilities Tab1: A[İçeriğe geç] ring=3px solid; Enter -> MAIN#main; sonraki 8 Tab (Tesis ekle, showInactive, Filtrele, satır bağlantıları) ring=3px solid, üst bar altında kalan 0
+Boş gönderim (istemci doğrulaması, sayfa kalır, ilk hatalı alana odak):
+  /facilities/create odak=#Code hatalar=Kod alanını doldurun.|Ad alanını doldurun.; /lines/create odak=#Code; /materials/create odak=#Code
+  /shifts/create odak=#Name hatalar=Ad alanını doldurun.|Başlangıç saatini girin.|Bitiş saatini girin.
+  /machines/create odak=#FacilityId hatalar=Tesis seçin.|Hat seçin.|Kod alanını doldurun.|Ad alanını doldurun.
+  /material-lots/create odak=#LotNo hatalar=Lot no alanını doldurun.|Son kullanma tarihini girin.
+Sunucu hatası (/facilities/create, kod T1): odak=#Code, özet "Tesis eklenemedi Bu tesis kodu kayıtlı.", alan hatası aynı, girilen değer korundu
+Makine formu yalnız klavye: tesis ArrowDown -> hatlar geldi (role=status #line-status), Tab hat ArrowDown, Tab kod, Tab ad, Enter -> /machines "Makine eklendi."
+Kaydedilmemiş değişiklik (/facilities/edit/4, ad değişti, menü bağlantısı): beforeunload diyaloğu 1
+360 /machines: Menü aria-expanded false -> true, odak çekmecede "Menüyü kapat"; çekmece / /facilities /machines /shifts /materials /users /account/security;
+  Esc -> aria-expanded false, odak Menü düğmesine döndü; 14 Tab boyunca halkasız odak 0 (son Tab belgeden çıkıp body)
+
+== Dört durum
+Yükleniyor: filtre gönderiminde ve sayfa bağlantısında [data-loading] görünür, "Yükleniyor…", liste gizli, iskelet 357 px, animasyon 0 (load4.js; 1440 ve 360;
+  /machines, /materials, /facilities, /shifts, /machines?page=2)
+Boş (ayrı kopya .qa/f2/qa-empty.db, tanımlar silinmiş, port 5162): /facilities "Henüz tesis yok" + Tesis ekle; /shifts "Önce tesis ekleyin" + Tesis ekle;
+  /machines "Henüz makine yok" + Makine ekle; /materials "Henüz malzeme yok" + Malzeme ekle. Süzgeçli boş: "Filtreye uyan malzeme yok", "Bu tesiste vardiya yok";
+  /materials/details/3 lot yok; /facilities/details/4 hat yok.
+Hata: form özeti + alan altı hata (yukarıda); hat isteği 500 -> "Hatlar yüklenemedi. Sayfayı yenileyip tekrar deneyin."
+Dolu: 120 karakter ad, 32 karakter malzeme kodu, 64 karakter lot no, 20 üstü satırda sayfalama
+
+== DNA hesaplanan stil (dna.js)
+h1 Archivo, gövde Hanken Grotesk, mono JetBrains Mono; birincil düğme rgb(33,82,160) açık, rgb(122,170,235) koyu; köşe 2 px; kenarlık 2 px;
+th alt çizgi 2 px, th sticky top 64 px; zebra yok; rozet 2 px solid + ikon + metin; gölge 0; gradient 0; geçiş yalnız renk özellikleri.
+
+
+== Tur 2 (2026-11-14)
+Release yayını (build6, çalışma ağacı), port 5201 Production, DB .qa/f2t2/qa.db (ön tur kopyası: tur 1 verisi + uzun veriler). 2026-11-14. Ölçüm şablonu .qa/f2t2/m3.tmpl.js, çözümleme an.py.
+Paketler: tl (10 liste adresi x 8 genişlik), td (6 ayrıntı + 3 sayfa dışı adres x 8), tu (/users x 8), tf (15 form x 5), tk1/tk2 koyu (360/1440/1920), tr1/tr2 reduced-motion (390 açık, 1440 koyu),
+tz1/tz2 %200 (320x640 açık, 640x400 koyu), t1 Faz 1 (/, /users, /users/create, /users/edit/5, /users/deactivate/5, /account/security; 360/768/1024/1440 açık, 1920 koyu), tsa Süper admin, tan oturumsuz, tjs JS kapalı, tp prototip (Development 5203).
+===== tl 80
+  sınıflar {'temiz': 80} kontrast>= 5.28 topbar<= 64
+===== td 72
+  sınıflar {'temiz': 72} kontrast>= 5.28 topbar<= 64
+===== tu 16
+  sınıflar {'temiz': 16} kontrast>= 5.28 topbar<= 64
+===== tf 75
+  sınıflar {'temiz': 75} kontrast>= 5.43 topbar<= 64
+===== tk1 48
+  sınıflar {'temiz': 48} kontrast>= 5.81 topbar<= 64
+===== tk2 45
+  sınıflar {'temiz': 45} kontrast>= 5.45 topbar<= 64
+===== tr1 32
+  sınıflar {'temiz': 32} kontrast>= 5.28 topbar<= 64
+===== tr2 30
+  sınıflar {'temiz': 30} kontrast>= 5.43 topbar<= 64
+===== tz1 32
+  sınıflar {'temiz': 32} kontrast>= 5.28 topbar<= 64
+===== tz2 30
+  sınıflar {'temiz': 30} kontrast>= 5.43 topbar<= 64
+===== t1 35
+  sınıflar {'temiz': 35} kontrast>= 5.28 topbar<= 64
+===== tsa 4
+  sınıflar {'temiz': 4} kontrast>= 5.28 topbar<= 64
+===== tan 6
+  sınıflar {'temiz': 6} kontrast>= 5.95 topbar<= 64
+===== tjs 9
+  sınıflar {'temiz': 9} kontrast>= 5.28 topbar<= 64
+===== tp 10
+  sınıflar {'temiz': 10} kontrast>= 5.28 topbar<= 64
+Toplam 524 ölçüm, başarısız 0 (h1, skip, img, etiket, ikon düğme adı, em/en-dash, hScroll, taşma, 40 px altı hedef, dış kaynak, font, üst bar, kontrast, mobil gövde 16 px, konsol, durum).
+Reduced-motion hücrelerinde görünür animasyon toplamı: 0 (62 ölçüm)
+G11 (g11.py): 360/390/768/1024/1280/1366/1440/1920 açık, 360/1440/1920 koyu, 390/1440 reduced-motion ve Faz 1 sayfaları: 195 tablo ölçümü beklenen imzayla aynı, 0 farklı; 320x640: 18 aynı.
+  Beklenen: bu dosyanın "Beklenen imza" bölümü ve Faz 1 tur 3 /users (768 altı Ad soyad:2@1 Sicil no:1@2 Roller:1@2 Durum:1@3 İşlem:1@3; 768/1024 Sicil no:1@1 Ad soyad:2@1 Roller:1@1 Durum:1@2 İşlem:1@2);
+  1280 ve üstü tablo, satır en az 56 px, hücre taşması 0.
+  640x400 (koyu, %200) listelerde Ad:1@1 ve 1. satırda boşluk ölçüsü (10 ölçüm): tur 1 .qa/f2/r-lists.json ile birebir aynı (Ad max-w-xs 320 px, iz 2x282 px); G11 genişliği değil, gerileme değil.
+JS kapalı yedek düğme:
+/machines/create 360x800-light-jsoff yedek=BUTTON:açık/görünür | eylem: Makineyi ekle:192x56@1 | Seçilen tesisin hatlarını getir:292x76@2 | Vazgeç:109x56@3
+/machines/create 768x1024-light-jsoff yedek=BUTTON:açık/görünür | eylem: Makineyi ekle:192x56@1 | Seçilen tesisin hatlarını getir:311x56@1 | Vazgeç:109x56@1
+/machines/create 1440x900-light-jsoff yedek=BUTTON:açık/görünür | eylem: Makineyi ekle:192x56@1 | Seçilen tesisin hatlarını getir:311x56@1 | Vazgeç:109x56@1

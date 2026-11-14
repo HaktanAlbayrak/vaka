@@ -1,0 +1,61 @@
+@using Vaka.Web.ViewModels.Definitions
+@model FacilityFormViewModel
+@{
+    var isCreate = Model.Id is null;
+    ViewData["Title"] = isCreate ? "Tesis ekle" : "Tesisi düzenle";
+    ViewData["Lead"] = isCreate ? "Tesis kodu bir kez verilir, sonra değiştirilemez." : Model.Name + ", kod " + Model.Code;
+    ViewData["NavKey"] = "facilities";
+}
+
+<partial name="_FormSummary" model='isCreate ? "Tesis eklenemedi" : "Tesis kaydedilemedi"' />
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard aria-labelledby="facility-form-title">
+        <div class="panel-head">
+            <h2 id="facility-form-title" class="panel-title">Tesis bilgileri</h2>
+        </div>
+        <div class="panel-body space-y-6">
+            <div class="grid gap-5 md:grid-cols-2">
+                <partial name="_Field" model='("Code", "Kod", Model.Code, "text", "off", Model.CodeLocked ? "Kod değiştirilemez." : "Tire içermez, tesisler arasında benzersizdir.", true, Model.CodeLocked)' />
+                <partial name="_Field" model='("Name", "Ad", Model.Name, "text", "off", (string?)null, true, false)' />
+            </div>
+
+            <label class="choice max-w-md">
+                <input type="hidden" name="IsActive" value="false" />
+                <input type="checkbox" name="IsActive" value="true" checked="@Model.IsActive" />
+                <span class="min-w-0">
+                    <span class="block font-bold">Aktif</span>
+                    <span class="mt-0.5 block text-sm text-muted">Pasif tesis ve altındaki hat ile makineler yeni kayıtta seçilemez.</span>
+                </span>
+            </label>
+
+            <div class="flex flex-wrap items-center gap-3 border-t-2 border-line pt-5">
+                <button type="submit" class="btn btn-primary btn-lg" data-requires-online>
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#save" /></svg>
+                    @(isCreate ? "Tesisi ekle" : "Değişiklikleri kaydet")
+                </button>
+                <a class="btn btn-secondary btn-lg" href="@(isCreate ? "/facilities" : "/facilities/details/" + Model.Id)">Vazgeç</a>
+            </div>
+        </div>
+    </form>
+
+    <aside class="min-w-0" aria-label="Bilgi">
+        <section class="panel" aria-labelledby="facility-help-title">
+            <div class="panel-head"><h2 id="facility-help-title" class="panel-title">Bilmeniz gerekenler</h2></div>
+            <ul class="list-inside list-disc space-y-2 p-4 md:p-5">
+                <li>Kod kaydedildikten sonra değişmez.</li>
+                <li>Hatlar ve vardiyalar tesise bağlıdır.</li>
+                <li>Pasif tesiste açılmış eski kayıtlar korunur.</li>
+            </ul>
+            @if (!isCreate)
+            {
+                <div class="border-t-2 border-line p-4 md:p-5">
+                    <a class="btn btn-secondary" href="/facilities/details/@Model.Id">
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#route" /></svg>
+                        Hatları göster
+                    </a>
+                </div>
+            }
+        </section>
+    </aside>
+</div>

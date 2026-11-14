@@ -1,0 +1,23 @@
+@model (string Name, string Label, string Type, string? Value, string? Hint, string RequiredMessage)
+@{
+    var hintId = Model.Name + "-hint";
+    var errorId = Model.Name + "-error";
+    var error = ViewData.ModelState.TryGetValue(Model.Name, out var entry) && entry.Errors.Count > 0 ? entry.Errors[0].ErrorMessage : null;
+    var describedBy = string.Join(' ', new[] { Model.Hint is null ? null : hintId, error is null ? null : errorId }.Where(part => part is not null));
+}
+<div class="field" data-field>
+    <label class="field-label" for="@Model.Name">@Model.Label</label>
+    <input id="@Model.Name" name="@Model.Name" type="@Model.Type" class="input mono" autocomplete="off" value="@Model.Value" required data-required-message="@Model.RequiredMessage"
+           aria-describedby="@(describedBy == "" ? null : describedBy)" aria-invalid="@(error is null ? null : "true")" />
+    @if (Model.Hint is not null)
+    {
+        <p id="@hintId" class="field-hint">@Model.Hint</p>
+    }
+    @if (error is not null)
+    {
+        <p id="@errorId" class="field-error">
+            <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+            <span>@error</span>
+        </p>
+    }
+</div>

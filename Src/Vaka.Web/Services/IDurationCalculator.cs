@@ -12,4 +12,41 @@ public interface IDurationCalculator
     /// işlemsizlik negatif çıkar ve oturum kapanmaz.
     /// </remarks>
     bool IsSessionIdle(DateTimeOffset lastRequestAt, DateTimeOffset now, int sessionMinutes);
+
+    /// <summary>
+    /// Vardiyanın ertesi gün bitip bitmediği (K-38).
+    /// Ertesi gün biter: Bitiş &lt; Başlangıç
+    /// </summary>
+    bool EndsNextDay(TimeOnly start, TimeOnly end);
+
+    /// <summary>
+    /// İki vardiya aralığının çakışıp çakışmadığı (K-38, FR-49).
+    /// Aralık = [Başlangıç, Bitiş); Bitiş &lt; Başlangıç ise günün sonunda ikiye bölünür: [Başlangıç, 24:00) ve [00:00, Bitiş)
+    /// Çakışır: bir parçada A.Başlangıç &lt; B.Bitiş ve B.Başlangıç &lt; A.Bitiş
+    /// </summary>
+    /// <remarks>
+    /// Bitişi diğerinin başlangıcına eşit aralıklar çakışmaz. Başlangıç ve bitişi aynı olan aralık 24 saat sayılır;
+    /// vardiya formu bunu zaten reddeder. Yalnız aktif vardiyalar karşılaştırılır, bu seçimi çağıran yapar.
+    /// </remarks>
+    bool DoShiftsOverlap(ShiftWindow first, ShiftWindow second);
+
+    /// <summary>
+    /// Verilen anı içeren vardiya (K-38; Faz 4 SH-13 ve Faz 6 SH-16 bu metodu kullanır).
+    /// t = anın Türkiye saatindeki günün saati, d = anın Türkiye saatindeki takvim günü
+    /// Normal vardiya (Bitiş &gt; Başlangıç): Başlangıç &lt;= t &lt; Bitiş ise içerir; başlangıç = d + Başlangıç, bitiş = d + Bitiş
+    /// Gece yarısını geçen vardiya (Bitiş &lt; Başlangıç): t &gt;= Başlangıç ise başlangıç = d + Başlangıç, bitiş = (d + 1 gün) + Bitiş;
+    /// t &lt; Bitiş ise başlangıç = (d - 1 gün) + Başlangıç, bitiş = d + Bitiş
+    /// </summary>
+    /// <remarks>
+    /// Aralık başlangıç dahil bitiş hariçtir: bitiş anının kendisi sonraki vardiyaya düşer. Hiçbir vardiya içermiyorsa null.
+    /// Çağıran yalnız aktif vardiyaları verir; aktif vardiyalar çakışmadığı için en çok bir sonuç çıkar.
+    /// </remarks>
+    ShiftOccurrence? FindShiftAt(DateTimeOffset moment, IReadOnlyList<ShiftWindow> shifts);
+
+    /// <summary>
+    /// Lotun SKT'sinin geçmiş olup olmadığı (BR-12, K-12).
+    /// SKT geçmiş: SKT &lt; bugün (Türkiye saatine göre takvim günü)
+    /// </summary>
+    /// <remarks>Bugünkü SKT geçmiş sayılmaz; lot o günün sonuna kadar kullanılabilir.</remarks>
+    bool IsLotExpired(DateOnly expiryDate, DateOnly today);
 }

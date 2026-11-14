@@ -16,8 +16,13 @@ public sealed class ErrorController : Controller
     }
 
     [Route("{code:int}")]
-    public IActionResult Status(int code)
+    public IActionResult Status([FromRoute] int code)
     {
+        if (code is < 400 or > 599)
+        {
+            code = StatusCodes.Status404NotFound;
+        }
+
         Response.StatusCode = code;
         return code switch
         {

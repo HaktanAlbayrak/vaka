@@ -250,9 +250,11 @@
   }
   .page-title {
     @apply text-3xl font-extrabold leading-none tracking-tight md:text-4xl;
+    overflow-wrap: anywhere;
   }
   .page-lead {
     @apply mt-2 max-w-prose text-base text-muted;
+    overflow-wrap: anywhere;
   }
   .demo-bar {
     @apply mt-10 flex flex-wrap items-center gap-2 border-t-2 border-dashed border-line-strong pt-4 text-sm text-muted;
@@ -317,8 +319,12 @@
   .kv dt {
     @apply text-xs font-bold uppercase tracking-wide text-muted;
   }
+  .kv > * {
+    @apply min-w-0;
+  }
   .kv dd {
-    @apply mt-0.5 min-w-0 break-words text-base font-semibold;
+    @apply mt-0.5 min-w-0 text-base font-semibold;
+    overflow-wrap: anywhere;
   }
   .mono {
     @apply font-mono tabular-nums;
@@ -547,7 +553,40 @@
     @apply max-xl:grid max-xl:grid-cols-2 max-xl:gap-x-4 max-xl:gap-y-2 max-xl:border-b-2 max-xl:border-line max-xl:p-3 md:max-xl:grid-cols-4;
   }
   .table-stack td {
-    @apply max-xl:block max-xl:border-0 max-xl:p-0;
+    @apply max-xl:block max-xl:min-w-0 max-xl:border-0 max-xl:p-0;
+  }
+  .table-stack td {
+    overflow-wrap: break-word;
+  }
+  @media (min-width: 1280px) {
+    .table-stack-rail td {
+      white-space: nowrap;
+    }
+    .table-stack-rail td.cell-long {
+      width: 100%;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+  }
+  @media (max-width: 1279.98px) {
+    .table-stack td {
+      overflow-wrap: anywhere;
+    }
+  }
+  .table-stack .btn,
+  .table-stack .badge,
+  .table-stack .badge > span,
+  .table-stack .chip {
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+  @media (min-width: 1280px) {
+    .table-stack .btn,
+    .table-stack .badge,
+    .table-stack .chip {
+      white-space: nowrap;
+    }
   }
   .table-stack td::before {
     @apply max-xl:mb-0.5 max-xl:block max-xl:text-xs max-xl:font-bold max-xl:uppercase max-xl:tracking-wide max-xl:text-muted;
@@ -561,6 +600,12 @@
   }
   .table-stack .stack-lead {
     @apply max-md:order-first;
+  }
+  .table-stack.table-stack-rail tbody tr {
+    @apply lg:max-xl:grid-cols-2;
+  }
+  .table-stack.table-stack-rail .stack-lead {
+    @apply lg:max-xl:order-first;
   }
   .table-stack td.num {
     @apply max-xl:text-left;

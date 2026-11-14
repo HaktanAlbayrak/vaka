@@ -1,0 +1,91 @@
+@using Vaka.Web.ViewModels.Definitions
+@model MaterialDetailViewModel
+@{
+    ViewData["Title"] = Model.Name;
+    ViewData["Lead"] = "Malzeme kodu " + Model.Code;
+    ViewData["NavKey"] = "materials";
+    ViewData["StatusMessage"] = Model.StatusMessage;
+    var expiredCount = Model.Lots.Count(lot => lot.IsExpired);
+}
+
+@section Actions {
+    <div class="flex flex-wrap gap-2">
+        <a class="btn btn-secondary" href="/materials">
+            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-left" /></svg>
+            Malzemeler
+        </a>
+        <a class="btn btn-secondary" href="/materials/edit/@Model.Id">
+            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
+            Malzemeyi düzenle
+        </a>
+    </div>
+}
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <section class="panel min-w-0" aria-labelledby="lots-title">
+        <div class="panel-head">
+            <h2 id="lots-title" class="panel-title">Lotlar</h2>
+            <a class="btn btn-primary" href="/material-lots/create?materialId=@Model.Id">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#plus" /></svg>
+                Lot ekle
+            </a>
+        </div>
+        @if (!Model.Lots.Any())
+        {
+            <div class="p-4 md:p-5">
+                <partial name="_State" model='("empty", "package", "Bu malzemenin lotu yok", "Kayıtta lot seçilir. İlk lotu lot numarası ve son kullanma tarihiyle ekleyin.", "Lot ekle", "/material-lots/create?materialId=" + Model.Id)' />
+            </div>
+        }
+        else
+        {
+            <table class="data-table table-stack table-stack-rail">
+                <caption class="sr-only">@Model.Name lotları, @Model.Lots.Length kayıt</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Lot no</th>
+                        <th scope="col">Son kullanma tarihi</th>
+                        <th scope="col">Durum</th>
+                        <th scope="col">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var lot in Model.Lots)
+                    {
+                        <tr>
+                            <td data-label="Lot no" class="cell-long break-words"><span class="record-no text-sm">@lot.LotNo</span></td>
+                            <td data-label="Son kullanma tarihi"><span class="mono">@lot.ExpiryDate.ToString("dd.MM.yyyy")</span></td>
+                            <td data-label="Durum">
+                                @if (lot.IsExpired)
+                                {
+                                    <partial name="_Badge" model='"lot.expired"' />
+                                }
+                                else
+                                {
+                                    <span class="chip">Kullanılabilir</span>
+                                }
+                            </td>
+                            <td data-label="İşlem">
+                                <a class="btn btn-secondary" href="/material-lots/edit/@lot.Id" aria-label="@lot.LotNo lotunu düzenle">
+                                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
+                                    Düzenle
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </section>
+
+    <aside class="min-w-0" aria-label="Malzeme bilgisi">
+        <section class="panel" aria-labelledby="material-title">
+            <div class="panel-head"><h2 id="material-title" class="panel-title">Malzeme</h2></div>
+            <dl class="kv p-4 md:p-5">
+                <div><dt>Kod</dt><dd class="mono">@Model.Code</dd></div>
+                <div><dt>Ad</dt><dd>@Model.Name</dd></div>
+                <div><dt>Durum</dt><dd class="mt-1"><partial name="_Badge" model='Model.IsActive ? "def.active" : "def.inactive"' /></dd></div>
+                <div><dt>Lot</dt><dd class="mono">@Model.Lots.Length@(expiredCount > 0 ? ", SKT geçmiş " + expiredCount : "")</dd></div>
+            </dl>
+        </section>
+    </aside>
+</div>

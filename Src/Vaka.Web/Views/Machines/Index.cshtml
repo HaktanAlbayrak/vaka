@@ -1,0 +1,148 @@
+@using Vaka.Web.ViewModels.Definitions
+@model MachineListViewModel
+@{
+    ViewData["Title"] = "Makineler";
+    ViewData["Lead"] = "Makineleri tesis ve hatta göre bulun. Kullanımdan kaldırılan makine yeni kayıtta seçilemez, geçmiş kayıtları korunur.";
+    ViewData["NavKey"] = "machines";
+    ViewData["StatusMessage"] = Model.StatusMessage;
+
+    var isFiltered = !string.IsNullOrWhiteSpace(Model.Query) || Model.FacilityId is not null || Model.LineId is not null || Model.ShowRetired;
+
+    string PageHref(int target) =>
+        "/machines?page=" + target
+        + (string.IsNullOrWhiteSpace(Model.Query) ? "" : "&query=" + Uri.EscapeDataString(Model.Query))
+        + (Model.FacilityId is null ? "" : "&facilityId=" + Model.FacilityId)
+        + (Model.LineId is null ? "" : "&lineId=" + Model.LineId)
+        + (Model.ShowRetired ? "&showRetired=true" : "");
+}
+
+@section Actions {
+    <a class="btn btn-primary" href="/machines/create">
+        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#plus" /></svg>
+        Makine ekle
+    </a>
+}
+
+<form method="get" action="/machines" class="panel mb-5" aria-label="Makine filtresi" data-busy-form>
+    <div class="grid gap-4 p-4 md:grid-cols-2 md:p-5 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)] xl:items-start">
+        <div class="field md:col-span-2 xl:col-span-1">
+            <label class="field-label" for="query">Makine kodu ya da adı</label>
+            <input id="query" name="query" type="search" class="input" value="@Model.Query" autocomplete="off" spellcheck="false" inputmode="search" />
+        </div>
+        <div class="field">
+            <label class="field-label" for="facilityId">Tesis</label>
+            <select id="facilityId" name="facilityId" class="input" data-cascade-url="/machines/lines" data-cascade-target="lineId" data-cascade-status="line-status">
+                <option value="">Tüm tesisler</option>
+                @foreach (var facility in Model.Facilities)
+                {
+                    <option value="@facility.Id" selected="@(facility.Id == Model.FacilityId)">@facility.Label</option>
+                }
+            </select>
+        </div>
+        <div class="field">
+            <label class="field-label" for="lineId">Hat</label>
+            <select id="lineId" name="lineId" class="input" aria-describedby="line-status">
+                <option value="">Tüm hatlar</option>
+                @foreach (var line in Model.Lines)
+                {
+                    <option value="@line.Id" selected="@(line.Id == Model.LineId)">@line.Label</option>
+                }
+            </select>
+            <p id="line-status" class="field-hint" role="status"></p>
+        </div>
+        <label class="choice min-h-12">
+            <input type="checkbox" name="showRetired" value="true" checked="@Model.ShowRetired" />
+            <span class="font-bold">Kullanımdan kaldırılanları da göster</span>
+        </label>
+        <div class="flex flex-wrap gap-2 md:col-span-2 xl:col-span-2">
+            <button type="submit" class="btn btn-primary">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#funnel" /></svg>
+                Filtrele
+            </button>
+            <a class="btn btn-secondary" href="/machines">Filtreleri temizle</a>
+        </div>
+    </div>
+</form>
+
+<partial name="_ListSkeleton" />
+
+<div data-loading-target>
+    @if (!Model.Items.Any())
+    {
+        if (Model.Total > 0)
+        {
+            <partial name="_State" model='("empty", "search", "Bu sayfada kayıt yok.", "Toplam " + Model.Total + " makine var. Listenin ilk sayfasına dönün.", "1. sayfaya dön", PageHref(1))' />
+        }
+        else if (isFiltered)
+        {
+            <partial name="_State" model='("empty", "search", "Filtreye uyan makine yok", "Aramayı ya da tesis ve hat seçimini değiştirin. Kullanımdan kaldırılanları görmek için seçeneği işaretleyin.", "Filtreleri temizle", "/machines")' />
+        }
+        else
+        {
+            <partial name="_State" model='("empty", "cog", "Henüz makine yok", "Makineler bir hatta bağlanır. Önce tesis ve hat tanımlayın, sonra makineyi ekleyin.", "Makine ekle", "/machines/create")' />
+        }
+    }
+    else
+    {
+        <div class="panel">
+            <table class="data-table table-stack">
+                <caption class="sr-only">Makineler, toplam @Model.Total kayıt, sayfa @Model.Page</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Kod</th>
+                        <th scope="col">Ad</th>
+                        <th scope="col">Tesis ve hat</th>
+                        <th scope="col">Durum</th>
+                        <th scope="col">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        var retired = item.RetiredAtLocal is not null;
+                        <tr>
+                            <td data-label="Kod"><span class="record-no text-sm">@item.Code</span></td>
+                            <td data-label="Ad" class="max-w-xs break-words font-semibold stack-wide stack-lead">@item.Name</td>
+                            <td data-label="Tesis ve hat" class="break-words">
+                                <span class="block font-semibold">@item.FacilityName</span>
+                                <span class="block text-muted">@item.LineName</span>
+                            </td>
+                            <td data-label="Durum">
+                                <div class="space-y-1">
+                                    <partial name="_Badge" model='retired ? "machine.retired" : item.IsActive ? "def.active" : "def.inactive"' />
+                                    @if (retired)
+                                    {
+                                        <p class="mono text-xs text-muted">@item.RetiredAtLocal!.Value.ToString("dd.MM.yyyy HH:mm")</p>
+                                    }
+                                </div>
+                            </td>
+                            <td data-label="İşlem">
+                                <div class="flex flex-wrap gap-2">
+                                    @if (retired)
+                                    {
+                                        <a class="btn btn-secondary" href="/machines/edit/@item.Id" aria-label="@item.Name makinesini görüntüle">
+                                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#eye" /></svg>
+                                            Görüntüle
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-secondary" href="/machines/edit/@item.Id" aria-label="@item.Name makinesini düzenle">
+                                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
+                                            Düzenle
+                                        </a>
+                                        <a class="btn btn-secondary" href="/machines/retire/@item.Id" aria-label="@item.Name makinesini kullanımdan kaldır">
+                                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#power-off" /></svg>
+                                            Kaldır
+                                        </a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <partial name="_Pagination" model='(Model.Page, Model.PageSize, Model.Total, "makine", (Func<int, string>)PageHref)' />
+        </div>
+    }
+</div>

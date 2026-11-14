@@ -1,0 +1,80 @@
+Faz 2 yetki matrisi. Release yayını, port 5161, DB .qa/f2/qa.db (App_Data kopyası + DemoData.sql). 2026-11-14.
+Kullanıcılar: 0001 Süper admin (yalnız SuperAdmin), 2001 Yönetici (Manager), 2002 Operatör (Operator), 2003 Denetçi (Auditor). anon = oturumsuz.
+302 /account/access-denied adresi 403 döner (curl -b op /account/access-denied -> 403).
+
+== GET (curl, yönlendirme izlenmeden)
+ROUTE                                anon                         op                           au                           sa                           m1        
+/facilities                          302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/facilities?showInactive=true        302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/facilities/create                   302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/facilities/edit/1                   302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/facilities/details/1                302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/lines/create?facilityId=1           302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/lines/edit/1                        302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/shifts                              302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/shifts?facilityId=1                 302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/shifts/create?facilityId=1          302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/shifts/edit/1                       302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/machines                            302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/machines/create                     302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/machines/edit/1                     302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/machines/lines?facilityId=1         302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/machines/retire/1                   302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/materials                           302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/materials/create                    302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/materials/edit/1                    302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/materials/details/1                 302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/material-lots/create?materialId=1   302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+/material-lots/edit/1                302 /account/login?RU        302 /account/access-denied?RU 302 /account/access-denied?RU 302 /account/access-denied?RU 200                         
+
+== POST: anon (gövde Name=QA), m1 antiforgery'siz (Name=QA), m1 antiforgery'siz ve Code= alanlı (ham soket)
+POST                       anon                       m1-notok     m1-notok+Code
+/facilities/create         302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/facilities/edit/1         302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/lines/create              302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/lines/edit/1              302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/shifts/create             302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/shifts/edit/1             302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/machines/create           302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/machines/edit/1           302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/machines/retire/1         302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/materials/create          302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/materials/edit/1          302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/material-lots/create      302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/material-lots/edit/1      302 /account/login?RU      400          HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+
+== POST, gövde Name=QA. Kolonlar: Operatör (geçerli belirteç) | Denetçi (geçerli belirteç) | Süper admin (belirteç ana sayfadan alınamadı, boş) | sa: Süper admin geçerli belirteçle (/users formundan)
+/facilities/create          302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+/facilities/edit/1          302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+/lines/create               302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+/lines/edit/1               302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+/shifts/create              302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+/shifts/edit/1              302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+/machines/create            302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+/machines/edit/1            302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+/machines/retire/1          302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+/materials/create           302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+/materials/edit/1           302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+/material-lots/create       302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+/material-lots/edit/1       302 /account/access-denied?RU      302 /account/access-denied?RU      302 /account/access-denied?RU       sa: 302 /account/access-denied?RU
+
+== Menü bağlantıları (Faz 2 adresleri, sayfa HTML'i)
+sa: 
+op: 
+au: 
+m1: href="/facilities" href="/machines" href="/materials" href="/shifts" 
+
+== Veri değişmedi: Facilities sayısı ve kaldırılmış makine sayısı reddedilen POST'lardan sonra
+(0, 0)
+
+
+== Tur 2 (2026-11-14), K7/G10 POST satırları yeniden
+Release yayını (build6, çalışma ağacı), port 5201 Production, DB .qa/f2t2/qa.db (ön tur kopyası: tur 1 verisi + uzun veriler). 2026-11-14. (.qa/f2t2/g5.py)
+== 4. K7/G10: gecerli belirtecle POST (govde Name=QA&Code=QA9). op/au belirteci / sayfasindan, sa belirteci /users/create sayfasindan
+op 302>http://127.0.0.1:5201/account/access-denied (13 POST)
+au 302>http://127.0.0.1:5201/account/access-denied (13 POST)
+sa 302>http://127.0.0.1:5201/account/access-denied (13 POST)
+op GET /account/access-denied -> HTTP/1.1 403 Forbidden
+
+== 5. Veri: tanim tablolari, kullanicilar, makine/tesis adlari ve kullanici durumu once/sonra ayni: True
+   sayilar once (5, 7, 37, 9, 29, 12, 6) sonra (5, 7, 37, 9, 29, 12, 6)

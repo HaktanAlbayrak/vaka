@@ -1311,7 +1311,7 @@ Aşağıdakiler makul varsayılanla doldurulmuştur; kullanıcı aksini söylers
 | V-12 | Bir adımın en az bir görevlisi olmalıdır. | BR-17 |
 | V-13 | Seed verisi, gerçek tesis verisi gelene kadar nötr demo verisidir; jenerik isim ve uydurma kurum adı kullanılmaz. | K-19 |
 | V-14 | Rapor ve denetim çıktısı ilk sürümde yazdırılabilir HTML + CSV'dir; sunucu tarafı PDF yoktur. | K-28 |
-| V-15 | Tip bazlı değerler (varsayılan kilit süresi, faz minimum süresi, malzeme zorunluluğu) yönetici ekranından; sistem geneli değerler (`<OturumSüresi>`, `<PinUzunluğu>`, `<PinDenemeSınırı>`, `<AzamiMedyaBoyutu>`, `<AzamiKilitSüresi>`) Sistem ayarları ekranından değişir; başlangıç değerlerini iş birimi ve BT verir (2026-11-13 K-47 kararıyla değişti). Faz 1 değerleri kullanıcıdan geldi (PL-24, Requirements §6); medya boyutu ve azami kilit süresi açık. | K-47 |
+| V-15 | Tip bazlı değerler (varsayılan kilit süresi, faz minimum süresi, malzeme zorunluluğu) yönetici ekranından; sistem geneli değerler (`<OturumSüresi>`, `<PinUzunluğu>`, `<PinDenemeSınırı>`, `<AzamiMedyaBoyutu>`, `<AzamiKilitSüresi>`) Sistem ayarları ekranından değişir; başlangıç değerlerini iş birimi ve BT verir (2026-11-13 K-47 kararıyla değişti). Faz 1 değerleri (PL-24) ve `<AzamiKilitSüresi>` 120 dakika (PL-34) kullanıcıdan geldi (Requirements §6); medya boyutu Faz 3 öncesine kadar açık. | K-47 |
 | V-16 | Tüm saha personeli sistem kullanıcısıdır; giriş yapmayan personel kaydı yoktur. | K-10 |
 | V-17 | Bir kayıtta mola ve bekleme sayısı sınırsızdır. | K-39, K-45 |
 | V-18 | Talep kararı tek yöneticinin kararıdır; ikinci onay yoktur. | K-40 |

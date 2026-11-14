@@ -1,0 +1,216 @@
+Ortak .table-stack td kuralındaki overflow-wrap: anywhere (Styles/app.css:553) etkisi. Release, port 5161, Chromium, açık tema.
+Yöntem (ow.js): sayfa ölçülür ("şimdi"), sonra yalnız .table-stack td{overflow-wrap:normal !important} eklenip aynı sayfa yeniden ölçülür ("normal").
+th = sütun genişlikleri px, h = ilk altı satırın yüksekliği px, çok satır = ilk sütunda birden çok satıra kırılan hücre (metin:satır).
+Görüntüler: DetayTablo-1280.png (/materials/details/2, olağan veri), LotTablo-1440.png (/materials/details/1, 64 karakter lot no).
+
+== Faz 2 tabloları (uzun ad 120, 32 karakter malzeme kodu, 64 karakter lot no)
+1280 /materials?query=MLZUZUN     table FARKLI | şimdi th: Kod=260 Ad=293 Lotlar=69 Durum=97 İşlem=246 | h: 121 | çok satır: ['MLZUZUNKODAB:2']
+                                         normal th: Kod=282 Ad=295 Lotlar=69 Durum=97 İşlem=222 | h: 121 | çok satır: []
+1280 /materials                   table AYNI | şimdi th: Kod=84 Ad=190 Lotlar=276 Durum=112 İşlem=302 | h: 69,69,69,69,69,69 | çok satır: []
+1280 /machines                    table AYNI | şimdi th: Kod=57 Ad=372 Tesis ve hat=119 Durum=112 İşlem=304 | h: 69,69,85,69,69,69 | çok satır: []
+1280 /facilities                  table AYNI | şimdi th: Kod=56 Ad=362 Hat=53 Vardiya=84 Durum=110 İşlem=299 | h: 69,85,69 | çok satır: []
+1280 /shifts                      table AYNI | şimdi th: Ad=354 Başlangıç=102 Bitiş=240 Durum=107 İşlem=162 | h: 69,69,69,69 | çok satır: ['Hafta sonu b:2']
+1280 /facilities/details/1        table FARKLI | şimdi th: Kod=49 Ad=243 Makine=70 Durum=97 İşlem=133 | h: 93,93,125 | çok satır: []
+                                         normal th: Kod=49 Ad=245 Makine=70 Durum=97 İşlem=146 | h: 69,69,125 | çok satır: []
+1280 /materials/details/1         table FARKLI | şimdi th: Lot no=203 Son kullanma tarihi=159 Durum=118 İşlem=112 | h: 117,117,117,117,117,117 | çok satır: ['LOTUZUNNUMAR:3']
+                                         normal th: Lot no=539 Son kullanma tarihi=159 Durum=121 İşlem=146 | h: 69,69,69,69,69,69 | çok satır: []
+1280 /materials/details/2         table AYNI | şimdi th: Lot no=109 Son kullanma tarihi=180 Durum=137 İşlem=166 | h: 69,69,69 | çok satır: []
+1440 /materials?query=MLZUZUN     table AYNI | şimdi th: Kod=308 Ad=350 Lotlar=75 Durum=106 İşlem=285 | h: 85 | çok satır: []
+1440 /materials                   table AYNI | şimdi th: Kod=98 Ad=222 Lotlar=322 Durum=130 İşlem=352 | h: 69,69,69,69,69,69 | çok satır: []
+1440 /machines                    table AYNI | şimdi th: Kod=67 Ad=433 Tesis ve hat=139 Durum=131 İşlem=354 | h: 69,69,85,69,69,69 | çok satır: []
+1440 /facilities                  table AYNI | şimdi th: Kod=65 Ad=423 Hat=62 Vardiya=98 Durum=128 İşlem=348 | h: 69,69,69 | çok satır: []
+1440 /shifts                      table AYNI | şimdi th: Ad=413 Başlangıç=119 Bitiş=279 Durum=125 İşlem=189 | h: 69,69,69,69 | çok satır: ['Hafta sonu b:2']
+1440 /facilities/details/1        table AYNI | şimdi th: Kod=54 Ad=353 Makine=78 Durum=107 İşlem=161 | h: 69,69,85 | çok satır: []
+1440 /materials/details/1         table FARKLI | şimdi th: Lot no=340 Son kullanma tarihi=159 Durum=127 İşlem=126 | h: 93,93,93,93,93,93 | çok satır: ['LOTUZUNNUMAR:2']
+                                         normal th: Lot no=539 Son kullanma tarihi=159 Durum=121 İşlem=146 | h: 69,69,69,69,69,69 | çok satır: []
+1440 /materials/details/2         table AYNI | şimdi th: Lot no=139 Son kullanma tarihi=228 Durum=174 İşlem=210 | h: 69,69,69 | çok satır: []
+1920 /materials?query=MLZUZUN     table AYNI | şimdi th: Kod=420 Ad=477 Lotlar=102 Durum=144 İşlem=389 | h: 85 | çok satır: []
+1920 /materials                   table AYNI | şimdi th: Kod=133 Ad=302 Lotlar=439 Durum=178 İşlem=480 | h: 69,69,69,69,69,69 | çok satır: []
+1920 /machines                    table AYNI | şimdi th: Kod=91 Ad=591 Tesis ve hat=189 Durum=179 İşlem=483 | h: 69,69,69,69,69,69 | çok satır: []
+1920 /facilities                  table AYNI | şimdi th: Kod=89 Ad=576 Hat=85 Vardiya=134 Durum=174 İşlem=475 | h: 69,69,69 | çok satır: []
+1920 /shifts                      table AYNI | şimdi th: Ad=563 Başlangıç=162 Bitiş=381 Durum=170 İşlem=257 | h: 69,69,69,69 | çok satır: []
+1920 /facilities/details/1        table AYNI | şimdi th: Kod=84 Ad=544 Makine=120 Durum=164 İşlem=248 | h: 69,69,69 | çok satır: []
+1920 /materials/details/1         table AYNI | şimdi th: Lot no=636 Son kullanma tarihi=187 Durum=164 İşlem=172 | h: 69,69,69,69,69,69 | çok satır: []
+1920 /materials/details/2         table AYNI | şimdi th: Lot no=214 Son kullanma tarihi=352 Durum=269 İşlem=324 | h: 69,69,69 | çok satır: []
+
+== Olağan veri: 95 karakterlik boşluklu hat adı (/facilities/details/3), 24 karakter lot no (/materials/details/2)
+1280 /facilities/details/3        table FARKLI | şimdi th: Kod=49 Ad=243 Makine=70 Durum=97 İşlem=133 | h: 93,93 | çok satır: []
+                                         normal th: Kod=49 Ad=229 Makine=70 Durum=97 İşlem=146 | h: 69,105 | çok satır: []
+1280 /materials/details/2         table FARKLI | şimdi th: Lot no=187 Son kullanma tarihi=159 Durum=110 İşlem=136 | h: 93,93,93,93 | çok satır: ['2026-11-DZF-:2']
+                                         normal th: Lot no=166 Son kullanma tarihi=159 Durum=121 İşlem=146 | h: 69,69,69,69 | çok satır: ['2026-11-DZF-:2']
+1440 /facilities/details/3        table AYNI | şimdi th: Kod=54 Ad=353 Makine=78 Durum=107 İşlem=161 | h: 69,69 | çok satır: []
+1440 /materials/details/2         table AYNI | şimdi th: Lot no=254 Son kullanma tarihi=186 Durum=142 İşlem=171 | h: 69,69,69,69 | çok satır: []
+1920 /facilities/details/3        table AYNI | şimdi th: Kod=84 Ad=544 Makine=120 Durum=164 İşlem=248 | h: 69,69 | çok satır: []
+1920 /materials/details/2         table AYNI | şimdi th: Lot no=392 Son kullanma tarihi=286 Durum=219 İşlem=263 | h: 69,69,69,69 | çok satır: []
+
+== 1366 ve 1400 px
+1366 /facilities/details/3        table FARKLI | şimdi th: Kod=49 Ad=316 Makine=70 Durum=97 İşlem=145 | h: 93,93 | çok satır: []
+                                         normal th: Kod=49 Ad=315 Makine=70 Durum=97 İşlem=146 | h: 69,85 | çok satır: []
+1366 /materials/details/2         table AYNI | şimdi th: Lot no=229 Son kullanma tarihi=167 Durum=128 İşlem=154 | h: 69,69,69,69 | çok satır: []
+1366 /materials?query=MLZUZUN     table AYNI | şimdi th: Kod=288 Ad=327 Lotlar=70 Durum=99 İşlem=267 | h: 85 | çok satır: []
+1400 /facilities/details/3        table AYNI | şimdi th: Kod=51 Ad=334 Makine=74 Durum=101 İşlem=152 | h: 69,85 | çok satır: []
+1400 /materials/details/2         table AYNI | şimdi th: Lot no=240 Son kullanma tarihi=176 Durum=134 İşlem=162 | h: 69,69,69,69 | çok satır: []
+1400 /materials?query=MLZUZUN     table AYNI | şimdi th: Kod=297 Ad=337 Lotlar=72 Durum=102 İşlem=275 | h: 85 | çok satır: []
+
+== Faz 1 /users (Yönetici görünümü; 16 haneli sicil no ve 67 karakterlik ad soyad eklendi)
+1024 /users                       card  AYNI | şimdi th: Sicil no=75 Ad soyad=84 Roller=68 Durum=67 İşlem=59 | h: 124,124,140,140,174,160 | çok satır: []
+1024 /users?status=All            card  AYNI | şimdi th: Sicil no=75 Ad soyad=84 Roller=68 Durum=67 İşlem=59 | h: 124,124,140,140,174,160 | çok satır: []
+1280 /users                       table FARKLI | şimdi th: Sicil no=144 Ad soyad=294 Roller=116 Durum=235 İşlem=175 | h: 71,71,69,69,89,89 | çok satır: ['202611223344:2']
+                                         normal th: Sicil no=153 Ad soyad=290 Roller=118 Durum=226 İşlem=178 | h: 71,71,69,69,89,89 | çok satır: []
+1280 /users?status=All            table FARKLI | şimdi th: Sicil no=144 Ad soyad=294 Roller=116 Durum=235 İşlem=175 | h: 71,71,69,69,89,89 | çok satır: ['202611223344:2']
+                                         normal th: Sicil no=153 Ad soyad=290 Roller=118 Durum=226 İşlem=178 | h: 71,71,69,69,89,89 | çok satır: []
+1440 /users                       table AYNI | şimdi th: Sicil no=167 Ad soyad=350 Roller=133 Durum=273 İşlem=202 | h: 56,56,69,69,69,69 | çok satır: []
+1440 /users?status=All            table AYNI | şimdi th: Sicil no=167 Ad soyad=350 Roller=133 Durum=273 İşlem=202 | h: 56,56,69,69,69,69 | çok satır: []
+1920 /users                       table AYNI | şimdi th: Sicil no=228 Ad soyad=477 Roller=181 Durum=371 İşlem=275 | h: 56,56,69,69,69,69 | çok satır: []
+1920 /users?status=All            table AYNI | şimdi th: Sicil no=228 Ad soyad=477 Roller=181 Durum=371 İşlem=275 | h: 56,56,69,69,69,69 | çok satır: []
+
+Satır yüksekliği 69 -> 93 px artışının nedeni görüntülerde: "Düzenle" düğmesi "Düzen/le" ya da "Düze/nle", "Kullanılabilir" rozeti
+"Kullanılabi/lir", "SKT geçmiş" rozeti iki satıra kırılıyor. anywhere en küçük içerik genişliğini düşürdüğü için tablo otomatik düzeni
+düğme ve rozet sütunlarını kelime genişliğinin altına daraltıyor. Kart modunda (1279 px ve altı) ve sayfa başlığında fark yok ya da beklenen yönde.
+
+
+== Tur 2 (2026-11-14)
+Release yayını (build6, çalışma ağacı), port 5201 Production, DB .qa/f2t2/qa.db (ön tur kopyası: tur 1 verisi + uzun veriler). 2026-11-14.
+Yöntem: det.js (ray yanı iki tablo) ve ovf.js (tam genişlik listeler), 1280/1366/1440/1600/1920, açık tema.
+doğal = değerin tek satır genişliği px; td = hücre genişliği; sığar = doğal + 24 px dolgu <= td. KELİMEİÇİ = boşluk ya da tire dışında satır sonu.
+panel-dışı = tablo sağ kenarı - panel sağ kenarı; çakışma = tablo ile ray kesişim alanı px2; örtülü = merkezinde başka öğe olan Düzenle düğmesi; cq30 sütunu kullanılmıyor.
+Görüntü: HatTablo-1280-Tur2.png (/facilities/details/1, 1280).
+
+-- Ray yanı tablolar (kısa değerli satırlar çıkarıldı)
+1280 /materials/details/1 cq30=178 tablo 592/592 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Lot no:LOTUZUNNUMARA2026A(64kr) doğal=515 td=148 satır=5 KELİMEİÇİ sığar=hayır
+   diğer sütunlar toplamı=444 uzun sütuna kalan=148
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1280 /materials/details/2 cq30=178 tablo 592/592 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Lot no:2026-11-DZF-000123(24kr) doğal=193 td=166 satır=2 sığar=hayır
+   Lot no:LOT32KARAKTERABCDE(32kr) doğal=258 td=166 satır=2 KELİMEİÇİ sığar=hayır
+   diğer sütunlar toplamı=426 uzun sütuna kalan=166
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1280 /facilities/details/1 cq30=178 tablo 592/592 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Ad:Çok uzun adlı amba(119kr) doğal=891 td=126 satır=9 KELİMEİÇİ sığar=hayır
+   Ad:Kuzey yerleşkesi i(64kr) doğal=459 td=126 satır=5 sığar=hayır
+   Kod:HATKODUUZUN16XYZ(16kr) doğal=129 td=153 satır=1
+   diğer sütunlar toplamı=466 uzun sütuna kalan=126
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1280 /facilities/details/3 cq30=178 tablo 592/592 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Ad:Sıcak dolum ve kap(99kr) doğal=726 td=229 satır=4 sığar=hayır
+   diğer sütunlar toplamı=363 uzun sütuna kalan=229
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1366 /materials/details/1 cq30=203 tablo 678/678 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Lot no:LOTUZUNNUMARA2026A(64kr) doğal=515 td=234 satır=3 KELİMEİÇİ sığar=hayır
+   diğer sütunlar toplamı=444 uzun sütuna kalan=234
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1366 /materials/details/2 cq30=203 tablo 678/678 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Lot no:2026-11-DZF-000123(24kr) doğal=193 td=252 satır=1 sığar=evet(td içinde)
+   Lot no:LOT32KARAKTERABCDE(32kr) doğal=258 td=252 satır=2 KELİMEİÇİ sığar=hayır
+   diğer sütunlar toplamı=426 uzun sütuna kalan=252
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1366 /facilities/details/1 cq30=203 tablo 678/678 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Ad:Çok uzun adlı amba(119kr) doğal=891 td=212 satır=5 KELİMEİÇİ sığar=hayır
+   Ad:Kuzey yerleşkesi i(64kr) doğal=459 td=212 satır=3 sığar=hayır
+   Kod:HATKODUUZUN16XYZ(16kr) doğal=129 td=153 satır=1
+   diğer sütunlar toplamı=466 uzun sütuna kalan=212
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1366 /facilities/details/3 cq30=203 tablo 678/678 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Ad:Sıcak dolum ve kap(99kr) doğal=726 td=315 satır=3 sığar=hayır
+   diğer sütunlar toplamı=363 uzun sütuna kalan=315
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1440 /materials/details/1 cq30=226 tablo 752/752 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Lot no:LOTUZUNNUMARA2026A(64kr) doğal=515 td=308 satır=2 KELİMEİÇİ sığar=hayır
+   diğer sütunlar toplamı=444 uzun sütuna kalan=308
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1440 /materials/details/2 cq30=226 tablo 752/752 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Lot no:2026-11-DZF-000123(24kr) doğal=193 td=326 satır=1 sığar=evet(td içinde)
+   Lot no:LOT32KARAKTERABCDE(32kr) doğal=258 td=326 satır=1 sığar=evet(td içinde)
+   diğer sütunlar toplamı=426 uzun sütuna kalan=326
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1440 /facilities/details/1 cq30=226 tablo 752/752 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Ad:Çok uzun adlı amba(119kr) doğal=891 td=286 satır=3 sığar=hayır
+   Ad:Kuzey yerleşkesi i(64kr) doğal=459 td=286 satır=2 sığar=hayır
+   Kod:HATKODUUZUN16XYZ(16kr) doğal=129 td=153 satır=1
+   diğer sütunlar toplamı=466 uzun sütuna kalan=286
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1440 /facilities/details/3 cq30=226 tablo 752/752 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Ad:Sıcak dolum ve kap(99kr) doğal=726 td=389 satır=2 sığar=hayır
+   diğer sütunlar toplamı=363 uzun sütuna kalan=389
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1600 /materials/details/1 cq30=274 tablo 912/912 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Lot no:LOTUZUNNUMARA2026A(64kr) doğal=515 td=468 satır=2 KELİMEİÇİ sığar=hayır
+   diğer sütunlar toplamı=444 uzun sütuna kalan=468
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1600 /materials/details/2 cq30=274 tablo 912/912 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Lot no:2026-11-DZF-000123(24kr) doğal=193 td=486 satır=1 sığar=evet(td içinde)
+   Lot no:LOT32KARAKTERABCDE(32kr) doğal=258 td=486 satır=1 sığar=evet(td içinde)
+   diğer sütunlar toplamı=426 uzun sütuna kalan=486
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1600 /facilities/details/1 cq30=274 tablo 912/912 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Ad:Çok uzun adlı amba(119kr) doğal=891 td=446 satır=3 sığar=hayır
+   Ad:Kuzey yerleşkesi i(64kr) doğal=459 td=446 satır=1 sığar=hayır
+   Kod:HATKODUUZUN16XYZ(16kr) doğal=129 td=153 satır=1
+   diğer sütunlar toplamı=466 uzun sütuna kalan=446
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1600 /facilities/details/3 cq30=274 tablo 912/912 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Ad:Sıcak dolum ve kap(99kr) doğal=726 td=549 satır=2 sığar=hayır
+   diğer sütunlar toplamı=363 uzun sütuna kalan=549
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1920 /materials/details/1 cq30=348 tablo 1160/1160 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Lot no:LOTUZUNNUMARA2026A(64kr) doğal=515 td=716 satır=1 sığar=evet(td içinde)
+   diğer sütunlar toplamı=444 uzun sütuna kalan=716
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1920 /materials/details/2 cq30=348 tablo 1160/1160 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Lot no:2026-11-DZF-000123(24kr) doğal=193 td=734 satır=1 sığar=evet(td içinde)
+   Lot no:LOT32KARAKTERABCDE(32kr) doğal=258 td=734 satır=1 sığar=evet(td içinde)
+   diğer sütunlar toplamı=426 uzun sütuna kalan=734
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1920 /facilities/details/1 cq30=348 tablo 1160/1160 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Ad:Çok uzun adlı amba(119kr) doğal=891 td=694 satır=2 sığar=hayır
+   Ad:Kuzey yerleşkesi i(64kr) doğal=459 td=694 satır=1 sığar=evet(td içinde)
+   Kod:HATKODUUZUN16XYZ(16kr) doğal=129 td=153 satır=1
+   diğer sütunlar toplamı=466 uzun sütuna kalan=694
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+1920 /facilities/details/3 cq30=348 tablo 1160/1160 panel-dışı=0 çakışma=0 örtülü=0 sayfaKaydırma=false
+   Ad:Sıcak dolum ve kap(99kr) doğal=726 td=797 satır=1 sığar=evet(td içinde)
+   diğer sütunlar toplamı=363 uzun sütuna kalan=797
+   diğer hücre kelime içi: 0 | düğme/rozet/çip çok satır: 0
+
+-- Tam genişlik listeler
+1280 /materials?query=MLZUZUN     tablo 964/964 taşma=0 sayfaKaydırma=False satır=121-121 düğme/rozet/çip çok satır=0 kelime içi=0
+1280 /materials                   tablo 964/964 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1280 /users                       tablo 964/964 taşma=0 sayfaKaydırma=False satır=56-89 düğme/rozet/çip çok satır=0 kelime içi=0
+1280 /shifts                      tablo 964/964 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1280 /machines?showRetired=true   tablo 964/964 taşma=0 sayfaKaydırma=False satır=69-105 düğme/rozet/çip çok satır=0 kelime içi=0
+1280 /facilities                  tablo 964/964 taşma=0 sayfaKaydırma=False satır=69-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1280 /machines?facilityId=1       tablo 964/964 taşma=0 sayfaKaydırma=False satır=69-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1280 /users?page=2 tablo yok (6 kullanıcı, tek sayfa)
+1366 /materials?query=MLZUZUN     tablo 1050/1050 taşma=0 sayfaKaydırma=False satır=85-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1366 /materials                   tablo 1050/1050 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1366 /users                       tablo 1050/1050 taşma=0 sayfaKaydırma=False satır=56-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1366 /shifts                      tablo 1050/1050 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1366 /machines?showRetired=true   tablo 1050/1050 taşma=0 sayfaKaydırma=False satır=69-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1366 /facilities                  tablo 1050/1050 taşma=0 sayfaKaydırma=False satır=69-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1366 /machines?facilityId=1       tablo 1050/1050 taşma=0 sayfaKaydırma=False satır=69-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1366 /users?page=2 tablo yok (6 kullanıcı, tek sayfa)
+1440 /materials?query=MLZUZUN     tablo 1124/1124 taşma=0 sayfaKaydırma=False satır=85-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1440 /materials                   tablo 1124/1124 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1440 /users                       tablo 1124/1124 taşma=0 sayfaKaydırma=False satır=56-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1440 /shifts                      tablo 1124/1124 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1440 /machines?showRetired=true   tablo 1124/1124 taşma=0 sayfaKaydırma=False satır=69-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1440 /facilities                  tablo 1124/1124 taşma=0 sayfaKaydırma=False satır=69-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1440 /machines?facilityId=1       tablo 1124/1124 taşma=0 sayfaKaydırma=False satır=69-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1440 /users?page=2 tablo yok (6 kullanıcı, tek sayfa)
+1600 /materials?query=MLZUZUN     tablo 1284/1284 taşma=0 sayfaKaydırma=False satır=85-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1600 /materials                   tablo 1284/1284 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1600 /users                       tablo 1284/1284 taşma=0 sayfaKaydırma=False satır=56-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1600 /shifts                      tablo 1284/1284 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1600 /machines?showRetired=true   tablo 1284/1284 taşma=0 sayfaKaydırma=False satır=69-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1600 /facilities                  tablo 1284/1284 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1600 /machines?facilityId=1       tablo 1284/1284 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1600 /users?page=2 tablo yok (6 kullanıcı, tek sayfa)
+1920 /materials?query=MLZUZUN     tablo 1532/1532 taşma=0 sayfaKaydırma=False satır=85-85 düğme/rozet/çip çok satır=0 kelime içi=0
+1920 /materials                   tablo 1532/1532 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1920 /users                       tablo 1532/1532 taşma=0 sayfaKaydırma=False satır=56-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1920 /shifts                      tablo 1532/1532 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1920 /machines?showRetired=true   tablo 1532/1532 taşma=0 sayfaKaydırma=False satır=69-73 düğme/rozet/çip çok satır=0 kelime içi=0
+1920 /facilities                  tablo 1532/1532 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1920 /machines?facilityId=1       tablo 1532/1532 taşma=0 sayfaKaydırma=False satır=69-69 düğme/rozet/çip çok satır=0 kelime içi=0
+1920 /users?page=2 tablo yok (6 kullanıcı, tek sayfa)

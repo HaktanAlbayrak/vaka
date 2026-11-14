@@ -1,0 +1,104 @@
+G5 antiforgery'siz POST. Release, port 5161. 2026-11-14.
+
+== 1. Ham soket (python, .qa/f2/raw.py), Yönetici 2001 oturum çerezi, antiforgery belirteci yok
+/facilities/create Name=Y -> HTTP/1.1 400 Bad Request | Bir hata olu&#x15F;tu - Vaka
+/facilities/create Code=T9&Name=Y -> HTTP/1.1 0  | Bir hata olu&#x15F;tu - Vaka
+/facilities/create Code=200&Name=Y -> HTTP/1.1 200 OK | Bir hata olu&#x15F;tu - Vaka
+/facilities/create Code=404 -> HTTP/1.1 404 Not Found | Sayfa bulunamad&#x131; - Vaka
+/facilities/create Code=403 -> HTTP/1.1 403 Forbidden | Yetkiniz yok - Vaka
+/facilities/create Code=500 -> HTTP/1.1 500 Internal Server Error | Bir hata olu&#x15F;tu - Vaka
+/account/login Code=200 -> HTTP/1.1 200 OK | Bir hata olu&#x15F;tu - Vaka
+/users/create RegistryNo=9&Code=200 -> HTTP/1.1 200 OK | Bir hata olu&#x15F;tu - Vaka
+/machines/retire/1 Code=200 -> HTTP/1.1 200 OK | Bir hata olu&#x15F;tu - Vaka
+/shifts/create Name=Y&StartTime=10:00 -> HTTP/1.1 400 Bad Request | Bir hata olu&#x15F;tu - Vaka
+/material-lots/create LotNo=X&ExpiryDate=2027-01-01 -> HTTP/1.1 400 Bad Request | Bir hata olu&#x15F;tu - Vaka
+
+== 2. curl 8.21.0 (mingw), aynı istek
+> POST /facilities/create HTTP/1.1
+* Unsupported HTTP/1 subversion in response
+
+== 3. Geçerli belirteçle, var olmayan kayıt (404 yolu), gövdede Code
+/machines/edit/9999 Name=QA -> 404 curl_rc=0
+/machines/edit/9999 Code=M01&Name=QA -> 000 curl_rc=1
+/facilities/edit/9999 Code=T1&Name=QA -> 000 curl_rc=1
+
+== 4. PowerShell 5.1 Invoke-WebRequest, POST /account/login (oturumsuz)
+Name=Y -> HATA: WebException: Uzak sunucu hata döndürdü: (400) Hatalı İstek. (durum 400)
+Code=T9 -> HATA: WebException: Sunucu protokol ihlalinde bulundu. Section=ResponseStatusLine (durum yok)
+Code=200 -> 200
+
+== 5. Playwright (Chromium) page.request.post /facilities/create, Yönetici oturumu, belirteç yok
+{"Name":"Y"} -> 400
+{"Code":"T9","Name":"Y"} -> HATA apiRequestContext.post: Parse Error: Invalid status code
+{"Code":"200","Name":"Y"} -> 200
+Tarayıcı formu (/facilities/create, antiforgery çerezi silinmiş, Kod=T9): durum 0 | başlık 'Bir hata oluştu - Vaka'
+
+== 6. Neden: Controllers/ErrorController.cs
+8:[Route("error")]
+11:    [Route("")]
+18:    [Route("{code:int}")]
+19:    public IActionResult Status(int code)
+21:        Response.StatusCode = code;
+69:app.UseStatusCodePagesWithReExecute("/error/{0}");
+UseStatusCodePagesWithReExecute isteği aynı yöntem ve gövdeyle /error/{0} adresine yeniden yürütür. MVC model bağlamada form değeri
+rota değerinden önce gelir; gövdedeki Code alanı Status(int code) parametresine bağlanır. Sayısal değilse code=0 olur ve
+Response.StatusCode = 0 geçersiz durum satırı ('HTTP/1.1 0') üretir; sayısalsa (200, 403, 404) durum kodu istemcinin
+gönderdiği değer olur. Code alanı olmayan formlar (vardiya, lot) 400 döner. Eylem çalışmaz, veri yazılmaz (YetkiMatrisi.txt son satır).
+
+== 7. Veri kontrolü
+(0,)
+
+
+== Tur 2 (2026-11-14)
+Release yayını (build6, çalışma ağacı), port 5201 Production, DB .qa/f2t2/qa.db (ön tur kopyası: tur 1 verisi + uzun veriler). 2026-11-14. Ham soket (.qa/f2t2/g5.py).
+
+== 1. Belirtecsiz POST, ham soket. Govdeler: Name=Y | Code=T9&Name=Y | Code=200&Name=Y | code=404
+POST                         oturum Name=Y                    Code=T9&Name=Y            Code=200&Name=Y           code=404                
+/facilities/create           m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/facilities/edit/1           m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/lines/create                m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/lines/edit/1                m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/shifts/create               m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/shifts/edit/1               m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/machines/create             m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/machines/edit/1             m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/machines/retire/1           m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/materials/create            m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/materials/edit/1            m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/material-lots/create        m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/material-lots/edit/1        m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/account/login               anon  400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/account/login               m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/account/first-login         m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/account/change-password     m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/account/change-pin          m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/account/logout              m1    302 Found /account/login?reason=signed-out  302 Found /account/login?reason=signed-out  302 Found /account/login?reason=signed-out  302 Found /account/login?reason=signed-out
+/users/create                m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/users/edit/5                m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/users/deactivate/5          m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/users/activate/5            m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/users/reset-pin/5           m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+/users/reset-password/5      m1    400 Bad Request           400 Bad Request           400 Bad Request           400 Bad Request         
+
+
+== 2. Gecerli belirtecle var olmayan kimlik, govdede Code (Yonetici)
+/machines/edit/9999 Code=M01&Name=QA -> HTTP/1.1 404 Not Found | Sayfa bulunamad&#x131; - Vaka
+/facilities/edit/9999 Code=M01&Name=QA -> HTTP/1.1 404 Not Found | Sayfa bulunamad&#x131; - Vaka
+/machines/edit/9999 Name=QA -> HTTP/1.1 404 Not Found | Sayfa bulunamad&#x131; - Vaka
+
+
+== 3. /error adresleri (GET, oturumsuz)
+/error/0 -> HTTP/1.1 404 Not Found | Sayfa bulunamad&#x131; - Vaka
+/error/200 -> HTTP/1.1 404 Not Found | Sayfa bulunamad&#x131; - Vaka
+/error/999 -> HTTP/1.1 404 Not Found | Sayfa bulunamad&#x131; - Vaka
+/error/399 -> HTTP/1.1 404 Not Found | Sayfa bulunamad&#x131; - Vaka
+/error/600 -> HTTP/1.1 404 Not Found | Sayfa bulunamad&#x131; - Vaka
+/error/400 -> HTTP/1.1 400 Bad Request | Bir hata olu&#x15F;tu - Vaka
+/error/403 -> HTTP/1.1 403 Forbidden | Yetkiniz yok - Vaka
+/error/404 -> HTTP/1.1 404 Not Found | Sayfa bulunamad&#x131; - Vaka
+/error/500 -> HTTP/1.1 500 Internal Server Error | Bir hata olu&#x15F;tu - Vaka
+/error -> HTTP/1.1 500 Internal Server Error | Bir hata olu&#x15F;tu - Vaka
+
+
+== 5. Veri: tanim tablolari, kullanicilar, makine/tesis adlari ve kullanici durumu once/sonra ayni: True
+   sayilar once (5, 7, 37, 9, 29, 12, 6) sonra (5, 7, 37, 9, 29, 12, 6)

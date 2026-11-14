@@ -1,0 +1,13 @@
+<div role="status" aria-busy="true" data-loading hidden>
+    <p class="mb-3 font-semibold text-muted">Yükleniyor…</p>
+    <div class="panel divide-y divide-line" aria-hidden="true">
+        @for (var index = 0; index < 6; index++)
+        {
+            <div class="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)_minmax(0,1fr)] gap-4 p-4">
+                <div class="skeleton h-5 w-full"></div>
+                <div class="skeleton h-5 w-full"></div>
+                <div class="skeleton h-5 w-full"></div>
+            </div>
+        }
+    </div>
+</div>

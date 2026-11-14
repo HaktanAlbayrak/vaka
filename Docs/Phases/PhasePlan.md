@@ -2,6 +2,7 @@
 
 > Sahibi: analyst. Kullanıcı onayıyla donar; sonraki kararlar `Docs/Phases/Decisions.md` dosyasına eklenir.
 > Durum: **ONAYLANDI** (2026-11-13, `Decisions.md` O-01). K-38, K-39, K-40, K-47 ve PL-05 kullanıcı yanıtlarıyla işlendi.
+> 2026-11-14: Salı takvimi B (O-03), Faz 6 ve 7 yeniden yapılandı (PL-46), Faz 3 ve 4 açıkları kapandı (PL-47, PL-48, PL-50).
 > Kimlikler: FR, NFR, BR, SC, SH, SK `Docs/Analysis/Brief.md`; E (ekran) `Docs/Analysis/Requirements.md §4`; K `Docs/Analysis/Kusur.md`; PL `Decisions.md`.
 
 ## Özet
@@ -11,16 +12,28 @@
 | 0 | Analiz ve faz planı | Brief, Kusur, Requirements, plan | - | TAMAMLANDI (2026-11-13) |
 | T | Tasarım DNA'sı ve kabuk prototipi | DNA kartı, demo veriyle 5 prototip sayfa | Hayır | TESLİM ALINDI (tur 3, 2026-11-13) |
 | 1 | Giriş, PIN, kullanıcılar ve Süper admin | Giriş, ilk giriş, PIN, kullanıcı yönetimi, Süper admin | Evet | TESLİM ALINDI (tur 3, 2026-11-14) |
-| 2 | Tesis yapısı, vardiya ve malzeme | Tesis, hat, makine, vardiya, malzeme ve lot ekranları | Evet | BEKLİYOR |
+| 2 | Tesis yapısı, vardiya ve malzeme | Tesis, hat, makine, vardiya, malzeme ve lot ekranları | Evet | TESLİM ALINDI (tur 2, 2026-11-14) |
 | 3 | Temizlik tipi ve prosedür versiyonu | Tip, makine eşleme, taslak düzenleyici, yayınlama | Evet | BEKLİYOR |
 | 4 | Kayıt açma ve makine kilidi | Yeni kayıt, İşlerim, Açıldı hali, makine panosu, zaman aşımı | Evet | BEKLİYOR |
 | 5 | Adım yürütme, görevli ve mola | Adım başlat/bitir, görevli PIN onayı, adım arasında ve adım sürerken mola, otomatik tamamlanma | Evet | BEKLİYOR |
-| 6 | Kayıt listesi, detay ve yönetici panosu | 13 soruyu yanıtlayan detay, olay günlüğü, bütünlük, pano | Evet | BEKLİYOR |
-| 7 | Talep, müdahale ve beklemeye alma | Talepler, Taleplerim, müdahale formu, bekleme ve devam | Evet | BEKLİYOR |
-| 8 | Acil müdahale, bildirim ve düzeltme | Acil müdahale ekranı, bildirimler, düzeltme formu | Evet | BEKLİYOR |
-| 9 | Raporlar, denetim çıktısı ve sistem ayarları | Süre ve efor raporu, lot izlenebilirliği, yazdırılabilir denetim çıktısı, Sistem ayarları ekranı | Evet | BEKLİYOR |
+| 6 | Kayıt listesi, detay, bütünlük ve müdahale | 13 soruyu yanıtlayan yazdırılabilir detay, olay günlüğü, bütünlük, iptal, yarıda kapatma, yöneticinin molayı bitirmesi | Evet | BEKLİYOR |
+| 7 | Talep, beklemeye alma ve yönetici panosu (Salı sonrası) | Talepler, Taleplerim, bekleme ve devam, yönetici panosu | Evet | BEKLİYOR |
+| 8 | Acil müdahale, bildirim ve düzeltme (Salı sonrası) | Acil müdahale ekranı, bildirimler, düzeltme formu | Evet | BEKLİYOR |
+| 9 | Raporlar, denetim çıktısı ve sistem ayarları (Salı sonrası) | Süre ve efor raporu, lot izlenebilirliği, yazdırılabilir denetim çıktısı, Sistem ayarları ekranı | Evet | BEKLİYOR |
 
 Durum değerleri: BEKLİYOR, GELİŞTİRMEDE, QA'DA, İADE, TESLİM ALINDI. Faz 0 QA'sız analiz fazıdır, kullanıcı onayıyla TAMAMLANDI olur.
+
+### Salı (2026-11-17) takvimi (O-03, PL-46, PL-49)
+
+Kullanıcı B'yi seçti: dokümanın çekirdeği önce, kapsam silinmez, doküman dışı kalemler Salı'dan sonraya kayar.
+
+- Salı'dan önce sırayla: Faz 2 kapanışı, Faz 3, Faz 4, Faz 5, Faz 6 (birleşik). Salı'dan sonra: Faz 7, 8, 9.
+- Kontrol noktaları: Pazar (2026-11-15) sonunda Faz 2 ve Faz 3 TESLİM ALINDI; Pazartesi (2026-11-16) öğlen Faz 4 TESLİM ALINDI.
+  Bir nokta kaçarsa koordinatör durur ve C kesintilerini (`Docs/Local/DokumanUyumu.md` §3) kullanıcıya o an sorar; C onaylı değildir, sorulmadan uygulanmaz.
+- Uzatma sırası (Faz 6 Salı'dan önce teslim alınır ve zaman kalırsa, her biri ayrı küçük faz, açılışı `Decisions.md`'ye yazılır):
+  (1) acil müdahale tek ekranı, bildirimsiz (Faz 8'den ayrılır); (2) süre ve efor raporu yalnız tablo, grafik ve CSV'siz (Faz 9'dan ayrılır).
+- Salı sonrasına kalan kabul ekleri: Ö-01 (doküman örneğiyle demo prosedür), Ö-02 (açılış ile ilk adım ayrımı testi), Ö-03 (12 sn + 40 dk
+  örneği), Ö-04 (SC-03 yarım kalan kayıt), Ö-05 (iş emri ve açıklama yürütme ekranında), Ö-09 (DÜŞÜK devri süreç notu). Şimdi hiçbir faza yazılmaz.
 
 ### Faz sayısı neden arttı
 
@@ -36,7 +49,15 @@ Durum değerleri: BEKLİYOR, GELİŞTİRMEDE, QA'DA, İADE, TESLİM ALINDI. Faz 
 - PL-05 Süper admin: Faz T (rol sabitleri, menü varyantı), Faz 1 (hesap kapsamı kuralı, seed, kabul kriterleri), Faz 2-9 (G10: Süper admin 403).
 - K-39 adım sürerken mola: Faz 4 (adım mola kolonu önden), Faz 5 (kural, SH-17, sayaç durması, kabul kriterleri), Faz 6 ve 7 (gösterim, müdahale).
 - K-47 ayar ekranı: Faz 1 (ayar tablosu ve servis), Faz 9 (E-33, Faz 1-8'de ekran sınırı dolu olduğu için, PL-17).
-- PL-24, PL-25 ayar değerleri: Faz 1 seed'i üç satır (oturum 30 dakika, PIN 4 hane, 5 deneme); Faz 3 kalan üç satırı seed ekleme olarak getirir.
+- PL-24, PL-25, PL-34 ayar değerleri: Faz 1 seed'i üç satır (oturum 30 dakika, PIN 4 hane, 5 deneme); Faz 3 kalan üç satırı seed ekleme
+  olarak getirir (azami kilit 120 dakika; fotoğraf ve video boyutu açık, Faz 3 öncesi gerekir).
+- PL-35 yerleşim ön turu: Faz 2 ve sonraki UI fazlarında teslim testinden önce qa-tester ön turu; faz sayısı ve tur sınırı değişmez.
+
+2026-11-14 Salı takvimi (O-03, PL-46) faz sayısını değiştirmedi, Faz 6 ve 7'nin içeriğini değiştirdi:
+
+- Faz 6: yönetici panosu (E-22) ve SH-16 çıktı; iptal, yarıda kapatma ve yöneticinin molayı bitirmesi (E-26) Faz 7'den geldi. Ekran sayısı 4.
+- Faz 7: müdahalenin iptal ve yarıda kapatma kısmı çıktı; pano ve SH-16 geldi. Beklemeye alma ve talepler yerinde kaldı. Ekran sayısı 4.
+- Faz 4: kapanış türü, kapatan ve kapanış gerekçesi kolonları kayıt tablosunda önden (PL-02), çünkü müdahale artık Faz 6'dadır.
 
 ---
 
@@ -90,7 +111,7 @@ Her metodun XML `<summary>`'sinde formül ve SH kimliği yazılır; bu, ilgili f
 | SH-11 kayıt net | `CalculateRecordNet` | 5, 7 | Faz 7'de SH-10 terimi eklenir |
 | SH-12 kayıt eforu | `CalculateRecordEffort` | 5 | |
 | SH-14 canlı süre | `CalculateLiveElapsed` | 5, 7 | Açık mola süresince değer artmaz; Faz 7'de beklemeler düşülür |
-| SH-16 vardiyası bitmiş açık iş | `IsPastShiftEnd` | 6 | PL-07 |
+| SH-16 vardiyası bitmiş açık iş | `IsPastShiftEnd` | 7 | PL-07; pano ile Faz 7'ye taşındı (PL-46) |
 | SH-05 faz beklemesi | `CalculatePhaseHolds` | 7 | |
 | SH-10 kayıt beklemesi | `CalculateRecordHolds` | 7 | |
 | SH-15 rapor ortalaması | `CalculateAverage` | 9 | Yalnız Tamamlandı kayıtlar, versiyon içinde |
@@ -114,6 +135,7 @@ Her metodun XML `<summary>`'sinde formül ve SH kimliği yazılır; bu, ilgili f
   - 768-1279 px satır kartı: 4 sütun; uzun metin alanı en çok 2 sütun; tam satır hücre yok.
   - 1280 px ve üstü: tablo, satır en az 56 px.
   - Form ve detay ekranları: lg ve üstünde ana kolon ve bağlam rayı yan yana, lg altında ray ana kolonun altında.
+  - İstisna (PL-39): ana kolonda rayın yanında duran gömülü tablo 1024-1279 px'te 768 px altı kart kuralını izler (2 sütun).
 
 **UI fazlarında yerleşim (PL-33)**
 
@@ -122,6 +144,9 @@ Her metodun XML `<summary>`'sinde formül ve SH kimliği yazılır; bu, ilgili f
 - Ekran G11 kalıbına uymayan bir yerleşim gerektiriyorsa frontend bunu devir notunda gerekçesiyle yazar; kabul analist kararıdır (`Decisions.md`).
 - Analist iade ederken düzeltme maddesini ve qa-tester'ın yeniden denetim şartını aynı imzayla yazar. Yerleşim iadesinde yeniden denetim
   ekranın dört genişlikteki imzasının tamamını kapsar, yalnız kalan hücreyi değil.
+- Geliştirme bitince, teslim testinden önce qa-tester yerleşim ön turu yapar (`Workflow.md §3` adım 2a, PL-35): fazın yeni ekranlarında yalnız
+  G11 imzası ve `UiDelivery.md §3` mekanik eval, 360, 768, 1024 ve 1440 px'te. Rapor yazılmaz, faz turu sayılmaz; bulgu listesi koordinatör
+  üzerinden frontend'e döner. Ön tur temiz çıkmadan teslim testine geçilmez; teslim testinde G11 yine ölçülür.
 
 ---
 
@@ -293,7 +318,7 @@ T-B15, T-B16, T-B21 kapandı. Faz 4'e devreden iki kalem Faz 4'ün "Faz 1'den de
 |---|---|---|---|
 | 1 | DB | Tesis, hat, makine, vardiya, malzeme, lot tabloları; BR-54 benzersizlikleri; lot no malzeme içinde benzersiz; makinede kullanımdan kaldırılma anı. Seed: nötr demo tesis yapısı, vardiya, malzeme ve lotlar (V-13), en az bir SKT'si geçmiş lot | backend-engineer talebi, dbadmin |
 | 2 | BE | Tanım servisleri: kod doğrulaması (tire yok, benzersizlik), kod ve makinenin hattı oluşturulduktan sonra değişmez (PL-04); pasif tesis ve hattın altındakiler yeni kayıtta seçilemez (BR-05) | backend-engineer |
-| 3 | BE | Vardiya kuralları (K-38 kararı): aynı tesiste aktif vardiyalar çakışmaz; bitiş başlangıçtan küçükse ertesi gün biter; aralık başlangıç dahil bitiş hariçtir (bir vardiyanın bitişi sonrakinin başlangıcına eşit olabilir); pasif vardiya çakışma kontrolüne ve hesaplara girmez; saatler Türkiye saatidir. Bir anın vardiyasını bulan tek metot bu fazda yazılır, Faz 4 SH-13 ve Faz 6 SH-16 onu kullanır | backend-engineer |
+| 3 | BE | Vardiya kuralları (K-38 kararı): aynı tesiste aktif vardiyalar çakışmaz; bitiş başlangıçtan küçükse ertesi gün biter; aralık başlangıç dahil bitiş hariçtir (bir vardiyanın bitişi sonrakinin başlangıcına eşit olabilir); pasif vardiya çakışma kontrolüne ve hesaplara girmez; saatler Türkiye saatidir. Bir anın vardiyasını bulan tek metot (`IDurationCalculator.FindShiftAt`, saf hesap) bu fazda yazılır, Faz 4 SH-13 ve Faz 7 SH-16 onu kullanır (PL-46); vardiyaları veritabanından okuyup bu metodu çağıran servis Faz 4'tedir (PL-40) | backend-engineer |
 | 4 | BE | Makine kullanımdan kaldırma; engelleyen kayıt kontrolü arayüzü bu fazda boş döner, Faz 4 ve 7'de dolar (BR-35) | backend-engineer |
 | 5 | BE | SKT geçmiş kararı tek metotta: SKT < Türkiye saatine göre bugünün tarihi (BR-12) | backend-engineer |
 | 6 | FE | E-05 Tesisler ve hatlar, E-06 Vardiyalar, E-07 Makineler (tesis ve hat filtreli, bağlı seçim), E-08 Malzemeler ve lotlar ("SKT geçmiş" rozeti) | frontend-engineer |
@@ -304,20 +329,42 @@ T-B15, T-B16, T-B21 kapandı. Faz 4'e devreden iki kalem Faz 4'ün "Faz 1'den de
 
 | Route | Action | Rol | ViewModel (alanlar) | Görünüm |
 |---|---|---|---|---|
-| GET `/facilities` | `FacilitiesController.Index` | Manager | `FacilityListViewModel { Items[] { Id, Code, Name, IsActive, LineCount, ShiftCount }, ShowInactive }` | `Views/Facilities/Index.cshtml` |
+| GET `/facilities` | `FacilitiesController.Index` | Manager | `FacilityListViewModel { Items[] { Id, Code, Name, IsActive, LineCount, ShiftCount }, ShowInactive, StatusMessage? }` | `Views/Facilities/Index.cshtml` |
 | GET, POST `/facilities/create`, `/facilities/edit/{id}` | `FacilitiesController.Create`, `.Edit` | Manager | `FacilityFormViewModel { Id?, Code, Name, IsActive, CodeLocked }` | `Views/Facilities/Form.cshtml` |
-| GET `/facilities/details/{id}` | `FacilitiesController.Details` | Manager | `FacilityDetailViewModel { Id, Code, Name, IsActive, Lines[] { Id, Code, Name, IsActive, MachineCount } }` | `Views/Facilities/Details.cshtml` |
+| GET `/facilities/details/{id}` | `FacilitiesController.Details` | Manager | `FacilityDetailViewModel { Id, Code, Name, IsActive, Lines[] { Id, Code, Name, IsActive, MachineCount }, StatusMessage? }` | `Views/Facilities/Details.cshtml` |
 | GET, POST `/lines/create?facilityId=`, `/lines/edit/{id}` | `LinesController.Create`, `.Edit` | Manager | `LineFormViewModel { Id?, FacilityId, FacilityName, Code, Name, IsActive, CodeLocked }` | `Views/Lines/Form.cshtml` |
-| GET `/shifts?facilityId=` | `ShiftsController.Index` | Manager | `ShiftListViewModel { FacilityId, Facilities[] { Id, Name }, Items[] { Id, Name, StartTime, EndTime, EndsNextDay, IsActive } }` | `Views/Shifts/Index.cshtml` |
-| GET, POST `/shifts/create?facilityId=`, `/shifts/edit/{id}` | `ShiftsController.Create`, `.Edit` | Manager | `ShiftFormViewModel { Id?, FacilityId, FacilityName, Name, StartTime, EndTime, IsActive }` | `Views/Shifts/Form.cshtml` |
-| GET `/machines` | `MachinesController.Index` | Manager | `MachineListViewModel { Items[] { Id, Code, Name, FacilityName, LineName, IsActive, RetiredAtLocal? }, FacilityId?, LineId?, Query, ShowRetired, Facilities[], Lines[], Page, PageSize, Total }` | `Views/Machines/Index.cshtml` |
-| GET, POST `/machines/create`, `/machines/edit/{id}` | `MachinesController.Create`, `.Edit` | Manager | `MachineFormViewModel { Id?, FacilityId, LineId, Code, Name, CodeLocked, Facilities[], Lines[] }` | `Views/Machines/Form.cshtml` |
+| GET `/shifts?facilityId=` | `ShiftsController.Index` | Manager | `ShiftListViewModel { FacilityId, Facilities[]: FacilityOptionViewModel { Id, Name } (pasif dahil tüm tesisler), Items[] { Id, Name, StartTime: TimeOnly, EndTime: TimeOnly, EndsNextDay, IsActive }, StatusMessage? }` | `Views/Shifts/Index.cshtml` |
+| GET, POST `/shifts/create?facilityId=`, `/shifts/edit/{id}` | `ShiftsController.Create`, `.Edit` | Manager | `ShiftFormViewModel { Id?, FacilityId, FacilityName, Name, StartTime: TimeOnly?, EndTime: TimeOnly?, IsActive }` | `Views/Shifts/Form.cshtml` |
+| GET `/machines` | `MachinesController.Index` | Manager | `MachineListViewModel { Items[] { Id, Code, Name, FacilityName, LineName, IsActive, RetiredAtLocal?: DateTime }, FacilityId?, LineId?, Query, ShowRetired, Facilities[]: SelectOptionViewModel, Lines[]: SelectOptionViewModel, Page, PageSize, Total, StatusMessage? }` | `Views/Machines/Index.cshtml` |
+| GET, POST `/machines/create`, `/machines/edit/{id}` | `MachinesController.Create`, `.Edit` | Manager | `MachineFormViewModel { Id?, FacilityId, LineId, Code, Name, CodeLocked, RetiredAtLocal?: DateTime, Facilities[]: SelectOptionViewModel, Lines[]: SelectOptionViewModel }` | `Views/Machines/Form.cshtml` |
 | GET `/machines/lines?facilityId=` | `MachinesController.Lines` | Manager | JSON `[{ id, label }]` | - |
-| GET, POST `/machines/retire/{id}` | `MachinesController.Retire` | Manager | `MachineRetireViewModel { MachineId, Code, Name, BlockingRecords[] { RecordNo, StatusLabel, Url }, CanRetire }` | `Views/Machines/Retire.cshtml` |
-| GET `/materials` | `MaterialsController.Index` | Manager | `MaterialListViewModel { Items[] { Id, Code, Name, IsActive, LotCount, ExpiredLotCount }, Query, ShowInactive, Page, PageSize, Total }` | `Views/Materials/Index.cshtml` |
+| GET, POST `/machines/retire/{id}` | `MachinesController.Retire` | Manager | `MachineRetireViewModel { MachineId, Code, Name, RetiredAtLocal?: DateTime, BlockingRecords[] { RecordNo, StatusLabel, Url }, CanRetire }` | `Views/Machines/Retire.cshtml` |
+| GET `/materials` | `MaterialsController.Index` | Manager | `MaterialListViewModel { Items[] { Id, Code, Name, IsActive, LotCount, ExpiredLotCount }, Query, ShowInactive, Page, PageSize, Total, StatusMessage? }` | `Views/Materials/Index.cshtml` |
 | GET, POST `/materials/create`, `/materials/edit/{id}` | `MaterialsController.Create`, `.Edit` | Manager | `MaterialFormViewModel { Id?, Code, Name, IsActive }` | `Views/Materials/Form.cshtml` |
-| GET `/materials/details/{id}` | `MaterialsController.Details` | Manager | `MaterialDetailViewModel { Id, Code, Name, IsActive, Lots[] { Id, LotNo, ExpiryDate, IsExpired } }` | `Views/Materials/Details.cshtml` |
-| GET, POST `/material-lots/create?materialId=`, `/material-lots/edit/{id}` | `MaterialLotsController.Create`, `.Edit` | Manager | `MaterialLotFormViewModel { Id?, MaterialId, MaterialName, LotNo, ExpiryDate }` | `Views/MaterialLots/Form.cshtml` |
+| GET `/materials/details/{id}` | `MaterialsController.Details` | Manager | `MaterialDetailViewModel { Id, Code, Name, IsActive, Lots[] { Id, LotNo, ExpiryDate: DateOnly, IsExpired }, StatusMessage? }` | `Views/Materials/Details.cshtml` |
+| GET, POST `/material-lots/create?materialId=`, `/material-lots/edit/{id}` | `MaterialLotsController.Create`, `.Edit` | Manager | `MaterialLotFormViewModel { Id?, MaterialId, MaterialName, LotNo, ExpiryDate: DateOnly? }` | `Views/MaterialLots/Form.cshtml` |
+
+Ortak davranış (PL-36..PL-44):
+
+- Seçenek tipleri: `SelectOptionViewModel { Id, Label }`, etiket "Kod - Ad" (makine ekranları ve `/machines/lines` JSON'u); `FacilityOptionViewModel { Id, Name }` (vardiya ekranı).
+  `/machines` süzgecinde tesis seçilmemişken hat etiketi birleşik kodla `<TesisKodu>-<HatKodu> - <HatAdı>` (PL-44).
+- Form saat ve tarih alanları boş olabilir tiptedir; çözülemeyen ya da boş değer alan altında Türkçe hatayla döner. Bunlar tanım değeridir
+  (vardiya saati, SKT), olay zamanı değildir; NFR-01 istemciden olay zamanı almama kuralı değişmez.
+- Başarılı POST yönlendirmesi: tesis ve malzeme ekleme Details'e; hat ekleme ve düzenleme tesis Details'e; vardiya `/shifts?facilityId=`'ye;
+  makine `/machines`'e; lot malzeme Details'e. Sonuç metni hedef ekranın `StatusMessage` alanında gelir.
+- PL-04 düzenleme: gönderilmeyen, boş ya da 0 kod ve hat değeri "değişmedi" sayılır; dolu ve kayıtlıdan farklı değer `Code` (makinede
+  `LineId`) alan hatasıyla reddedilir, kayıt değişmez. Makine düzenlemede tesis hattan türer; gönderilen `FacilityId` dolu ve farklıysa `LineId` hatasıyla reddedilir.
+- K3 JS kapalı: makine ekleme formunda tesis seçimini yenileyen düğme bulunur; aynı POST formunda `name="refresh" value="true"` gönderir,
+  sunucu kaydetmez, alan hatası üretmez, formu gönderilen tesisin aktif hatlarıyla, kod ve ad korunarak çizer (PL-44). `GET /machines/create?facilityId=`
+  doğrudan adres olarak kalır. JS açıkken bu düğme gizlenir. POST'ta hat gönderilen tesise ait değilse ya da tesis değişmiş ve hat eskiyse `LineId` alan hatası döner ve form gönderilen
+  tesisin aktif hatlarıyla yeniden çizilir. Makine listesi filtresi JS kapalıyken "Uygula" ile aynı sonucu verir.
+- Makine kullanımdan kaldırma PIN istemez (BR-48 "PIN istenmeyenler", Requirements §2 matrisi); POST gövdesi yalnız antiforgery token'dır.
+- Kaldırılmış makine salt okunurdur (PL-43): düzenleme POST'u nedenli reddedilir; `/machines/edit/{id}` alanları kilitli, kaydet ve kaldır
+  bağlantısı olmadan, kaldırılma anıyla açılır; kaldırma ekranı "zaten kaldırıldı" bilgisini gösterir; listede eylem "Görüntüle".
+- Sayfalama: `/machines` ve `/materials` sunucuda 20'lik sayfalanır. `/facilities` ve `/shifts` sayfalanmaz; filtreleri (`showInactive`,
+  `facilityId`) sunucuda çalışır (PL-38).
+- Rota adı kebab dönüştürücüsünden gelir (`Program.cs` `RouteTokenTransformerConvention`): `MaterialLotsController` `[controller]/[action]`
+  ile `/material-lots/...` üretir; ayrı sabit rota gerekmez.
 
 **Dosya sınırı:** frontend `Views/Facilities/**`, `Views/Lines/**`, `Views/Shifts/**`, `Views/Machines/**`, `Views/Materials/**`, `Views/MaterialLots/**`,
 `wwwroot/js/CascadeSelect.js`, menü; backend ilgili controller'lar, `Services/` tanım servisleri, `ViewModels/Definitions/**`.
@@ -326,15 +373,24 @@ T-B15, T-B16, T-B21 kapandı. Faz 4'e devreden iki kalem Faz 4'ün "Faz 1'den de
 
 - [ ] K1: Yönetici tesis, hat ve makine ekler; aynı tesis kodu, aynı tesiste aynı hat kodu, aynı hatta aynı makine kodu ve tire içeren kod alan altında nedeniyle reddedilir (BR-54).
 - [ ] K2: Kaydedilmiş tesis, hat ve makinenin kod alanı düzenleme formunda değiştirilemez; istek değiştirilerek gönderilen yeni kod ya da makine için yeni hat reddedilir (PL-04).
-- [ ] K3: Makine formunda hat listesi seçilen tesise göre gelir; JS kapalıyken form sunucu tarafında aynı sonucu verir.
+- [ ] K3: Makine formunda hat listesi seçilen tesise göre gelir; JS kapalıyken tesis yenileme düğmesi aynı hat listesini getirir ve başka tesisin
+  hattıyla gönderilen form `LineId` alan hatasıyla, gönderilen tesisin hatlarıyla yeniden çizilir; makine kaydedilmez.
 - [ ] K4: Aynı tesiste çakışan iki aktif vardiya reddedilir; bir vardiyanın bitişiyle sonrakinin başlangıcı aynı saat olabilir; bitişi başlangıçtan küçük vardiya "ertesi gün biter" olarak listelenir; pasif vardiya çakışma kontrolüne girmez (K-38).
 - [ ] K5: Yönetici makineyi kullanımdan kaldırır; liste "Kullanımdan kaldırıldı" ve anını gösterir; makine silinmez (FR-02, BR-05).
 - [ ] K6: SKT'si bugünden önce olan lot listede metinli "SKT geçmiş" rozetiyle görünür; bugünkü SKT geçmiş sayılmaz.
 - [ ] K7: Operatör ve Denetçi bu fazın tüm adreslerinde 403 alır (BR-34).
-- [ ] K8: Liste ekranlarında sayfalama ve filtre sunucuda çalışır. E-05, E-06, E-07 ve E-08 liste ekranları 360, 768, 1024 ve 1440 px'te G11
-  imzasını taşır ve frontend devir notundaki beklenen imzayla aynıdır; 360 ve 390 px'te yatay kaydırma yok; 1440 px'te tablo.
+- [ ] K8: `/machines` ve `/materials` sayfalaması ve filtreleri, `/facilities` aktiflik filtresi ve `/shifts` tesis seçimi sunucuda çalışır
+  (sorgu dizesiyle açılan adres aynı sonucu verir). E-05, E-06, E-07 ve E-08 liste ekranları 360, 768, 1024 ve 1440 px'te G11 imzasını taşır
+  ve frontend devir notundaki beklenen imzayla aynıdır; `/facilities/details/{id}` hat tablosu ve `/materials/details/{id}` lot tablosu
+  PL-39 istisnasıyla ölçülür; 360 ve 390 px'te yatay kaydırma yok; 1440 px'te tablo.
+- [ ] K9: `IDurationCalculator`'ın Faz 2 metotları (ertesi gün bitiş, vardiya çakışması, anın vardiyası, SKT geçmiş kararı) XML yorumunda
+  formül ve kural kimliğini taşır; vardiya çakışması ve SKT kararı yalnız bu metotlardan çağrılır, controller ve görünümde saat ya da tarih karşılaştırması yoktur.
 
 **Kapsam dışı:** Toplu içe aktarım (K-19), kullanıcıya tesis ataması (K-20).
+
+**Sonuç (2026-11-14):** TESLİM ALINDI (tur 2; tur 1 İADE, PL-42..PL-45). Kabul kriterleri 18/18; B1-B10 kapandı, açık bulgu 0.
+B1 Faz 1 kodundaydı (`ErrorController`), Faz 1 POST'ları tur 2'de yeniden denetlendi. Faz 4'e devreden: A1 makine kaldırma engel listesi,
+A2 `FindShiftAt` çalışma zamanı denemesi (qa-tester). Rapor: `Docs/Delivery/Faz-2-Teslim.md`.
 
 ---
 
@@ -342,59 +398,107 @@ T-B15, T-B16, T-B21 kapandı. Faz 4'e devreden iki kalem Faz 4'ün "Faz 1'den de
 
 **Amaç:** Yöneticinin temizlik tiplerini tanımlayıp makinelerle eşlemesi, faz ve adımlardan oluşan prosedürü taslakta hazırlayıp versiyon olarak yayınlaması.
 
+**Ayar değerleri (PL-34, PL-47, PL-51):** `<AzamiKilitSüresi>` 120 dakika; `<AzamiMedyaBoyutu>` fotoğraf 10 MB, video 100 MB. 1 MB = 1 048 576 bayt;
+sınıra eşit dosya kabul edilir. Değerler yalnız seed'de ve ayar tablosundadır; kod, `appsettings*.json` ve görünümde yoktur.
+
+**Başlama şartı:** Faz 2 TESLİM ALINDI ve faz commit'i atıldı (CLAUDE.md kural 7). Neden: Faz 3 migration'ı Faz 2 migration'ının üstüne kurulur,
+makine eşlemesi Faz 2 tablolarına bağlıdır. Kullanıcıdan beklenen değer ya da karar kalmadı.
+
 **Kapsam**
 
 | # | Tür | İş kalemi | Sahibi |
 |---|---|---|---|
-| 1 | DB | Ayar tablosuna `<AzamiMedyaBoyutu>` fotoğraf, video ve `<AzamiKilitSüresi>` satırları seed ekleme olarak, kullanıcının verdiği değerlerle (PL-25); Faz 1 satırları değişmez. Değerler gelmeden Faz 3 başlamaz (Requirements §9) | backend-engineer talebi, dbadmin |
-| 1a | DB | Temizlik tipi (tür: Planlı, Acil), makine eşlemesi, prosedür versiyonu, faz, adım, adım medyası tabloları; tip başına tek "Yürürlükte" ve tek "Taslak" için kısmi unique index; yayınlanmış versiyonun faz, adım ve medya satırlarında UPDATE ve DELETE'i reddeden tetikleyiciler (BR-04). Seed: bir planlı ve bir acil tip, yayınlanmış birer versiyon | backend-engineer talebi, dbadmin |
-| 2 | BE | Tip servisi: varsayılan kilit süresi yalnız planlı tipte zorunlu ve `<AzamiKilitSüresi>`'ni (ayar servisinden) aşamaz (BR-45); tür oluşturulduktan sonra değişmez (PL-04); acil tip makine eşlemesi almaz (BR-50) | backend-engineer |
-| 3 | BE | Versiyon servisi: yeni taslak yürürlüktekinin derin kopyasıdır (Brief §7.e); taslakta faz ve adım ekleme, düzenleme, sıralama, çıkarma (PL-03); yayınlama tek transaction'da eskisini Arşiv yapar, versiyon no sistemce artar, PIN ister; yayın koşulu: en az bir faz, her fazda en az bir adım, planlı tipte her fazda minimum süre (PL-14) | backend-engineer |
-| 4 | BE | Medya: JPEG, PNG, WebP, MP4 (K-26), `<AzamiMedyaBoyutu>` (ayar servisinden, fotoğraf ve video ayrı), `wwwroot` dışında içerik özetiyle adlandırılmış dosya, yetkili action üzerinden sunum, video için aralıklı okuma (Brief §9.6) | backend-engineer |
-| 5 | BE | Tip pasifleştirme; engelleyen kayıt kontrolü arayüzü bu fazda boş döner, Faz 4'te dolar (BR-35) | backend-engineer |
-| 6 | FE | E-09 Tipler ve makine eşleme (tesis ve hat gruplu seçim), E-10 Tip detayı ve versiyon geçmişi, E-11 Taslak düzenleyici (faz ve adım listesi, sıralama, medya yükleme, yayınlama PIN diyaloğu), E-12 Versiyon görüntüleme | frontend-engineer |
+| 1 | DB | Ayar tablosuna üç satır seed ekleme (`HasData`, migration'da yalnız `InsertData`): `MaxLockMinutes` 120 `dakika`, `MaxPhotoMb` 10 `MB`, `MaxVideoMb` 100 `MB`. Faz 1'in üç satırı ve değişiklik geçmişi değişmez, migration'da `UPDATE` yok (PL-25). Anahtar sabitleri `Services/SettingKeys.cs`'tedir (backend, Faz 1 düzeni) | backend-engineer talebi, dbadmin |
+| 1a | DB | Temizlik tipi (tür: Planlı, Acil; varsayılan kilit süresi yalnız planlıda), makine eşlemesi, prosedür versiyonu, faz, adım, adım medyası tabloları (Brief §7.g). Unique: tip kodu (büyük-küçük harf duyarsız), (tip, versiyon no). Kısmi unique index: tip başına tek Yürürlükte ve tek Taslak. Faz minimumu saniye olarak saklanır. Medya satırında en az tür, içerik özeti (SHA-256), özgün dosya adı, içerik tipi ve bayt boyutu. Yayınlayan kişi boş olabilir (kurulum verisi, PL-51). Tetikleyiciler (BR-04): Yürürlükte ya da Arşiv versiyonun faz, adım ve medya satırlarında UPDATE ve DELETE ret; versiyon satırında Taslak dışı durumda yalnız Yürürlükte'den Arşiv'e durum geçişine izin, diğer kolonların değişmesi ve DELETE ret | backend-engineer talebi, dbadmin |
+| 1b | DB | Demo veri `Data/Seed/DemoData.sql`'e ek (Faz 2 düzeni: `INSERT OR IGNORE`, sabit Id, migration'da `HasData` yok): bir planlı tip (varsayılan kilit süresi 120 dakikayı aşmaz, aktif demo makinelerinin tümüne eşli) ve bir acil tip; her birinin Yürürlükte birer versiyonu; planlıda her fazın minimumu dolu ve en az bir fazda birden çok adım; acilde minimum yok; yayınlayan boş; medya yok. Nötr demo (V-13); dokümandaki örnek yapı Ö-01 ile Salı sonrası (PL-49) | backend-engineer talebi, dbadmin |
+| 2 | BE | Tip servisi: kod zorunlu ve benzersiz; kod kayıt numarasına girmez, düzenlemede değişebilir (PL-51). Tür oluşturulduktan sonra değişmez (PL-04). Varsayılan kilit süresi yalnız planlı tipte zorunlu, pozitif tam sayı, `<AzamiKilitSüresi>`'ni aşamaz (BR-45; sınır her istekte ayar servisinden); acil tipte dolu gelen değer `DefaultLockMinutes` alan hatasıyla reddedilir. Acil tip makine eşlemesi almaz (BR-50). Eşlemede yalnız aktif, kullanımdan kaldırılmamış, aktif hat ve tesisteki makine yeni seçilir; seçilemez hale gelmiş makinenin mevcut eşlemesi korunur | backend-engineer |
+| 3 | BE | Versiyon servisi: taslak açma, yürürlükte versiyon varsa onun derin kopyası (faz, adım, medya bağlantısı, malzeme zorunluluğu, doküman no; Brief §7.e), yoksa boş taslak; versiyon no tipteki en büyük no + 1, taslak açılırken verilir; tip başına tek taslak. Taslakta faz ve adım ekleme, düzenleme, taşıma, çıkarma (PL-03); faz çıkarma adımlarını ve medya bağlantılarını da çıkarır; sıra no'lar her işlemden sonra 1'den boşluksuz. Faz minimumu dakika olarak girilir, saniyeye çevrim tek yerde serviste; acil tipte dolu gelen minimum reddedilir. Yayın engelleri metinleri: "En az bir faz gerekir", "Faz <n> adımı yok", "Faz <n> minimum süresi yok" (yalnız planlı, PL-14). Yayın PIN ister; PIN doğrulaması ve yayın aynı veritabanı işleminde (F1-A2 kuralı); aynı işlemde eski Yürürlükte Arşiv, taslak Yürürlükte olur, yayın anı sunucu saati, yayınlayan işlemi yapan. Yayınlanmış versiyonu değiştiren her istek nedenli reddedilir | backend-engineer |
+| 4 | BE | Medya: fotoğraf JPEG, PNG, WebP; video MP4 (K-26). Biçim uzantıyla ve dosyanın baştaki imza baytlarıyla birlikte doğrulanır, uyuşmazlık reddedilir. Sınır türe göre `MaxPhotoMb` ya da `MaxVideoMb` x 1 048 576 bayt, her istekte ayar servisinden. Kestrel'in varsayılan istek gövdesi sınırı (30 000 000 bayt) video sınırının altında, çok parçalı form sınırı (128 MB) ayar artarsa yetmez: yükleme action'ında ikisi de ayar değerinden türetilir, kodda MB sabiti yoktur. Ayar sınırını aşan dosya düzenleyicide hata olarak döner; gövde sınırını da aşan istek uygulamanın hata sayfasını 413 durum koduyla alır, ham sunucu metni görünmez. Dosya `wwwroot` dışında, `appsettings.json` `Media:RootPath` altında (değer `App_Data/Media`, içerik köküne göre), adı içeriğin SHA-256 özeti; aynı içerik tek dosya. Taslaktan çıkarılan medyanın dosyası silinmez (başka versiyon paylaşabilir). Sunum `/media/{id}` üzerinden, saklanan içerik tipiyle, video için aralıklı okuma (Brief §9.6) | backend-engineer |
+| 5 | BE | Tip pasifleştirme ve yeniden etkinleştirme düzenleme formundan; engelleyen kayıt kontrolü arayüzü bu fazda boş döner, Faz 4'te dolar (BR-35). Pasif tip yeni kayıtta seçilmez (Faz 4) | backend-engineer |
+| 6 | BE | İlk iş, frontend bunlara karşı derler: sözleşmedeki ViewModel sınıfları, enum'lar ve `SettingKeys`'in üç yeni anahtarı | backend-engineer |
+| 7 | FE | E-09 Tipler ve makine eşleme (tesis ve hat gruplu seçim), E-10 Tip detayı ve versiyon geçmişi, E-11 Taslak düzenleyici (faz ve adım listesi, taşıma, medya yükleme, yayınlama PIN diyaloğu), E-12 Versiyon görüntüleme; Yönetici menüsünde "Tanımlar" grubuna "Temizlik tipleri" | frontend-engineer |
+| 8 | FE | `ProcedureEditor.js`: düzenleyici formlarını fetch ile gönderir, yanıttaki düzenleyici bölgesini değiştirir, odağı işlem yapılan öğeye ya da hata özetine taşır; seçilen dosyanın türünü ve boyutunu sunucunun verdiği sınırla önceden denetler (yalnız kolaylık, karar sunucuda). `MediaViewer.js`: fotoğraf ve video önizleme. JS kapalıyken tüm formlar tam sayfa çalışır | frontend-engineer |
 
-**Paralel:** Evet. Gerekçe: şema Brief §7.g'de belli; düzenleyicinin her işlemi ayrı route olarak aşağıda; frontend JS'i yalnız bu route'ları çağırır.
+**Paralel:** Evet. Gerekçe: şema Brief §7.g'de belli; route, ViewModel, enum, form alanı adı, hata hedefi ve rol aşağıda; düzenleyicinin her işlemi
+ayrı route. Frontend veritabanına bağlı değildir; derlemesi BE 6'ya bağlıdır, BE 6 backend'in ilk işidir. Dosyalar ayrık: menü frontend'de,
+`Program.cs`, `appsettings.json` ve `SettingKeys.cs` backend'de, `SettingSeed.cs` ve `DemoData.sql` dbadmin'de.
 
 **Sözleşme**
 
+ViewModel ad alanı `Vaka.Web.ViewModels.Procedures`, klasör `ViewModels/Procedures/`. Enum'lar `Services/` altında, ad alanı `Vaka.Web.Services`
+(entity ve ViewModel ikisi de kullanır; `SettingKeys` düzeni): `CleaningTypeKind { Planned = 1, Emergency = 2 }`,
+`ProcedureVersionStatus { Draft = 1, Current = 2, Archived = 3 }`, `StepMediaType { Photo = 1, Video = 2 }`. Form girdisi
+`MoveDirection { Up = 1, Down = 2 }` `ViewModels/Procedures/` altındadır. Görünür adlar backend'den `...Label` alanında gelir (Planlı, Acil;
+Taslak, Yürürlükte, Arşiv; Fotoğraf, Video); görünüm enum'dan metin üretmez. Faz 2'den yeniden kullanılan tipler: `SelectOptionViewModel { Id, Label }`,
+`BlockingRecordViewModel { RecordNo, StatusLabel, Url }` (`ViewModels/Definitions/`). `?` boş olabilir demektir.
+
 | Route | Action | Rol | ViewModel (alanlar) | Görünüm |
 |---|---|---|---|---|
-| GET `/cleaning-types` | `CleaningTypesController.Index` | Manager | `CleaningTypeListViewModel { Items[] { Id, Code, Name, Kind, IsActive, CurrentVersionNo?, HasDraft, MachineCount }, Kind?, ShowInactive }` | `Views/CleaningTypes/Index.cshtml` |
-| GET, POST `/cleaning-types/create`, `/cleaning-types/edit/{id}` | `CleaningTypesController.Create`, `.Edit` | Manager | `CleaningTypeFormViewModel { Id?, Code, Name, Kind, KindLocked, DefaultLockMinutes?, MaxLockMinutes, IsActive }` | `Views/CleaningTypes/Form.cshtml` |
-| GET, POST `/cleaning-types/machines/{id}` | `CleaningTypesController.Machines` | Manager | `MachineMappingViewModel { CleaningTypeId, CleaningTypeName, Groups[] { FacilityName, LineName, Machines[] { Id, Code, Name, IsActive, IsSelected } }, SelectedMachineIds[] }` | `Views/CleaningTypes/Machines.cshtml` |
-| GET `/cleaning-types/details/{id}` | `CleaningTypesController.Details` | Manager | `CleaningTypeDetailViewModel { Id, Code, Name, Kind, DefaultLockMinutes?, IsActive, MachineCount, Versions[] { Id, VersionNo, Status, PublishedAtLocal?, PublishedByName?, DocumentRef }, DraftId?, CanCreateDraft }` | `Views/CleaningTypes/Details.cshtml` |
-| POST `/procedure-versions/create-draft` | `ProcedureVersionsController.CreateDraft` | Manager | form `{ CleaningTypeId }`, başarıda düzenleyiciye yönlenir | - |
-| GET `/procedure-versions/edit/{id}` | `ProcedureVersionsController.Edit` | Manager | `ProcedureDraftViewModel { Id, CleaningTypeId, CleaningTypeName, Kind, VersionNo, MaterialRequired, DocumentRef, Phases[] { Id, OrderNo, Title, MinDurationMinutes?, Steps[] { Id, OrderNo, Title, Description, Media[] { Id, MediaType, OriginalFileName, Url } } }, PublishBlockers[] }` | `Views/ProcedureVersions/Edit.cshtml` |
-| POST `/procedure-versions/update-header/{id}` | `.UpdateHeader` | Manager | `{ MaterialRequired, DocumentRef }` | - |
-| POST `/procedure-versions/add-phase/{id}`, `/update-phase/{phaseId}`, `/move-phase/{phaseId}`, `/remove-phase/{phaseId}` | `.AddPhase`, `.UpdatePhase`, `.MovePhase`, `.RemovePhase` | Manager | `{ Title, MinDurationMinutes? }`; taşımada `{ Direction: Up, Down }` | - |
-| POST `/procedure-versions/add-step/{phaseId}`, `/update-step/{stepId}`, `/move-step/{stepId}`, `/remove-step/{stepId}` | `.AddStep`, `.UpdateStep`, `.MoveStep`, `.RemoveStep` | Manager | `{ Title, Description }`; taşımada `{ Direction }` | - |
-| POST `/procedure-versions/upload-media/{stepId}`, `/remove-media/{mediaId}` | `.UploadMedia`, `.RemoveMedia` | Manager | multipart `{ File }` | - |
-| POST `/procedure-versions/publish/{id}` | `.Publish` | Manager | `{ Pin }`; engel varsa `PublishBlockers[]` ile düzenleyiciye döner | - |
-| GET `/procedure-versions/details/{id}` | `.Details` | ManagerOrAuditor | `ProcedureVersionViewModel { Id, CleaningTypeName, Kind, VersionNo, Status, PublishedAtLocal?, PublishedByName?, DocumentRef, MaterialRequired, Phases[] { OrderNo, Title, MinDurationMinutes?, Steps[] { OrderNo, Title, Description, Media[] } } }` | `Views/ProcedureVersions/Details.cshtml` |
-| GET `/media/{id}` | `MediaController.Show` | RecordReaders | dosya akışı, aralıklı okuma | - |
+| GET `/cleaning-types?kind=&showInactive=` | `CleaningTypesController.Index` | Manager | `CleaningTypeListViewModel { Items: CleaningTypeListItemViewModel[] { Id, Code, Name, Kind, KindLabel, IsActive, CurrentVersionNo?, DraftVersionNo?, MachineCount }, Kind?: CleaningTypeKind, ShowInactive, StatusMessage? }`. Sayfalanmaz (PL-38 gerekçesi); süzgeç sunucuda | `Views/CleaningTypes/Index.cshtml` |
+| GET, POST `/cleaning-types/create`, `/cleaning-types/edit/{id}` | `CleaningTypesController.Create`, `.Edit` | Manager | `CleaningTypeFormViewModel { Id?, Code, Name, Kind?: CleaningTypeKind, KindLabel?, KindOptions[]: SelectOptionViewModel (Id enum değeri), KindLocked, DefaultLockMinutes?, MaxLockMinutes, IsActive, BlockingRecords[]: BlockingRecordViewModel }` | `Views/CleaningTypes/Form.cshtml` |
+| GET, POST `/cleaning-types/machines/{id}` | `CleaningTypesController.Machines` | Manager | `MachineMappingViewModel { CleaningTypeId, CleaningTypeName, Groups: MachineMappingGroupViewModel[] { FacilityLabel, LineLabel, Machines: MachineMappingItemViewModel[] { Id, Code, Name, IsSelected, IsSelectable, NotSelectableReason? } }, SelectedMachineIds[] }`. POST alanı `SelectedMachineIds` (tekrarlı) | `Views/CleaningTypes/Machines.cshtml` |
+| GET `/cleaning-types/details/{id}` | `CleaningTypesController.Details` | Manager | `CleaningTypeDetailViewModel { Id, Code, Name, Kind, KindLabel, DefaultLockMinutes?, IsActive, MachineCount, CanMapMachines, Versions: ProcedureVersionItemViewModel[] { Id, VersionNo, Status, StatusLabel, PublishedAtLocal?, PublishedByName?, DocumentRef?, Url }, DraftId?, CanCreateDraft, StatusMessage? }`. `Url` taslakta düzenleyiciye, diğerlerinde versiyon görüntülemeye | `Views/CleaningTypes/Details.cshtml` |
+| POST `/procedure-versions/create-draft` | `ProcedureVersionsController.CreateDraft` | Manager | `CreateDraftViewModel { CleaningTypeId }`; başarıda düzenleyiciye, taslak zaten varsa tip detayına `StatusMessage` ile yönlenir | - |
+| GET `/procedure-versions/edit/{id}` | `ProcedureVersionsController.Edit` | Manager | `ProcedureDraftViewModel { Id, CleaningTypeId, CleaningTypeName, Kind, KindLabel, VersionNo, MaterialRequired, DocumentRef?, Phases: DraftPhaseViewModel[] { Id, OrderNo, Title, MinDurationMinutes?, CanMoveUp, CanMoveDown, Steps: DraftStepViewModel[] { Id, OrderNo, Title, Description?, CanMoveUp, CanMoveDown, Media: StepMediaViewModel[] { Id, MediaType, MediaTypeLabel, OriginalFileName, Url } } }, PublishBlockers[] (metin), MaxPhotoSizeMb, MaxVideoSizeMb, MediaAccept, Error?: DraftFormErrorViewModel { Target, Messages[], Title?, Description?, MinDurationMinutes?, DocumentRef? }, StatusMessage? }`. Taslak olmayan versiyonun kimliğiyle açılınca versiyon görüntülemeye yönlenir | `Views/ProcedureVersions/Edit.cshtml` |
+| POST `/procedure-versions/update-header/{id}` | `.UpdateHeader` | Manager | `DraftHeaderViewModel { MaterialRequired, DocumentRef? }` | - |
+| POST `/procedure-versions/add-phase/{id}`, `/update-phase/{phaseId}`, `/move-phase/{phaseId}`, `/remove-phase/{phaseId}` | `.AddPhase`, `.UpdatePhase`, `.MovePhase`, `.RemovePhase` | Manager | `PhaseFormViewModel { Title, MinDurationMinutes? }`; taşımada `MoveViewModel { Direction: MoveDirection }`; çıkarmada gövde yalnız antiforgery token | - |
+| POST `/procedure-versions/add-step/{phaseId}`, `/update-step/{stepId}`, `/move-step/{stepId}`, `/remove-step/{stepId}` | `.AddStep`, `.UpdateStep`, `.MoveStep`, `.RemoveStep` | Manager | `StepFormViewModel { Title, Description? }`; taşımada `MoveViewModel` | - |
+| POST `/procedure-versions/upload-media/{stepId}`, `/remove-media/{mediaId}` | `.UploadMedia`, `.RemoveMedia` | Manager | `MediaUploadViewModel { File: IFormFile }` (multipart, tek dosya) | - |
+| POST `/procedure-versions/publish/{id}` | `.Publish` | Manager | `PublishViewModel { Pin }`; başarıda tip detayına `StatusMessage` ile ("v<n> yayınlandı"); engel ya da yanlış PIN'de düzenleyici `Error.Target = publish` ile yeniden çizilir | - |
+| GET `/procedure-versions/details/{id}` | `.Details` | ManagerOrAuditor | `ProcedureVersionViewModel { Id, CleaningTypeId, CleaningTypeName, Kind, KindLabel, VersionNo, Status, StatusLabel, PublishedAtLocal?, PublishedByName?, DocumentRef?, MaterialRequired, Phases: VersionPhaseViewModel[] { OrderNo, Title, MinDurationMinutes?, Steps: VersionStepViewModel[] { OrderNo, Title, Description?, Media: StepMediaViewModel[] } }, StatusMessage? }`. Yalnız yayınlanmış versiyon; taslak kimliğinde Yönetici düzenleyiciye yönlenir, Denetçi 404 alır (PL-51) | `Views/ProcedureVersions/Details.cshtml` |
+| GET `/media/{id}` | `MediaController.Show` | RecordReaders | dosya akışı, saklanan içerik tipiyle; aralıklı istekte 206 ve `Accept-Ranges: bytes` | - |
 
-Düzenleyici POST'ları JS kapalıyken tam sayfa yönlendirmeyle, JS açıkken aynı route'a fetch ile çalışır; ikisinde de sonuç düzenleyicinin yeniden çizimidir.
+Ortak davranış:
 
-**Dosya sınırı:** frontend `Views/CleaningTypes/**`, `Views/ProcedureVersions/**`, `wwwroot/js/ProcedureEditor.js`, `wwwroot/js/MediaViewer.js`;
-backend `Controllers/CleaningTypesController.cs`, `Controllers/ProcedureVersionsController.cs`, `Controllers/MediaController.cs`, ilgili servisler, `ViewModels/Procedures/**`.
+- Öznitelikler: `CleaningTypesController` `[Authorize(Roles = Roles.Manager)]`; `ProcedureVersionsController` sınıfta
+  `[Authorize(Roles = Roles.ManagerOrAuditor)]`, `Details` dışındaki her action'da ayrıca `[Authorize(Roles = Roles.Manager)]` (ikisi birlikte
+  uygulanır, Denetçi yazma action'larında 403 alır); `MediaController` `[Authorize(Roles = Roles.RecordReaders)]`.
+- Tip formları Faz 1-2 düzenindedir: alan hatası `ModelState`'te alan adıyla, başarılı POST hedef GET'e yönlenir, sonuç `StatusMessage`'dadır.
+  Tip ekleme, düzenleme ve eşleme başarıda tip detayına yönlenir.
+- Tip formunda tür seçilmeden kayıt yapılmaz. JS açıkken Acil seçilince kilit süresi alanı gizlenir; JS kapalıyken alan "Yalnız planlı tipte"
+  yardım metniyle görünür. Düzenlemede tür kilitlidir; acil tipin düzenleme formunda kilit süresi alanı ve detayında eşleme bağlantısı yoktur.
+  Acil tipte `/cleaning-types/machines/{id}` GET ve POST tip detayına `StatusMessage` ile yönlenir, eşleme yazılmaz.
+- Pasifleştirme engelliyse (Faz 4'ten sonra) form `IsActive` alan hatası ve `BlockingRecords` ile yeniden çizilir.
+- Düzenleyici POST'ları başarıda `/procedure-versions/edit/{id}`'ye `StatusMessage` ile yönlenir. Alan hatası, iş kuralı reddi, yayın engeli ve
+  yanlış PIN düzenleyiciyi 200 ile `Error` dolu yeniden çizer. `Error.Target` hatalı formu adlandırır: `header`, `add-phase`, `phase:<phaseId>`,
+  `add-step:<phaseId>`, `step:<stepId>`, `media:<stepId>`, `publish`; `Error` içindeki değerler formu gönderildiği haliyle doldurur.
+  Sunucu fetch isteğini tam sayfa isteğinden ayırt etmez; JS yanıttaki düzenleyici bölgesini alır. `CreateDraft` ve `Publish` fetch'siz tam sayfa formdur.
+- Yayınlanmış versiyona (Yürürlükte ya da Arşiv) yönelik her düzenleme POST'u nedenli reddedilir, veri değişmez; yanıt versiyon görüntülemeye
+  `StatusMessage` ile yönlenir.
+- Acil tipte faz formunda minimum alanı yoktur. Planlı tipte taslakta minimum boş kalabilir, yayını engeller. `MinDurationMinutes` pozitif tam sayıdır.
+- Taşıma: ilk öğede yukarı, son öğede aşağı düğmesi sunulmaz (`CanMoveUp`, `CanMoveDown`); istekle gelirse sıra değişmez.
+- Medya hatası (biçim, imza uyuşmazlığı, boyut) `Error.Target = media:<stepId>` ile döner; metin sınırı ayar değeriyle MB olarak yazar.
+  `MediaAccept` dosya seçicinin `accept` değeridir (`image/jpeg,image/png,image/webp,video/mp4`).
+- Yayınlayanı boş yayınlanmış versiyonda backend `PublishedByName` alanına "Kurulum verisi" yazar (PL-51).
+- PIN alanı doğrulama modundadır (PL-18). Yayında yanlış PIN hatalı deneme sayar; kilitlenirse Faz 1 düzeniyle oturum kapanır.
+- Menü: Yönetici "Tanımlar" grubunda "Temizlik tipleri" (`/cleaning-types`). Denetçi menüsüne bu fazda kalem eklenmez; versiyon görüntülemeye
+  Faz 6 kayıt detayından gelir.
+
+**Dosya sınırı:** frontend `Views/CleaningTypes/**`, `Views/ProcedureVersions/**`, menü kalemi (`Views/Shared/**`), `Styles/**`,
+`wwwroot/js/ProcedureEditor.js`, `wwwroot/js/MediaViewer.js`; backend `Controllers/CleaningTypesController.cs`, `Controllers/ProcedureVersionsController.cs`,
+`Controllers/MediaController.cs`, `Services/` (tip, versiyon, medya servisleri, enum'lar, `SettingKeys.cs`), `ViewModels/Procedures/**`, `Program.cs`,
+`appsettings.json` (`Media:RootPath`), `Docs/Db/DB-<yıl>-<sıra>.md` talebi; dbadmin `Domain/Entities/**`, `Data/**` (`SettingSeed.cs`, `DemoData.sql`
+dahil). Koordinatör: `.gitignore`'a medya kökü (`Src/Vaka.Web/App_Data/`).
 
 **Kabul kriterleri**
 
-- [ ] K1: Yönetici planlı tip açar, varsayılan kilit süresi girer; `<AzamiKilitSüresi>` üstü değer reddedilir. Acil tip formunda kilit süresi alanı ve makine eşleme bağlantısı yoktur.
-- [ ] K2: Kaydedilmiş tipin türü değiştirilemez (PL-04).
-- [ ] K3: Planlı tip makinelerle eşlenir; pasif makine eşleme listesinde seçilemez.
-- [ ] K4: Taslakta faz ve adım eklenir, sıralanır, çıkarılır; planlı tipte minimum süresi boş faz varken yayınlama "Faz <n> minimum süresi yok" engeliyle reddedilir (PL-14); fazsız ya da adımsız fazlı taslak yayınlanamaz.
-- [ ] K5: Yayınlama yanlış PIN'le yapılmaz; doğru PIN'le versiyon "Yürürlükte", önceki "Arşiv" olur, versiyon no bir artar.
+- [ ] K1: Yönetici planlı tip açar, varsayılan kilit süresi girer; `<AzamiKilitSüresi>` üstü değer reddedilir (seed değeri 120 ile 120 kabul, 121 red; QA kopyasında ayar değeri değiştirilince sınır yeni değere uyar, kodda sabit yoktur). Acil tipin düzenleme formunda kilit süresi alanı, detayında makine eşleme bağlantısı yoktur; acil tipte gönderilen kilit süresi reddedilir.
+- [ ] K2: Kaydedilmiş tipin türü değiştirilemez; istek değiştirilerek gönderilen tür kaydı değiştirmez (PL-04).
+- [ ] K3: Planlı tip makinelerle eşlenir; pasif ya da kullanımdan kaldırılmış makine ve pasif hat ya da tesisteki makine eşleme listesinde seçilemez, nedeni yazılıdır; istekle gönderilen seçilemez makine eşlenmez. Acil tipin eşleme adresi tip detayına yönlenir ve eşleme yazmaz.
+- [ ] K4: Taslakta faz ve adım eklenir, taşınır, çıkarılır; sıra no'lar boşluksuz kalır. Planlı tipte minimum süresi boş faz varken yayınlama "Faz <n> minimum süresi yok" engeliyle reddedilir (PL-14); fazsız ya da adımsız fazlı taslak yayınlanamaz.
+- [ ] K5: Yayınlama yanlış PIN'le yapılmaz ve hatalı deneme sayılır; doğru PIN'le versiyon "Yürürlükte", önceki "Arşiv" olur, versiyon no bir artar.
 - [ ] K6: Yürürlükte bir versiyon varken yeni taslak açılır; taslak yürürlüktekinin faz, adım ve medyasını taşır; ikinci taslak açma isteği reddedilir.
-- [ ] K7: Yayınlanmış versiyonun faz, adım ve medya satırı QA kopyasında SQL UPDATE ve DELETE ile değiştirilemez (tetikleyici hatası); düzenleme route'ları yayınlanmış versiyon için reddedilir (BR-04).
-- [ ] K8: JPEG, PNG, WebP ve MP4 yüklenir; başka biçim ve `<AzamiMedyaBoyutu>` üstü dosya reddedilir; aynı dosya iki kez yüklenince diskte tek kopya kalır; video tarayıcıda ileri sarılabilir (NFR-10).
+- [ ] K7: Yayınlanmış versiyonun faz, adım ve medya satırı QA kopyasında SQL UPDATE ve DELETE ile değiştirilemez (tetikleyici hatası); versiyon satırının malzeme zorunluluğu ve doküman no'su SQL UPDATE ile değiştirilemez, durumu yalnız Yürürlükte'den Arşiv'e geçer. Düzenleme route'ları yayınlanmış versiyon için reddedilir ve veri değişmez (BR-04).
+- [ ] K8: JPEG, PNG, WebP ve MP4 yüklenir. İzinsiz biçim (ör. GIF) ve uzantısı izinli ama içeriği o biçimde olmayan dosya reddedilir. Seed değerleriyle 10 485 760 baytlık fotoğraf kabul, 10 485 761 bayt red; 104 857 600 baytlık video kabul, 104 857 601 bayt red; ret düzenleyicide hata olarak görünür. QA kopyasında ayar değiştirilince sınır yeni değere uyar. Aynı dosya iki adıma yüklenince diskte tek kopya kalır; video tarayıcıda ileri sarılabilir, `/media/{id}` aralıklı istekte 206 döner (NFR-10).
 - [ ] K9: `/media/{id}` oturumsuz istekte giriş sayfasına yönlenir.
-- [ ] K10: Denetçi `/procedure-versions/details/{id}` açar, düzenleme route'larında 403 alır; Operatör tüm bu fazın ekranlarında 403 alır.
-- [ ] K11: Düzenleyici 1024 px'te ve klavyeyle kullanılabilir (sıralama düğmeleri odaklanabilir, odak görünür).
-- [ ] K12: Ayar tablosuna üç satır eklenmiştir ve değerleri Requirements §6'daki başlangıç değerleridir; Faz 1'in üç satırı ve değişiklik geçmişi değişmemiştir; migration'da `UPDATE` yoktur (PL-25).
+- [ ] K10: Denetçi `/procedure-versions/details/{id}` açar, düzenleme route'larında (GET ve POST) 403 alır, taslak kimliğinde 404 alır; Operatör `/media/{id}` dışında bu fazın tüm adreslerinde 403 alır.
+- [ ] K11: Düzenleyici 1024 px'te ve klavyeyle kullanılabilir (taşıma düğmeleri odaklanabilir, odak görünür, fetch işleminden sonra odak işlem yapılan öğede ya da hata özetindedir); JS kapalıyken tüm düzenleyici işlemleri tam sayfa çalışır.
+- [ ] K12: Ayar tablosunda altı satır vardır; yeni üçü `MaxLockMinutes` 120 dakika, `MaxPhotoMb` 10 MB, `MaxVideoMb` 100 MB'tır; Faz 1'in üç satırı ve değişiklik geçmişi değişmemiştir; migration'da `UPDATE` yoktur (PL-25, PL-47).
+- [ ] K13: Yönetici tipi düzenleme formundan pasifleştirir ve yeniden etkinleştirir; pasif tip listede `showInactive` ile metinli "Pasif" rozetiyle görünür.
+- [ ] K14: E-09 liste ekranı 360, 768, 1024 ve 1440 px'te G11 imzasını taşır ve frontend devir notundaki beklenen imzayla aynıdır; E-10 versiyon tablosu bağlam rayı yanındaysa PL-39 istisnasıyla ölçülür; E-11 ve E-12 form ve detay kuralına uyar; 360 ve 390 px'te yatay kaydırma yok.
+- [ ] K15: Demo veride bir planlı ve bir acil tip, ikisinin de Yürürlükte birer versiyonu vardır; planlı tip aktif demo makinelerine eşlidir; versiyon görüntülemede yayınlayan "Kurulum verisi" yazar; `DemoData.sql` ikinci kez uygulanınca satır sayıları değişmez.
 
-**Kapsam dışı:** Yayın için ikinci onay ve ileri tarihli yürürlük (K-24), adım sonuç alanları (K-27).
+**Kapsam dışı:** Yayın için ikinci onay ve ileri tarihli yürürlük (K-24), adım sonuç alanları (K-27), dokümandaki örnek prosedürle demo veri (Ö-01, Salı sonrası, PL-49).
 
 ---
 
@@ -402,15 +506,18 @@ backend `Controllers/CleaningTypesController.cs`, `Controllers/ProcedureVersions
 
 **Amaç:** Operatörün makine ve tip seçerek kayıt açması, kaydın makineyi kilitlemesi, kilit süresi dolunca zaman aşımına düşmesi; olay günlüğünün ilk kez yazılması.
 
+**Başlama şartı:** Faz 3 TESLİM ALINDI ve commit'i atıldı. Olay özeti anahtarı engeli kalktı (PL-48); geliştirme anahtarını geliştirici ve
+qa-tester kendi makinesinde user-secrets'a yazar, kurulum adımını koordinatör README'ye ekler.
+
 **Kapsam**
 
 | # | Tür | İş kalemi | Sahibi |
 |---|---|---|---|
-| 1 | DB | Temizlik kaydı, faz ve adım yürütmeleri, adım görevlileri, kayıt malzemeleri, olay günlüğü, işlenmiş komutlar ve numara sayaçları tabloları. Önden gelen kolonlar (PL-02): saha referansı, başlangıç, tamamlanma ve kapanış zamanları, brüt, mola, bekleme, net ve efor toplamları, acil açıklaması, faz süre altı alanları, adım zaman, adım molası (SH-17, PL-19), süre ve efor alanları, görevli "çalışıyor" bayrağı | backend-engineer talebi, dbadmin |
+| 1 | DB | Temizlik kaydı, faz ve adım yürütmeleri, adım görevlileri, kayıt malzemeleri, olay günlüğü, işlenmiş komutlar ve numara sayaçları tabloları. Önden gelen kolonlar (PL-02): saha referansı, başlangıç, tamamlanma ve kapanış zamanları, kapanış türü, kapatan kişi ve kapanış gerekçesi (Faz 6 müdahalesi, PL-46), brüt, mola, bekleme, net ve efor toplamları, acil açıklaması, faz süre altı alanları, adım zaman, adım molası (SH-17, PL-19), süre ve efor alanları, görevli "çalışıyor" bayrağı | backend-engineer talebi, dbadmin |
 | 2 | DB | Kısmi unique index'ler: makine başına tek Açıldı, Devam ediyor ya da Beklemede kayıt (BR-23); sahip başına tek Açıldı ya da Devam ediyor kayıt (BR-37); kişi başına tek çalışılan adım (BR-24). Unique: kayıt no, saha referansı, komut kimliği, kayıt içi olay sırası. Tetikleyiciler: olay günlüğünde UPDATE ve DELETE ret (BR-31); adımda dolu başlangıç ve bitiş zamanının değişmesi ret (BR-28). SQLite WAL ve busy timeout | backend-engineer talebi, dbadmin |
-| 3 | BE | Olay yazıcı: her durum değişikliği aynı transaction'da olay yazar; özet = HMAC-SHA256(anahtar, önceki özet + kanonik olay), anahtar ortam değişkeninden (BR-32, NFR-12); komut kimliğiyle tekrar istekte ilk sonuç döner (BR-33) | backend-engineer |
+| 3 | BE | Olay yazıcı: her durum değişikliği aynı transaction'da olay yazar; özet = HMAC-SHA256(anahtar, önceki özet + kanonik olay) (BR-32, NFR-12); komut kimliğiyle tekrar istekte ilk sonuç döner (BR-33). Anahtar yapılandırma anahtarı `EventChain:HmacKey`'den okunur (Base64, çözülünce en az 32 bayt): Development'ta user-secrets (`Vaka.Web.csproj`'a `UserSecretsId`), üretimde ortam değişkeni `EventChain__HmacKey`; `appsettings*.json`'da ve repoda yoktur; üretim anahtarı BT'den gelince kod değişmez (PL-48). Uygulama başlangıçta anahtarı doğrular; yoksa ya da kısaysa başlamaz, nedeni günlüğe yazar, varsayılan anahtar üretmez | backend-engineer |
 | 4 | BE | Kayıt açma servisi: BR-01, BR-02 sunucu doğrulaması; yürürlükteki versiyona bağlama ve faz, adım satırlarını Bekliyor olarak oluşturma, sahibi her adıma varsayılan görevli yazma (BR-03, BR-17); açılış anı değerleri (BR-06); kayıt no (BR-08); iş emri planlıda zorunlu (K-18); kilit süresi tipten, `<AzamiKilitSüresi>` sınırı (BR-45); çakışmada sahip adı, durum ve açılış saatiyle hata | backend-engineer |
-| 5 | BE | `IDurationCalculator` ilk metotları: SH-13 ve zaman aşımı kararı; zaman aşımı kayda ya da makineye dokunan her istekte ve pano sorgusunda aynı transaction'da uygulanır, zaman aşımı anı kilit bitişidir (BR-26) | backend-engineer |
+| 5 | BE | `IDurationCalculator` ilk metotları: SH-13 ve zaman aşımı kararı; tesisin aktif vardiyalarını okuyup Faz 2'nin `FindShiftAt` metodunu çağıran vardiya bulucu servis (PL-40); zaman aşımı kayda ya da makineye dokunan her istekte ve pano sorgusunda aynı transaction'da uygulanır, zaman aşımı anı kilit bitişidir (BR-26) | backend-engineer |
 | 6 | BE | Malzeme ekleme ve çıkarma: yalnız sahip, PIN, ilk adımdan önce, kilit bitişi geçmemişken; SKT geçmiş lotta gerekçe zorunlu (BR-12, BR-46, BR-47). Malzeme eklemek kilidi uzatmaz | backend-engineer |
 | 7 | BE | Açık iş genişlemesi: sahibi olduğu aktif kayıt kullanıcı pasifleştirmeyi; aktif kayıt makine ve tip kaldırmayı engeller (BR-35, BR-36). Ana sayfa Operatör'ü `/my-work`'e yönlendirir. Süre biçimleyici (saniyeden "sa dk sn" metni) | backend-engineer |
 | 8 | FE | E-13 İşlerim, E-14 Yeni kayıt (bağlı seçimler, makinenin meşgul nedeni, lot seçici ve SKT gerekçesi, kilit süresi, PIN), E-15 Yürütme ekranının Açıldı hali (başlık, kilit bitişi, malzeme ekle ve çıkar, faz ve adım listesi salt okunur), E-16 Makine durum panosu | frontend-engineer |
@@ -447,7 +554,7 @@ Yürütme ekranı yalnız Operatör'e açıktır; Yönetici ve Denetçi kaydı F
 - [ ] K3: Planlı iş emri boşken kayıt açılmaz (K-18).
 - [ ] K4: Kayıt açılınca yürütme ekranı açılır; kayıt no `<TesisKodu>-<HatKodu>-<MakineKodu>-P<Yıl>-<Sıra>` biçimindedir, aynı makinede aynı yıl ikinci kayıtta sıra bir artar; durum "Açıldı"; saha referansı boştur (BR-08, BR-09).
 - [ ] K5: Kilit bitişi: açılışı içeren vardiyası olan tesiste en erken (açılış + kilit süresi, vardiya bitişi), vardiyasız tesiste ve iki vardiya arasındaki boşlukta açılış + kilit süresi; QA iki tesiste dener, gece yarısını geçen vardiyayı da dener (SH-13, SC-36 kilit kısmı). Kayıt açıldıktan sonra vardiyanın bitiş saati değiştirilince açık kaydın kilit bitişi değişmez (K-38).
-- [ ] K6: Kilit süresi `<AzamiKilitSüresi>` üstündeyse kayıt açılmaz (BR-45).
+- [ ] K6: Kilit süresi `<AzamiKilitSüresi>` üstündeyse kayıt açılmaz (BR-45); seed değeri 120 ile 121 dakika reddedilir, 120 kabul edilir.
 - [ ] K7: Makinede Açıldı ya da Devam ediyor kayıt varken ikinci açma reddedilir; mesajda sahip adı, durum ve açılış saati vardır. İki oturumdan eşzamanlı iki açma isteğinde tek kayıt oluşur (SC-04, BR-23).
 - [ ] K8: Aktif kaydı olan operatör başka makinede kayıt açamaz; mesaj mevcut kaydın numarasını bağlantıyla gösterir; eşzamanlı iki istekte de tek kayıt oluşur (SC-29, BR-37).
 - [ ] K9: Kilit bitişi geçmiş Açıldı kayıt, makine panosu açılınca "Zaman aşımı" olur ve makine Boş görünür; olay günlüğünde zaman aşımı anı kilit bitişidir; aynı kayda malzeme ekleme isteği reddedilir; başka operatör makine için kayıt açabilir (SC-15, BR-26, BR-46).
@@ -456,7 +563,7 @@ Yürütme ekranı yalnız Operatör'e açıktır; Yönetici ve Denetçi kaydı F
 - [ ] K12: Aynı `CommandId` ile iki kez gönderilen açma isteği tek kayıt ve tek olay üretir (SC-23).
 - [ ] K13: Tarayıcı çevrimdışıyken "Kaydı oluştur" işlemin yapılmadığını gösterir; çevrimiçi olunca yeniden deneme tek kayıt üretir (SC-33).
 - [ ] K14: QA kopyasında olay günlüğü satırına SQL UPDATE ve DELETE tetikleyici hatasıyla reddedilir (BR-31).
-- [ ] K15: Her olay önceki olayın özetini taşır; özet anahtarı `appsettings*.json` ve kaynak kodda yoktur (BR-32, NFR-12).
+- [ ] K15: Her olay önceki olayın özetini taşır; özet anahtarı `appsettings*.json`, kaynak kod ve repoda yoktur (BR-32, NFR-12). Anahtarı user-secrets'ta olan geliştirme ortamında olay yazılır; `EventChain:HmacKey` tanımsızken uygulama başlamaz ve günlükte nedeni yazar; anahtar ortam değişkeniyle verildiğinde kod ve yapılandırma dosyası değişmeden çalışır (PL-48).
 - [ ] K16: `IDurationCalculator` SH-13 ve zaman aşımı metotlarının XML yorumunda formül ve kimlik yazılıdır.
 - [ ] K17: Kayıt yürürlükteki versiyona bağlanır; kayıt Açıldı iken yeni versiyon yayınlansa da kaydın versiyon no'su değişmez (BR-03, SC-20).
 - [ ] K18: Makine durum panosu Operatör, Yönetici ve Denetçi'de açılır, yalnız Süper admin rolündeki kullanıcıda 403 döner; durum metinle yazılıdır; zaman aşımına düşmesi gereken kayıt panoda Açıldı görünmez.
@@ -474,6 +581,13 @@ Yürütme ekranı yalnız Operatör'e açıktır; Yönetici ve Denetçi kaydı F
   kayıt bağlantısı yalnız görüntüleyenin erişebildiği ekrana verilir, Süper admin görüntülerken bağlantı yoktur (K-04, PL-16, Faz 1 kalem 7).
 - [ ] F1-A2 (BE): PIN isteyen her işlemde (Faz 1 hesap işlemleri dahil) PIN doğrulaması ve iş eylemi aynı veritabanı işleminde yapılır; doğru
   PIN'den sonra iş kuralı reddinde kısmi yazma kalmaz, yanlış PIN'de hatalı deneme sayacı yine yazılır (BR-48).
+
+**Faz 2'den devreden (PL-52):**
+
+- [ ] F2-A1 (QA): Aktif kaydı olan makinenin `/machines/retire/{id}` ekranı engelleyen kaydı bağlantısıyla listeler, kaldırma yapılmaz; bağlantı
+  yalnız görüntüleyenin erişebildiği ekrana verilir (BR-35; K19 ile birlikte).
+- [ ] F2-A2 (QA): `FindShiftAt` gece yarısını geçen vardiyada ve vardiya sınır anlarında (başlangıç dahil, bitiş hariç) çalışan uygulamada
+  doğru vardiyayı bulur (K5 ile birlikte, PL-40).
 
 **Kapsam dışı:** Adım yürütme (Faz 5), kayıt detayı ve listesi (Faz 6), acil kayıt (Faz 8).
 
@@ -553,38 +667,47 @@ adım, görevli ve mola servisleri, `Services/DurationCalculator.cs`, `ViewModel
 
 - [ ] T-B20 (FE): Mola panelindeki ve mola ekranındaki "Molayı bitir" 320-1920 px'te tek satır ve 56 px yüksekliğindedir; adım eylem düğmeleriyle aynı ızgarayı kullanır.
 
-**Kapsam dışı:** Yöneticinin molayı bitirmesi ve beklemeye alma (Faz 7), kayıt detayı (Faz 6), kişi düzeyi mola ve adımın ayrıca duraklatılması (K-39, K-21).
+**Kapsam dışı:** Yöneticinin molayı bitirmesi ve kayıt detayı (Faz 6), beklemeye alma (Faz 7), kişi düzeyi mola ve adımın ayrıca duraklatılması (K-39, K-21).
 
 ---
 
-## Faz 6: Kayıt listesi, detay ve yönetici panosu
+## Faz 6: Kayıt listesi, detay, bütünlük ve müdahale
 
-**Amaç:** Kayıtların aranması, tek kayıtta 13 temel sorunun yanıtlanması, bütünlüğün doğrulanması ve yöneticinin aktif işleri tek ekranda görmesi.
+**Amaç:** Kayıtların aranması, tek kayıtta 13 temel sorunun yanıtlanması ve yazdırılması, bütünlüğün doğrulanması; yöneticinin kaydı gerekçe ve
+PIN'le iptal etmesi, yarıda kapatması ve açık molayı bitirmesi (O-03, PL-46).
 
 **Kapsam**
 
 | # | Tür | İş kalemi | Sahibi |
 |---|---|---|---|
-| 1 | DB | Liste filtreleri için index'ler (backend'in sorgu listesine göre); yeni tablo yok | backend-engineer talebi, dbadmin |
-| 2 | BE | Kayıt sorgu servisi: filtre, arama, sunucu sayfalama; Operatör'de varsayılan "benim kayıtlarım" (sahip ya da görevli) (K-17, PL-08) | backend-engineer |
-| 3 | BE | Detay sorgusu: Brief §4.3'teki 13 soru, açılış anı değerleri, versiyon içeriği (FR-09), zaman çizelgesi, olay günlüğü | backend-engineer |
+| 1 | DB | Liste filtreleri ve lot no araması için index'ler (backend'in sorgu listesine göre); yeni tablo yok. Müdahale alanları Faz 4 kayıt tablosunda (kapanış türü, kapatan, gerekçe, kapanış anı), mola kapanış alanları Faz 5 mola tablosunda önden gelir | backend-engineer talebi, dbadmin |
+| 2 | BE | Kayıt sorgu servisi: filtre, arama (kayıt no, saha referansı, iş emri, lot no; Ö-06), sunucu sayfalama; Operatör'de varsayılan "benim kayıtlarım" (sahip ya da görevli) (K-17, PL-08) | backend-engineer |
+| 3 | BE | Detay sorgusu: Brief §4.3'teki 13 soru, açılış anı değerleri, versiyon içeriği (FR-09), zaman çizelgesi, olay günlüğü, kapanış bilgisi | backend-engineer |
 | 4 | BE | Bütünlük doğrulama: (1) özet zinciri, (2) durum tablolarındaki zaman, kişi ve malzeme alanlarının olay değerleriyle aynı olması; ilk tutarsız olay sırası (PL-11, SC-21) | backend-engineer |
-| 5 | BE | Pano sorgusu; SH-16 (başladığı vardiya bitmiş açık adım ve açık mola); ana sayfa Yönetici ve Denetçi'yi `/dashboard`'a yönlendirir; `PrototypeController` ve prototip görünümleri kaldırılır (PL-10) | backend-engineer, frontend-engineer |
-| 6 | FE | E-19 Kayıtlar, E-20 Kayıt detayı (zaman çizelgesi, görevliler ve onay zamanları, molalar, malzemeler, olay günlüğü, bütünlük rozeti), E-21 Bütünlük doğrulama, E-22 Yönetici panosu | frontend-engineer |
+| 5 | BE | Müdahale servisi (BR-27, BR-40): iptal (Açıldı ya da Devam ediyor kayıtta) ve yarıda kapatma (Devam ediyor kayıtta); gerekçe ve PIN zorunlu, PIN doğrulaması ve iş eylemi aynı veritabanı işleminde. Aynı işlemde: devam eden adım Kesildi, bitişi müdahale anı, adım molası ve süresi SH-17 ve SH-01 ile; tamamlanmamış fazlar Kesildi; açık mola müdahale anında "Müdahale" türüyle kapanır; görevlilerin çalışıyor bayrağı kalkar; makine kilidi kalkar; kapanış türü, kapatan, gerekçe ve anı kayda yazılır. Kayıt silinmez, sahip değişmez, kayıt no yeniden kullanılmaz. Yönetici açık molayı gerekçe ve PIN'le bitirir, bitiş işlem anıdır; adım "Devam ediyor" kalır. Zaman aşımı kuralı (BR-26) müdahaleden önce aynı işlemde uygulanır | backend-engineer |
+| 6 | BE | Ana sayfa Yönetici ve Denetçi'yi `/records`'a yönlendirir (Faz 7'de `/dashboard` olur); `PrototypeController` ve prototip görünümleri kaldırılır (PL-10) | backend-engineer, frontend-engineer |
+| 7 | FE | E-19 Kayıtlar, E-20 Kayıt detayı (zaman çizelgesi, görevliler ve onay zamanları, molalar, malzemeler, olay günlüğü, bütünlük rozeti, kapanış bilgisi; yazdırma katmanı: menü, üst bar, alt çubuk ve eylem düğmeleri gizli, Ö-07), E-21 Bütünlük doğrulama, E-26 Müdahale formu (iptal, yarıda kapatma) ve mola bitirme formu; detayda "Müdahale et" ve "Molayı bitir" yalnız Yönetici'de | frontend-engineer |
 
-**Paralel:** Evet. Gerekçe: salt okuma ekranları; veri yapısı Faz 4-5'te oluştu; sözleşme aşağıda.
+**Paralel:** Evet. Gerekçe: veri yapısı Faz 4-5'te oluştu; müdahale yeni tablo istemez (kolonlar önden, PL-02); route, ViewModel ve rol aşağıda; dosyalar ayrık.
 
 **Sözleşme**
 
 | Route | Action | Rol | ViewModel (alanlar) | Görünüm |
 |---|---|---|---|---|
-| GET `/records` | `RecordsController.Index` | RecordReaders | `RecordListViewModel { Items[] { Id, RecordNo, Kind, KindLabel, StatusLabel, FieldBookRef?, FacilityName, LineName, MachineLabel, CleaningTypeName, VersionNo, OwnerName, OpenedAtLocal, CompletedAtLocal?, NetSeconds?, HasBelowMinimum, HasExpiredMaterial, Url }, Filter { Query, FacilityId?, LineId?, MachineId?, Kind?, Status?, From?, To?, MineOnly }, Facilities[], Lines[], Machines[], Page, PageSize, Total }` | `Views/Records/Index.cshtml` |
-| GET `/records/details/{id}` | `RecordsController.Details` | RecordReaders | `RecordDetailViewModel { Header { RecordNo, Kind, KindLabel, StatusLabel, FieldBookRef?, Facility, Line, Machine, CleaningTypeName, VersionNo, VersionUrl?, WorkOrderNo, Note, EmergencyDescription? }, People { OwnerName, OwnerRegistryNo, FirstStepStartedByName?, Helpers[] }, Times { OpenedAtLocal, StartedAtLocal?, CompletedAtLocal?, ClosedAtLocal?, LockExpiresAtLocal? }, Summary { GrossSeconds?, BreakSeconds?, HoldSeconds?, NetSeconds?, EffortSeconds? }, Phases[] { OrderNo, Title, MinDurationSeconds?, StatusLabel, GrossSeconds?, BreakSeconds?, NetSeconds?, BelowMinimum, BelowMinimumReason, Steps[] { OrderNo, Title, Description, Media[], StatusLabel, StartedAtLocal?, StartedByName?, EndedAtLocal?, EndedByName?, BreakSeconds?, DurationSeconds?, EffortSeconds?, Participants[] { FullName, RegistryNo, AddedByName, ConfirmedAtLocal } } }, Breaks[] { StartedByName, StartedAtLocal, EndedAtLocal?, DurationSeconds?, EndKindLabel, EndReason, DuringStepTitle? }, Materials[] { MaterialCode, MaterialName, LotNo, ExpiryDate, ExpiredAtEntry, ExpiredReason, EnteredByName, EnteredAtLocal }, Events[] { Sequence, OccurredAtLocal, ActorName, EventLabel, Summary }, Integrity { IsValid, FirstBrokenSequence?, CheckedAtLocal, ReportUrl? }, RunUrl? }` | `Views/Records/Details.cshtml` |
+| GET `/records` | `RecordsController.Index` | RecordReaders | `RecordListViewModel { Items[] { Id, RecordNo, Kind, KindLabel, StatusLabel, FieldBookRef?, FacilityName, LineName, MachineLabel, CleaningTypeName, VersionNo, OwnerName, OpenedAtLocal, CompletedAtLocal?, NetSeconds?, HasBelowMinimum, HasExpiredMaterial, Url }, Filter { Query, FacilityId?, LineId?, MachineId?, Kind?, Status?, From?, To?, MineOnly }, Facilities[], Lines[], Machines[], Page, PageSize, Total }`. `Query` kayıt no, saha referansı, iş emri ve lot no'da arar | `Views/Records/Index.cshtml` |
+| GET `/records/details/{id}` | `RecordsController.Details` | RecordReaders | `RecordDetailViewModel { Header { RecordNo, Kind, KindLabel, StatusLabel, FieldBookRef?, Facility, Line, Machine, CleaningTypeName, VersionNo, VersionUrl?, WorkOrderNo, Note, EmergencyDescription? }, People { OwnerName, OwnerRegistryNo, FirstStepStartedByName?, Helpers[] }, Times { OpenedAtLocal, StartedAtLocal?, CompletedAtLocal?, ClosedAtLocal?, LockExpiresAtLocal? }, Summary { GrossSeconds?, BreakSeconds?, HoldSeconds?, NetSeconds?, EffortSeconds? }, Phases[] { OrderNo, Title, MinDurationSeconds?, StatusLabel, GrossSeconds?, BreakSeconds?, NetSeconds?, BelowMinimum, BelowMinimumReason, Steps[] { OrderNo, Title, Description, Media[], StatusLabel, StartedAtLocal?, StartedByName?, EndedAtLocal?, EndedByName?, BreakSeconds?, DurationSeconds?, EffortSeconds?, Participants[] { FullName, RegistryNo, AddedByName, ConfirmedAtLocal } } }, Breaks[] { StartedByName, StartedAtLocal, EndedAtLocal?, DurationSeconds?, EndKindLabel, EndedByName?, EndReason, DuringStepTitle? }, Materials[] { MaterialCode, MaterialName, LotNo, ExpiryDate, ExpiredAtEntry, ExpiredReason, EnteredByName, EnteredAtLocal }, Events[] { Sequence, OccurredAtLocal, ActorName, EventLabel, Summary }, Integrity { IsValid, FirstBrokenSequence?, CheckedAtLocal, ReportUrl? }, Closure? { KindLabel, ClosedByName, ClosedAtLocal, Reason }, OpenBreak? { BreakId, StartedByName, StartedAtLocal, DuringStepTitle? }, CanIntervene, InterventionUrl?, CanEndBreak, EndBreakUrl?, RunUrl?, GeneratedAtLocal }`. `GeneratedAtLocal` yazdırılan çıktıda görünür | `Views/Records/Details.cshtml` |
 | GET `/records/integrity/{id}` | `RecordsController.Integrity` | ManagerOrAuditor | `IntegrityReportViewModel { RecordId, RecordNo, IsValid, CheckedAtLocal, Events[] { Sequence, EventLabel, OccurredAtLocal, HashShort, IsValid, Problem? }, StateMismatches[] { Field, StoredValue, EventValue, Sequence } }` | `Views/Records/Integrity.cshtml` |
-| GET `/dashboard` | `DashboardController.Index` | ManagerOrAuditor | `DashboardViewModel { ActiveRecords[] { RecordId, RecordNo, MachineLabel, StatusLabel, OwnerName, OpenedAtLocal, LockExpiresAtLocal?, CurrentStepTitle? }, NeedsAttention[] { KindLabel, RecordId, RecordNo, MachineLabel, PersonName, StartedAtLocal, ShiftName }, BelowMinimum[] { RecordId, RecordNo, PhaseTitle, NetSeconds, MinDurationSeconds, Reason, CompletedAtLocal }, RecentCompleted[] { RecordId, RecordNo, MachineLabel, CompletedAtLocal, NetSeconds, EffortSeconds }, OpenCount, InProgressCount, CompletedTodayCount, OnHold[] (Faz 7), PendingRequests[] (Faz 7), Emergencies[] (Faz 8) }` | `Views/Dashboard/Index.cshtml` |
+| GET, POST `/interventions/create?recordId=&type=` | `InterventionsController.Create` | Manager | `InterventionViewModel { CommandId, RecordId, RecordNo, MachineLabel, OwnerName, RecordStatusLabel, Type?: InterventionType, AllowedTypes[] { Value, Label }, Reason, Pin, InProgressStepTitle?, OpenBreak? { StartedByName, StartedAtLocal }, BlockReason? }`; başarıda `/records/details/{id}` | `Views/Interventions/Create.cshtml` |
+| GET, POST `/interventions/end-break/{breakId}` | `InterventionsController.EndBreak` | Manager | `EndBreakViewModel { CommandId, BreakId, RecordId, RecordNo, StartedByName, StartedAtLocal, DuringStepTitle?, Reason, Pin, BlockReason? }`; başarıda `/records/details/{id}` | `Views/Interventions/EndBreak.cshtml` |
 
-**Dosya sınırı:** frontend `Views/Records/Index.cshtml`, `Views/Records/Details.cshtml`, `Views/Records/Integrity.cshtml`, `Views/Dashboard/**`, `Views/Prototype/**` (kaldırma);
-backend `Controllers/RecordsController.cs` (okuma action'ları), `Controllers/DashboardController.cs`, `Controllers/PrototypeController.cs` (kaldırma), sorgu ve bütünlük servisleri, `ViewModels/Records/**`, `ViewModels/Dashboard/**`.
+`InterventionType` (`Services/`): `Cancel = 1`, `Abort = 2`; görünür adları İptal, Yarıda kapatma. `Hold = 3` Faz 7'de eklenir.
+`AllowedTypes`: Açıldı kayıtta yalnız İptal, Devam ediyor kayıtta İptal ve Yarıda kapatma; diğer durumlarda boş ve `BlockReason` dolu.
+Formun alanı göstermesi yetmez; tür, durum ve gerekçe serviste yeniden denetlenir. Makine panosundaki kayıt bağlantısı Yönetici ve Denetçi'de detaya gider (Faz 4 sözleşmesi).
+
+**Dosya sınırı:** frontend `Views/Records/Index.cshtml`, `Views/Records/Details.cshtml`, `Views/Records/Integrity.cshtml`, `Views/Interventions/**`,
+`Views/Prototype/**` (kaldırma), `Styles/**` (yazdırma katmanı); backend `Controllers/RecordsController.cs` (okuma action'ları),
+`Controllers/InterventionsController.cs`, `Controllers/HomeController.cs`, `Controllers/PrototypeController.cs` (kaldırma), sorgu, bütünlük ve
+müdahale servisleri, `ViewModels/Records/**`, `ViewModels/Interventions/**`.
 
 **Kabul kriterleri**
 
@@ -592,33 +715,41 @@ backend `Controllers/RecordsController.cs` (okuma action'ları), `Controllers/Da
 - [ ] K2: "Kaydı açan (sorumlu)" ile "İlk adımı başlatan" ayrı satırlardır (K-35); süreler brüt, mola, net ve efor olarak ayrı etiketlidir (FR-21). Adım içinde mola olan adımın satırında adım molası ayrıca görünür; mola satırı sürdüğü adımı gösterir (SC-37).
 - [ ] K3: v2 yayınlandıktan sonra v1 kaydının detayı v1'in faz minimumunu, adım açıklamasını ve medyasını gösterir (SC-11, FR-09).
 - [ ] K4: Makine adı sonradan değiştirildiğinde eski kayıt açılış anındaki adı gösterir (BR-06).
-- [ ] K5: Operatör `/records`'u yalnız sahibi ya da görevlisi olduğu kayıtlarla açar; filtreyi kaldırınca tüm kayıtları görür (PL-08); tesis, hat, makine, tür, durum, tarih aralığı ve kayıt no, saha referansı, iş emri araması birlikte çalışır; sayfalama sunucuda.
+- [ ] K5: Operatör `/records`'u yalnız sahibi ya da görevlisi olduğu kayıtlarla açar; filtreyi kaldırınca tüm kayıtları görür (PL-08); tesis, hat, makine, tür, durum, tarih aralığı ve kayıt no, saha referansı, iş emri, lot no araması birlikte çalışır; lot no ile arama o lotun eklendiği kayıtları getirir (Ö-06); sayfalama sunucuda.
 - [ ] K6: Olay günlüğü tüm olayları sırayla, yapan kişi ve sunucu zamanıyla listeler (FR-34, BR-30).
 - [ ] K7: Değiştirilmemiş kayıtta rozet "Doğrulandı" yazar. QA kopyasında kaydın iş emri ya da bir malzeme lot değeri SQL ile değiştirilince rozet "Bütünlük ihlali" olur ve doğrulama ekranı alanı, saklanan ve olaydaki değeri gösterir; olay değeri değiştirilmiş kopyada ilk tutarsız olay sırası gösterilir (SC-21, PL-11).
-- [ ] K8: `/records/integrity/{id}` ve `/dashboard` Yönetici ve Denetçi'de açılır, Operatör'de 403; Denetçi panoda yazma düğmesi görmez (SC-24).
-- [ ] K9: Başladığı vardiya bitmiş açık adım ve açık mola panoda "Müdahale bekleyenler"de kişi, kayıt no, başlangıç ve vardiya adıyla görünür; vardiyası sürenler görünmez (SH-16).
-- [ ] K10: Süre altında tamamlanan fazlar panoda gerekçesiyle listelenir.
-- [ ] K11: Yönetici ve Denetçi `/` adresinde `/dashboard`'a yönlenir; makine panosundaki kayıt bağlantısı onlarda detayı açar. Yalnız Süper admin rolündeki kullanıcı `/records` ve `/records/details/{id}` için 403 alır.
-- [ ] K12: `SH-16` formülü `IDurationCalculator`'da XML yorumunda.
+- [ ] K8: `/records/integrity/{id}` Yönetici ve Denetçi'de açılır, Operatör'de 403 (SC-24). Pano kısmı Faz 7 K18'e taşındı (PL-46).
+- K9, K10, K12: Faz 7'ye taşındı (K19, K20, K21; PL-46).
+- [ ] K11: Yönetici ve Denetçi `/` adresinde `/records`'a yönlenir; makine panosundaki kayıt bağlantısı onlarda detayı açar. Yalnız Süper admin rolündeki kullanıcı `/records`, `/records/details/{id}` ve `/interventions/*` için 403 alır.
 - [ ] K13: `Views/Prototype` ve `PrototypeController` repoda yoktur.
+- [ ] K14: Detayın yazdırma önizlemesinde menü, üst bar, alt çubuk ve eylem düğmeleri görünmez; 13 sorunun yanıtları, olay günlüğü, bütünlük rozeti ve sayfanın oluşturulma anı çıktıdadır; A4 dikey sayfada yatay taşma yoktur (Ö-07). Tam denetim çıktısı Faz 9'dadır.
+- [ ] K15 (eski Faz 7 K8): İptalde kayıt "İptal edildi", devam eden adım "Kesildi" ve bitişi müdahale anı, açık mola kapanış türü "Müdahale" ile kapanır, makine Boş olur; kayıt silinmez, kayıt no yeniden kullanılmaz (BR-27, SC-10). Adım sürerken açık mola varken yapılan iptalde Kesildi adımın süresi, molanın müdahale anına kadarki kısmı düşülerek yazılır (SH-17, SH-01). Açıldı kayıt iptal edilebilir.
+- [ ] K16 (eski Faz 7 K9): Yarıda kapatmada Devam ediyor kayıt "Yarıda kapatıldı", makine Boş olur; Açıldı kayıtta yarıda kapatma sunulmaz ve istekle gönderilirse reddedilir.
+- [ ] K17 (eski Faz 7 K13): Yönetici açık molayı gerekçe ve PIN'le bitirir; bitiş işlem anıdır; mola satırında kapanış türü "Yönetici" ve gerekçe görünür (BR-40). Mola adım sürerken açılmışsa adım "Devam ediyor" kalır, görevlisi adımı bitirebilir, molayı başlatan kişinin yazma kilidi kalkar.
+- [ ] K18 (eski Faz 7 K2, müdahale kısmı): Operatör hiçbir ekranda kaydı kendisi iptal etme ya da kapatma düğmesi görmez; `/interventions/*` Operatör ve Denetçi'de GET ve POST'ta 403; Denetçi detayda müdahale ve mola bitirme bağlantısı görmez (K-05).
+- [ ] K19: Gerekçesiz ya da yanlış PIN'li müdahale ve mola bitirme kaydı değiştirmez ve olay üretmez; yanlış PIN hatalı deneme sayılır. Tamamlandı, Zaman aşımı, İptal edildi ve Yarıda kapatıldı kayıtta müdahale reddedilir. Kilit bitişi geçmiş Açıldı kayıtta iptal isteği kaydı Zaman aşımı yapar (zaman aşımı olayı, anı kilit bitişi) ve iptal "Kayıt zaman aşımına düştü" nedeniyle reddedilir (BR-26).
+- [ ] K20 (eski Faz 7 K15): SC-16 uçtan uca: yönetici kaydı yarıda kapatır, diğer kaydın sahibi kişiyi henüz başlamamış adımdan çıkarır, ardından pasifleştirme yapılır; sahip hiçbir aşamada değişmez.
+- [ ] K21 (eski Faz 7 K16, müdahale kısmı): Olay günlüğünde iptal, yarıda kapatma ve yöneticinin mola bitirme olayları yapan, gerekçe ve zamanla yer alır (BR-30); bütünlük rozeti müdahaleden sonra "Doğrulandı" kalır.
 
-**Kapsam dışı:** Denetim çıktısı ve CSV (Faz 9), müdahale düğmeleri (Faz 7).
+**Kapsam dışı:** Denetim çıktısı E-32 ve CSV (Faz 9), yönetici panosu ve SH-16 (Faz 7), beklemeye alma ve talepler (Faz 7).
 
 ---
 
-## Faz 7: Talep, müdahale ve beklemeye alma
+## Faz 7: Talep, beklemeye alma ve yönetici panosu (Salı sonrası)
 
-**Amaç:** Sahibin yöneticiye gerekçeli talep açması, yöneticinin talepleri karara bağlaması ya da doğrudan müdahale etmesi, kaydın beklemeye alınıp devam ettirilmesi.
+**Amaç:** Sahibin yöneticiye gerekçeli talep açması, yöneticinin talepleri karara bağlaması, kaydın beklemeye alınıp devam ettirilmesi ve
+yöneticinin aktif işleri tek ekranda görmesi. Takvim: Salı (2026-11-17) sonrası (O-03, PL-46).
 
 **Kapsam**
 
 | # | Tür | İş kalemi | Sahibi |
 |---|---|---|---|
-| 1 | DB | Talep ve bekleme tabloları; kayıt başına tek bekleyen talep ve tek açık bekleme için kısmi unique index (BR-41) | backend-engineer talebi, dbadmin |
-| 2 | BE | Talep servisi: SK-5, BR-41; türler kayıt durumuna göre (Açıldı: İptal; Devam ediyor: üçü; Beklemede: İptal ve Yarıda kapatma; Brief §6.1); geri çekme; onay işlemi aynı transaction'da uygular, koşul sağlanmazsa talep Bekliyor kalır; ilk karar geçerli (K-40); ret gerekçesi zorunlu; kayıt başka yoldan kapanınca talep Geçersiz (BR-42) | backend-engineer |
-| 3 | BE | Müdahale servisi: iptal, yarıda kapatma, beklemeye alma (BR-27, BR-43); devam eden adım Kesildi, açık mola müdahale anında kapanır, makine kilidi iptal ve yarıda kapatmada kalkar; yönetici açık molayı gerekçeyle bitirir (BR-40); sahip beklemedeki kaydı PIN'le devam ettirir (BR-44) | backend-engineer |
-| 4 | BE | `IDurationCalculator`: SH-05, SH-10; SH-06, SH-11, SH-14 bekleme terimiyle güncellenir, yorumlar aynı commit'te; açık iş genişlemesi: bekleyen talep ve Beklemede kayıt pasifleştirmeyi, Beklemede kayıt makine kaldırmayı engeller | backend-engineer |
-| 5 | FE | E-23 Talep formu (yürütme ekranı ve detayda sahibe), E-24 Taleplerim, E-25 Talepler ve karar formu, E-26 Müdahale formu (iptal, yarıda kapatma, beklemeye alma, mola bitirme); detayda talepler ve beklemeler; panoda Beklemede ve bekleyen talepler; İşlerim'de beklemedeki kayıtlar ve "Devam et"; makine panosunda Beklemede | frontend-engineer |
+| 1 | DB | Talep ve bekleme tabloları; kayıt başına tek bekleyen talep ve tek açık bekleme için kısmi unique index (BR-41); pano sorguları için index'ler | backend-engineer talebi, dbadmin |
+| 2 | BE | Talep servisi: SK-5, BR-41; türler kayıt durumuna göre (Açıldı: İptal; Devam ediyor: üçü; Beklemede: İptal ve Yarıda kapatma; Brief §6.1); geri çekme; onay işlemi Faz 6 müdahale servisini aynı transaction'da çağırır, koşul sağlanmazsa talep Bekliyor kalır; ilk karar geçerli (K-40); ret gerekçesi zorunlu; kayıt başka yoldan kapanınca talep Geçersiz (BR-42) | backend-engineer |
+| 3 | BE | Müdahale servisine ek: beklemeye alma (BR-43); Beklemede kayıtta iptal ve yarıda kapatma, açık bekleme müdahale anında kapanır; doğrudan müdahalede bekleyen talep Geçersiz (BR-42); sahip beklemedeki kaydı PIN'le devam ettirir (BR-44) | backend-engineer |
+| 4 | BE | `IDurationCalculator`: SH-05, SH-10, SH-16; SH-06, SH-11, SH-14 bekleme terimiyle güncellenir, yorumlar aynı commit'te; açık iş genişlemesi: bekleyen talep ve Beklemede kayıt pasifleştirmeyi, Beklemede kayıt makine kaldırmayı engeller | backend-engineer |
+| 5 | BE | Pano sorgusu; SH-16 (başladığı vardiya bitmiş açık adım ve açık mola, Faz 4 vardiya bulucusuyla); ana sayfa Yönetici ve Denetçi'yi `/records` yerine `/dashboard`'a yönlendirir | backend-engineer |
+| 6 | FE | E-22 Yönetici panosu, E-23 Talep formu (yürütme ekranı ve detayda sahibe), E-24 Taleplerim, E-25 Talepler ve karar formu; E-26'ya beklemeye alma türü; detayda talepler ve beklemeler; panoda Beklemede ve bekleyen talepler; İşlerim'de beklemedeki kayıtlar ve "Devam et"; makine panosunda Beklemede | frontend-engineer |
 
 **Paralel:** Evet. Gerekçe: tablolar yeni, mevcut tabloya dokunulmaz (PL-02); route ve ViewModel aşağıda.
 
@@ -631,43 +762,48 @@ backend `Controllers/RecordsController.cs` (okuma action'ları), `Controllers/Da
 | GET `/requests/mine` | `RequestsController.Mine` | Operator | `MyRequestListViewModel { Items[] { Id, RecordId, RecordNo, MachineLabel, TypeLabel, Reason, StatusLabel, RequestedAtLocal, DecidedByName?, DecidedAtLocal?, DecisionNote?, CanWithdraw, CommandId } }` | `Views/Requests/Mine.cshtml` |
 | GET `/requests` | `RequestsController.Index` | ManagerOrAuditor | `RequestListViewModel { Items[] { Id, RecordId, RecordNo, MachineLabel, RecordStatusLabel, TypeLabel, Reason, RequestedByName, RequestedAtLocal, StatusLabel, DecidedByName?, DecidedAtLocal?, DecisionNote?, CanDecide }, Status (varsayılan Pending), Page, PageSize, Total }` | `Views/Requests/Index.cshtml` |
 | GET `/requests/decide/{id}`; POST `/requests/approve/{id}`, `/requests/reject/{id}` | `RequestsController.Decide`, `.Approve`, `.Reject` | Manager | `RequestDecisionViewModel { CommandId, RequestId, RecordId, RecordNo, TypeLabel, Reason, RequestedByName, RequestedAtLocal, RecordStatusLabel, DecisionNote, Pin, BlockReason? }` | `Views/Requests/Decide.cshtml` |
-| GET, POST `/interventions/create?recordId=&type=` | `InterventionsController.Create` | Manager | `InterventionViewModel { CommandId, RecordId, RecordNo, RecordStatusLabel, Type, AllowedTypes[], Reason, Pin, PendingRequest?, BlockReason? }` | `Views/Interventions/Create.cshtml` |
-| GET, POST `/interventions/end-break/{breakId}` | `InterventionsController.EndBreak` | Manager | `EndBreakViewModel { CommandId, BreakId, RecordId, RecordNo, StartedByName, StartedAtLocal, Reason, Pin }` | `Views/Interventions/EndBreak.cshtml` |
+| GET, POST `/interventions/create?recordId=&type=` | `InterventionsController.Create` | Manager | Faz 6 sözleşmesine ek: `Type = Hold`, `PendingRequest? { Id, TypeLabel, RequestedAtLocal }`. `AllowedTypes`: Devam ediyor kayıtta İptal, Yarıda kapatma, Beklemeye alma; Beklemede kayıtta İptal ve Yarıda kapatma | `Views/Interventions/Create.cshtml` |
 | POST `/records/resume/{id}` | `RecordsController.Resume` | Operator | `{ CommandId, Pin }` | - |
-| Mevcut ekranlara ek alanlar | `Run`, `Details`, `Dashboard`, `MyWork`, `MachineBoard` | - | Run: `CanRequest, PendingRequest?, CanResume, Holds[]`; Details: `Requests[] { TypeLabel, Reason, StatusLabel, RequestedByName, RequestedAtLocal, DecidedByName?, DecisionNote? }, Holds[] { StartedAtLocal, EndedAtLocal?, DurationSeconds?, StartedByName, EndedByName? }, CanIntervene, CanEndBreak`; Dashboard: `OnHold[]`, `PendingRequests[]`; MyWork: `HeldRecords[] { Id, RecordNo, MachineLabel, HeldAtLocal, CanResume }`; MachineBoard: `State = OnHold` | mevcut görünümler |
+| GET `/dashboard` | `DashboardController.Index` | ManagerOrAuditor | `DashboardViewModel { ActiveRecords[] { RecordId, RecordNo, MachineLabel, StatusLabel, OwnerName, OpenedAtLocal, LockExpiresAtLocal?, CurrentStepTitle? }, NeedsAttention[] { KindLabel, RecordId, RecordNo, MachineLabel, PersonName, StartedAtLocal, ShiftName }, BelowMinimum[] { RecordId, RecordNo, PhaseTitle, NetSeconds, MinDurationSeconds, Reason, CompletedAtLocal }, RecentCompleted[] { RecordId, RecordNo, MachineLabel, CompletedAtLocal, NetSeconds, EffortSeconds }, OpenCount, InProgressCount, CompletedTodayCount, OnHold[] { RecordId, RecordNo, MachineLabel, OwnerName, HeldAtLocal }, PendingRequests[] { RequestId, RecordNo, TypeLabel, RequestedByName, RequestedAtLocal }, Emergencies[] (Faz 8) }` | `Views/Dashboard/Index.cshtml` |
+| Mevcut ekranlara ek alanlar | `Run`, `Details`, `MyWork`, `MachineBoard` | - | Run: `CanRequest, PendingRequest?, CanResume, Holds[]`; Details: `Requests[] { TypeLabel, Reason, StatusLabel, RequestedByName, RequestedAtLocal, DecidedByName?, DecisionNote? }, Holds[] { StartedAtLocal, EndedAtLocal?, DurationSeconds?, StartedByName, EndedByName? }`; MyWork: `HeldRecords[] { Id, RecordNo, MachineLabel, HeldAtLocal, CanResume }`; MachineBoard: `State = OnHold` | mevcut görünümler |
 
 `Type` değerleri: `Cancel`, `Abort`, `Hold`. Görünür adları: İptal, Yarıda kapatma, Beklemeye alma.
 
-**Dosya sınırı:** frontend `Views/Requests/**`, `Views/Interventions/**`, mevcut `Run`, `Details`, `Dashboard`, `MyWork`, `MachineBoard` görünümlerinde yeni bölümler;
-backend `Controllers/RequestsController.cs`, `Controllers/InterventionsController.cs`, `RecordsController.Resume`, talep ve müdahale servisleri, `DurationCalculator`, `ViewModels/Requests/**`, `ViewModels/Interventions/**`.
+**Dosya sınırı:** frontend `Views/Requests/**`, `Views/Dashboard/**`, `Views/Interventions/**` (beklemeye alma), mevcut `Run`, `Details`, `MyWork`, `MachineBoard` görünümlerinde yeni bölümler;
+backend `Controllers/RequestsController.cs`, `Controllers/DashboardController.cs`, `Controllers/InterventionsController.cs`, `Controllers/HomeController.cs`, `RecordsController.Resume`, talep, müdahale ve pano servisleri, `DurationCalculator`, `ViewModels/Requests/**`, `ViewModels/Interventions/**`, `ViewModels/Dashboard/**`.
 
 **Kabul kriterleri**
 
 - [ ] K1: Sahip olmayan operatörün talep isteği reddedilir; gerekçesiz talep açılmaz; bekleyen talep varken ikinci talep açılmaz ve bekleyen talep gösterilir (BR-41, SK-5).
-- [ ] K2: Operatör hiçbir ekranda kaydı kendisi iptal etme ya da kapatma düğmesi görmez; `/interventions/*` Operatör'de 403 (K-05).
+- [ ] K2: Müdahale kısmı Faz 6 K18'e taşındı; bu fazda qa-tester talep ekranları için gerileme olarak yeniden denetler: Operatör talep ekranlarında kaydı kendisi iptal etme ya da kapatma düğmesi görmez.
 - [ ] K3: Açıldı kayıtta talep türü yalnız İptal'dir; Devam ediyor kayıtta üç tür, Beklemede kayıtta İptal ve Yarıda kapatma sunulur; istekle gönderilen uygunsuz tür reddedilir.
 - [ ] K4: Talepler ekranı varsayılan "Bekliyor" filtresiyle açılır; Denetçi listeyi görür, karar düğmesi görmez, karar POST'u 403 (SC-24).
 - [ ] K5: Gerekçesiz ret reddedilir; gerekçeyle ret sonrası talep "Reddedildi", kayıt değişmez, sahip Taleplerim'de karar ve gerekçeyi görür; geri çekilen talep "Geri çekildi" olur ve yönetici listesinde karar düğmesi taşımaz (SC-28).
 - [ ] K6: Devam eden adım varken beklemeye alma onayı yapılmaz, neden gösterilir, talep Bekliyor kalır; adım bitince onay yapılır (SC-35).
 - [ ] K7: İki yönetici aynı talebi art arda onaylarsa ikincisi "Talep zaten karara bağlandı" mesajı alır ve ikinci olay yazılmaz (K-40).
-- [ ] K8: İptalde kayıt "İptal edildi", devam eden adım "Kesildi" ve bitişi müdahale anı, açık mola kapanış türü "Müdahale" ile kapanır, makine Boş olur; kayıt silinmez, kayıt no yeniden kullanılmaz (BR-27, SC-10). Adım sürerken açık mola varken yapılan iptalde Kesildi adımın süresi, molanın müdahale anına kadarki kısmı düşülerek yazılır (SH-17, SH-01).
-- [ ] K9: Yarıda kapatmada kayıt "Yarıda kapatıldı", makine Boş olur.
+- K8, K9, K13, K15: Faz 6'ya taşındı (Faz 6 K15, K16, K17, K20; PL-46).
 - [ ] K10: Beklemeye alınan kayıt "Beklemede", makine panosunda Beklemede ve kilitli; sahip başka makinede kayıt açabilir; sahip "Devam et"le PIN'le devam ettirir; başka aktif kaydı varken devam reddedilir (SC-27, BR-43, BR-44).
 - [ ] K11: Detayda bekleme ayrı satırdır; Net = Brüt - mola - bekleme (SH-10, SH-11) ve faz neti beklemeyi düşer (SH-05, SH-06).
 - [ ] K12: Yönetici doğrudan müdahale ettiğinde aynı kayıttaki bekleyen talep "Geçersiz" olur (BR-42).
-- [ ] K13: Yönetici açık molayı gerekçe ve PIN'le bitirir; bitiş işlem anıdır; mola satırında kapanış türü "Yönetici" ve gerekçe görünür (BR-40). Mola adım sürerken açılmışsa adım "Devam ediyor" kalır, görevlisi adımı bitirebilir, molayı başlatan kişinin yazma kilidi kalkar.
 - [ ] K14: Bekleyen talebi ya da Beklemede kaydı olan kullanıcı pasifleştirilemez; Beklemede kaydı olan makine kullanımdan kaldırılamaz (BR-35, BR-36).
-- [ ] K15: SC-16 uçtan uca: yönetici kaydı yarıda kapatır, diğer kaydın sahibi kişiyi adımdan çıkarır, ardından pasifleştirme yapılır; sahip hiçbir aşamada değişmez.
-- [ ] K16: Olay günlüğünde talep açma, geri çekme, onay, ret, geçersizlik, beklemeye alma, devam ve müdahale olayları yapan ve zamanla yer alır (BR-30).
+- [ ] K16: Olay günlüğünde talep açma, geri çekme, onay, ret, geçersizlik, beklemeye alma ve devam olayları yapan ve zamanla yer alır (BR-30).
 - [ ] K17: SH-05 ve SH-10 yeni, SH-06, SH-11 ve SH-14 güncellenmiş formülleriyle XML yorumundadır.
+- [ ] K18 (eski Faz 6 K8, pano kısmı): `/dashboard` Yönetici ve Denetçi'de açılır, Operatör'de 403; Denetçi panoda yazma düğmesi görmez (SC-24).
+- [ ] K19 (eski Faz 6 K9): Başladığı vardiya bitmiş açık adım ve açık mola panoda "Müdahale bekleyenler"de kişi, kayıt no, başlangıç ve vardiya adıyla görünür; vardiyası sürenler görünmez (SH-16).
+- [ ] K20 (eski Faz 6 K10): Süre altında tamamlanan fazlar panoda gerekçesiyle listelenir.
+- [ ] K21 (eski Faz 6 K12): `SH-16` formülü `IDurationCalculator`'da XML yorumunda.
+- [ ] K22: Yönetici ve Denetçi `/` adresinde `/dashboard`'a yönlenir.
+- [ ] K23: Beklemede kayıt doğrudan müdahaleyle iptal edilir ya da yarıda kapatılır; açık bekleme müdahale anında kapanır, makine Boş olur.
 
 **Kapsam dışı:** Yeni talep bildirimi (Faz 8), düzeltme (Faz 8).
 
 ---
 
-## Faz 8: Acil müdahale, bildirim ve düzeltme
+## Faz 8: Acil müdahale, bildirim ve düzeltme (Salı sonrası)
 
 **Amaç:** Operatörün acil müdahaleyi tek ekrandan açıp başlatması, yöneticilerin bildirim alması ve yöneticinin yanlış bilgiyi orijinali koruyarak düzeltmesi.
+Takvim: Salı sonrası (O-03); kapsamı değişmedi. B uzatma sırasının 1. kalemi açılırsa acil müdahale tek ekranı (bildirimsiz) bu fazdan ayrılır (PL-49).
+Panodaki acil bölümü Faz 7 panosuna eklenir.
 
 **Kapsam**
 
@@ -719,10 +855,13 @@ backend `Controllers/EmergenciesController.cs`, `Controllers/NotificationsContro
 
 ---
 
-## Faz 9: Raporlar, denetim çıktısı ve sistem ayarları
+## Faz 9: Raporlar, denetim çıktısı ve sistem ayarları (Salı sonrası)
 
 **Amaç:** Makine ve faz bazında süre, efor ve minimum uyumunun raporlanması, lot izlenebilirliği, denetimde sunulacak yazdırılabilir kayıt
 çıktısı ve sistem ayarlarının ekrandan değiştirilmesi (K-47).
+Takvim: Salı sonrası (O-03); kapsamı değişmedi. Faz 6'daki lot no araması (Ö-06) ve yazdırılabilir detay (Ö-07) E-31 ve E-32'nin yerini
+tutmaz; denetim çıktısı Faz 6 detayının yazdırma katmanını temel alır. B uzatma sırasının 2. kalemi açılırsa süre ve efor raporu yalnız tablo
+olarak bu fazdan ayrılır (PL-49).
 
 **Kapsam**
 

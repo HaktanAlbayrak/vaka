@@ -1,0 +1,95 @@
+@using Vaka.Web.ViewModels.Definitions
+@model FacilityDetailViewModel
+@{
+    ViewData["Title"] = Model.Name;
+    ViewData["Lead"] = "Tesis kodu " + Model.Code;
+    ViewData["NavKey"] = "facilities";
+    ViewData["StatusMessage"] = Model.StatusMessage;
+}
+
+@section Actions {
+    <div class="flex flex-wrap gap-2">
+        <a class="btn btn-secondary" href="/facilities">
+            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-left" /></svg>
+            Tesisler
+        </a>
+        <a class="btn btn-secondary" href="/facilities/edit/@Model.Id">
+            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
+            Tesisi düzenle
+        </a>
+    </div>
+}
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <section class="panel min-w-0" aria-labelledby="lines-title">
+        <div class="panel-head">
+            <h2 id="lines-title" class="panel-title">Hatlar</h2>
+            <a class="btn btn-primary" href="/lines/create?facilityId=@Model.Id">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#plus" /></svg>
+                Hat ekle
+            </a>
+        </div>
+        @if (!Model.Lines.Any())
+        {
+            <div class="p-4 md:p-5">
+                <partial name="_State" model='("empty", "route", "Bu tesiste hat yok", "Makineler hatta bağlanır. Önce bir hat ekleyin, sonra makineleri tanımlayın.", "Hat ekle", "/lines/create?facilityId=" + Model.Id)' />
+            </div>
+        }
+        else
+        {
+            <table class="data-table table-stack table-stack-rail">
+                <caption class="sr-only">@Model.Name hatları, @Model.Lines.Length kayıt</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Kod</th>
+                        <th scope="col">Ad</th>
+                        <th scope="col" class="text-right max-xl:text-left">Makine</th>
+                        <th scope="col">Durum</th>
+                        <th scope="col">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var line in Model.Lines)
+                    {
+                        <tr>
+                            <td data-label="Kod"><span class="record-no text-sm">@line.Code</span></td>
+                            <td data-label="Ad" class="cell-long break-words font-semibold stack-wide stack-lead">@line.Name</td>
+                            <td data-label="Makine" class="num">@line.MachineCount</td>
+                            <td data-label="Durum"><partial name="_Badge" model='line.IsActive ? "def.active" : "def.inactive"' /></td>
+                            <td data-label="İşlem">
+                                <a class="btn btn-secondary" href="/lines/edit/@line.Id" aria-label="@line.Name hattını düzenle">
+                                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
+                                    Düzenle
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </section>
+
+    <aside class="min-w-0 space-y-5" aria-label="Tesis bilgisi">
+        <section class="panel" aria-labelledby="facility-title">
+            <div class="panel-head"><h2 id="facility-title" class="panel-title">Tesis</h2></div>
+            <dl class="kv p-4 md:p-5">
+                <div><dt>Kod</dt><dd class="mono">@Model.Code</dd></div>
+                <div><dt>Ad</dt><dd>@Model.Name</dd></div>
+                <div><dt>Durum</dt><dd class="mt-1"><partial name="_Badge" model='Model.IsActive ? "def.active" : "def.inactive"' /></dd></div>
+            </dl>
+        </section>
+        <section class="panel" aria-labelledby="links-title">
+            <div class="panel-head"><h2 id="links-title" class="panel-title">Bu tesisin tanımları</h2></div>
+            <div class="flex flex-col gap-2 p-4 md:p-5">
+                <a class="btn btn-secondary justify-start" href="/shifts?facilityId=@Model.Id">
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#clock" /></svg>
+                    Vardiyalar
+                </a>
+                <a class="btn btn-secondary justify-start" href="/machines?facilityId=@Model.Id">
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#cog" /></svg>
+                    Makineler
+                </a>
+            </div>
+        </section>
+    </aside>
+</div>

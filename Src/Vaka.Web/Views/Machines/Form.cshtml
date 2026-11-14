@@ -1,0 +1,127 @@
+@using Vaka.Web.ViewModels.Definitions
+@model MachineFormViewModel
+@{
+    var isCreate = Model.Id is null;
+    var isRetired = Model.RetiredAtLocal is not null;
+    ViewData["Title"] = isCreate ? "Makine ekle" : isRetired ? "Makine" : "Makineyi düzenle";
+    ViewData["Lead"] = isCreate ? "Makine bir hatta bağlanır. Kod ve hat sonradan değiştirilemez." : isRetired ? "Kullanımdan kaldırılmış makine değiştirilemez." : Model.Name + ", kod " + Model.Code;
+    ViewData["NavKey"] = "machines";
+
+    string? ErrorOf(string key) =>
+        ViewData.ModelState.TryGetValue(key, out var entry) && entry.Errors.Count > 0 ? entry.Errors[0].ErrorMessage : null;
+
+    var facilityError = ErrorOf("FacilityId");
+    var lineError = ErrorOf("LineId");
+}
+
+<partial name="_FormSummary" model='isCreate ? "Makine eklenemedi" : "Makine kaydedilemedi"' />
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard="@(isRetired ? null : "")" aria-labelledby="machine-form-title">
+        <div class="panel-head">
+            <h2 id="machine-form-title" class="panel-title">Makine bilgileri</h2>
+        </div>
+        <div class="panel-body space-y-6">
+            @if (isRetired)
+            {
+                <p class="notice notice-info" role="status">
+                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#power-off" /></svg>
+                    <span>Makine <span class="mono font-bold">@Model.RetiredAtLocal!.Value.ToString("dd.MM.yyyy HH:mm")</span> tarihinde kullanımdan kaldırıldı.</span>
+                </p>
+            }
+
+            <div class="grid gap-5 md:grid-cols-2">
+                <div class="field" data-field>
+                    <label class="field-label" for="FacilityId">Tesis</label>
+                    @if (Model.CodeLocked)
+                    {
+                        <input type="hidden" name="FacilityId" value="@Model.FacilityId" />
+                    }
+                    <select id="FacilityId" name="FacilityId" class="input" required disabled="@(Model.CodeLocked || isRetired)" data-required-message="Tesis seçin."
+                            data-cascade-url="/machines/lines" data-cascade-target="LineId" data-cascade-status="line-status"
+                            aria-describedby="@(facilityError is null ? null : "FacilityId-error")" aria-invalid="@(facilityError is null ? null : "true")">
+                        <option value="">Tesis seçin</option>
+                        @foreach (var facility in Model.Facilities)
+                        {
+                            <option value="@facility.Id" selected="@(facility.Id == Model.FacilityId)">@facility.Label</option>
+                        }
+                    </select>
+                    @if (facilityError is not null)
+                    {
+                        <p id="FacilityId-error" class="field-error">
+                            <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+                            <span>@facilityError</span>
+                        </p>
+                    }
+                </div>
+
+                <div class="field" data-field>
+                    <label class="field-label" for="LineId">Hat</label>
+                    @if (Model.CodeLocked)
+                    {
+                        <input type="hidden" name="LineId" value="@Model.LineId" />
+                    }
+                    <select id="LineId" name="LineId" class="input" required disabled="@(Model.CodeLocked || isRetired)" data-required-message="Hat seçin."
+                            aria-describedby="@(lineError is null ? "line-status" : "line-status LineId-error")" aria-invalid="@(lineError is null ? null : "true")">
+                        <option value="">Hat seçin</option>
+                        @foreach (var line in Model.Lines)
+                        {
+                            <option value="@line.Id" selected="@(line.Id == Model.LineId)">@line.Label</option>
+                        }
+                    </select>
+                    <p id="line-status" class="field-hint" role="status">@(Model.CodeLocked && Model.RetiredAtLocal is null ? "Hat değiştirilemez." : "")</p>
+                    @if (lineError is not null)
+                    {
+                        <p id="LineId-error" class="field-error">
+                            <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+                            <span>@lineError</span>
+                        </p>
+                    }
+                </div>
+            </div>
+
+            <div class="grid gap-5 md:grid-cols-2">
+                <partial name="_Field" model='("Code", "Kod", Model.Code, "text", "off", Model.CodeLocked ? "Kod değiştirilemez." : "Tire içermez, hat içinde benzersizdir.", true, Model.CodeLocked || isRetired)' />
+                <partial name="_Field" model='("Name", "Ad", Model.Name, "text", "off", (string?)null, true, isRetired)' />
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 border-t-2 border-line pt-5">
+                @if (!isRetired)
+                {
+                    <button type="submit" class="btn btn-primary btn-lg" data-requires-online>
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#save" /></svg>
+                        @(isCreate ? "Makineyi ekle" : "Değişiklikleri kaydet")
+                    </button>
+                }
+                @if (isCreate)
+                {
+                    <button type="submit" class="btn btn-secondary btn-lg" name="refresh" value="true" formnovalidate data-cascade-fallback>
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#refresh-cw" /></svg>
+                        Seçilen tesisin hatlarını getir
+                    </button>
+                }
+                <a class="btn btn-secondary btn-lg" href="/machines@(isRetired ? "?showRetired=true" : "")">@(isRetired ? "Makine listesine dön" : "Vazgeç")</a>
+            </div>
+        </div>
+    </form>
+
+    <aside class="min-w-0 space-y-5" aria-label="Bilgi">
+        <section class="panel" aria-labelledby="machine-help-title">
+            <div class="panel-head"><h2 id="machine-help-title" class="panel-title">Bilmeniz gerekenler</h2></div>
+            <ul class="list-inside list-disc space-y-2 p-4 md:p-5">
+                <li>Hat listesi seçtiğiniz tesise göre gelir. Tesisi değiştirdikten sonra hattı yeniden seçin.</li>
+                <li>Kod ve hat kaydedildikten sonra değişmez.</li>
+                <li>Makine silinmez, yalnız kullanımdan kaldırılır.</li>
+            </ul>
+            @if (!isCreate && !isRetired)
+            {
+                <div class="border-t-2 border-line p-4 md:p-5">
+                    <a class="btn btn-secondary" href="/machines/retire/@Model.Id">
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#power-off" /></svg>
+                        Kullanımdan kaldır
+                    </a>
+                </div>
+            }
+        </section>
+    </aside>
+</div>

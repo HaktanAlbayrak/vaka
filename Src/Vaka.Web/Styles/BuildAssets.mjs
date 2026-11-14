@@ -23,6 +23,7 @@ const icons = [
   "panel-left-close", "panel-left-open", "info", "circle-alert", "eye", "eye-off", "droplets",
   "user-round", "funnel", "shield-check", "refresh-cw", "timer", "circle-check", "layers",
   "house", "key-round", "user-plus", "pencil", "user-check", "user-x", "rotate-ccw", "save",
+  "arrow-left", "building-2", "calendar-days", "moon-star", "power-off", "route",
 ];
 
 const symbols = icons.map((name) => {

@@ -40,6 +40,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<ICredentialHasher, CredentialHasher>();
+builder.Services.AddSingleton<ITurkeyClock, TurkeyClock>();
 builder.Services.AddSingleton<IDurationCalculator, DurationCalculator>();
 builder.Services.AddScoped<VakaCookieEvents>();
 builder.Services.AddScoped<ISystemSettingsReader, SystemSettingsReader>();
@@ -47,6 +48,14 @@ builder.Services.AddScoped<IPinFormatValidator, PinFormatValidator>();
 builder.Services.AddScoped<IPinService, PinService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IOpenWorkProvider, NoOpenWorkProvider>();
+builder.Services.AddScoped<IMachineBlockProvider, NoMachineBlockProvider>();
+builder.Services.AddScoped<IFacilityService, FacilityService>();
+builder.Services.AddScoped<ILineService, LineService>();
+builder.Services.AddScoped<IShiftService, ShiftService>();
+builder.Services.AddScoped<IMachineService, MachineService>();
+builder.Services.AddScoped<IMachineRetirement, MachineRetirement>();
+builder.Services.AddScoped<IMaterialService, MaterialService>();
+builder.Services.AddScoped<IMaterialLotService, MaterialLotService>();
 builder.Services.AddScoped<IUserDirectory, UserDirectory>();
 builder.Services.AddScoped<IUserAdministration, UserAdministration>();
 
