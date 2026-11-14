@@ -45,6 +45,7 @@ Faz planı kuralları:
 |---|---|---|
 | 1. Görevlendirme | koordinatör | Faz planındaki ilgili bölüm + son devir notu ajana verilir |
 | 2. Geliştirme | backend-engineer, frontend-engineer (gerekirse dbadmin) | Kod + öz denetim + devir notu |
+| 2a. Yerleşim ön turu (yalnız UI fazı) | qa-tester | Yalnız yerleşim imzası (PhasePlan G11) ve `UiDelivery.md §3` mekanik eval, 360/768/1024/1440 px. Rapor yazılmaz, tur sayılmaz; bulgu listesi koordinatör üzerinden frontend'e döner, temizse 3. adıma geçilir |
 | 3. Test | qa-tester | `Docs/Delivery/Faz-<N>-Teslim.md` (sabit biçim), QA önerisi GEÇTİ / KALDI |
 | 4. Teslim alma | analyst | Raporun "Analist kararı" bölümü: TESLİM ALINDI / İADE; TESLİM ALINDI ise `Docs/Local/ProjeOzeti.md` güncellenir |
 | 5. Commit | koordinatör | Faz commit'i, ardından README commit'i |

@@ -21,6 +21,7 @@ Alt ajanlar birbirini çağıramaz; her geçiş koordinatörden geçer.
 ```
 İstek -> analyst (gereksinim + faz planı) -> kullanıcı onayı
 Her faz:  [backend-engineer -> dbadmin]  ||  frontend-engineer      (paralellik analistin kararı)
+          -> qa-tester yerleşim ön turu (yalnız UI fazı, rapor yok, tur sayılmaz)
           -> qa-tester (test + teslim raporu) -> analyst (TESLİM ALINDI | İADE)
           -> koordinatör: faz commit'i (kod + rapor) -> README güncellemesi
 ```
@@ -51,7 +52,7 @@ Ayrıntı: [Docs/Process/Workflow.md](Docs/Process/Workflow.md). Bağlayıcı ku
 |---|---|
 | `admin-ui` | Dashboard tasarım DNA'sı, UI kuralları, UI teslim kuralları (cms-codebase `html-to-cms-v2` tasarım dosyalarından uyarlandı) |
 | `web-design-guidelines` | Vercel arayüz kuralları, yerel kopya `command.md` (cms-codebase'den aynen) |
-| `playwright-cli` | Tarayıcı turu; yalnız qa-tester faz tesliminde ve kullanıcı açıkça isteyince (cms-codebase'den aynen) |
+| `playwright-cli` | Tarayıcı turu; yalnız qa-tester faz tesliminde, UI fazlarının yerleşim ön turunda ve kullanıcı açıkça isteyince (cms-codebase'den aynen) |
 
 Ajanlar `Skill` aracını çağırmaz; görev tanımındaki dosyaları yoldan okur.
 

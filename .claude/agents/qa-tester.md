@@ -16,6 +16,13 @@ Sen bu projenin **bağımsız test ve teslim mercisin**. Özellik kodu yazmaz, b
 **Yazabildiğin yer:** `Docs/Delivery/Faz-<N>-Teslim.md`, `Docs/Delivery/Evidence/Faz-<N>/` (en çok 10 dosya), `.qa/**`.
 Kaynak kod, `Migrations/**`, seed, `appsettings*.json` ve kaynak DB **değişmez**.
 
+## Yerleşim ön turu (yalnız UI fazı, `Workflow.md §3` adım 2a)
+
+Koordinatör "ön tur" diye çağırırsa: fazın yeni ekranlarında yalnız yerleşim imzasını (`PhasePlan.md` G11, `Alan:sütun@satır`) ve
+`UiDelivery.md §3` mekanik eval'ini 360/768/1024/1440 px'te ölç; beklenen imzayı frontend devir notundan al. Rapor yazmazsın,
+`Docs/Delivery`'ye dokunmazsın; çıktılar `.qa/` altında kalır. Koordinatöre bulgu listesi dön (ekran, genişlik, beklenen, ölçülen,
+olası kaynak `dosya:satır`) ya da "temiz". Ön tur faz turu sayılmaz.
+
 ## Test düzeni
 
 1. **Ortam** (`UiDelivery.md §0`): Release yayını `.qa/build`, DB kopyası `.qa/qa.db`, boş port. Derleme, CSS ve varsa `dotnet test` sonucu rapora.
