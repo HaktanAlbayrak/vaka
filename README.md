@@ -17,7 +17,8 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 | Faz | Başlık | Durum | Tarih | Commit | Teslim raporu |
 |---|---|---|---|---|---|
 | 0 | Analiz ve faz planı | Tamamlandı | 2026-11-13 | 9b8eb67 | - (analiz fazı, QA yok) |
-| T | Tasarım DNA'sı ve kabuk prototipi | Tamamlandı | 2026-11-14 | 38d0b4e | Faz 1: giriş, ilk girişte parola ve PIN, PIN kilidi, kullanıcı yönetimi, Süper admin |
+| T | Tasarım DNA'sı ve kabuk prototipi | Tamamlandı | 2026-11-14 | a3f6ec3 | Süreç: UI fazlarında tam testten önce QA yerleşim ön turu (rapor yok, tur sayılmaz) |
+| 2026-11-14 | 38d0b4e | Faz 1: giriş, ilk girişte parola ve PIN, PIN kilidi, kullanıcı yönetimi, Süper admin |
 | 2026-11-13 | 947be60 | [Faz-T-Teslim.md](Docs/Delivery/Faz-T-Teslim.md) |
 | 1 | Giriş, PIN ve kullanıcılar | Tamamlandı | 2026-11-14 | 38d0b4e | [Faz-1-Teslim.md](Docs/Delivery/Faz-1-Teslim.md) |
 | 2 | Tesis yapısı, vardiya ve malzeme | Sırada | | | |
