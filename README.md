@@ -17,9 +17,10 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 | Faz | Başlık | Durum | Tarih | Commit | Teslim raporu |
 |---|---|---|---|---|---|
 | 0 | Analiz ve faz planı | Tamamlandı | 2026-11-13 | 9b8eb67 | - (analiz fazı, QA yok) |
-| T | Tasarım DNA'sı ve kabuk prototipi | Tamamlandı | 2026-11-13 | 947be60 | [Faz-T-Teslim.md](Docs/Delivery/Faz-T-Teslim.md) |
-| 1 | Giriş, PIN ve kullanıcılar | Sırada | | | |
-| 2 | Tesis yapısı, vardiya ve malzeme | Bekliyor | | | |
+| T | Tasarım DNA'sı ve kabuk prototipi | Tamamlandı | 2026-11-14 | 38d0b4e | Faz 1: giriş, ilk girişte parola ve PIN, PIN kilidi, kullanıcı yönetimi, Süper admin |
+| 2026-11-13 | 947be60 | [Faz-T-Teslim.md](Docs/Delivery/Faz-T-Teslim.md) |
+| 1 | Giriş, PIN ve kullanıcılar | Tamamlandı | 2026-11-14 | 38d0b4e | [Faz-1-Teslim.md](Docs/Delivery/Faz-1-Teslim.md) |
+| 2 | Tesis yapısı, vardiya ve malzeme | Sırada | | | |
 | 3 | Temizlik tipi ve prosedür versiyonu | Bekliyor | | | |
 | 4 | Kayıt açma ve makine kilidi | Bekliyor | | | |
 | 5 | Adım yürütme, görevli ve mola | Bekliyor | | | |
@@ -37,9 +38,16 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 
 ## Çalıştırma
 
+İlk kurulumda veritabanı migration ile oluşturulur; uygulama açılışta migration çalıştırmaz.
+
 ```bash
+dotnet tool install --global dotnet-ef     # bir kez
+dotnet ef database update --project Src/Vaka.Web
 dotnet run --project Src/Vaka.Web          # Development, http://localhost:5080
 ```
+
+Seed tek bir Süper admin hesabı içerir (sicil no `0001`). Geliştirme parolası depoda tutulmaz, ekipten alınır;
+ilk girişte parola değiştirilir ve PIN belirlenir. Canlı ortama geçmeden önce bu hesabın parolası değiştirilmiş olmalıdır.
 
 Derlenmiş CSS, yazı tipleri ve ikonlar depodadır. Stil değiştirilirse:
 
