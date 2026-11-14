@@ -17,23 +17,24 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 | Faz | Başlık | Durum | Tarih | Commit | Teslim raporu |
 |---|---|---|---|---|---|
 | 0 | Analiz ve faz planı | Tamamlandı | 2026-11-13 | 9b8eb67 | - (analiz fazı, QA yok) |
-| T | Tasarım DNA'sı ve kabuk prototipi | Tamamlandı | 2026-11-14 | a3f6ec3 | Süreç: UI fazlarında tam testten önce QA yerleşim ön turu (rapor yok, tur sayılmaz) |
-| 2026-11-14 | 38d0b4e | Faz 1: giriş, ilk girişte parola ve PIN, PIN kilidi, kullanıcı yönetimi, Süper admin |
-| 2026-11-13 | 947be60 | [Faz-T-Teslim.md](Docs/Delivery/Faz-T-Teslim.md) |
-| 1 | Giriş, PIN ve kullanıcılar | Tamamlandı | 2026-11-14 | 38d0b4e | [Faz-1-Teslim.md](Docs/Delivery/Faz-1-Teslim.md) |
-| 2 | Tesis yapısı, vardiya ve malzeme | Sırada | | | |
-| 3 | Temizlik tipi ve prosedür versiyonu | Bekliyor | | | |
+| T | Tasarım DNA'sı ve kabuk prototipi | Tamamlandı | 2026-11-13 | 947be60 | [Faz-T-Teslim.md](Docs/Delivery/Faz-T-Teslim.md) |
+| 1 | Giriş, PIN, kullanıcılar ve Süper admin | Tamamlandı | 2026-11-14 | 38d0b4e | [Faz-1-Teslim.md](Docs/Delivery/Faz-1-Teslim.md) |
+| 2 | Tesis yapısı, vardiya ve malzeme | Tamamlandı | 2026-11-14 | c3a4fd7 | [Faz-2-Teslim.md](Docs/Delivery/Faz-2-Teslim.md) |
+| 3 | Temizlik tipi ve prosedür versiyonu | Sırada | | | |
 | 4 | Kayıt açma ve makine kilidi | Bekliyor | | | |
 | 5 | Adım yürütme, görevli ve mola | Bekliyor | | | |
-| 6 | Kayıt listesi, detay ve yönetici panosu | Bekliyor | | | |
-| 7 | Talep, müdahale ve beklemeye alma | Bekliyor | | | |
-| 8 | Acil müdahale, bildirim ve düzeltme | Bekliyor | | | |
-| 9 | Raporlar ve denetim çıktısı | Bekliyor | | | |
+| 6 | Kayıt listesi, detay, bütünlük ve müdahale | Bekliyor | | | |
+| 7 | Talep, beklemeye alma ve yönetici panosu | Bekliyor (2026-11-17 sonrası) | | | |
+| 8 | Acil müdahale, bildirim ve düzeltme | Bekliyor (2026-11-17 sonrası) | | | |
+| 9 | Raporlar, denetim çıktısı ve sistem ayarları | Bekliyor (2026-11-17 sonrası) | | | |
 
 ## Son Değişiklikler
 
 | Tarih | Commit | Değişiklik |
 |---|---|---|
+| 2026-11-14 | c3a4fd7 | Faz 2: tesis, hat, makine, vardiya, malzeme ve lot tanımları; Salı takvimine göre faz planı güncellendi |
+| 2026-11-14 | a3f6ec3 | Süreç: UI fazlarında tam testten önce QA yerleşim ön turu (rapor yok, tur sayılmaz) |
+| 2026-11-14 | 38d0b4e | Faz 1: giriş, ilk girişte parola ve PIN, PIN kilidi, kullanıcı yönetimi, Süper admin |
 | 2026-11-13 | 947be60 | Faz T: onaylı tasarım DNA'sı, uygulama iskeleti ve beş prototip sayfa |
 | 2026-11-13 | 9b8eb67 | Faz 0: analiz, kusur listesi, gereksinimler ve onaylı faz planı |
 
