@@ -1,0 +1,3 @@
+@using Vaka.Web.Services
+@model IReadOnlyList<DurationPart>
+<span class="whitespace-nowrap">@foreach (var part in Model){<span class="mono font-bold">@part.Value</span><span class="dur-unit">@part.Unit</span>}</span>

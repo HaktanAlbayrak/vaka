@@ -1,0 +1,49 @@
+@using Vaka.Web.ViewModels.Records
+@model (string Id, string Mode, string NameId, string NameReason, bool Required, MaterialEntryViewModel[] Selected, string Hint)
+@{
+    var isMulti = Model.Mode == "multi";
+    string? ReasonError(int index)
+    {
+        var key = isMulti ? "Materials[" + index + "].ExpiredReason" : "ExpiredReason";
+        return ViewData.ModelState.TryGetValue(key, out var entry) && entry.Errors.Count > 0 ? entry.Errors[0].ErrorMessage : null;
+    }
+    string LabelOf(MaterialEntryViewModel entry) => entry.MaterialName + " (" + entry.MaterialCode + "), lot " + entry.LotNo + ", SKT " + entry.ExpiryDate.ToString("dd.MM.yyyy");
+}
+<div class="space-y-3" data-lot-picker data-lot-url="/records/lots" data-lot-mode="@Model.Mode" data-name-id="@Model.NameId" data-name-reason="@Model.NameReason"
+     @Html.Raw((Model.Required ? "data-lot-required=\"true\" " : "") + (isMulti ? "" : "data-lot-js"))>
+    <div class="field" data-field data-lot-search-box data-lot-js>
+        <label class="field-label" for="@(Model.Id)-search">Lot ara</label>
+        <input id="@(Model.Id)-search" type="search" class="input" autocomplete="off" spellcheck="false" inputmode="search" enterkeyhint="search"
+               aria-controls="@(Model.Id)-results" aria-describedby="@(Model.Id)-hint @(Model.Id)-status" data-lot-search />
+        <p id="@(Model.Id)-hint" class="field-hint">@Model.Hint</p>
+        <p id="@(Model.Id)-status" class="field-hint" role="status" data-lot-status></p>
+    </div>
+    <ul id="@(Model.Id)-results" class="lot-results" aria-label="Bulunan lotlar" data-lot-results hidden></ul>
+    <ul class="space-y-2" aria-label="Seçilen lotlar" data-lot-selected>
+    @if (isMulti)
+    {
+        @for (var index = 0; index < Model.Selected.Length; index++)
+        {
+            var entry = Model.Selected[index];
+            <partial name="_LotRow" model='(index, entry.MaterialLotId, LabelOf(entry), entry.IsExpired, entry.ExpiredReason, ReasonError(index))' />
+        }
+    }
+    </ul>
+    @if (!isMulti)
+    {
+        <template data-lot-pending>
+            @for (var index = 0; index < Model.Selected.Length; index++)
+            {
+                var entry = Model.Selected[index];
+                <partial name="_LotRow" model='(index, entry.MaterialLotId, LabelOf(entry), entry.IsExpired, entry.ExpiredReason, ReasonError(index))' />
+            }
+        </template>
+    }
+    <p class="text-sm text-muted" data-lot-empty hidden="@(Model.Selected.Length > 0)">Henüz lot seçilmedi.</p>
+    <template data-lot-row-template>
+        <partial name="_LotRow" model='(0, 0, "", false, (string?)null, (string?)null)' />
+    </template>
+    <template data-lot-badge-template>
+        <partial name="_Badge" model='"lot.expired"' />
+    </template>
+</div>

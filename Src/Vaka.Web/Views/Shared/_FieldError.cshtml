@@ -1,0 +1,5 @@
+@model (string Id, string Message)
+<p id="@Model.Id" class="field-error">
+    <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+    <span>@Model.Message</span>
+</p>

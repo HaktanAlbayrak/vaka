@@ -89,4 +89,22 @@ public interface IDurationCalculator
     /// zarf payı çok parçalı gövdedeki alan başlıkları ve antiforgery alanı içindir.
     /// </summary>
     long GetUploadBodyLimitBytes(int maxPhotoMb, int maxVideoMb);
+
+    /// <summary>
+    /// Makine kilidinin bitişi (SH-13, BR-45, K-38).
+    /// Kilit bitişi = en erken (Açılış + KilitSüresi dakika, açılış anını içeren vardiyanın bitişi)
+    /// Açılış bir vardiyaya düşmüyorsa ya da tesiste aktif vardiya yoksa: Kilit bitişi = Açılış + KilitSüresi dakika
+    /// </summary>
+    /// <remarks>
+    /// Vardiya aralığı başlangıç dahil bitiş hariçtir; <paramref name="shiftAtOpening"/> bunu <see cref="FindShiftAt"/> ile bulunmuş olarak verir.
+    /// Gece yarısını geçen vardiyanın bitişi ertesi güne düşer. Açılışta bir kez hesaplanır ve saklanır; vardiya sonradan değişse de kayıt değişmez.
+    /// </remarks>
+    DateTimeOffset CalculateLockExpiry(DateTimeOffset openedAt, int lockMinutes, ShiftOccurrence? shiftAtOpening);
+
+    /// <summary>
+    /// Kilit bitişinin geçip geçmediği (BR-26, BR-46).
+    /// Geçti: Şimdi &gt;= Kilit bitişi (bitiş anının kendisinde kilit kalkar)
+    /// </summary>
+    /// <remarks>Zaman aşımı anı olarak kaydedilen değer şimdi değil kilit bitişidir.</remarks>
+    bool IsLockExpired(DateTimeOffset lockExpiresAt, DateTimeOffset now);
 }

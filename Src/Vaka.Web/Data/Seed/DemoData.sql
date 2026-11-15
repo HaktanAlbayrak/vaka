@@ -79,3 +79,42 @@ INSERT OR IGNORE INTO "ProcedureSteps" ("Id","ProcedurePhaseId","OrderNo","Title
 UPDATE "ProcedureVersions" SET "Status" = 2, "PublishedAtUtc" = '2026-10-01 08:00:00'
  WHERE "Id" IN (1,2) AND "Status" = 1 AND "PublishedByUserId" IS NULL
    AND EXISTS (SELECT 1 FROM "ProcedurePhases" WHERE "ProcedureVersionId" = "ProcedureVersions"."Id");
+
+-- Faz 4 notr demo verisi (DB-2026-006): ucuncu planli tip (PLN3). Faz 3 duzeni: versiyon once Taslak yazilir,
+-- faz ve adimlar yalniz versiyon Taslak iken eklenir, en sonda Yururlukte yapilir. Faz 3 satirlari degismez.
+-- Kayit, olay ve sayac demo verisi yoktur. Ikinci calistirmada hicbir ifade satir eklemez ya da degistirmez.
+INSERT OR IGNORE INTO "CleaningTypes" ("Id","Code","Name","Kind","DefaultLockMinutes","IsActive") VALUES
+ (3,'PLN3','Üç fazlı planlı temizlik',1,90,1);
+
+INSERT OR IGNORE INTO "MachineCleaningTypes" ("MachineId","CleaningTypeId")
+ SELECT "Id", 3 FROM "Machines" WHERE "Id" IN (1,2,3,5) AND "IsActive" = 1 AND "RetiredAtUtc" IS NULL;
+
+INSERT OR IGNORE INTO "ProcedureVersions" ("Id","CleaningTypeId","VersionNo","Status","MaterialRequired","DocumentRef","PublishedAtUtc","PublishedByUserId") VALUES
+ (3,3,1,1,0,NULL,NULL,NULL);
+
+INSERT OR IGNORE INTO "ProcedurePhases" ("Id","ProcedureVersionId","OrderNo","Title","MinDurationSeconds")
+ SELECT column1, column2, column3, column4, column5 FROM (VALUES
+  (5,3,1,'Hazırlık',900),
+  (6,3,2,'Temizlik',900),
+  (7,3,3,'Kontrol ve teslim',900))
+ WHERE EXISTS (SELECT 1 FROM "ProcedureVersions" WHERE "Id" = 3 AND "Status" = 1);
+
+INSERT OR IGNORE INTO "ProcedureSteps" ("Id","ProcedurePhaseId","OrderNo","Title","Description")
+ SELECT column1, column2, column3, column4, column5 FROM (VALUES
+  (8,5,1,'Makineyi durdur ve enerjiyi kes',NULL),
+  (9,5,2,'Güvenlik etiketini as',NULL),
+  (10,5,3,'Ürün kalıntısını boşalt',NULL),
+  (11,5,4,'Koruyucu ekipmanı tak',NULL),
+  (12,5,5,'Temizlik malzemelerini hazırla',NULL),
+  (13,6,1,'Yüzeyleri deterjanla yıka',NULL),
+  (14,6,2,'Temas parçalarını sök ve temizle',NULL),
+  (15,6,3,'Durula ve dezenfektan uygula',NULL),
+  (16,7,1,'Yüzeyi gözle kontrol et',NULL),
+  (17,7,2,'Parçaları yerine tak',NULL),
+  (18,7,3,'Etiketi çıkar ve alanı topla',NULL),
+  (19,7,4,'Temizliği onayla',NULL))
+ WHERE EXISTS (SELECT 1 FROM "ProcedureVersions" WHERE "Id" = 3 AND "Status" = 1);
+
+UPDATE "ProcedureVersions" SET "Status" = 2, "PublishedAtUtc" = '2026-10-01 08:00:00'
+ WHERE "Id" = 3 AND "Status" = 1 AND "PublishedByUserId" IS NULL
+   AND EXISTS (SELECT 1 FROM "ProcedurePhases" WHERE "ProcedureVersionId" = "ProcedureVersions"."Id");

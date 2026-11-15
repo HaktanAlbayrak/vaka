@@ -1,0 +1,120 @@
+Faz 4 teslim testi, 2026-11-15. Release yayını .qa/f4/build (çalışma ağacı, HEAD 64b9ad3). Port 5401 Production, DB .qa/f4/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5403 Development, .qa/f4/qa-dev.db, user-secrets anahtarı. Port 5402 Production, .qa/f4/empty.db (yalnız migration + iki kullanıcı). Saatler: veritabanında UTC, ekranda Türkiye (UTC+3).
+
+== JS kapalı yeni kayıt: seçili lot satırının görünürlüğü (nojs2.js, 1024; görüntü JsKapali-YeniKayit.png)
+html data-js: false
+seçili lot satırları: [{"label":"Yüzey dezenfektanı (MLZ001), lot L2027-001, SKT 31.03.2027","görünür":false,"gizleyen":["DIV.space-y-3[data-lot-js]"]}]
+Çıkar düğmesi (RemoveMaterialIndex) görünür: false
+hidden Materials[] alanları: Materials[0].MaterialLotId=2
+
+== JS kapalı yeni kayıt: SKT geçmiş lot (nojs3.js, 390; 1: gerekçesiz, 2: gerekçe "Ekle" anında verildi)
+    (gezinme olmadı)
+1 SKT geçmiş lot gerekçesiz "Kaydı oluştur": POST gönderilmedi | url /records/create?refresh=true | hata - | geçersiz alan: Materials[0].ExpiredReason görünür=false
+  eklendikten sonra gizli satırdaki gerekçe: "Tedarik gecikti, sorumlu onayladı" görünür=false
+2 gerekçe "Ekle" anında verilerek "Kaydı oluştur": POST 200 /records/create?refresh=true | url /records/create?refresh=true | hata -
+DB: makine 17 için bu akışlardan kayıt oluşmadı; 2. adımın POST'u /records/create?refresh=true adresine gitti.
+
+== JS kapalı Run (nojs4.js, kayıt 4): ?q=, add-material, PendingMaterial, çıkarma
+  run malzeme: Malzeme Malzeme gerekmez Yüzey dezenfektanı MLZ001 Lot L2026-001, SKT 30.06.2026 QA Operatör 3, 05:51 SKT geçmiş Gerekçe: Tedarik gecikti, Q
+3 Run ?q=K2027 listelenen: 4
+  K2027A ekle: 302 /records/add-material/4 | hata -
+4 yanlış PIN ile ekle: 200 /records/add-material/4 | hata İşlem yapılmadı PIN hatalı. | PendingMaterial seçili radyo: 3 | PIN boş: true
+5 ?q=L2026 (lot 1 zaten ekli) listelenen: 1
+6 ilk malzemeyi çıkar: 302 /records/remove-material/4 | hata -
+RID=4
+
+== JS açık yeni kayıt: zincirli seçim, varsayılan kilit, LotPicker, K13 çevrimdışı ve yeniden deneme (js1.js)
+Seçimi uygula düğmesi JS açıkken görünür: false
+hat seçenekleri: ["Hat seçin","H1 - QA hat"]
+makine seçenekleri: ["Makine seçin","A1 - QA vardiyasız makine A1 - Sahip: QA Operatör 8, durum:  [kapalı]","A2 - QA vardiyasız makine A2 - Sahip: QA Operatör 5, durum:  [kapalı]","A3 - QA vardiyasız makine A3 - Sahip: QA Operatör 7, durum:  [kapalı]","A4 - QA vardiyasız makine A4 - Sahip: QA Operatör 09, durum: [kapalı]","A5 - QA eşzamanlı A5 - Sahip: QA Operatör 10, durum: açıldı, [kapalı]","A6 - QA eşzamanlı A6 - Sahip: QA Operatör 16, durum: açıldı, [kapalı]","A7 - QA eşzamanlı A7"]
+tip seçenekleri: ["1","3"]
+kilit süresi tip varsayılanı: 90 | malzeme notu: Seçilen tip malzeme gerektiriyor. En az bir lot ekleyin.
+LotPicker sonuçları: Yüzey dezenfektanı (MLZ001)Lot L2026-001 · SKT 30.06.2026 SKT geçmiş
+seçili satır: Yüzey dezenfektanı (MLZ001), lot L2026-001, SKT 30.06.2026 SKT geçmiş Çıkar Çıkar SKT geçmiş lotu kullanma gerekçesi | gerekçe alanı görünür=true zorunlu=true
+gerekçesiz gönder: istek 0 | odak=true geçerli=false
+K13 çevrimdışı gönder: istek 0 | ileti: İşlem yapılmadı, bağlantı yok. Bağlantı gelince aynı düğmeyle yeniden deneyin, işlem tek kez yapılır. | düğme etkin=true | CommandId aynı=true | url /records/create
+çevrimiçi yeniden dene: istek /records/create CommandId=885db42e-a147-4f7d-a7ca-9ab5883c99e7 | url /records/run/17
+CommandId başlangıç 885db42e-a147-4f7d-a7ca-9ab5883c99e7
+konsol hatası: 0
+
+
+== Tur 2 (2026-11-15)
+Release yayını .qa/f4/build (B1 düzeltmesi), port 5401 qa.db (tur 1 verisinin devamı), yeni süreç içi rastgele anahtar. Tarayıcının kendi form gönderimi.
+
+== B1 JS kapalı yeni kayıt, 360 (op17, A8) ve 1440 (op18, A9), malzeme zorunlu PLN (b1.js). Sütunlar: adres, CommandId, korunan alanlar, seçili satırlar, listelenen lotlar, görünür hata, form/belirteç
+-- 360
+form action: /records/create | data-lot-js sayısı: 1
+1 tesis T3 + Seçimi uygula                   url=/records/create | CommandId aynı | tip - iş emri "" not "" kilit  | seçili: - | listelenen: L2026-001,,L2027-001,,L2027-002,,K2026B,,K2027A, | hata: - | form 4 belirteçsiz 0
+2 hat + Seçimi uygula                        url=/records/create | CommandId aynı | tip - iş emri "" not "" kilit  | seçili: - | listelenen: L2026-001,,L2027-001,,L2027-002,,K2026B,,K2027A, | hata: - | form 4 belirteçsiz 0
+3 makine + Seçimi uygula                     url=/records/create | CommandId aynı | tip - iş emri "" not "" kilit  | seçili: - | listelenen: L2026-001,,L2027-001,,L2027-002,,K2026B,,K2027A, | hata: - | form 4 belirteçsiz 0
+4 tip PLN, alanlar, LotQuery "L2027"         url=/records/create | CommandId aynı | tip 1 iş emri "IE-T2-360" not "Tur 2 JS kapalı 360" kilit 50 | seçili: - | listelenen: L2027-001,,L2027-002, | hata: - | form 4 belirteçsiz 0
+5 normal lot Ekle                            url=/records/create?refresh=true | CommandId aynı | tip 1 iş emri "IE-T2-360" not "Tur 2 JS kapalı 360" kilit 50 | seçili: lot L2027-001, SKT 31.03.2027 (Çıkar görünür) | listelenen: L2027-001,,L2027-002, | hata: - | form 4 belirteçsiz 0
+6 LotQuery "L2026"                           url=/records/create | CommandId aynı | tip 1 iş emri "IE-T2-360" not "Tur 2 JS kapalı 360" kilit 50 | seçili: lot L2027-001, SKT 31.03.2027 (Çıkar görünür) | listelenen: L2026-001, | hata: - | form 4 belirteçsiz 0
+7 SKT geçmiş lot Ekle (gerekçesiz)           url=/records/create?refresh=true | CommandId aynı | tip 1 iş emri "IE-T2-360" not "Tur 2 JS kapalı 360" kilit 50 | seçili: lot L2027-001, SKT 31.03.2027 (Çıkar görünür); lot L2026-001, SKT 30.06.2026 [SKT geçmiş, gerekçe alanı görünür] (Çıkar görünür) | listelenen: L2026-001, | hata: - | form 4 belirteçsiz 0
+    (gezinme olmadı)
+8 gerekçesiz "Kaydı oluştur"                 url=/records/create?refresh=true | CommandId aynı | tip 1 iş emri "IE-T2-360" not "Tur 2 JS kapalı 360" kilit 50 | seçili: lot L2027-001, SKT 31.03.2027 (Çıkar görünür); lot L2026-001, SKT 30.06.2026 [SKT geçmiş, gerekçe alanı görünür] (Çıkar görünür) | listelenen: L2026-001, | hata: - | form 4 belirteçsiz 0
+9 üçüncü lot (K2027A) Ekle                   url=/records/create?refresh=true | CommandId aynı | tip 1 iş emri "IE-T2-360" not "Tur 2 JS kapalı 360" kilit 50 | seçili: lot L2027-001, SKT 31.03.2027 (Çıkar görünür); lot L2026-001, SKT 30.06.2026 [SKT geçmiş, gerekçe alanı görünür] (Çıkar görünür); lot K2027A, SKT 31.01.2027 (Çıkar görünür) | listelenen: K2027A, | hata: - | form 4 belirteçsiz 0
+10 son satırı Çıkar                          url=/records/create?refresh=true | CommandId aynı | tip 1 iş emri "IE-T2-360" not "Tur 2 JS kapalı 360" kilit 50 | seçili: lot L2027-001, SKT 31.03.2027 (Çıkar görünür); lot L2026-001, SKT 30.06.2026 [SKT geçmiş, gerekçe alanı görünür] (Çıkar görünür) | listelenen: K2027A, | hata: - | form 4 belirteçsiz 0
+11 gerekçeyle "Kaydı oluştur"                url=/records/run/18 | CommandId DEĞİŞTİ | tip - iş emri "undefined" not "undefined" kilit undefined | seçili: - | listelenen: - | hata: - | form 6 belirteçsiz 0
+POST yanıtları: 200 /records/create || 200 /records/create || 200 /records/create || 200 /records/create || 200 /records/create?refresh=true || 200 /records/create || 200 /records/create?refresh=true || 200 /records/create || 200 /records/create?refresh=true || 200 /records/create?refresh=true || 302 /records/create
+RID=18
+Run malzeme: Yüzey dezenfektanı MLZ001 Lot L2027-001, SKT 31.03.2027 QA Operatör 17, 06:10 Çıkar L2027-001 lotu bu kayıttan çıkarılır || Yüzey dezenfektanı MLZ001 Lot L2026-001, SKT 30.06.2026 QA Operatör 17, 06:10 SKT geçmiş Gerekçe: Tedarik gecikti, sorum
+-- 1440
+form action: /records/create | data-lot-js sayısı: 1
+1 tesis T3 + Seçimi uygula                   url=/records/create | CommandId aynı | tip - iş emri "" not "" kilit  | seçili: - | listelenen: L2026-001,,L2027-001,,L2027-002,,K2026B,,K2027A, | hata: - | form 4 belirteçsiz 0
+2 hat + Seçimi uygula                        url=/records/create | CommandId aynı | tip - iş emri "" not "" kilit  | seçili: - | listelenen: L2026-001,,L2027-001,,L2027-002,,K2026B,,K2027A, | hata: - | form 4 belirteçsiz 0
+3 makine + Seçimi uygula                     url=/records/create | CommandId aynı | tip - iş emri "" not "" kilit  | seçili: - | listelenen: L2026-001,,L2027-001,,L2027-002,,K2026B,,K2027A, | hata: - | form 4 belirteçsiz 0
+4 tip PLN, alanlar, LotQuery "L2027"         url=/records/create | CommandId aynı | tip 1 iş emri "IE-T2-1440" not "Tur 2 JS kapalı 1440" kilit 50 | seçili: - | listelenen: L2027-001,,L2027-002, | hata: - | form 4 belirteçsiz 0
+5 normal lot Ekle                            url=/records/create?refresh=true | CommandId aynı | tip 1 iş emri "IE-T2-1440" not "Tur 2 JS kapalı 1440" kilit 50 | seçili: lot L2027-001, SKT 31.03.2027 (Çıkar görünür) | listelenen: L2027-001,,L2027-002, | hata: - | form 4 belirteçsiz 0
+6 LotQuery "L2026"                           url=/records/create | CommandId aynı | tip 1 iş emri "IE-T2-1440" not "Tur 2 JS kapalı 1440" kilit 50 | seçili: lot L2027-001, SKT 31.03.2027 (Çıkar görünür) | listelenen: L2026-001, | hata: - | form 4 belirteçsiz 0
+7 SKT geçmiş lot Ekle (gerekçesiz)           url=/records/create?refresh=true | CommandId aynı | tip 1 iş emri "IE-T2-1440" not "Tur 2 JS kapalı 1440" kilit 50 | seçili: lot L2027-001, SKT 31.03.2027 (Çıkar görünür); lot L2026-001, SKT 30.06.2026 [SKT geçmiş, gerekçe alanı görünür] (Çıkar görünür) | listelenen: L2026-001, | hata: - | form 4 belirteçsiz 0
+    (gezinme olmadı)
+8 gerekçesiz "Kaydı oluştur"                 url=/records/create?refresh=true | CommandId aynı | tip 1 iş emri "IE-T2-1440" not "Tur 2 JS kapalı 1440" kilit 50 | seçili: lot L2027-001, SKT 31.03.2027 (Çıkar görünür); lot L2026-001, SKT 30.06.2026 [SKT geçmiş, gerekçe alanı görünür] (Çıkar görünür) | listelenen: L2026-001, | hata: - | form 4 belirteçsiz 0
+9 üçüncü lot (K2027A) Ekle                   url=/records/create?refresh=true | CommandId aynı | tip 1 iş emri "IE-T2-1440" not "Tur 2 JS kapalı 1440" kilit 50 | seçili: lot L2027-001, SKT 31.03.2027 (Çıkar görünür); lot L2026-001, SKT 30.06.2026 [SKT geçmiş, gerekçe alanı görünür] (Çıkar görünür); lot K2027A, SKT 31.01.2027 (Çıkar görünür) | listelenen: K2027A, | hata: - | form 4 belirteçsiz 0
+10 son satırı Çıkar                          url=/records/create?refresh=true | CommandId aynı | tip 1 iş emri "IE-T2-1440" not "Tur 2 JS kapalı 1440" kilit 50 | seçili: lot L2027-001, SKT 31.03.2027 (Çıkar görünür); lot L2026-001, SKT 30.06.2026 [SKT geçmiş, gerekçe alanı görünür] (Çıkar görünür) | listelenen: K2027A, | hata: - | form 4 belirteçsiz 0
+11 gerekçeyle "Kaydı oluştur"                url=/records/run/19 | CommandId DEĞİŞTİ | tip - iş emri "undefined" not "undefined" kilit undefined | seçili: - | listelenen: - | hata: - | form 6 belirteçsiz 0
+POST yanıtları: 200 /records/create || 200 /records/create || 200 /records/create || 200 /records/create || 200 /records/create?refresh=true || 200 /records/create || 200 /records/create?refresh=true || 200 /records/create || 200 /records/create?refresh=true || 200 /records/create?refresh=true || 302 /records/create
+RID=19
+Run malzeme: Yüzey dezenfektanı MLZ001 Lot L2027-001, SKT 31.03.2027 QA Operatör 18, 06:10 Çıkar L2027-001 lotu bu kayıttan çıkarılır || Yüzey dezenfektanı MLZ001 Lot L2026-001, SKT 30.06.2026 QA Operatör 18, 06:10 SKT geçmiş Gerekçe: Tedarik gecikti, sorum
+
+== Veritabanı (önce/sonra; refresh POST'ları kayıt ve olay üretmedi; olay +3 = iki RecordOpened + kayıt 14'ün kendiliğinden RecordTimedOut olayı)
+önce kayıt/olay/malzeme 17 23 10
+sonra kayıt/olay/malzeme 19 26 14
+[(18, 'T3-H1-A8-P2026-1', 1, 20, 20, 50, '2026-11-15 03:10:23.5493051', '2026-11-15 04:00:23.5493051', None, 1, 'IE-T2-360', None)] [(2, 0, None, None), (1, 1, 'Tedarik gecikti, sorumlu onayladı', None)] [(1, 'RecordOpened', '5952c694-6ee6-4d7c-bdcf-61f24d8915f6')]
+[(19, 'T3-H1-A9-P2026-1', 1, 21, 21, 50, '2026-11-15 03:10:23.9116751', '2026-11-15 04:00:23.9116751', None, 1, 'IE-T2-1440', None)] [(2, 0, None, None), (1, 1, 'Tedarik gecikti, sorumlu onayladı', None)] [(1, 'RecordOpened', 'df6b1b0d-7245-418d-974b-c7be1060210d')]
+
+== Gerekçesiz SKT geçmiş lot: tarayıcı doğrulaması ve sunucu reddi; JS açık Run LotPicker (b1v.js)
+JS kapalı gerekçesiz gönder: url /records/create?refresh=true | gerekçe alanı görünür=true geçersiz=true tarayıcı iletisi="Lütfen bu alanı doldurun." odakta=true
+tarayıcı doğrulaması atlanınca sunucu: url /records/create | hatalar: Kayıt açılamadı SKT geçmiş lot için gerekçe girin. / SKT geçmiş lot için gerekçe girin. | hata gerekçe alanının altında: true
+JS açık Run: JS kapalı yedek gizli=true | picker görünür=true
+  seçili satır: Yüzey dezenfektanı (MLZ001), lot L2026-001, SKT 30.06.2026 SKT geçmiş Çıkar Çıka
+  yanlış PIN:  | hata:  | PendingMaterial satırı: Yüzey dezenfektanı (MLZ001), lot L2026-001, SKT 30.06.2026 SKT geçmiş Çıkar Çıka | gizli alan MaterialLotId: 1 | PIN boş=false
+  doğru PIN:  | malzeme listesinde K2026B: false
+  konsol hatası: 0
+
+== JS açık Run PendingMaterial (pend.js, kayıt 19)
+arama "L2027-002" sonuçları: Yüzey dezenfektanı (MLZ001)Lot L2027-002 · SKT 30.09.2027
+seçili: Yüzey dezenfektanı (MLZ001), lot L2027-002, SKT 30.09.2027
+yanlış PIN gönder: 200 /records/add-material/19 | hata: İşlem yapılmadı PIN hatalı. | PendingMaterial satırı: Yüzey dezenfektanı (MLZ001), lot L2027-002, SKT 30.09.2027 | etkin MaterialLotId: 3 | PIN boş=true | odak=alert
+doğru PIN gönder: 302 /records/add-material/19 | hata: -
+SKT geçmiş seçili: Yüzey dezenfektanı (MLZ001), lot L2026-001, SKT 30.06.2026 [SKT geçmiş, gerekçe=""]
+gerekçesiz gönder: istek yok | geçersiz alan odakta=true ileti="Lütfen bu alanı doldurun."
+gerekçeli yanlış PIN: 200 /records/add-material/19 | PendingMaterial: Yüzey dezenfektanı (MLZ001), lot L2026-001, SKT 30.06.2026 [SKT geçmiş, gerekçe="QA gerekçe"]
+konsol hatası: 0
+
+== JS açık yeni kayıt gerilemesi, K13 (js1.js, op19, A10)
+Seçimi uygula düğmesi JS açıkken görünür: false
+hat seçenekleri: ["Hat seçin","H1 - QA hat"]
+makine seçenekleri: ["Makine seçin","A1 - QA vardiyasız makine A1 - Sahip: QA Operatör 8, durum:  [kapalı]","A10 - QA tur 2 A10","A11 - QA tur 2 A11","A2 - QA vardiyasız makine A2 - Sahip: QA Operatör 5, durum:  [kapalı]","A3 - QA vardiyasız makine A3 - Sahip: QA Operatör 7, durum:  [kapalı]","A4 - QA vardiyasız makine A4 - Sahip: QA Operatör 09, durum: [kapalı]","A5 - QA eşzamanlı A5 - Sahip: QA Operatör 10, durum: açıldı, [kapalı]","A6 - QA eşzamanlı A6 - Sahip: QA Operatör 16, durum: açıldı, [kapalı]","A7 - QA eşzamanlı A7 - Sahip: QA Operatör 6, durum: açıldı,  [kapalı]","A8 - QA tur 2 A8 - Sahip: QA Operatör 17, durum: açıldı, açı [kapalı]","A9 - QA tur 2 A9 - Sahip: QA Operatör 18, durum: açıldı, açı [kapalı]"]
+tip seçenekleri: ["1","3"]
+kilit süresi tip varsayılanı: 90 | malzeme notu: Seçilen tip malzeme gerektiriyor. En az bir lot ekleyin.
+LotPicker sonuçları: Yüzey dezenfektanı (MLZ001)Lot L2026-001 · SKT 30.06.2026 SKT geçmiş
+seçili satır: Yüzey dezenfektanı (MLZ001), lot L2026-001, SKT 30.06.2026 SKT geçmiş Çıkar Çıkar SKT geçmiş lotu kullanma gerekçesi | gerekçe alanı görünür=true zorunlu=true
+gerekçesiz gönder: istek 0 | odak=true geçerli=false
+K13 çevrimdışı gönder: istek 0 | ileti: İşlem yapılmadı, bağlantı yok. Bağlantı gelince aynı düğmeyle yeniden deneyin, işlem tek kez yapılır. | düğme etkin=true | CommandId aynı=true | url /records/create
+çevrimiçi yeniden dene: istek /records/create CommandId=87b2883e-42df-4153-8fef-a53475696f74 | url /records/run/20
+CommandId başlangıç 87b2883e-42df-4153-8fef-a53475696f74
+konsol hatası: 0
+
+== K12 tur 2
+K12 tur 2: 1. 302 /records/run/21 | 2. aynı CommandId 302 /records/run/21 | kayıt +1 olay +1
+JS açık akış kaydı: [(20, 'T3-H1-A10-P2026-1', 1, 22, 22, 90, '2026-11-15 03:13:31.8649522', '2026-11-15 04:43:31.8649522', None, 1, 'IE-T2-JS', None)] [(1, 1, 'Tedarik gecikti, sorumlu onayladı')]

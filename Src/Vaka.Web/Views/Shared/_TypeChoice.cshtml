@@ -1,0 +1,12 @@
+@model (string InputId, string Value, string Name, string Meta, string MaterialRequired, string DefaultLock, bool Checked)
+<label class="choice">
+    <input type="radio" name="CleaningTypeId" id="@Model.InputId" value="@Model.Value" checked="@Model.Checked" required
+           data-material-required="@Model.MaterialRequired" data-default-lock="@Model.DefaultLock" data-required-message="Temizlik tipini seçin." />
+    <span class="min-w-0">
+        <span class="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span class="font-bold break-words" data-type-name>@Model.Name</span>
+            <partial name="_Badge" model='"CleaningTypeKind.Planned"' />
+        </span>
+        <span class="mt-1 block text-sm text-muted" data-type-meta>@Model.Meta</span>
+    </span>
+</label>

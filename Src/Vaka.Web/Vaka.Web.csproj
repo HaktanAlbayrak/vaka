@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <UserSecretsId>vaka-web-6c1f0d52-3a47-4e8e-9b0a-5d7e2f19a4c3</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

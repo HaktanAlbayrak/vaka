@@ -42,13 +42,14 @@ builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<ICredentialHasher, CredentialHasher>();
 builder.Services.AddSingleton<ITurkeyClock, TurkeyClock>();
 builder.Services.AddSingleton<IDurationCalculator, DurationCalculator>();
+builder.Services.AddSingleton<IDurationFormatter, DurationFormatter>();
 builder.Services.AddScoped<VakaCookieEvents>();
 builder.Services.AddScoped<ISystemSettingsReader, SystemSettingsReader>();
 builder.Services.AddScoped<IPinFormatValidator, PinFormatValidator>();
 builder.Services.AddScoped<IPinService, PinService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IOpenWorkProvider, NoOpenWorkProvider>();
-builder.Services.AddScoped<IMachineBlockProvider, NoMachineBlockProvider>();
+builder.Services.AddScoped<IOpenWorkProvider, OpenWorkProvider>();
+builder.Services.AddScoped<IMachineBlockProvider, MachineBlockProvider>();
 builder.Services.AddScoped<IFacilityService, FacilityService>();
 builder.Services.AddScoped<ILineService, LineService>();
 builder.Services.AddScoped<IShiftService, ShiftService>();
@@ -59,7 +60,7 @@ builder.Services.AddScoped<IMaterialLotService, MaterialLotService>();
 builder.Services.AddSingleton<IMediaStore, MediaStore>();
 builder.Services.AddScoped<UploadLimitFilter>();
 builder.Services.AddScoped<IProcedureLinks, ProcedureLinks>();
-builder.Services.AddScoped<ICleaningTypeBlockProvider, NoCleaningTypeBlockProvider>();
+builder.Services.AddScoped<ICleaningTypeBlockProvider, CleaningTypeBlockProvider>();
 builder.Services.AddScoped<ICleaningTypeService, CleaningTypeService>();
 builder.Services.AddScoped<IMachineMappingService, MachineMappingService>();
 builder.Services.AddScoped<IProcedureVersionReader, ProcedureVersionReader>();
@@ -69,8 +70,34 @@ builder.Services.AddScoped<IProcedureStepEditor, ProcedureStepEditor>();
 builder.Services.AddScoped<IStepMediaService, StepMediaService>();
 builder.Services.AddScoped<IUserDirectory, UserDirectory>();
 builder.Services.AddScoped<IUserAdministration, UserAdministration>();
+builder.Services.AddSingleton<IEventDigest>(_ => new HmacEventDigest(EventChainKey.Parse(builder.Configuration[EventChainKey.ConfigurationKey])));
+builder.Services.AddScoped<IWriteTransactionRunner, WriteTransactionRunner>();
+builder.Services.AddScoped<ICleaningEventWriter, CleaningEventWriter>();
+builder.Services.AddScoped<IProcessedCommands, ProcessedCommands>();
+builder.Services.AddScoped<INumberSequences, NumberSequences>();
+builder.Services.AddScoped<IShiftLocator, ShiftLocator>();
+builder.Services.AddScoped<IRecordTimeouts, RecordTimeouts>();
+builder.Services.AddScoped<ILotCatalog, LotCatalog>();
+builder.Services.AddScoped<IRecordOptions, RecordOptions>();
+builder.Services.AddScoped<IRecordCreateForm, RecordCreateForm>();
+builder.Services.AddScoped<IRecordOpenValidator, RecordOpenValidator>();
+builder.Services.AddScoped<IRecordOpener, RecordOpener>();
+builder.Services.AddScoped<IRecordRunReader, RecordRunReader>();
+builder.Services.AddScoped<IRecordMaterialService, RecordMaterialService>();
+builder.Services.AddScoped<IMyWorkReader, MyWorkReader>();
+builder.Services.AddScoped<IMachineBoardReader, MachineBoardReader>();
 
 var app = builder.Build();
+
+try
+{
+    app.Services.GetRequiredService<IEventDigest>();
+}
+catch (InvalidOperationException exception)
+{
+    app.Logger.LogCritical("Olay özeti anahtarı geçersiz, uygulama başlamıyor: {Reason}", exception.Message);
+    return 1;
+}
 
 if (!app.Environment.IsDevelopment())
 {
@@ -85,3 +112,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+return 0;

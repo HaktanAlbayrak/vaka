@@ -1,0 +1,79 @@
+@using Vaka.Web.ViewModels.Records
+@model (string Mode, string? LotQuery, LotOptionViewModel[] Lots, bool Truncated, int? PendingLotId, string? PendingReason)
+@{
+    var isMulti = Model.Mode == "multi";
+}
+<div class="space-y-3" data-lot-nojs>
+    @if (isMulti)
+    {
+        <div class="field" data-field>
+            <label class="field-label" for="LotQuery">Lot ara</label>
+            <div class="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
+                <input id="LotQuery" name="LotQuery" type="search" class="input" value="@Model.LotQuery" autocomplete="off" spellcheck="false" inputmode="search" />
+                <button type="submit" class="btn btn-secondary min-h-12" name="refresh" value="true" formnovalidate>
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#search" /></svg>
+                    Lotları ara
+                </button>
+            </div>
+            <p class="field-hint">Malzeme adı, kodu ya da lot no yazın. Boş bırakırsanız ilk lotlar listelenir.</p>
+        </div>
+    }
+    @if (Model.Lots.Length == 0)
+    {
+        <p class="text-sm text-muted">Listelenecek lot yok. Aramayı değiştirin.</p>
+    }
+    else
+    {
+        @if (isMulti)
+        {
+            <ul class="divide-y divide-line border-2 border-line-strong bg-surface" aria-label="Bulunan lotlar">
+                @foreach (var lot in Model.Lots)
+                {
+                    <li class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 p-3">
+                        <div class="min-w-0">
+                            <p class="break-words font-semibold">@lot.MaterialName (@lot.MaterialCode)</p>
+                            <p class="text-sm text-muted">Lot <span class="mono">@lot.LotNo</span>, SKT <span class="mono">@lot.ExpiryDate.ToString("dd.MM.yyyy")</span></p>
+                            @if (lot.IsExpired)
+                            {
+                                <partial name="_Badge" model='"lot.expired"' />
+                            }
+                        </div>
+                        <button type="submit" class="btn btn-secondary" name="AddMaterialLotId" value="@lot.Id" formaction="/records/create?refresh=true" formnovalidate
+                                aria-label="@lot.MaterialName lot @lot.LotNo ekle">
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#plus" /></svg>
+                            Ekle
+                        </button>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="grid gap-2" role="radiogroup" aria-label="Bulunan lotlar">
+                @foreach (var lot in Model.Lots)
+                {
+                    <label class="choice">
+                        <input type="radio" name="MaterialLotId" value="@lot.Id" checked="@(lot.Id == Model.PendingLotId)" />
+                        <span class="min-w-0">
+                            <span class="block break-words font-semibold">@lot.MaterialName (@lot.MaterialCode)</span>
+                            <span class="block text-sm text-muted">Lot <span class="mono">@lot.LotNo</span>, SKT <span class="mono">@lot.ExpiryDate.ToString("dd.MM.yyyy")</span></span>
+                            @if (lot.IsExpired)
+                            {
+                                <partial name="_Badge" model='"lot.expired"' />
+                            }
+                        </span>
+                    </label>
+                }
+            </div>
+        }
+    }
+    @if (Model.Truncated)
+    {
+        <p class="notice notice-warn"><svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#info" /></svg><span>Aramayı daraltın. Yalnız ilk 50 lot gösteriliyor.</span></p>
+    }
+    <div class="field" data-field>
+        <label class="field-label" for="@(isMulti ? "AddExpiredReason" : "ExpiredReason")">SKT geçmiş lot için gerekçe</label>
+        <textarea id="@(isMulti ? "AddExpiredReason" : "ExpiredReason")" name="@(isMulti ? "AddExpiredReason" : "ExpiredReason")" class="input" rows="2" autocomplete="off">@Model.PendingReason</textarea>
+        <p class="field-hint">Yalnız son kullanma tarihi geçmiş lot seçtiyseniz doldurun.</p>
+    </div>
+</div>

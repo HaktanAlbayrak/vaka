@@ -9,13 +9,15 @@ public sealed class AccountService : IAccountService
     private readonly ICredentialHasher _hasher;
     private readonly IPinService _pins;
     private readonly IPinFormatValidator _pinFormat;
+    private readonly IWriteTransactionRunner _transactions;
 
-    public AccountService(VakaDbContext db, ICredentialHasher hasher, IPinService pins, IPinFormatValidator pinFormat)
+    public AccountService(VakaDbContext db, ICredentialHasher hasher, IPinService pins, IPinFormatValidator pinFormat, IWriteTransactionRunner transactions)
     {
         _db = db;
         _hasher = hasher;
         _pins = pins;
         _pinFormat = pinFormat;
+        _transactions = transactions;
     }
 
     public async Task<AccountState?> SignInAsync(string registryNo, string password, CancellationToken cancellationToken)
@@ -119,23 +121,24 @@ public sealed class AccountService : IAccountService
         return CommandResult.Success();
     }
 
-    public async Task<CommandResult> ChangePinAsync(int userId, string currentPin, string newPin, CancellationToken cancellationToken)
-    {
-        var status = await _pins.VerifyAsync(userId, currentPin, cancellationToken);
-        if (status != PinCheckStatus.Accepted)
+    public async Task<CommandResult> ChangePinAsync(int userId, string currentPin, string newPin, CancellationToken cancellationToken) =>
+        await _transactions.RunAsync(async token =>
         {
-            return CommandResult.FromPin(status, "CurrentPin");
-        }
+            var status = await _pins.VerifyAsync(userId, currentPin, token);
+            if (status != PinCheckStatus.Accepted)
+            {
+                return CommandResult.FromPin(status, "CurrentPin");
+            }
 
-        var pinError = await _pinFormat.ValidateNewPinAsync(newPin, cancellationToken);
-        if (pinError is not null)
-        {
-            return CommandResult.Rejected("NewPin", pinError);
-        }
+            var pinError = await _pinFormat.ValidateNewPinAsync(newPin, token);
+            if (pinError is not null)
+            {
+                return CommandResult.Rejected("NewPin", pinError);
+            }
 
-        await _pins.SetAsync(userId, newPin, cancellationToken);
-        return CommandResult.Success();
-    }
+            await _pins.SetAsync(userId, newPin, token);
+            return CommandResult.Success();
+        }, cancellationToken);
 
     private List<FieldError> CheckPasswordChange(string passwordHash, string? currentPassword, string? newPassword)
     {

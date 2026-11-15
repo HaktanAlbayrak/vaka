@@ -81,9 +81,18 @@
     }
     else if (showRail)
     {
-        if (User.IsInRole(Roles.Operator) || User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Auditor))
+        if (User.IsInRole(Roles.Operator))
+        {
+            navItems.Add(("", "İşlerim", "layout-list", "/my-work", "my-work"));
+            navItems.Add(("", "Yeni kayıt", "file-plus", "/records/create", "new-record"));
+        }
+        else if (User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Auditor))
         {
             navItems.Add(("", "Ana sayfa", "house", "/", "home"));
+        }
+        if (User.IsInRole(Roles.Operator) || User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Auditor))
+        {
+            navItems.Add((User.IsInRole(Roles.Operator) ? "" : "İzleme", "Makine panosu", "factory", "/machine-board", "machine-board"));
         }
         if (User.IsInRole(Roles.Manager))
         {

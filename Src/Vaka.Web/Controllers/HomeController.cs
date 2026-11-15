@@ -12,6 +12,11 @@ public sealed class HomeController : Controller
     [HttpGet("~/")]
     public IActionResult Index()
     {
+        if (User.IsInRole(Roles.Operator))
+        {
+            return RedirectToAction("Index", "MyWork");
+        }
+
         var roles = User.FindAll(ClaimTypes.Role).Select(claim => claim.Value).ToArray();
         if (roles.All(role => role == Roles.SuperAdmin))
         {

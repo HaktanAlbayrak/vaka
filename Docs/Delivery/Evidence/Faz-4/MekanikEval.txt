@@ -1,0 +1,136 @@
+Faz 4 teslim testi, 2026-11-15. Release yayını .qa/f4/build (çalışma ağacı, HEAD 64b9ad3). Port 5401 Production, DB .qa/f4/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5403 Development, .qa/f4/qa-dev.db, user-secrets anahtarı. Port 5402 Production, .qa/f4/empty.db (yalnız migration + iki kullanıcı). Saatler: veritabanında UTC, ekranda Türkiye (UTC+3).
+
+== Mekanik eval (an.py): ön tur p4op/p4op2/p4m/p4a/p4x, Run tekrar r4, boş kopya e4, Faz 1-3 gerilemesi g123
+===== p4op 35
+  sınıflar {'temiz': 35} kontrast>= 5.28 topbar<= 64
+===== p4op2 14
+  sınıflar {'temiz': 14} kontrast>= 5.44 topbar<= 64
+===== p4m 14
+  sınıflar {'temiz': 14} kontrast>= 5.28 topbar<= 64
+===== p4a 4
+  sınıflar {'temiz': 4} kontrast>= 5.28 topbar<= 64
+===== p4x 20
+  sınıflar {'temiz': 20} kontrast>= 5.28 topbar<= 64
+===== r4 9
+  sınıflar {'temiz': 9} kontrast>= 5.44 topbar<= 64
+===== e4 6
+  sınıflar {'temiz': 6} kontrast>= 5.95 topbar<= 64
+===== g123 52
+  sınıflar {'temiz': 52} kontrast>= 5.28 topbar<= 64
+
+== G11 / G4 / adım satırı hizası (f4ui.js): pano ızgara sütunu, birincil düğme yüksekliği, yatay kaydırma
+/records/run/1@360-light: adım 6, merkez farkı (satır/başlık/rozet) ready:16.5/0.5/41 waiting:5.3/-10.8/18.5+açıklama waiting:16.5/0.5/41+açıklama | üst fark 0 | damga 44 px, başlık satırı 77/55 px KUSUR 6 | birincil düğme yükseklik 44,56 | hScroll false
+/machine-board@360-light: adım yok | pano sütun 1 | birincil düğme yükseklik 48 | hScroll false
+/my-work@360-light: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/create@360-light: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/run/1@768-light: adım 6, merkez farkı (satır/başlık/rozet) ready:-8/-8/-8 waiting:-8/-8/-8+açıklama | üst fark 0 | damga 44 px, başlık satırı 28 px KUSUR 6 | birincil düğme yükseklik 44,56 | hScroll false
+/machine-board@768-light: adım yok | pano sütun 2 | birincil düğme yükseklik 48 | hScroll false
+/my-work@768-light: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/create@768-light: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/run/1@1024-light: adım 6, merkez farkı (satır/başlık/rozet) ready:5.3/-10.8/18.5 waiting:5.3/-10.8/18.5+açıklama waiting:-8/-8/-8+açıklama | üst fark 0 | damga 44 px, başlık satırı 55/28 px KUSUR 6 | birincil düğme yükseklik 44,56 | hScroll false | kv satır T1 - Ana tesis, H1:2 Planlı temizlik, v:2 Test Operatör 1:1 05:29:1 12131:1 Atanmadı:1 Detaylı temizlik g:1
+/machine-board@1024-light: adım yok | pano sütun 2 | birincil düğme yükseklik 48 | hScroll false | kv satır T1-H1-M01-P2026-1:2 Test Operatör 1:1 05:29:1 06:59:1 T1-H1-M02-P2026-1:2 Test Operatör 2:1 05:37:1 06:37:1
+/my-work@1024-light: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/create@1024-light: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/run/1@1440-light: adım 6, merkez farkı (satır/başlık/rozet) ready:-8/-8/-8 waiting:-8/-8/-8+açıklama | üst fark 0 | damga 44 px, başlık satırı 28 px KUSUR 6 | birincil düğme yükseklik 44,56 | hScroll false
+/machine-board@1440-light: adım yok | pano sütun 3 | birincil düğme yükseklik 48 | hScroll false
+/my-work@1440-light: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/create@1440-light: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/run/1@360-dark: adım 6, merkez farkı (satır/başlık/rozet) ready:16.5/0.5/41 waiting:5.3/-10.8/18.5+açıklama waiting:16.5/0.5/41+açıklama | üst fark 0 | damga 44 px, başlık satırı 77/55 px KUSUR 6 | birincil düğme yükseklik 44,56 | hScroll false
+/machine-board@360-dark: adım yok | pano sütun 1 | birincil düğme yükseklik 48 | hScroll false
+/my-work@360-dark: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/create@360-dark: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/run/1@768-dark: adım 6, merkez farkı (satır/başlık/rozet) ready:-8/-8/-8 waiting:-8/-8/-8+açıklama | üst fark 0 | damga 44 px, başlık satırı 28 px KUSUR 6 | birincil düğme yükseklik 44,56 | hScroll false
+/machine-board@768-dark: adım yok | pano sütun 2 | birincil düğme yükseklik 48 | hScroll false
+/my-work@768-dark: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/create@768-dark: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/run/1@1024-dark: adım 6, merkez farkı (satır/başlık/rozet) ready:5.3/-10.8/18.5 waiting:5.3/-10.8/18.5+açıklama waiting:-8/-8/-8+açıklama | üst fark 0 | damga 44 px, başlık satırı 55/28 px KUSUR 6 | birincil düğme yükseklik 44,56 | hScroll false | kv satır T1 - Ana tesis, H1:2 Planlı temizlik, v:2 Test Operatör 1:1 05:29:1 12131:1 Atanmadı:1 Detaylı temizlik g:1
+/machine-board@1024-dark: adım yok | pano sütun 2 | birincil düğme yükseklik 48 | hScroll false | kv satır T1-H1-M01-P2026-1:2 Test Operatör 1:1 05:29:1 06:59:1 T1-H1-M02-P2026-1:2 Test Operatör 2:1 05:37:1 06:37:1
+/my-work@1024-dark: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/create@1024-dark: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/run/1@1440-dark: adım 6, merkez farkı (satır/başlık/rozet) ready:-8/-8/-8 waiting:-8/-8/-8+açıklama | üst fark 0 | damga 44 px, başlık satırı 28 px KUSUR 6 | birincil düğme yükseklik 44,56 | hScroll false
+/machine-board@1440-dark: adım yok | pano sütun 3 | birincil düğme yükseklik 48 | hScroll false
+/my-work@1440-dark: adım yok | birincil düğme yükseklik 56 | hScroll false
+/records/create@1440-dark: adım yok | birincil düğme yükseklik 56 | hScroll false
+
+== Adım satırı düzeltme sonrası (f4uir.js, f4uir2.js)
+/records/run/1@360-light: adım 6, merkez farkı (satır/başlık/rozet) ready:16.5/0.5/41 waiting:5.3/-10.8/18.5+açıklama waiting:16.5/0.5/41+açıklama | üst fark 0 | damga 44 px, başlık satırı 77/55 px KUSUR 6 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/1@768-light: adım 6, merkez farkı (satır/başlık/rozet) ready:0/0/0 waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 44 px kusur 0 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/1@1024-light: adım 6, merkez farkı (satır/başlık/rozet) ready:5.3/-10.8/18.5 waiting:5.3/-10.8/18.5+açıklama waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 55/44 px KUSUR 5 | birincil düğme yükseklik 44,56 | hScroll false | kv satır T1 - Ana tesis, H1:2 Planlı temizlik, v:2 Test Operatör 1:1 05:29:1 12131:1 Atanmadı:1 Detaylı temizlik g:1
+/records/run/1@1440-light: adım 6, merkez farkı (satır/başlık/rozet) ready:0/0/0 waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 44 px kusur 0 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/1@360-dark: adım 6, merkez farkı (satır/başlık/rozet) ready:16.5/0.5/41 waiting:5.3/-10.8/18.5+açıklama waiting:16.5/0.5/41+açıklama | üst fark 0 | damga 44 px, başlık satırı 77/55 px KUSUR 6 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/1@768-dark: adım 6, merkez farkı (satır/başlık/rozet) ready:0/0/0 waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 44 px kusur 0 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/1@1024-dark: adım 6, merkez farkı (satır/başlık/rozet) ready:5.3/-10.8/18.5 waiting:5.3/-10.8/18.5+açıklama waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 55/44 px KUSUR 5 | birincil düğme yükseklik 44,56 | hScroll false | kv satır T1 - Ana tesis, H1:2 Planlı temizlik, v:2 Test Operatör 1:1 05:29:1 12131:1 Atanmadı:1 Detaylı temizlik g:1
+/records/run/1@1440-dark: adım 6, merkez farkı (satır/başlık/rozet) ready:0/0/0 waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 44 px kusur 0 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/2@360-light: adım 12, merkez farkı (satır/başlık/rozet) ready:16.5/0.5/41 waiting:5.3/-10.8/18.5+açıklama waiting:16.5/0.5/41+açıklama | üst fark 0 | damga 44 px, başlık satırı 77/55 px KUSUR 12 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/2@768-light: adım 12, merkez farkı (satır/başlık/rozet) ready:0/0/0 waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 44 px kusur 0 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/2@1024-light: adım 12, merkez farkı (satır/başlık/rozet) ready:5.3/-10.8/18.5 waiting:5.3/-10.8/18.5+açıklama waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 55/44 px KUSUR 10 | birincil düğme yükseklik 44,56 | hScroll false | kv satır T1 - Ana tesis, H1:2 Üç fazlı planlı te:2 Test Operatör 2:1 05:37:1 IE-QA-1:1 Atanmadı:1 QA ön tur kaydı:1
+/records/run/2@1440-light: adım 12, merkez farkı (satır/başlık/rozet) ready:0/0/0 waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 44 px kusur 0 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/2@360-dark: adım 12, merkez farkı (satır/başlık/rozet) ready:16.5/0.5/41 waiting:5.3/-10.8/18.5+açıklama waiting:16.5/0.5/41+açıklama | üst fark 0 | damga 44 px, başlık satırı 77/55 px KUSUR 12 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/2@768-dark: adım 12, merkez farkı (satır/başlık/rozet) ready:0/0/0 waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 44 px kusur 0 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/2@1024-dark: adım 12, merkez farkı (satır/başlık/rozet) ready:5.3/-10.8/18.5 waiting:5.3/-10.8/18.5+açıklama waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 55/44 px KUSUR 10 | birincil düğme yükseklik 44,56 | hScroll false | kv satır T1 - Ana tesis, H1:2 Üç fazlı planlı te:2 Test Operatör 2:1 05:37:1 IE-QA-1:1 Atanmadı:1 QA ön tur kaydı:1
+/records/run/2@1440-dark: adım 12, merkez farkı (satır/başlık/rozet) ready:0/0/0 waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 44 px kusur 0 | birincil düğme yükseklik 44,56 | hScroll false
+
+== T-B14, T-B22, klavye (misc.js)
+T-B14: "15dk" rakam yazı tipi="JetBrains Mono" birim yazı tipi="Hanken Grotesk" || "15dk" rakam yazı tipi="JetBrains Mono" birim yazı tipi="Hanken Grotesk" || "15dk" rakam yazı tipi="JetBrains Mono" birim yazı tipi="Hanken Grotesk"
+T-B22 @1024: Yer=2 Tip=2 Sahip=1 Açılış=1(nowrap) İş emri=1 Saha defteri=1(nowrap) Açıklama=1
+T-B22 @1100: Yer=2 Tip=2 Sahip=1 Açılış=1(nowrap) İş emri=1 Saha defteri=1(nowrap) Açıklama=1
+T-B22 @1279: Yer=1 Tip=1 Sahip=1 Açılış=1(nowrap) İş emri=1 Saha defteri=1(nowrap) Açıklama=1
+T-B22 @1280: Yer=1 Tip=1 Sahip=1 Açılış=1(nowrap) İş emri=1 Saha defteri=1(nowrap) Açıklama=1
+Klavye /records/create: İçeriğe geç > A:solid > A:solid > A:solid > A:solid > BUTTON:solid > BUTTON:solid > BUTTON:solid > FacilityId:solid > LineId:solid > MachineId:solid > WorkOrderNo:solid > Note:solid
+Boş gönderim: odak=FacilityId hatalar=Tesis seçin. | Hat seçin. | Makine seçin. | İş emri no alanını doldurun. | Kilit süresini girin. | Bu alanı doldurun.
+
+== Boş durumlar (5402)
+5402 op /my-work 200 | İşlerim Açık kaydınız ve yeni kayıt açma durumunuz. Yükleniyor… Açık işiniz yok Temizlik yapacağınız makineyi seçip kayıt açın. Kayıt açılınca makine sizin için tutulur. Yeni kayıt aç
+5402 op /records/create 200 | Yeni kayıt Makineyi ve temizlik tipini seçin, PIN'inizle kaydı açın. Kayıt bilgileri Makine Tesis Tesis seçin Hat Hat seçin Makine Makine seçin Şu an seçilemeyen makineler Seçimi uygula Tesis, hat ya da makineyi değiştirince bu düğmeyle listeleri yenileyin. Te
+5402 op /machine-board 200 | Makine panosu Makinelerin şu anki durumu ve kaydı tutan kişi. Tesis Tüm tesisler Göster Yenile Yükleniyor… Gösterilecek makine yok Seçili tesiste aktif makine bulunmuyor. Tesis seçimini değiştirin ya da makine tanımları için yöneticinize başvurun. Tüm tesisler
+5402 m1 /machine-board 200 | Makine panosu Makinelerin şu anki durumu ve kaydı tutan kişi. Tesis Tüm tesisler Göster Yenile Yükleniyor… Gösterilecek makine yok Seçili tesiste aktif makine bulunmuyor. Tesis seçimini değiştirin ya da makine tanımları için yöneticinize başvurun. Tüm tesisler
+
+== Faz 1-3 G11 (g11f3.py, g123)
+AYNI  /users 360x800-light card Ad soyad:2@1 Sicil no:1@2 Roller:1@2 Durum:1@3 İşlem:2@4 boşluk=3(ARA)  minH 204
+AYNI  /facilities 360x800-light card Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:2@4   minH 216
+AYNI  /machines 360x800-light card Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /materials 360x800-light card Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:2@4 boşluk=3(ARA)  minH 216
+AYNI  /shifts 360x800-light card Ad:2@1 Başlangıç:1@2 Bitiş:1@2 Durum:1@3 İşlem:1@3   minH 168
+AYNI  /cleaning-types 360x800-light card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 276
+AYNI  /cleaning-types/details/3 360x800-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /facilities/details/1 360x800-light card Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3   minH 164
+AYNI  /materials/details/1 360x800-light card Lot no:2@1 Son kullanma tarihi:1@2 Durum:1@2 İşlem:2@3   minH 168
+AYNI  /users 768x1024-light card Sicil no:1@1 Ad soyad:2@1 Roller:1@1 Durum:1@2 İşlem:3@2   minH 124
+AYNI  /facilities 768x1024-light card Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:2@2   minH 118
+AYNI  /machines 768x1024-light card Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:3@2   minH 138
+AYNI  /materials 768x1024-light card Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:3@2   minH 118
+AYNI  /shifts 768x1024-light card Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:3@2   minH 122
+AYNI  /cleaning-types 768x1024-light card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types/details/3 768x1024-light card Versiyon:1@1 Durum:1@1 Yayın:2@1 Doküman no:1@2 İşlem:3@2   minH 136
+AYNI  /facilities/details/1 768x1024-light card Kod:1@1 Ad:2@1 Makine:1@1 Durum:1@2 İşlem:3@2   minH 118
+AYNI  /materials/details/1 768x1024-light card Lot no:2@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:4@2   minH 122
+AYNI  /users 1024x768-light card Sicil no:1@1 Ad soyad:2@1 Roller:1@1 Durum:1@2 İşlem:3@2   minH 124
+AYNI  /facilities 1024x768-light card Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:2@2   minH 118
+AYNI  /machines 1024x768-light card Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:3@2   minH 138
+AYNI  /materials 1024x768-light card Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:3@2   minH 118
+AYNI  /shifts 1024x768-light card Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:3@2   minH 122
+AYNI  /cleaning-types 1024x768-light card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types/details/3 1024x768-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /facilities/details/1 1024x768-light card Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3   minH 164
+AYNI  /materials/details/1 1024x768-light card Lot no:2@1 Son kullanma tarihi:1@2 Durum:1@2 İşlem:2@3   minH 168
+AYNI  /users 1440x900-light table Sicil no:1@1 Ad soyad:1@1 Roller:1@1 Durum:1@1 İşlem:1@1   minH 56
+AYNI  /facilities 1440x900-light table Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /machines 1440x900-light table Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /materials 1440x900-light table Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /shifts 1440x900-light table Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types 1440x900-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/3 1440x900-light table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /facilities/details/1 1440x900-light table Kod:1@1 Ad:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /materials/details/1 1440x900-light table Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:1@1   minH 69
+G11: aynı 36 farklı 0
+
+
+== Tur 2 (2026-11-15)
+Release yayını .qa/f4/build (B1 düzeltmesi), port 5401 qa.db.
+
+== Ön tur ve gerileme: /records/create, /records/run/4, ?q=K, /my-work mekanik eval (t2e; 360/768/1024/1440/1920, koyu, reduced-motion, 320x640) ve G12 (t2g; 360/768/1024/1440 açık ve koyu)
+===== t2e 36
+  sınıflar {'temiz': 36} kontrast>= 5.44 topbar<= 64
+===== t2g 24
+  kontrol sayıları {'a+': 40, 'b+': 6, 'c+': 120, 'd+': 112, 'e+': 6} kusurlu hücre 0
+JS kapalı yeni kayıtta her durumda form 4, belirteçsiz 0; Run form 6, belirteçsiz 0 (JsKapaliAcik.txt "Tur 2"). G5b grep 0, §4 grep 0, antiforgery'siz POST formu 0, G8 grep 0.

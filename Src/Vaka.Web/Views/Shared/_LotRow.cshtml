@@ -1,0 +1,32 @@
+@model (int Index, int LotId, string Label, bool Expired, string? Reason, string? Error)
+@{
+    var reasonId = "Materials[" + Model.Index + "]-ExpiredReason";
+    var errorId = reasonId + "-error";
+}
+<li class="lot-row" data-lot-row data-lot-id="@Model.LotId" data-expired="@(Model.Expired ? "true" : "false")">
+    <div class="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+        <div class="min-w-0 space-y-1">
+            <p class="font-semibold break-words" data-lot-label>@Model.Label</p>
+            <p data-lot-expired-note hidden="@(!Model.Expired)"><partial name="_Badge" model='"lot.expired"' /></p>
+        </div>
+        <button type="button" class="btn btn-secondary" data-lot-remove data-lot-js aria-label="@Model.Label lotunu çıkar">
+            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#trash-2" /></svg>
+            Çıkar
+        </button>
+        <button type="submit" class="btn btn-secondary" name="RemoveMaterialIndex" value="@Model.Index" formaction="/records/create?refresh=true" formnovalidate data-lot-nojs aria-label="@Model.Label lotunu çıkar">
+            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#trash-2" /></svg>
+            Çıkar
+        </button>
+    </div>
+    <input type="hidden" name="Materials[@Model.Index].MaterialLotId" value="@Model.LotId" data-lot-id-input />
+    <div class="field" data-field data-lot-reason hidden="@(!Model.Expired)">
+        <label class="field-label" for="@reasonId">SKT geçmiş lotu kullanma gerekçesi</label>
+        <textarea id="@reasonId" name="Materials[@Model.Index].ExpiredReason" class="input" rows="2" autocomplete="off"
+                  data-required-message="Gerekçeyi yazın." aria-invalid="@(Model.Error is null ? null : "true")"
+                  aria-describedby="@(Model.Error is null ? null : errorId)" required="@Model.Expired" data-lot-reason-input>@Model.Reason</textarea>
+        @if (Model.Error is not null)
+        {
+            <partial name="_FieldError" model='(errorId, Model.Error)' />
+        }
+    </div>
+</li>

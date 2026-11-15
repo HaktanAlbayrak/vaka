@@ -1,0 +1,247 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Records
+@inject IDurationFormatter DurationFormatter
+@model RecordRunViewModel
+@{
+    ViewData["Title"] = "Yürütme";
+    ViewData["Lead"] = "Kaydın bilgileri, malzemesi ve faz listesi.";
+    ViewData["NavKey"] = "my-work";
+
+    var isOpened = Model.Status == RecordStatus.Opened;
+    var totalSteps = Model.Phases.Sum(phase => phase.Steps.Length);
+    var stateByPhase = new Dictionary<PhaseStatus, string>
+    {
+        [PhaseStatus.Waiting] = "waiting",
+        [PhaseStatus.InProgress] = "running",
+        [PhaseStatus.Completed] = "done",
+        [PhaseStatus.CompletedBelowMinimum] = "short",
+        [PhaseStatus.Interrupted] = "cut",
+    };
+    string StepKey(RecordStepViewModel step) => step.Status == StepStatus.Waiting && step.IsNext ? "StepStatus.Ready" : "StepStatus." + step.Status;
+    string StepState(RecordStepViewModel step) => step.Status switch
+    {
+        StepStatus.Waiting => step.IsNext ? "ready" : "waiting",
+        StepStatus.InProgress => "running",
+        StepStatus.Completed => "done",
+        _ => "waiting",
+    };
+    var pendingRows = Model.PendingMaterial is null
+        ? Array.Empty<MaterialEntryViewModel>()
+        : Model.AvailableLots.Where(lot => lot.Id == Model.PendingMaterial.MaterialLotId).Select(lot => new MaterialEntryViewModel
+        {
+            MaterialLotId = lot.Id, ExpiredReason = Model.PendingMaterial.ExpiredReason, MaterialCode = lot.MaterialCode, MaterialName = lot.MaterialName,
+            LotNo = lot.LotNo, ExpiryDate = lot.ExpiryDate, IsExpired = lot.IsExpired
+        }).ToArray();
+    var firstOpenPhase = Model.Phases.FirstOrDefault(phase => phase.Status is PhaseStatus.InProgress or PhaseStatus.Waiting)?.Id;
+}
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_24rem]">
+    <div class="min-w-0 space-y-5">
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="notice notice-danger" role="alert" tabindex="-1" data-form-summary>
+                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+                <div class="min-w-0">
+                    <p class="font-semibold">İşlem yapılmadı</p>
+                    <p class="mt-0.5 text-sm">@Model.ErrorMessage</p>
+                </div>
+            </div>
+        }
+
+        <section class="panel" aria-labelledby="record-title">
+            <div class="panel-body space-y-4">
+                <div class="flex flex-wrap items-start justify-between gap-3">
+                    <div class="min-w-0">
+                        <h2 id="record-title" class="sr-only">Kayıt bilgisi</h2>
+                        <p class="record-no whitespace-nowrap text-xl md:text-2xl">@Model.RecordNo</p>
+                        <p class="mt-1 break-words text-lg font-semibold">@Model.MachineLabel</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <partial name="_Badge" model='"CleaningTypeKind." + Model.Kind' />
+                        <partial name="_Badge" model='"RecordStatus." + Model.Status' />
+                    </div>
+                </div>
+                <dl class="kv grid-cols-2 md:grid-cols-4 lg:grid-cols-2 2xl:grid-cols-4">
+                    <div><dt>Yer</dt><dd>@Model.FacilityLabel, @Model.LineLabel</dd></div>
+                    <div><dt>Tip</dt><dd>@Model.CleaningTypeName, versiyon @Model.VersionNo</dd></div>
+                    <div><dt>Sahip</dt><dd>@Model.OwnerName</dd></div>
+                    <div><dt>Açılış</dt><dd><partial name="_Moment" model='(Model.OpenedAtLocal, Model.OpenedAtLocal)' /></dd></div>
+                    <div><dt>İş emri</dt><dd class="mono">@Model.WorkOrderNo</dd></div>
+                    <div><dt>Saha defteri</dt><dd class="mono whitespace-nowrap">@(string.IsNullOrEmpty(Model.FieldBookRef) ? "Atanmadı" : Model.FieldBookRef)</dd></div>
+                    @if (!string.IsNullOrWhiteSpace(Model.Note))
+                    {
+                        <div class="col-span-2"><dt>Açıklama</dt><dd class="font-normal">@Model.Note</dd></div>
+                    }
+                </dl>
+            </div>
+        </section>
+
+        @if (isOpened && Model.LockExpiresAtLocal is not null)
+        {
+            <div class="notice notice-info">
+                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#lock" /></svg>
+                <div>
+                    <p class="font-semibold">Makine <partial name="_Moment" model='(Model.LockExpiresAtLocal.Value, Model.OpenedAtLocal)' /> saatine kadar sizin için kilitli</p>
+                    <p class="mt-0.5 text-sm">İlk adım bu saate kadar başlatılmazsa kayıt Zaman aşımı olur ve makine serbest kalır.</p>
+                </div>
+            </div>
+        }
+
+        <section aria-labelledby="phases-title">
+            <h2 id="phases-title" class="mb-3 text-xl font-bold">Fazlar</h2>
+            @if (Model.Phases.Length == 0)
+            {
+                <partial name="_State" model='("empty", "list-ordered", "Faz bulunamadı", "Bu kayda bağlı versiyonda faz yok. Yöneticinize bildirin.", (string?)null, (string?)null)' />
+            }
+            else
+            {
+                <ol class="phase-strip" aria-label="Fazlar">
+                    @foreach (var phase in Model.Phases)
+                    {
+                        <li class="phase-cell" data-state="@stateByPhase[phase.Status]" aria-current="@(phase.Status == PhaseStatus.InProgress ? "step" : null)">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <span class="phase-num">Faz @phase.OrderNo</span>
+                                <partial name="_Badge" model='"PhaseStatus." + phase.Status' />
+                            </div>
+                            <p class="phase-title">@phase.Title</p>
+                            <p class="text-sm text-muted">@phase.Steps.Length adım</p>
+                            @if (phase.MinDurationSeconds is not null)
+                            {
+                                <p class="text-sm"><span class="text-muted">Minimum </span><partial name="_Duration" model="DurationFormatter.Format(phase.MinDurationSeconds.Value)" /></p>
+                            }
+                        </li>
+                    }
+                </ol>
+            }
+        </section>
+
+        @if (totalSteps > 0)
+        {
+            <section aria-labelledby="steps-title" class="space-y-3">
+                <h2 id="steps-title" class="text-xl font-bold">Adımlar</h2>
+                @foreach (var phase in Model.Phases)
+                {
+                    <details class="panel" open="@(phase.Id == firstOpenPhase)">
+                        <summary class="panel-head cursor-pointer">
+                            <span class="panel-title">Faz @phase.OrderNo: @phase.Title</span>
+                            <span class="text-sm text-muted">@phase.Steps.Length adım</span>
+                        </summary>
+                        <ol class="step-list p-3 md:p-4">
+                            @foreach (var step in phase.Steps)
+                            {
+                                <li class="step" data-state="@StepState(step)">
+                                    <span class="step-stamp">@(phase.OrderNo).@(step.OrderNo)</span>
+                                    <div class="min-w-0 space-y-1.5">
+                                        <div class="flex min-h-11 flex-wrap items-center gap-x-3 gap-y-1">
+                                            <h3 class="break-words text-lg font-bold leading-tight">@step.Title</h3>
+                                            <partial name="_Badge" model="StepKey(step)" />
+                                        </div>
+                                        @if (step.Status == StepStatus.Waiting && !step.IsNext)
+                                        {
+                                            <p class="text-sm text-muted">Önceki adım bitmeden başlatılamaz.</p>
+                                        }
+                                    </div>
+                                </li>
+                            }
+                        </ol>
+                    </details>
+                }
+            </section>
+        }
+    </div>
+
+    <aside class="min-w-0 space-y-5" aria-label="Kayıt ayrıntısı">
+        <section class="panel" aria-labelledby="material-title">
+            <div class="panel-head">
+                <h2 id="material-title" class="panel-title">Malzeme</h2>
+                <span class="text-sm text-muted">@(Model.MaterialRequired ? "Bu tip malzeme gerektirir" : "Malzeme gerekmez")</span>
+            </div>
+            @if (Model.Materials.Length == 0)
+            {
+                <p class="p-4 text-muted md:p-5">@(Model.MaterialRequired ? "Henüz lot eklenmedi. İlk adımdan önce en az bir lot ekleyin." : "Bu kayda lot eklenmedi.")</p>
+            }
+            else
+            {
+                <ul class="divide-y divide-line">
+                    @foreach (var material in Model.Materials)
+                    {
+                        <li class="space-y-2 px-4 py-3 md:px-5">
+                            <div class="min-w-0">
+                                <p class="break-words font-semibold">@material.MaterialName <span class="mono text-sm text-muted">@material.MaterialCode</span></p>
+                                <p class="text-sm">Lot <span class="mono font-bold">@material.LotNo</span>, SKT <span class="mono">@material.ExpiryDate.ToString("dd.MM.yyyy")</span></p>
+                                <p class="text-sm text-muted">@material.EnteredByName, <partial name="_Moment" model='(material.EnteredAtLocal, Model.OpenedAtLocal)' /></p>
+                            </div>
+                            @if (material.ExpiredAtEntry)
+                            {
+                                <div class="space-y-1">
+                                    <partial name="_Badge" model='"lot.expired"' />
+                                    <p class="text-sm"><span class="font-semibold">Gerekçe:</span> @material.ExpiredReason</p>
+                                </div>
+                            }
+                            @if (Model.CanManageMaterials)
+                            {
+                                <details class="tool tool-danger">
+                                    <summary aria-label="@material.LotNo lotunu çıkarmak için aç">
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#trash-2" /></svg>
+                                        Çıkar
+                                    </summary>
+                                    <form method="post" action="/records/remove-material/@Model.Id" class="tool-body space-y-3" data-validate data-command-form asp-antiforgery="true">
+                                        <input type="hidden" name="CommandId" value="@Model.CommandId" />
+                                        <input type="hidden" name="RecordMaterialId" value="@material.Id" />
+                                        <p class="text-sm">@material.LotNo lotu bu kayıttan çıkarılır. Onay için PIN'inizi girin.</p>
+                                        <partial name="_PinInput" model='("pin-remove-" + material.Id, "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                                        <div class="notice notice-danger" role="alert" data-command-status hidden>
+                                            <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                                            <p class="font-semibold" data-command-message></p>
+                                        </div>
+                                        <button type="submit" class="btn btn-danger">
+                                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#trash-2" /></svg>
+                                            Lotu çıkar
+                                        </button>
+                                    </form>
+                                </details>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            @if (Model.CanManageMaterials)
+            {
+                <div class="border-t-2 border-line p-4 md:p-5">
+                    <details class="tool" open="@(Model.LotQuery is not null || Model.PendingMaterial is not null)">
+                        <summary>
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#plus" /></svg>
+                            Malzeme ekle
+                        </summary>
+                        <div class="tool-body space-y-4">
+                        <form method="get" action="/records/run/@Model.Id" class="field" data-lot-nojs>
+                            <label class="field-label" for="q">Lot ara</label>
+                            <div class="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
+                                <input id="q" name="q" type="search" class="input" value="@Model.LotQuery" autocomplete="off" spellcheck="false" inputmode="search" />
+                                <button type="submit" class="btn btn-secondary min-h-12">
+                                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#search" /></svg>
+                                    Lotları ara
+                                </button>
+                            </div>
+                        </form>
+                        <form method="post" action="/records/add-material/@Model.Id" class="space-y-4" data-validate data-command-form asp-antiforgery="true">
+                            <input type="hidden" name="CommandId" value="@Model.CommandId" />
+                            <partial name="_LotPicker" model='("add-lot", "single", "MaterialLotId", "ExpiredReason", true, pendingRows, "Malzeme adı, kodu ya da lot no yazın. Son kullanma tarihi geçmiş lot gerekçeyle eklenir.")' />
+                            <partial name="_LotFallback" model='("single", Model.LotQuery, Model.AvailableLots, Model.AvailableLotsTruncated, Model.PendingMaterial?.MaterialLotId, Model.PendingMaterial?.ExpiredReason)' />
+                            <partial name="_PinInput" model='("pin-add-material", "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                            <div class="notice notice-danger" role="alert" data-command-status hidden>
+                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                                <p class="font-semibold" data-command-message></p>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#plus" /></svg>
+                                Lotu ekle
+                            </button>
+                        </form>
+                        </div>
+                    </details>
+                </div>
+            }
+        </section>
+    </aside>
+</div>

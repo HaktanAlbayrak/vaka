@@ -15,7 +15,7 @@
 | 1 | Giriş, PIN, kullanıcılar ve Süper admin | Giriş, ilk giriş, PIN, kullanıcı yönetimi, Süper admin | Evet | TESLİM ALINDI (tur 3, 2026-11-14) |
 | 2 | Tesis yapısı, vardiya ve malzeme | Tesis, hat, makine, vardiya, malzeme ve lot ekranları | Evet | TESLİM ALINDI (tur 2, 2026-11-14) |
 | 3 | Temizlik tipi ve prosedür versiyonu | Tip, makine eşleme, taslak düzenleyici, yayınlama | Evet | TESLİM ALINDI (tur 3, 2026-11-15) |
-| 4 | Kayıt açma ve makine kilidi | Yeni kayıt, İşlerim, Açıldı hali, makine panosu, zaman aşımı | Evet | BEKLİYOR |
+| 4 | Kayıt açma ve makine kilidi | Yeni kayıt, İşlerim, Açıldı hali, makine panosu, zaman aşımı | Evet | TESLİM ALINDI (tur 2, 2026-11-15) |
 | 5 | Adım yürütme, görevli ve mola | Adım başlat/bitir, sahibin eklediği görevliler, iki adım arasında mola, otomatik tamamlanma | Evet | BEKLİYOR |
 | 6 | Kayıt listesi, detay, bütünlük ve müdahale | 13 soruyu yanıtlayan detay ve yazdırılabilir denetim çıktısı, olay günlüğü, bütünlük, iptal, yarıda kapatma, yöneticinin molayı bitirmesi | Evet | BEKLİYOR |
 | 6A | Acil müdahale, süre raporu ve malzeme izlenebilirliği | Acil müdahale ekranı ve "Acil" ayrımı, süre ve efor raporu (tablo), lot ve makine bazlı malzeme sorgusu | Evet | BEKLİYOR |
@@ -34,6 +34,8 @@ Salı öncesine alındı, yer açmak için kullanıcının kendi iki eki (K-39 a
 - Kontrol noktaları (PL-59, O-05), bilgi amaçlı: Pazar (2026-11-15) sonu Faz 3; Pazartesi (2026-11-16) öğlen Faz 4; Pazartesi sonu Faz 5;
   Salı sunumdan önce Faz 6 ve Faz 6A. Nokta kaçınca koordinatör durmaz, sıradaki faza geçer.
 - Öncelik (O-05): doküman kalemleri (Faz 3, 4, 5, 6, 6A) kesintisiz önce tamamlanır, Salı'ya yetişmese de; ardından Faz 7, 8, 9 sırayla.
+- Faz 6A'dan sonra, Faz 7'den önce "Sunum hazırlığı" (faz değil, faz kapısı dışı; PL-65): kullanıcının veritabanında uygulama üzerinden gerçek
+  zamanlı 2-3 kayıt. Sunum senaryosu `Docs/Local/SunumSenaryosu.md`, her faz tesliminde güncellenir.
 - Kabul ekleri Salı öncesi (PL-58): Ö-01 Faz 4 demo verisi, Ö-05 Faz 4 K4, Ö-02 Faz 5 K22, Ö-03 Faz 5 K16, Ö-04 Faz 5 K23.
 - Bilinçli tasarım sınırları değişmez, sunumda gerekçesiyle anlatılır: periyodik takvim yok (satır 3, K-34), kişiye makine yetkisi yok (13, K-20),
   saniye eşiği yok (128, İÖ-06).
@@ -615,6 +617,17 @@ Sözleşme ekleri (PL-62, paralel başlangıç için):
   değişmez, "İşlem yapılmadı, bağlantı yok" gösterilir. Aynı `CommandId` ile tekrar istek ilk sonucun yönlendirmesini döner (BR-33).
 - Malzeme ekle ve çıkar başarıda `/records/run/{id}`'ye yönlenir; reddi `RecordRunViewModel.ErrorMessage` ile (Run'a `ErrorMessage?` eklenir).
 - Ortak kriterler G5a, G5b, G11, G12 bu fazın ekranlarına uygulanır.
+- JS kapalı lot seçimi (PL-64): `RecordCreateViewModel` ve `RecordRunViewModel`'e `LotQuery?`, `AvailableLots[]: LotOptionViewModel { Id, MaterialCode,
+  MaterialName, LotNo, ExpiryDate, IsExpired }` (aktif malzemelerin lotları, makine ve tesisten bağımsız, en çok 50 satır) ve `AvailableLotsTruncated`
+  (doluysa "Aramayı daraltın" yazılır) eklenir. Yeni kayıtta JS kapalıyken lot ekleme ve çıkarma aynı formda `refresh=true` POST'uyla yapılır:
+  `LotQuery` süzer, `AddMaterialLotId` ve `AddExpiredReason` `Materials[]`'a satır ekler, `RemoveMaterialIndex` çıkarır; kayıt açılmaz, olay
+  yazılmaz, diğer alanlar ve `CommandId` korunur. Yürütme ekranında JS kapalıyken lot `AvailableLots` seçimiyle `add-material` POST'una gider,
+  süzgeç `GET /records/run/{id}?q=`. JS açıkken `LotPicker.js` `/records/lots?q=` JSON'unu kullanır; iki yolda sunucu kuralları aynıdır.
+- Reddedilen malzeme ekleme Run'ı `ErrorMessage` ve `PendingMaterial? { MaterialLotId, ExpiredReason }` ile yeniden çizer; seçili lot ve gerekçe
+  korunur, PIN korunmaz (Faz 1 "başarısız POST aynı ViewModel'le" kuralı, PL-64).
+- `CommandForm.js` sapması kabul (PL-64): JS yalnız `response.redirected` doğruysa ve adres farklıysa `location.assign` yapar, aksi halde sayfayı
+  yanıtla değiştirir. Backend reddi asla yönlendirmeyle değil, 200 görünümle döner; yetki reddi 403 sayfasıdır.
+- K10 ve K11 JS kapalıyken de denenir: malzeme zorunlu tipte JS kapalı tarayıcıda lot seçilip kayıt açılır; SKT geçmiş lotta gerekçe istenir.
 
 **Dosya sınırı:** frontend `Views/MyWork/**`, `Views/Records/Create.cshtml`, `Views/Records/Run.cshtml`, `Views/MachineBoard/**`, `wwwroot/js/CommandForm.js`,
 `wwwroot/js/LotPicker.js`, `wwwroot/js/CascadeSelect.js`; backend `Controllers/MyWorkController.cs`, `Controllers/RecordsController.cs`,
@@ -668,7 +681,10 @@ Sözleşme ekleri (PL-62, paralel başlangıç için):
 - [ ] F2-A2 (QA): `FindShiftAt` gece yarısını geçen vardiyada ve vardiya sınır anlarında (başlangıç dahil, bitiş hariç) çalışan uygulamada
   doğru vardiyayı bulur (K5 ile birlikte, PL-40).
 
-**Kapsam dışı:** Adım yürütme (Faz 5), kayıt detayı ve listesi (Faz 6), acil kayıt (Faz 8).
+**Kapsam dışı:** Adım yürütme (Faz 5), kayıt detayı ve listesi (Faz 6), acil kayıt (Faz 6A).
+
+**Sonuç (2026-11-15):** TESLİM ALINDI (tur 2; tur 1 İADE B1, JS kapalı lot akışı, PL-67). Kabul kriterleri 42/42; Faz 1-3'ten devreden F1-A1..F3-A1 kapandı.
+Faz 5'e devreden: F4-A1, F4-A2. Rapor: `Docs/Delivery/Faz-4-Teslim.md`.
 
 ---
 
@@ -682,12 +698,15 @@ otomatik tamamlanması. Adım sürerken mola (K-39) ve görevlinin kendi PIN'iyl
 | # | Tür | İş kalemi | Sahibi |
 |---|---|---|---|
 | 1 | DB | Mola tablosu: başlatan, molanın başladığı anda devam eden adım (boş olabilir; Faz 5'te hep boş, Faz 7 için önden, PL-19, PL-57), zamanlar, bitiren, kapanış türü (Kişi, Yönetici, Müdahale), gerekçe; kayıt başına ve kişi başına tek açık mola için kısmi unique index (BR-40); dolu mola zamanlarının değişmesini reddeden tetikleyici | backend-engineer talebi, dbadmin |
+| 1b | DB | Kısa demo tipi (PL-65), `DemoData.sql`'e ek (Faz 3-4 düzeni, `INSERT OR IGNORE`, sabit Id): planlı, kod `KSA`, ad "Kısa planlı temizlik", varsayılan kilit süresi PLN ile aynı (90 dakika); 2 faz, her fazda 2 adım, her faz minimumu 60 saniye; malzeme zorunlu değil; Yürürlükte v1, yayınlayan boş; PLN ve PLN3 ile aynı aktif demo makinelerine eşli. PLN, ACL ve PLN3 satırları değişmez | backend-engineer talebi, dbadmin |
 | 2 | BE | Adım servisi: SK-1 (sahip ya da görevli), BR-14 katı sıra, BR-15 tek devam eden adım, BR-24 tüm görevliler boşta, BR-11 zorunlu malzeme, BR-46 kilit kontrolü, BR-39 kayıtta açık mola varken başlatma ve bitirme reddi; ilk adımda saha referansı (BR-09); bitirmede SH-17, SH-01, SH-02; faz son adımında SH-07 ve gerekçe (BR-21); faz ve kayıt otomatik tamamlanma, makine kilidinin kalkması (BR-22) | backend-engineer |
 | 3 | BE | Görevli servisi: yalnız sahip, adım başlamadan, kendi PIN'iyle ekler ve çıkarır (SK-2); eklenen kişinin PIN'i bu fazda istenmez, katılım onayı Faz 7'de (K-10, PL-57); pasif ya da molada kişi eklenemez; kendi kaydı devam eden kişiye uyarı bilgisi (K-41) | backend-engineer |
 | 4 | BE | Mola servisi: BR-38 başlatma koşulu bu fazda: kayıt Devam ediyor ve devam eden adım yok (iki adım arasında; adım sürerken mola Faz 7, PL-57); başlatan sahip ya da sıradaki adımın görevlisi (SK-6); başlatan başka kayıtta devam eden adımda değil; BR-39 kayıt ve kişi kilidi (molada kişinin tüm yazma istekleri servis katmanında reddedilir, controller `/breaks/current`'a yönlendirir; kayıtta adım başlatma, bitirme, görevli ve malzeme reddedilir); BR-40 yalnız başlatan bitirir | backend-engineer |
 | 5 | BE | `IDurationCalculator`: SH-17 (formül genel; Faz 5'te adım içi mola olmadığından 0), SH-01, SH-02, SH-03, SH-04, SH-06 (bekleme terimsiz), SH-07, SH-08, SH-09, SH-11 (bekleme terimsiz), SH-12, SH-14 (açık molada değer artmaz); açık iş genişlemesi: tamamlanmamış adımda görevlilik ve açık mola pasifleştirmeyi engeller (BR-36) | backend-engineer |
 | 6 | FE | E-15 Yürütme ekranının tam hali: sıradaki adım belirgin, kilitli adımlar ve kilit nedeni, adım açıklaması ve medyası, başlat ve bitir (PIN), faz minimumu ve canlı net süre, süre altı gerekçe alanı, mola düğmesi yalnız iki adım arasında, açık mola bandı (molada olan kişi, başlangıç, "Sayaçlar durdu"), molalar listesi, tamamlanma özeti; E-17 Görevli paneli (kişi arama, sahibin PIN'i, K-41 uyarısı); E-18 Mola ekranı; İşlerim'de görevli olduğum adımlar ve açık mola | frontend-engineer |
 | 7 | FE | `LiveTimer.js` (sunucunun verdiği saniyeden gösterimi ilerletir, `TimersRunning` false iken ilerletmez, hesap yapmaz), `ParticipantPicker.js` | frontend-engineer |
+| 8 | FE | İlk iş, kullanıcı isteği (2026-11-15, PL-66): PIN bileşeni doğrulama modunda da `maxlength` güncel `<PinUzunluğu>` olur ve rakam dışı karakteri istemcide kabul etmez. Değer `_PinInput.cshtml`'de `@inject ISystemSettingsReader` ile `SettingKeys.PinLength`'ten okunur (tek yer, görünümde sabit yok); sunucu kuralları değişmez. Faz 1-4'teki tüm PIN alanlarına uygulanır; Faz 4 raporu değişmez | frontend-engineer |
+| 9 | FE | İlk iş, görsel rötuş (PL-66; DNA kartı değişmez, `Dna.md` bileşen notu güncellenir): (a) PIN göz düğmesi dinlenmede dolgusuz, alanın iç köşe yarıçapıyla uyumlu, hover ve odakta token renginden hafif ton, odak halkası görünür, 44 px hedef korunur; (b) tüm `<select>`'ler `appearance-none`, `.input` ile aynı kenarlık, yarıçap, yükseklik, iç boşluk ve odak; ok proje sprite'ındaki `chevron-down`, açık ve koyu tema ile pasif hali; Faz 1-4'teki tüm select'ler | frontend-engineer |
 
 **Paralel:** Evet. Gerekçe: ekranın tüm kararları ViewModel bayraklarından gelir (`CanStart`, `CanFinish`, `CanManageParticipants`, `CanStartBreak`, `TimersRunning`); route'lar aşağıda; dosyalar ayrık.
 
@@ -711,7 +730,24 @@ diğer kullanıcılar yürütme ekranını görür: `TimersRunning` false, `Open
 `DuringStepTitle` molanın başladığı anda devam eden adımın başlığıdır, iki adım arasındaki molada boştur; Faz 5'te hep boştur (PL-57).
 `CanStartBreak` devam eden adım varken false, neden "Mola iki adım arasında verilir".
 
+Sözleşme ekleri (PL-68, paralel başlangıç için):
+
+- Ad alanları `Vaka.Web.ViewModels.Records` (Faz 4 `RecordRunViewModel` ve `MyWorkViewModel` aynı sınıflar, alan eklenir) ve `Vaka.Web.ViewModels.Breaks`
+  (`CurrentBreakViewModel`). Alt tipler: `RecordBreakViewModel`, `OpenBreakViewModel`, `StepParticipantViewModel`, `RecordSummaryViewModel`,
+  `AssignedStepViewModel`, `ParticipantOptionViewModel { UserId, FullName, RegistryNo, IsAvailable, UnavailableReason, HasOwnActiveRecord }`.
+- Enum `Services/BreakEndKind { Person = 1, Manager = 2, Intervention = 3 }`; görünür adı `EndKindLabel`. Adım ve faz durumları Faz 4 enum'larıdır.
+- Komut formları (başlat, bitir, görevli ekle ve çıkar, mola başlat ve bitir) Faz 4 `CommandForm.js` kuralıyla çalışır (PL-62, PL-64): başarı hedef GET'e
+  yönlenir, ret 200 görünüm ve `ErrorMessage`; reddedilen görevli eklemede seçili kişi `PendingParticipant? { StepId, ParticipantUserId }` ile korunur, PIN korunmaz.
+- JS kapalı görevli ekleme: `RecordRunViewModel`'e `ParticipantStepId?`, `ParticipantQuery?`, `ParticipantOptions[]` (en çok 50) ve
+  `ParticipantOptionsTruncated`; süzgeç `GET /records/run/{id}?stepId=&people=`, ekleme `add-participant` POST'u. JS açıkken `ParticipantPicker.js`
+  `/records/people` JSON'unu kullanır; iki yolda sunucu kuralları aynı (Faz 4 B1'in tekrarı olmasın diye).
+- Süre altı gerekçe: gerekçesiz bitirme isteği `FinishStepViewModel` ile `Views/Records/FinishStep.cshtml` gerekçe formunu 200 ile çizer;
+  gerekçeli gönderim aynı `CommandId` ile bitirir.
+- F4-A2: `AvailableLots` ve `/records/lots?q=&recordId=` kayda eklenmiş lotu listelemez.
+- Ortak kriterler G5a, G5b, G8, G9, G11, G12 bu fazın ekranlarına uygulanır.
+
 **Dosya sınırı:** frontend `Views/Records/Run.cshtml`, `Views/Records/FinishStep.cshtml`, `Views/Records/_Participants.cshtml`, `Views/Breaks/**`,
+`Views/Shared/_PinInput.cshtml`, `Styles/**`, `Docs/Design/Dna.md` (bileşen notu), FE 9 için yalnız select işaretlemesi olarak Faz 1-4 görünümleri,
 `Views/MyWork/**`, `wwwroot/js/LiveTimer.js`, `wwwroot/js/ParticipantPicker.js`; backend `Controllers/RecordsController.cs`, `Controllers/BreaksController.cs`,
 adım, görevli ve mola servisleri, `Services/DurationCalculator.cs`, `ViewModels/Records/**`, `ViewModels/Breaks/**`.
 
@@ -748,6 +784,19 @@ adım, görevli ve mola servisleri, `Services/DurationCalculator.cs`, `ViewModel
   görünür, açılış ile ilk adım arasındaki süre hiçbir süreye girmez (BR-13, SH-03, SH-08; doküman satır 45-47).
 - [ ] K23 (Ö-04, SC-03): Sahip adım aralarında oturumu kapatır, yeniden girer; kayıt "Devam ediyor" kalmıştır, İşlerim'de görünür, sıradaki adımdan
   devam edilir; bu sürede makine panosunda makine kilitlidir ve başka operatör o makinede kayıt açamaz (doküman satır 78-81).
+- [ ] K24 (PL-65): Demo veride `KSA` tipi vardır: 2 faz, ikişer adım, faz minimumu 60 saniye, malzeme zorunlu değil, demo makinelerinde yeni kayıt formunda seçilir; PLN, ACL, PLN3 değişmemiştir; `DemoData.sql` ikinci kez uygulanınca satır sayıları değişmez.
+- [ ] K25 (PL-66): Seed değeri `<PinUzunluğu>` 4 ile Faz 1-5'teki her PIN alanına (doğrulama ve belirleme modu) 5. hane ve rakam dışı karakter
+  girilemez, yapıştırmada da; QA kopyasında ayar 6 yapılınca 6 hane girilir; kaynak kodda ve görünümde PIN uzunluğu sabiti yok. Sunucu tarafı
+  PIN kuralları (K3 Faz 1, BR-49) değişmemiştir.
+- [ ] K26 (PL-66): PIN göz düğmesi ve tüm select'ler Faz 1-5 ekranlarında 360, 768, 1024 ve 1440 px'te, açık ve koyu temada: select yüksekliği aynı
+  satırdaki `.input` ile eşit, ok ikonu dikey ortalı (G12); göz düğmesi alanın kenarlık içinde, köşesi alanla uyumlu; hover ve odak hali görünür,
+  kontrast AA; `prefers-reduced-motion` açıkken geçiş yok; dokunma hedefi en az 44 px; pasif select ayırt edilir. Faz 1-4 G11 imzaları değişmez.
+
+**Faz 4'ten devreden (PL-67):**
+
+- [ ] F4-A1 (QA): Malzeme zorunlu tipte malzemesiz açılmış kaydın ilk adımı başlatılamaz (K8 ile aynı ölçüm; doküman satır 22-23).
+- [ ] F4-A2 (BE, FE): Yürütme ekranında `AvailableLots` ve `/records/lots?q=&recordId=` kayda zaten eklenmiş lotu listelemez; istekle gönderilirse
+  yine nedenle reddedilir.
 
 **Faz T'den devreden (PL-23):**
 
@@ -880,6 +929,32 @@ izlenebilirlik servisleri, `Services/DurationCalculator.cs` (SH-15), `ViewModels
 - [ ] K15: E-30 ve E-31 tabloları G11 imzasını, üç ekran G12 hizalamasını taşır.
 
 **Kapsam dışı:** Acil bildirimi ve panoda acil bölümü (Faz 8), rapor grafiği ve CSV dışa aktarımı (Faz 9), bekleme ortalaması (Faz 7), düzeltilmiş işareti (Faz 8).
+
+---
+
+## Sunum hazırlığı (faz değil, Faz 6A'dan sonra, Faz 7'den önce)
+
+**Amaç:** Salı sunumunda ekranlar boş kalmasın ve süre beklemeden anlatılabilsin diye kullanıcının veritabanında uygulama üzerinden gerçek zamanla
+tamamlanmış kayıtlar bulunması (PL-65). Faz kapısı, teslim raporu ve commit yoktur.
+
+**Başlama şartı:** Faz 6A TESLİM ALINDI ve commit'i atıldı.
+
+**İş (qa-tester, koordinatör çağırır):**
+
+0. Koordinatör hazırlıktan önce `App_Data/vaka.db`'yi yedekler ve `Data/Seed/DemoData.sql`'i `INSERT OR IGNORE` ile yükler; kullanıcının
+   veritabanında Faz 4 ve 5 demo satırları (`PLN3`, `KSA`) yoktur.
+1. `App_Data/vaka.db` önce `.qa/` altına yedeklenir; işlem yalnız çalışan uygulamanın arayüzünden yapılır.
+2. Yeni hesap açılmaz; kullanıcının veritabanındaki test hesapları kullanılır: `0001` Süper admin, `1001` Test Yönetici, `2001` Test Operatör 1,
+   `2002` Test Operatör 2, `3001` Test Denetçi (ilk giriş tamam). Parola ve PIN yalnız yerel `Docs/Local/TestHesaplari.md`'dedir; plana, senaryoya
+   ve rapora yazılmaz.
+3. Kayıtlar, gerçek zamanla:
+   - `KSA` ile normal biten kayıt (her faz neti en az 60 saniye; iki operatörden biri görevli).
+   - `KSA` ile süre altında, gerekçeyle biten kayıt.
+   - Dokümanın 12 sn / 40 dk örneği (satır 67-71): `KSA` 1. fazın 1. adımı yaklaşık 12 saniyede biter, adımlar arasında 40 dakikalık mola verilir,
+     2. adım başlatılıp bitirilir; faz neti molayı düşer, minimum altında kaldığı için gerekçe istenir.
+4. Sahte veri, doğrudan SQL ve geriye tarihli kayıt yoktur. Bütünlük ihlali gösterimi kullanıcının veritabanında yapılmaz, yalnız ayrı kopyada.
+
+**Çıktı:** kayıt no'ları, her birinin detayında bütünlük rozeti "Doğrulandı"; koordinatör mesajıyla analiste, analist `Docs/Local/SunumSenaryosu.md`'ye işler.
 
 ---
 
@@ -1033,7 +1108,7 @@ kolonlarının raporlara eklenmesi, Sistem ayarları (K12-K15), son regresyon (K
 | 1 | DB | Rapor sorguları için index'ler (backend'in sorgu listesine göre); yeni tablo yok | backend-engineer talebi, dbadmin |
 | 2 | BE | Süre raporu sorgusu: makine ve faz bazında ortalama brüt, mola, bekleme, net, efor; yalnız Tamamlandı kayıtlar, faz ortalaması versiyon içinde (SH-15); durum sayıları ayrı; süre altı sayısı; en uzun adımlar (FR-40); tür filtresi | backend-engineer |
 | 3 | BE | Lot izlenebilirliği: lotla ve makineyle sorgu (FR-37); denetim çıktısı sorgusu; CSV (UTF-8 BOM, `;` ayırıcı); `IDurationCalculator` SH-15 | backend-engineer |
-| 4 | BE | Ayar servisi yazma: değer pozitif tam sayı; `<AzamiKilitSüresi>` aktif planlı tiplerin varsayılan kilit süresinin altına inemez, engelleyen tipler listelenir; her değişiklik aynı transaction'da geçmişe yazılır; PIN ister; etkiler PL-18 (açık kayıtların kilit bitişi değişmez, mevcut PIN'ler geçerli) | backend-engineer |
+| 4 | BE | Ayar servisi yazma: değer pozitif tam sayı; `<AzamiKilitSüresi>` aktif planlı tiplerin varsayılan kilit süresinin altına inemez, engelleyen tipler listelenir; her değişiklik aynı transaction'da geçmişe yazılır; PIN ister; etkiler PL-18 (açık kayıtların kilit bitişi değişmez, mevcut PIN'ler geçerli); `<PinUzunluğu>` küçültülemez, yalnız aynı kalır ya da artar (PL-66) | backend-engineer |
 | 5 | FE | E-30 Süre ve efor raporu (SVG grafik ve aynı verinin tablosu), E-31 Malzeme izlenebilirliği, E-32 Denetim çıktısı (yazdırma CSS'i, kabuksuz); detay ve listeye denetim çıktısı ve CSV bağlantıları; E-33 Sistem ayarları (birimli alanlar, PIN, engelleyen tipler, değişiklik geçmişi); menüde Yönetici ve Süper admin için Sistem ayarları | frontend-engineer |
 
 **Paralel:** Evet. Gerekçe: raporlar salt okuma; ayar tablosu Faz 1'den beri var, yeni tablo yok; sözleşme aşağıda.
@@ -1069,6 +1144,6 @@ kolonlarının raporlara eklenmesi, Sistem ayarları (K12-K15), son regresyon (K
 - [ ] K12: Yönetici ve Süper admin `/settings`'te bir değeri PIN'le değiştirir; yanlış PIN'de değer değişmez; geçmişte eski değer, yeni değer, yapan ve zaman görünür. Operatör ve Denetçi `/settings` GET ve POST'ta 403 alır (FR-55).
 - [ ] K13: Sıfır, negatif ve tam sayı olmayan değer alan altında nedeniyle reddedilir.
 - [ ] K14: `<AzamiKilitSüresi>` aktif bir planlı tipin varsayılan kilit süresinin altına indirilemez; ekran engelleyen tipleri listeler. Değişiklik açık kayıtların kilit bitişini değiştirmez (PL-18).
-- [ ] K15: `<PinUzunluğu>` değişince mevcut PIN'ler doğrulanmaya devam eder, yeni belirlenen PIN yeni uzunlukta istenir; `<OturumSüresi>` ve `<PinDenemeSınırı>` değişikliği sonraki istekte uygulanır; `<AzamiMedyaBoyutu>` yeni yüklemelerde uygulanır (PL-18).
+- [ ] K15: `<PinUzunluğu>` artırılınca mevcut PIN'ler doğrulanmaya devam eder, yeni belirlenen PIN yeni uzunlukta istenir; küçültme isteği alan altında nedeniyle reddedilir, değer ve geçmiş değişmez (PL-66); `<OturumSüresi>` ve `<PinDenemeSınırı>` değişikliği sonraki istekte uygulanır; `<AzamiMedyaBoyutu>` yeni yüklemelerde uygulanır (PL-18).
 
 **Kapsam dışı:** Personel ve vardiya kırılımı (K-36), sunucu tarafı PDF (K-28), İÖ önerileri.

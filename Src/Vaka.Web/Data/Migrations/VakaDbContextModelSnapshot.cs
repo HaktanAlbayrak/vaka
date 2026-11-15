@@ -17,6 +17,231 @@ namespace Vaka.Web.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.15");
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.CleaningEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ActorUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CleaningRecordId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CommandId")
+                        .HasMaxLength(36)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Hash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("OccurredAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PayloadJson")
+                        .IsRequired()
+                        .HasMaxLength(4000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PreviousHash")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Sequence")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActorUserId");
+
+                    b.HasIndex("CommandId");
+
+                    b.HasIndex("CleaningRecordId", "Sequence")
+                        .IsUnique();
+
+                    b.ToTable("CleaningEvents", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_CleaningEvents_CommandId", "\"CommandId\" IS NULL OR length(\"CommandId\") = 36");
+
+                            t.HasCheckConstraint("CK_CleaningEvents_HashFormat", "length(\"Hash\") = 64 AND \"Hash\" NOT GLOB '*[^0-9a-f]*'");
+
+                            t.HasCheckConstraint("CK_CleaningEvents_PreviousHashFormat", "\"PreviousHash\" IS NULL OR (length(\"PreviousHash\") = 64 AND \"PreviousHash\" NOT GLOB '*[^0-9a-f]*')");
+
+                            t.HasCheckConstraint("CK_CleaningEvents_PreviousHashPresence", "(\"Sequence\" = 1 AND \"PreviousHash\" IS NULL) OR (\"Sequence\" > 1 AND \"PreviousHash\" IS NOT NULL)");
+
+                            t.HasCheckConstraint("CK_CleaningEvents_Sequence", "\"Sequence\" > 0");
+                        });
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.CleaningRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("BreakSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("ClosedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ClosedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ClosureKind")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ClosureReason")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CompletedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("EffortSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("EmergencyDescription")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FacilityCodeSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FacilityNameSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FieldBookRef")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT")
+                        .UseCollation("NOCASE");
+
+                    b.Property<int?>("GrossSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("HoldSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Kind")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LineCodeSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LineNameSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LockExpiresAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("LockMinutes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MachineCodeSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MachineId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MachineNameSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("NetSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("OpenedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("OwnerUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProcedureVersionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("RecordNo")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT")
+                        .UseCollation("NOCASE");
+
+                    b.Property<DateTime?>("StartedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("WorkOrderNo")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClosedByUserId");
+
+                    b.HasIndex("FieldBookRef")
+                        .IsUnique();
+
+                    b.HasIndex("MachineId");
+
+                    b.HasIndex("OwnerUserId");
+
+                    b.HasIndex("ProcedureVersionId");
+
+                    b.HasIndex("RecordNo")
+                        .IsUnique();
+
+                    b.HasIndex(new[] { "MachineId" }, "IX_CleaningRecords_OneActivePerMachine")
+                        .IsUnique()
+                        .HasFilter("\"Status\" IN (1, 2, 3)");
+
+                    b.HasIndex(new[] { "OwnerUserId" }, "IX_CleaningRecords_OneActivePerOwner")
+                        .IsUnique()
+                        .HasFilter("\"Status\" IN (1, 2)");
+
+                    b.ToTable("CleaningRecords", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_CleaningRecords_Emergency", "\"Kind\" = 1 OR \"EmergencyDescription\" IS NOT NULL");
+
+                            t.HasCheckConstraint("CK_CleaningRecords_Kind", "\"Kind\" IN (1, 2)");
+
+                            t.HasCheckConstraint("CK_CleaningRecords_LockMinutes", "\"LockMinutes\" IS NULL OR \"LockMinutes\" > 0");
+
+                            t.HasCheckConstraint("CK_CleaningRecords_Seconds", "(\"GrossSeconds\" IS NULL OR \"GrossSeconds\" >= 0) AND (\"BreakSeconds\" IS NULL OR \"BreakSeconds\" >= 0) AND (\"HoldSeconds\" IS NULL OR \"HoldSeconds\" >= 0) AND (\"NetSeconds\" IS NULL OR \"NetSeconds\" >= 0) AND (\"EffortSeconds\" IS NULL OR \"EffortSeconds\" >= 0)");
+
+                            t.HasCheckConstraint("CK_CleaningRecords_Status", "\"Status\" IN (1, 2, 3, 4, 5, 6, 7)");
+                        });
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.CleaningType", b =>
                 {
                     b.Property<int>("Id")
@@ -198,6 +423,26 @@ namespace Vaka.Web.Data.Migrations
                     b.ToTable("MaterialLots", (string)null);
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.NumberSequence", b =>
+                {
+                    b.Property<string>("Scope")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LastValue")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Scope", "Year");
+
+                    b.ToTable("NumberSequences", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_NumberSequences_LastValue", "\"LastValue\" >= 0");
+                        });
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.ProcedurePhase", b =>
                 {
                     b.Property<int>("Id")
@@ -314,6 +559,38 @@ namespace Vaka.Web.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProcessedCommand", b =>
+                {
+                    b.Property<string>("CommandId")
+                        .HasMaxLength(36)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CommandType")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ResultJson")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CommandId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProcessedCommands", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_ProcessedCommands_CommandId", "length(\"CommandId\") = 36");
+                        });
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.ProductionLine", b =>
                 {
                     b.Property<int>("Id")
@@ -345,6 +622,185 @@ namespace Vaka.Web.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("ProductionLines", (string)null);
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordMaterial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CleaningRecordId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("EnteredAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EnteredByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("ExpiredAtEntry")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ExpiredReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly>("ExpiryDateSnapshot")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LotNoSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT")
+                        .UseCollation("NOCASE");
+
+                    b.Property<string>("MaterialCodeSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("TEXT")
+                        .UseCollation("NOCASE");
+
+                    b.Property<int>("MaterialLotId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MaterialNameSnapshot")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("RemovedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnteredByUserId");
+
+                    b.HasIndex("MaterialLotId");
+
+                    b.HasIndex(new[] { "CleaningRecordId", "MaterialLotId" }, "IX_RecordMaterials_OneActiveLotPerRecord")
+                        .IsUnique()
+                        .HasFilter("\"RemovedAtUtc\" IS NULL");
+
+                    b.ToTable("RecordMaterials", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_RecordMaterials_ExpiredReason", "\"ExpiredAtEntry\" = 0 OR \"ExpiredReason\" IS NOT NULL");
+                        });
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordPhase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("BelowMinimum")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("BelowMinimumReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("BreakSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CleaningRecordId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("GrossSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("HoldSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MinDurationSecondsSnapshot")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("NetSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProcedurePhaseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcedurePhaseId");
+
+                    b.HasIndex("CleaningRecordId", "ProcedurePhaseId")
+                        .IsUnique();
+
+                    b.ToTable("RecordPhases", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_RecordPhases_MinDuration", "\"MinDurationSecondsSnapshot\" IS NULL OR \"MinDurationSecondsSnapshot\" > 0");
+
+                            t.HasCheckConstraint("CK_RecordPhases_Seconds", "(\"GrossSeconds\" IS NULL OR \"GrossSeconds\" >= 0) AND (\"BreakSeconds\" IS NULL OR \"BreakSeconds\" >= 0) AND (\"HoldSeconds\" IS NULL OR \"HoldSeconds\" >= 0) AND (\"NetSeconds\" IS NULL OR \"NetSeconds\" >= 0)");
+
+                            t.HasCheckConstraint("CK_RecordPhases_Status", "\"Status\" IN (1, 2, 3, 4, 5)");
+                        });
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordStep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BreakSeconds")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(0);
+
+                    b.Property<int?>("DurationSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("EffortSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("EndedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("EndedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProcedureStepId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RecordPhaseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("StartedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("StartedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EndedByUserId");
+
+                    b.HasIndex("ProcedureStepId");
+
+                    b.HasIndex("StartedByUserId");
+
+                    b.HasIndex("RecordPhaseId", "ProcedureStepId")
+                        .IsUnique();
+
+                    b.ToTable("RecordSteps", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_RecordSteps_BreakSeconds", "\"BreakSeconds\" >= 0");
+
+                            t.HasCheckConstraint("CK_RecordSteps_DurationSeconds", "\"DurationSeconds\" IS NULL OR \"DurationSeconds\" >= 0");
+
+                            t.HasCheckConstraint("CK_RecordSteps_EffortSeconds", "\"EffortSeconds\" IS NULL OR \"EffortSeconds\" >= 0");
+
+                            t.HasCheckConstraint("CK_RecordSteps_Status", "\"Status\" IN (1, 2, 3, 4)");
+                        });
                 });
 
             modelBuilder.Entity("Vaka.Web.Domain.Entities.SettingChange", b =>
@@ -454,6 +910,45 @@ namespace Vaka.Web.Data.Migrations
 
                             t.HasCheckConstraint("CK_StepMedia_SizeBytes", "\"SizeBytes\" > 0");
                         });
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.StepParticipant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AddedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("ConfirmedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsWorking")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("RecordStepId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddedByUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("RecordStepId", "UserId")
+                        .IsUnique();
+
+                    b.HasIndex(new[] { "UserId" }, "IX_StepParticipants_OneWorkingPerUser")
+                        .IsUnique()
+                        .HasFilter("\"IsWorking\" = 1");
+
+                    b.ToTable("StepParticipants", (string)null);
                 });
 
             modelBuilder.Entity("Vaka.Web.Domain.Entities.SystemSetting", b =>
@@ -629,6 +1124,58 @@ namespace Vaka.Web.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.CleaningEvent", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.User", "Actor")
+                        .WithMany()
+                        .HasForeignKey("ActorUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Vaka.Web.Domain.Entities.CleaningRecord", "Record")
+                        .WithMany("Events")
+                        .HasForeignKey("CleaningRecordId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Actor");
+
+                    b.Navigation("Record");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.CleaningRecord", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.User", "ClosedBy")
+                        .WithMany()
+                        .HasForeignKey("ClosedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Vaka.Web.Domain.Entities.Machine", "Machine")
+                        .WithMany()
+                        .HasForeignKey("MachineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vaka.Web.Domain.Entities.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vaka.Web.Domain.Entities.ProcedureVersion", "ProcedureVersion")
+                        .WithMany()
+                        .HasForeignKey("ProcedureVersionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ClosedBy");
+
+                    b.Navigation("Machine");
+
+                    b.Navigation("Owner");
+
+                    b.Navigation("ProcedureVersion");
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.Machine", b =>
                 {
                     b.HasOne("Vaka.Web.Domain.Entities.ProductionLine", "Line")
@@ -710,6 +1257,15 @@ namespace Vaka.Web.Data.Migrations
                     b.Navigation("PublishedBy");
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProcessedCommand", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.ProductionLine", b =>
                 {
                     b.HasOne("Vaka.Web.Domain.Entities.Facility", "Facility")
@@ -719,6 +1275,85 @@ namespace Vaka.Web.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Facility");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordMaterial", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.CleaningRecord", "Record")
+                        .WithMany("Materials")
+                        .HasForeignKey("CleaningRecordId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vaka.Web.Domain.Entities.User", "EnteredBy")
+                        .WithMany()
+                        .HasForeignKey("EnteredByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vaka.Web.Domain.Entities.MaterialLot", "MaterialLot")
+                        .WithMany()
+                        .HasForeignKey("MaterialLotId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EnteredBy");
+
+                    b.Navigation("MaterialLot");
+
+                    b.Navigation("Record");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordPhase", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.CleaningRecord", "Record")
+                        .WithMany("Phases")
+                        .HasForeignKey("CleaningRecordId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vaka.Web.Domain.Entities.ProcedurePhase", "ProcedurePhase")
+                        .WithMany()
+                        .HasForeignKey("ProcedurePhaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ProcedurePhase");
+
+                    b.Navigation("Record");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordStep", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.User", "EndedBy")
+                        .WithMany()
+                        .HasForeignKey("EndedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Vaka.Web.Domain.Entities.ProcedureStep", "ProcedureStep")
+                        .WithMany()
+                        .HasForeignKey("ProcedureStepId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vaka.Web.Domain.Entities.RecordPhase", "Phase")
+                        .WithMany("Steps")
+                        .HasForeignKey("RecordPhaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vaka.Web.Domain.Entities.User", "StartedBy")
+                        .WithMany()
+                        .HasForeignKey("StartedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("EndedBy");
+
+                    b.Navigation("Phase");
+
+                    b.Navigation("ProcedureStep");
+
+                    b.Navigation("StartedBy");
                 });
 
             modelBuilder.Entity("Vaka.Web.Domain.Entities.SettingChange", b =>
@@ -762,6 +1397,33 @@ namespace Vaka.Web.Data.Migrations
                     b.Navigation("Step");
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.StepParticipant", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.User", "AddedBy")
+                        .WithMany()
+                        .HasForeignKey("AddedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vaka.Web.Domain.Entities.RecordStep", "Step")
+                        .WithMany("Participants")
+                        .HasForeignKey("RecordStepId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vaka.Web.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AddedBy");
+
+                    b.Navigation("Step");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.UserRole", b =>
                 {
                     b.HasOne("Vaka.Web.Domain.Entities.User", "User")
@@ -771,6 +1433,15 @@ namespace Vaka.Web.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.CleaningRecord", b =>
+                {
+                    b.Navigation("Events");
+
+                    b.Navigation("Materials");
+
+                    b.Navigation("Phases");
                 });
 
             modelBuilder.Entity("Vaka.Web.Domain.Entities.CleaningType", b =>
@@ -815,6 +1486,16 @@ namespace Vaka.Web.Data.Migrations
             modelBuilder.Entity("Vaka.Web.Domain.Entities.ProductionLine", b =>
                 {
                     b.Navigation("Machines");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordPhase", b =>
+                {
+                    b.Navigation("Steps");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordStep", b =>
+                {
+                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("Vaka.Web.Domain.Entities.User", b =>

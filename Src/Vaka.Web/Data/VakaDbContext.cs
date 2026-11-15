@@ -25,6 +25,14 @@ public class VakaDbContext : DbContext
     public DbSet<ProcedurePhase> ProcedurePhases => Set<ProcedurePhase>();
     public DbSet<ProcedureStep> ProcedureSteps => Set<ProcedureStep>();
     public DbSet<StepMedia> StepMedia => Set<StepMedia>();
+    public DbSet<CleaningRecord> CleaningRecords => Set<CleaningRecord>();
+    public DbSet<RecordPhase> RecordPhases => Set<RecordPhase>();
+    public DbSet<RecordStep> RecordSteps => Set<RecordStep>();
+    public DbSet<StepParticipant> StepParticipants => Set<StepParticipant>();
+    public DbSet<RecordMaterial> RecordMaterials => Set<RecordMaterial>();
+    public DbSet<CleaningEvent> CleaningEvents => Set<CleaningEvent>();
+    public DbSet<ProcessedCommand> ProcessedCommands => Set<ProcessedCommand>();
+    public DbSet<NumberSequence> NumberSequences => Set<NumberSequence>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

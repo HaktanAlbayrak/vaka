@@ -1,0 +1,124 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Records
+@model MachineBoardViewModel
+@{
+    ViewData["Title"] = "Makine panosu";
+    ViewData["Lead"] = "Makinelerin şu anki durumu ve kaydı tutan kişi.";
+    ViewData["NavKey"] = "machine-board";
+
+    var all = Model.Groups.SelectMany(group => group.Machines).ToList();
+    string StateKey(MachineState state) => state switch
+    {
+        MachineState.Free => "free",
+        MachineState.Opened => "opened",
+        MachineState.InProgress => "in-progress",
+        _ => "on-hold",
+    };
+}
+
+<form method="get" action="/machine-board" class="panel mb-5" aria-label="Pano süzgeci" data-busy-form>
+    <div class="grid gap-4 p-4 sm:grid-cols-[minmax(0,20rem)_auto] sm:items-end md:p-5">
+        <div class="field">
+            <label class="field-label" for="facilityId">Tesis</label>
+            <select id="facilityId" name="facilityId" class="input">
+                <option value="">Tüm tesisler</option>
+                @foreach (var facility in Model.Facilities)
+                {
+                    <option value="@facility.Id" selected="@(facility.Id == Model.FacilityId)">@facility.Label</option>
+                }
+            </select>
+        </div>
+        <div class="flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary min-h-12">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#funnel" /></svg>
+                Göster
+            </button>
+            <a class="btn btn-secondary min-h-12" href="/machine-board@(Model.FacilityId is null ? "" : "?facilityId=" + Model.FacilityId)">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#refresh-cw" /></svg>
+                Yenile
+            </a>
+        </div>
+    </div>
+</form>
+
+<partial name="_ListSkeleton" />
+
+<div data-loading-target>
+    @if (all.Count == 0)
+    {
+        <partial name="_State" model='("empty", "factory", "Gösterilecek makine yok", "Seçili tesiste aktif makine bulunmuyor. Tesis seçimini değiştirin ya da makine tanımları için yöneticinize başvurun.", "Tüm tesisler", "/machine-board")' />
+    }
+    else
+    {
+        <div class="mb-5 flex flex-wrap items-center gap-x-5 gap-y-2" role="group" aria-label="Durum sayıları">
+            @foreach (var state in new[] { MachineState.Free, MachineState.Opened, MachineState.InProgress, MachineState.OnHold })
+            {
+                var count = all.Count(machine => machine.State == state);
+                if (count == 0 && state == MachineState.OnHold)
+                {
+                    continue;
+                }
+                <span class="flex items-center gap-2">
+                    <partial name="_Badge" model='"MachineState." + state' />
+                    <span class="mono text-lg font-bold">@count</span>
+                </span>
+            }
+            <span class="text-sm text-muted">Güncellendi <partial name="_Moment" model='(Model.GeneratedAtLocal, Model.GeneratedAtLocal)' /></span>
+        </div>
+
+        <div class="space-y-6">
+            @foreach (var group in Model.Groups)
+            {
+                var headingId = "group-" + Array.IndexOf(Model.Groups, group);
+                <section aria-labelledby="@headingId">
+                    <h2 id="@headingId" class="mb-3 break-words text-xl font-bold">@group.FacilityName, @group.LineName</h2>
+                    <ul class="machine-grid">
+                        @foreach (var machine in group.Machines)
+                        {
+                            <li class="machine-tile" data-state="@StateKey(machine.State)">
+                                <div class="flex flex-wrap items-start justify-between gap-2">
+                                    <div class="min-w-0">
+                                        <p class="record-no">@machine.Code</p>
+                                        <p class="break-words font-semibold">@machine.Name</p>
+                                    </div>
+                                    <partial name="_Badge" model='"MachineState." + machine.State' />
+                                </div>
+                                @if (machine.RecordNo is not null)
+                                {
+                                    <dl class="kv grid-cols-2">
+                                        <div class="col-span-2">
+                                            <dt>Kayıt</dt>
+                                            <dd>
+                                                @if (machine.RecordUrl is not null)
+                                                {
+                                                    <a class="record-no inline-flex min-h-11 items-center break-all underline underline-offset-2" href="@machine.RecordUrl">@machine.RecordNo</a>
+                                                }
+                                                else
+                                                {
+                                                    <span class="record-no break-all">@machine.RecordNo</span>
+                                                }
+                                            </dd>
+                                        </div>
+                                        <div><dt>Sahip</dt><dd>@machine.OwnerName</dd></div>
+                                        @if (machine.OpenedAtLocal is not null)
+                                        {
+                                            <div><dt>Açılış</dt><dd><partial name="_Moment" model='(machine.OpenedAtLocal.Value, Model.GeneratedAtLocal)' /></dd></div>
+                                        }
+                                        @if (machine.State == MachineState.Opened && machine.LockExpiresAtLocal is not null)
+                                        {
+                                            <div class="col-span-2"><dt>Kilit bitişi</dt><dd><partial name="_Moment" model='(machine.LockExpiresAtLocal.Value, Model.GeneratedAtLocal)' /></dd></div>
+                                        }
+                                    </dl>
+                                }
+                                else
+                                {
+                                    <p class="text-sm text-muted">Kayıt açılabilir.</p>
+                                }
+                            </li>
+                        }
+                    </ul>
+                </section>
+            }
+        </div>
+    }
+</div>

@@ -737,6 +737,43 @@
   .legend-grid {
     @apply grid gap-x-6 gap-y-3 sm:grid-cols-2;
   }
+
+  .dur-unit {
+    @apply ml-0.5 mr-1.5 font-sans text-[0.9em] font-semibold text-muted last:mr-0;
+  }
+
+  .machine-grid {
+    @apply grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4;
+  }
+  .machine-tile {
+    @apply flex min-w-0 flex-col gap-3 border-2 border-line bg-surface p-3 md:p-4;
+    border-top-width: 6px;
+  }
+  .machine-tile[data-state="free"] {
+    @apply border-t-ok bg-transparent;
+  }
+  .machine-tile[data-state="opened"] {
+    @apply border-t-accent;
+  }
+  .machine-tile[data-state="in-progress"] {
+    @apply border-accent bg-accent-soft;
+  }
+  .machine-tile[data-state="on-hold"] {
+    @apply border-t-warn;
+  }
+
+  .lot-results {
+    @apply max-h-72 divide-y divide-line overflow-y-auto overscroll-contain border-2 border-line-strong bg-surface;
+  }
+  .lot-result {
+    @apply flex min-h-14 w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-2 text-left hover:bg-sunken;
+  }
+  .lot-row {
+    @apply space-y-3 rounded-ui border-2 border-line-strong bg-surface p-3;
+  }
+  .lot-row[data-expired="true"] {
+    @apply border-danger;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -758,5 +795,10 @@
   display: inline-block;
 }
 :root[data-theme="dark"] .theme-moon {
+  display: none;
+}
+
+html:not([data-js]) [data-lot-js],
+html[data-js] [data-lot-nojs] {
   display: none;
 }

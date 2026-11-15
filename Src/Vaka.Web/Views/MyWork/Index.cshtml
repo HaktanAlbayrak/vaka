@@ -1,0 +1,73 @@
+@using Vaka.Web.ViewModels.Records
+@model MyWorkViewModel
+@{
+    ViewData["Title"] = "İşlerim";
+    ViewData["Lead"] = "Açık kaydınız ve yeni kayıt açma durumunuz.";
+    ViewData["NavKey"] = "my-work";
+    var active = Model.ActiveRecord;
+}
+
+<partial name="_RecordSkeleton" />
+
+<div data-loading-target>
+    @if (active is null && Model.CanOpenRecord)
+    {
+        <partial name="_State" model='("empty", "clipboard-list", "Açık işiniz yok", "Temizlik yapacağınız makineyi seçip kayıt açın. Kayıt açılınca makine sizin için tutulur.", "Yeni kayıt aç", "/records/create")' />
+    }
+    else if (active is null)
+    {
+        <partial name="_State" model='("empty", "lock", "Şu an kayıt açamazsınız", Model.CannotOpenReason ?? "Kayıt açma şartları sağlanmıyor. Yöneticinize başvurun.", Model.CannotOpenUrl is null ? null : "Kaydı görüntüle", Model.CannotOpenUrl)' />
+    }
+    else
+    {
+        <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+            <section class="panel min-w-0 border-accent" aria-labelledby="active-title">
+                <div class="panel-head">
+                    <h2 id="active-title" class="panel-title">Açık iş</h2>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <partial name="_Badge" model='"CleaningTypeKind." + active.Kind' />
+                        <partial name="_Badge" model='"RecordStatus." + active.Status' />
+                    </div>
+                </div>
+                <div class="panel-body space-y-5">
+                    <div class="min-w-0">
+                        <p class="record-no break-words text-xl md:text-2xl">@active.RecordNo</p>
+                        <p class="mt-1 text-lg font-semibold break-words">@active.MachineLabel</p>
+                        <p class="text-muted break-words">@active.CleaningTypeName, versiyon @active.VersionNo</p>
+                    </div>
+                    @if (active.LockExpiresAtLocal is not null)
+                    {
+                        <div class="notice notice-info">
+                            <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#lock" /></svg>
+                            <div>
+                                <p class="font-semibold">Makine <span class="mono">@active.LockExpiresAtLocal.Value.ToString("dd.MM.yyyy HH:mm")</span> saatine kadar sizin için kilitli</p>
+                                <p class="mt-0.5 text-sm">İlk adım bu saate kadar başlatılmazsa kayıt Zaman aşımı olur ve makine serbest kalır.</p>
+                            </div>
+                        </div>
+                    }
+                    <a class="btn btn-primary btn-lg btn-block" href="@active.Url" data-busy-link>
+                        Yürütmeye git
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-right" /></svg>
+                    </a>
+                </div>
+            </section>
+
+            <aside class="min-w-0 space-y-5" aria-label="Yeni kayıt">
+                <section class="panel" aria-labelledby="rule-title">
+                    <div class="panel-head"><h2 id="rule-title" class="panel-title">Yeni kayıt</h2></div>
+                    <div class="space-y-3 p-4 md:p-5">
+                        <p>@(Model.CanOpenRecord ? "Yeni kayıt açabilirsiniz." : Model.CannotOpenReason ?? "Açık kaydınız bitmeden yeni kayıt açılmaz.")</p>
+                        @if (Model.CanOpenRecord)
+                        {
+                            <a class="btn btn-primary btn-block" href="/records/create" data-busy-link>Yeni kayıt aç</a>
+                        }
+                        else if (Model.CannotOpenUrl is not null && Model.CannotOpenUrl != active.Url)
+                        {
+                            <a class="btn btn-secondary btn-block" href="@Model.CannotOpenUrl" data-busy-link>Kaydı görüntüle</a>
+                        }
+                    </div>
+                </section>
+            </aside>
+        </div>
+    }
+</div>

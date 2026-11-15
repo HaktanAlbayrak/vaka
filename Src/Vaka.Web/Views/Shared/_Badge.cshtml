@@ -43,9 +43,43 @@
         ["user.inactive"] = ("Pasif", "ban", "badge-muted"),
         ["user.pinlocked"] = ("PIN kilitli", "lock", "badge-danger"),
         ["user.firstlogin"] = ("İlk giriş bekliyor", "hourglass", "badge-warn"),
+
+        ["machine.free"] = ("Boş", "circle-check", "badge-ok"),
+    };
+
+    // Enum üye adından sözlük anahtarına tek eşleme. Görünümler enum adını verir, rozet biçimi yalnız burada belirlenir.
+    private static readonly Dictionary<string, string> EnumKeys = new()
+    {
+        ["RecordStatus.Opened"] = "record.open",
+        ["RecordStatus.InProgress"] = "record.running",
+        ["RecordStatus.OnHold"] = "record.held",
+        ["RecordStatus.Completed"] = "record.done",
+        ["RecordStatus.TimedOut"] = "record.expired",
+        ["RecordStatus.Cancelled"] = "record.cancelled",
+        ["RecordStatus.Aborted"] = "record.aborted",
+
+        ["PhaseStatus.Waiting"] = "phase.waiting",
+        ["PhaseStatus.InProgress"] = "phase.running",
+        ["PhaseStatus.Completed"] = "phase.done",
+        ["PhaseStatus.CompletedBelowMinimum"] = "phase.short",
+        ["PhaseStatus.Interrupted"] = "phase.cut",
+
+        ["StepStatus.Waiting"] = "step.waiting",
+        ["StepStatus.Ready"] = "step.ready",
+        ["StepStatus.InProgress"] = "step.running",
+        ["StepStatus.Completed"] = "step.done",
+        ["StepStatus.Interrupted"] = "step.cut",
+
+        ["MachineState.Free"] = "machine.free",
+        ["MachineState.Opened"] = "record.open",
+        ["MachineState.InProgress"] = "record.running",
+        ["MachineState.OnHold"] = "record.held",
+
+        ["CleaningTypeKind.Planned"] = "kind.planned",
+        ["CleaningTypeKind.Emergency"] = "kind.emergency",
     };
 }
 @{
-    var badge = Vocabulary[Model];
+    var badge = Vocabulary[EnumKeys.TryGetValue(Model, out var alias) ? alias : Model];
 }
 <span class="badge @badge.Tone"><svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#@badge.Icon" /></svg><span>@badge.Label</span></span>

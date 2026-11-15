@@ -1,0 +1,22 @@
+Faz 4 teslim testi, 2026-11-15. Release yayını .qa/f4/build (çalışma ağacı, HEAD 64b9ad3). Port 5401 Production, DB .qa/f4/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5403 Development, .qa/f4/qa-dev.db, user-secrets anahtarı. Port 5402 Production, .qa/f4/empty.db (yalnız migration + iki kullanıcı). Saatler: veritabanında UTC, ekranda Türkiye (UTC+3).
+
+== G12 genel ölçüm (an12.py)
+===== q4op 32
+  kontrol sayıları {'a+': 48, 'b+': 14, 'c+': 128, 'd+': 96, 'e+': 14} kusurlu hücre 0
+===== q4op2 16
+  kontrol sayıları {'a+': 16, 'c+': 24, 'd+': 64} kusurlu hücre 0
+===== q4m 16
+  kontrol sayıları {'b+': 8, 'c+': 8, 'd+': 8, 'e+': 8} kusurlu hücre 0
+===== r4g 8
+  kontrol sayıları {'a+': 40, 'c+': 48, 'd+': 40} kusurlu hücre 0
+===== g123g 48
+  kontrol sayıları {'a+': 36, 'b+': 31, 'c+': 90, 'd+': 78, 'e+': 21, 'f+': 16} kusurlu hücre 0
+
+== Adım satırı (ön tur bulgusu): damga 44 px, başlık + rozet satırı
+Önce (ön tur):
+/records/run/1@360-light: adım 6, merkez farkı (satır/başlık/rozet) ready:16.5/0.5/41 waiting:5.3/-10.8/18.5+açıklama waiting:16.5/0.5/41+açıklama | üst fark 0 | damga 44 px, başlık satırı 77/55 px KUSUR 6 | birincil düğme yükseklik 44,56 | hScroll false
+Sonra:
+/records/run/1@360-light: adım 6, merkez farkı (satır/başlık/rozet) ready:16.5/0.5/41 waiting:5.3/-10.8/18.5+açıklama waiting:16.5/0.5/41+açıklama | üst fark 0 | damga 44 px, başlık satırı 77/55 px KUSUR 6 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/1@768-light: adım 6, merkez farkı (satır/başlık/rozet) ready:0/0/0 waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 44 px kusur 0 | birincil düğme yükseklik 44,56 | hScroll false
+/records/run/1@1024-light: adım 6, merkez farkı (satır/başlık/rozet) ready:5.3/-10.8/18.5 waiting:5.3/-10.8/18.5+açıklama waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 55/44 px KUSUR 5 | birincil düğme yükseklik 44,56 | hScroll false | kv satır T1 - Ana tesis, H1:2 Planlı temizlik, v:2 Test Operatör 1:1 05:29:1 12131:1 Atanmadı:1 Detaylı temizlik g:1
+/records/run/1@1440-light: adım 6, merkez farkı (satır/başlık/rozet) ready:0/0/0 waiting:0/0/0+açıklama | üst fark 0 | damga 44 px, başlık satırı 44 px kusur 0 | birincil düğme yükseklik 44,56 | hScroll false

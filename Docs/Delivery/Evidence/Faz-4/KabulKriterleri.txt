@@ -1,0 +1,188 @@
+Faz 4 teslim testi, 2026-11-15. Release yayını .qa/f4/build (çalışma ağacı, HEAD 64b9ad3). Port 5401 Production, DB .qa/f4/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5403 Development, .qa/f4/qa-dev.db, user-secrets anahtarı. Port 5402 Production, .qa/f4/empty.db (yalnız migration + iki kullanıcı). Saatler: veritabanında UTC, ekranda Türkiye (UTC+3).
+
+== K15 başlangıç (anahtarsız, 16 bayt, Base64 olmayan; Production, port 5409)
+nokey     süreç çıktı, günlük: crit Olay özeti anahtarı geçersiz, uygulama başlamıyor: EventChain:HmacKey tanımlı değil. Development'ta user-secrets, üretimde EventChain__HmacKey ortam değişkeni ile verin.
+shortkey  süreç çıktı, günlük: crit Olay özeti anahtarı geçersiz, uygulama başlamıyor: EventChain:HmacKey çözüldüğünde en az 32 bayt olmalı.
+badkey    süreç çıktı, günlük: crit Olay özeti anahtarı geçersiz, uygulama başlamıyor: EventChain:HmacKey Base64 değil.
+Anahtar EventChain__HmacKey ortam değişkeniyle verilince aynı yayın kod ve yapılandırma değişmeden başladı (5401). appsettings*.json, kaynak ve repoda anahtar değeri yok (grep: yalnız EventChainKey.cs içindeki yapılandırma adı).
+
+== K1, K2, K3, K4, K5 (gece yarısını geçen ve vardiyasız), K6, K12 (k1.py)
+== K1 JSON uçları (Operatör)
+  /records/lines?facilityId=1 200 [{"id":1,"label":"H1 - Haz\u0131rl\u0131k hatt\u0131"},{"id":2,"label":"H2 - Dolum hatt\u0131"}]
+  /records/lines?facilityId=2 200 []
+  /records/machines?lineId=1 200 [{"id":1,"label":"M01 - Kar\u0131\u015Ft\u0131r\u0131c\u0131","isAvailable":false,"busyReason":"Sahip: Test Operat\u00F6r 1, durum: a\u00E7\u0131ld\u0131, a\u00E7\u0131l\u0131\u015F: 15.11.2026 05:29"},{"id":2,"label":"M02 - Tart\u0131 \u00FCnitesi","isAvailable":false,"busyReason":"Sahip: Test Oper
+  /records/machines?lineId=2 200 [{"id":3,"label":"M01 - Dolum makinesi","isAvailable":true,"busyReason":null}]
+  /records/machines?lineId=3 200 []
+  /records/cleaning-types?machineId=1 200 [{"id":1,"name":"Planl\u0131 temizlik","versionNo":1,"materialRequired":true,"defaultLockMinutes":90},{"id":3,"name":"\u00DC\u00E7 fazl\u0131 planl\u0131 temizlik","versionNo":1,"materialRequired":false,"defaultLockMinutes":90}]
+  /records/cleaning-types?machineId=13 200 []
+  /records/cleaning-types?machineId=3 200 [{"id":1,"name":"Planl\u0131 temizlik","versionNo":1,"materialRequired":true,"defaultLockMinutes":90},{"id":3,"name":"\u00DC\u00E7 fazl\u0131 planl\u0131 temizlik","versionNo":1,"materialRequired":false,"defaultLockMinutes":90}]
+  /records/lots?q=L2026 200 [{"id":1,"materialCode":"MLZ001","materialName":"Y\u00FCzey dezenfektan\u0131","lotNo":"L2026-001","expiryDate":"2026-06-30","isExpired":true}]
+  GET /records/create tesis seçenekleri: [('1', 'T1 - Ana tesis'), ('3', 'T3 - QA vardiyas&#x131;z tesis'), ('4', 'T4 - QA vardiya s&#x131;n&#x131;r&#x131; tesisi')]
+== K2 değiştirilmiş istek
+  başka hattın makinesi (H1 + makine 3)          -> 200  | kayıt +0 olay +0 | Kayıt açılamadı / Hat seçilen makineye uygun değil ya da aktif değil.
+  eşlemesiz tip (M09 + PLN3)                     -> 200  | kayıt +0 olay +0 | Kayıt açılamadı / Temizlik tipi seçilen makineye eşli değil ya da yürürlükte versiyonu yok.
+  acil tip (ACL)                                 -> 200  | kayıt +0 olay +0 | Kayıt açılamadı / Temizlik tipi seçilen makineye eşli değil ya da yürürlükte versiyonu yok.
+  kullanımdan kaldırılmış makine (4)             -> 200  | kayıt +0 olay +0 | Kayıt açılamadı / Makine kullanımda değil.
+  pasif tesisin makinesi (5)                     -> 200  | kayıt +0 olay +0 | Kayıt açılamadı / Tesis seçilen makineye uygun değil ya da aktif değil.
+  başka tesisin hattı (T1 + T3 hattı)            -> 200  | kayıt +0 olay +0 | Kayıt açılamadı / Tesis seçilen makineye uygun değil ya da aktif değil.
+== K3 iş emri
+  planlı, iş emri boş                            -> 200  | kayıt +0 olay +0 | Kayıt açılamadı / İş emri numarasını girin.
+  planlı, iş emri boşluk                         -> 200  | kayıt +0 olay +0 | Kayıt açılamadı / İş emri numarasını girin.
+== K6 kilit süresi
+  121 dakika                                     -> 200  | kayıt +0 olay +0 | Kayıt açılamadı / Kilit süresi 1 ile 120 dakika arasında olmalı.
+  0 dakika                                       -> 200  | kayıt +0 olay +0 | Kayıt açılamadı / Kilit süresi 1 ile 120 dakika arasında olmalı.
+== PIN
+  yanlış PIN                                     -> 200  | kayıt +0 olay +0 | Kayıt açılamadı / PIN hatalı.
+    PIN sayacı 0 -> 1
+== K5 gece yarısını geçen vardiya (T1 Gece 23:00-07:00), K4 biçim, K6 120
+  op3, M03 (T1-H1), kilit 120                    -> 302 /records/run/4 | kayıt +1 olay +1 
+     (4, 'T1-H1-M03-P2026-1', 1, 14, 6, 120, '2026-11-15 02:46:31.9366474', '2026-11-15 04:00:00', None, 3, 'IE-K5-GECE', None)
+     açılış TR 2026-11-15 05:46:31.936647 kilit bitişi TR 2026-11-15 07:00:00 | açılış+120 TR 2026-11-15 07:46:31.936647 | beklenen: vardiya bitişi 07:00 (en erken)
+  op4, M01 (T1-H2, makine 3), kilit 60           -> 302 /records/run/5 | kayıt +1 olay +1 
+     açılış TR 2026-11-15 05:46:32.040232 kilit bitişi TR 2026-11-15 06:46:32.040232 | fark dk 60.0 (beklenen 60, 07:00 öncesi)
+== K5 vardiyasız tesis (T3), K6 120 kabul
+  op5, A2 (T3), kilit 120                        -> 302 /records/run/6 | kayıt +1 olay +1 
+     T3-H1-A2-P2026-1 fark dk 120.0 (beklenen 120)
+== K12 aynı CommandId iki kez (op7, A3)
+  1. gönderim 302 /records/run/7 | 2. gönderim aynı CommandId 302 /records/run/7 | kayıt +1 olay +1 | ProcessedCommands [('73f06e1c-3ae4-47fa-8521-a847af72decb', 'OpenRecord', 10, '{"recordId":7}', '2026-11-15 02:46:32.2574633')]
+  aynı CommandId farklı gövde (makine A4) -> 302 /records/run/7 | kayıt 1
+== K4 kayıt no, durum, saha referansı, iş emri ve açıklama
+   T3-H1-A1-P2026-1 durum 1 saha ref None iş emri IE-K9
+   T1-H1-M03-P2026-1 durum 1 saha ref None iş emri IE-K5-GECE
+   T1-H2-M01-P2026-1 durum 1 saha ref None iş emri IE-K5-GECE60
+   T3-H1-A2-P2026-1 durum 1 saha ref None iş emri IE-K5-T3
+   T3-H1-A3-P2026-1 durum 1 saha ref None iş emri IE-K12
+  run sayfası: iş emri True | açıklama True | durum Açıldı True | saha ref metni: ['Saha defteri Atanmadı Açıklama']
+
+== K5 / F2-A2 vardiya sınırı (k5b.py: başlangıç dahil; k5c.py: bitiş hariç)
+şimdi TR 2026-11-15 05:48:47.129644+00:00 | sınır M 2026-11-15 05:50:00+00:00
+  vardiya QA S1 04:50 - 05:50 -> 302 /shifts?facilityId=4 
+  vardiya QA S2 05:50 - 06:00 -> 302 /shifts?facilityId=4 
+  vardiya QA S1 tek 04:50 - 05:50 -> 404  
+  B1 (T4, S1 bitti, S2 başladı) 302 /records/run/14 | açılış TR 2026-11-15 05:50:00.420095 | kilit bitişi TR 2026-11-15 06:00:00 | açılıştan dk 9.993
+  C1 (T6, tek vardiya M'de bitti) 302 /records/run/13 | açılış TR 2026-11-15 05:50:00.269382 | kilit bitişi TR 2026-11-15 06:50:00.269382 | açılıştan dk 60.0
+  beklenen: B1 kilit bitişi 2026-11-15 06:00:00+00:00 ; C1 açılış + 60 dk
+  S2 bitişi 06:30 yapıldı -> 302 /shifts?facilityId=4 | B1 kilit bitişi önce 2026-11-15 03:00:00 sonra 2026-11-15 03:00:00
+Not: k5b içindeki "QA S1 tek" 404 yanlış tesis kimliğiyle denendi; bitiş hariç ölçümü k5c ile yapıldı:
+şimdi TR 2026-11-15 05:50:18.195704+00:00 | M 2026-11-15 05:51:00+00:00 | T6 vardiyası 04:51 - 05:51 -> 302 /shifts?facilityId=5 
+  C2 302 /records/run/15 | açılış TR 2026-11-15 05:51:00.263750 | kilit bitişi TR 2026-11-15 06:51:00.263750 | açılıştan dk 60.0 | beklenen 60 (vardiya M'de bitti, bitiş hariç)
+
+== K9 zaman aşımı, K18 pano, K4 sıra artışı (k9.py)
+şimdi UTC 2026-11-15 02:47:08.238087+00:00
+önce: [(3, 'T3-H1-A1-P2026-1', 1, 6, 9, 1, '2026-11-15 02:46:02.8292715', '2026-11-15 02:47:02.8292715', None, 3, 'IE-K9', None)]
+  run sayfası (zaman aşımı uygulanmadan önce açıldı mı): 200 durum metni: ['Zaman aşımı']
+  sonrası DB: [(3, 'T3-H1-A1-P2026-1', 5, 6, 9, 1, '2026-11-15 02:46:02.8292715', '2026-11-15 02:47:02.8292715', '2026-11-15 02:47:02.8292715', 3, 'IE-K9', None)]
+  op6 malzeme ekle -> 400  ['Sunucuda bir sorun var Yaptığınız işlem kaydedilmemiş olabilir. Birkaç dakika sonra yeniden deneyin. Sorun sürerse yöneticinize bildirin.']
+  pano (Yönetici) A1 kartı: A1 QA vardiyasız makine A1 Boş Kayıt açılabilir.
+  olaylar: [(1, 'RecordOpened', 9, '2026-11-15 02:46:02.8292715', '6dd99317-61df-4128-9398-734ca129a6f5'), (2, 'RecordTimedOut', None, '2026-11-15 02:47:08.2824089', None)]
+  ClosedAtUtc 2026-11-15 02:47:02.8292715 == LockExpiresAtUtc 2026-11-15 02:47:02.8292715 : True
+  başka operatör (op8) A1 açar -> 302 /records/run/8  [(3, 'T3-H1-A1-P2026-1', 5, 6, 9, 1, '2026-11-15 02:46:02.8292715', '2026-11-15 02:47:02.8292715', '2026-11-15 02:47:02.8292715', 3, 'IE-K9', None), (8, 'T3-H1-A1-P2026-2', 1, 6, 11, 30, '2026-11-15 02:47:08.4766014', '2026-11-15 03:17:08.4766014', None, 3, 'IE-K9-2', None)]
+  zaman aşımı sonrası run: malzeme formu var mı False
+  op6 zaman aşımına düşmüş kayda malzeme ekle (geçerli belirteç) -> 200  ['İşlem yapılmadı'] | malzeme satırı [(1,)]
+
+== K7 makine kilidi, K8 sahip kilidi (k7.py, eşzamanlı istek threading.Barrier)
+== K7 sıralı: dolu makine (A2, op5 kaydı) için op9
+   -> 200 Kayıt açılamadı / Kayıt açılamadı
+== K8 sıralı: aktif kaydı olan op5 başka makinede
+   -> 200 Kayıt açılamadı / Kayıt açılamadı | bağlantılar: ['/records/run/6']
+== K7 tur 1: op9 ve op10 aynı makine A4
+    op9 makine 9 -> 302 /records/run/9 
+    op10 makine 9 -> 200  Kayıt açılamadı / Kayıt açılamadı
+    kayıt +1, olay +1, 500 yanıtı 0
+== K7 tur 2: op11 ve op12 aynı makine B3
+    op11 makine 12 -> 302 /records/run/10 
+    op12 makine 12 -> 200  Kayıt açılamadı / Kayıt açılamadı
+    kayıt +1, olay +1, 500 yanıtı 0
+== K8 tur 1: op10 aynı anda A5 ve A6
+    op10 makine 15 -> 302 /records/run/11 
+    op10 makine 16 -> 200  Kayıt açılamadı / Kayıt açılamadı
+    kayıt +1, olay +1, 500 yanıtı 0
+== K8 tur 2: op12 aynı anda A7 ve B2
+    op12 makine 17 -> 200  Kayıt açılamadı / Kayıt açılamadı
+    op12 makine 11 -> 302 /records/run/12 
+    kayıt +1, olay +1, 500 yanıtı 0
+makine başına açık kayıt: [] | sahip başına: []
+numara sayaçları: [('Record:1', 2026, 1), ('Record:11', 2026, 1), ('Record:12', 2026, 1), ('Record:14', 2026, 1), ('Record:15', 2026, 1), ('Record:2', 2026, 1), ('Record:3', 2026, 1), ('Record:6', 2026, 2), ('Record:7', 2026, 1), ('Record:8', 2026, 1), ('Record:9', 2026, 1)]
+hata günlüğü (fail/crit): 0
+K7 sıralı (op12 dolu A2): 200 Kayıt açılamadı Makinede açık kayıt var. Sahip: QA Operatör 5, durum: açıldı, açılış: 15.11.2026 05:46 Kaydı görüntüle Makine Tesis <select id="FacilityId" name="FacilityId" class="input" required data-required-message="Tesis seçin." data-cascade-url="/records
+K8 sıralı (op5 aktif kaydı varken A6): 200 Kayıt açılamadı Açık kaydınız var: T3-H1-A2-P2026-1 (açıldı). Yeni kayıt açmadan önce onu sürdürün. Kaydı görüntüle Makine Tesis <select id="FacilityId" name="FacilityId" class="input" required data-required-message="Tesis seçin." data-cascade-url="/records/li | bağlantı: [('/records/run/6', 'Kaydı görüntüle')]
+
+== K10, K11 malzeme (k10.py, HTTP)
+kayıt 4 kilit bitişi 2026-11-15 04:00:00 | malzeme önce []
+K10 SKT geçmiş lot, gerekçesiz -> 200  role="alert" tabindex="-1" data-form-summary> İşlem yapılmadı SKT geçmiş lot için gerekçe girin. | PendingMaterial seçili lot: ['name="MaterialLotId" value="1" checked="checked']
+K10 gerekçeyle -> 302 /records/run/4
+   run satırı: class="text-sm">Lot L2026-001 , SKT 30.06.2026 QA Operatör 3, 05:51 <div
+aynı lot tekrar -> 200  role="alert" tabindex="-1" data-form-summary> İşlem yapılmadı Bu lot kayda zaten eklenmiş.
+K11 yanlış PIN -> 200 role="alert" tabindex="-1" data-form-summary> İşlem yapılmadı PIN hatalı. <section class="p | sayaç 0 -> 1
+K11 başka operatör (op4) ekleme -> 403  ['Yetkiniz yok - Vaka']
+K11 sahip doğru PIN lot 3 -> 302 /records/run/4
+   kilit bitişi önce 2026-11-15 04:00:00 sonra 2026-11-15 04:00:00 | aynı: True
+   çıkarma formları RecordMaterialId: ['7', '8']
+K11 sahip çıkarma -> 302 /records/run/4
+K11 başka operatör çıkarma -> 403 
+malzeme sonra [(7, 1, 1, 'Tedarik gecikti, QA onaylı', 6, None), (8, 3, 0, None, 6, '2026-11-15 02:51:29.6396971')]
+olaylar [(1, 'RecordOpened', 6), (2, 'MaterialAdded', 6), (3, 'MaterialAdded', 6), (4, 'MaterialRemoved', 6)]
+
+== K17, K19, F1-A1, F1-A2, F2-A1, F3-A1, K18 (k17.py)
+== K17
+  kayıt 4 versiyon 3
+  PLN3 taslak (4, 2)
+  yayın -> 200 ['v2 yayınlandı.']
+  PLN3 versiyonları [(3, 1, 3), (4, 2, 2)]
+  kayıt 4 versiyon sonra 3
+  run sayfası versiyon metni: []
+  yeni kayıtta PLN3 versiyon no (JSON): [{"id":1,"name":"Planl\u0131 temizlik","versionNo":1,"materialRequired":true,"defaultLockMinutes":90},{"id":3,"name":"\u00DC\u00E7 fazl\u0131 planl\u0131 temizlik","versionNo":2,"materialRequired":fal
+== F1-A1 / K19 kullanıcı (op3 = Id 6, açık kayıt 4)
+  m1 GET -> 200  | kayıt no geçiyor True | run bağlantısı False | PIN alanı/pasifleştir düğmesi False | ri var T1-H1-M03-P2026-1 (açıldı) Kayıt sahibi Kullanıcının açık işi var. Önce bu işler kapatılmalı. Hesaba dön Pasifleştirince Kullanıcı parolasıyla giriş yapamaz. Kullanıcı liste
+  sa GET -> 200  | kayıt no geçiyor True | run bağlantısı False | PIN alanı/pasifleştir düğmesi False | ri var T1-H1-M03-P2026-1 (açıldı) Kayıt sahibi Kullanıcının açık işi var. Önce bu işler kapatılmalı. Hesaba dön Pasifleştirince Kullanıcı parolasıyla giriş yapamaz. Kullanıcı liste
+  doğru PIN ile pasifleştir POST -> 200  ['Pasifleştirilemedi', 'Kullanıcının açık işi var. Önce bu işler kapatılmalı.'] | op3 aktif 1 | m1 sayaç 0 -> 0
+  yanlış PIN ile POST -> 200  ['Pasifleştirilemedi', 'Kullanıcının açık işi var. Önce bu işler kapatılmalı.'] | m1 sayaç 0
+  doğru PIN tekrar (sayaç sıfırlanır mı) -> 200 | sayaç 0
+== F2-A1 / K19 makine (M03 = 14, kayıt 4)
+  GET -> 200 | kayıt no True | bağlantı False | gönder düğmesi False
+  POST -> 200  ['Makine kullanımdan kaldırılamadı', 'Aktif ya da beklemedeki kaydı olan makine kullanımdan kaldırılamaz. Önce yukarıdaki kayıtları tamamlayın ya da kapatın.'] | makine [(1, None)]
+== F3-A1 / K19 tip (PLN3 = 3, açık kayıtları var)
+  GET engelleyen liste: [] | bağlantı False
+  pasifleştir POST -> 200  {'IsActive': 'Aktif ya da beklemedeki kaydı olan tip pasifleştirilemez.'} | engelleyen satır sayısı 13 | tip aktif 1
+== K18 pano
+  op -> 200  | durum metinleri: {'Boş': 2, 'Açıldı': 17, 'Devam ediyor': 1, 'Zaman aşımı': 0} | kayıt bağlantısı 16
+  m1 -> 200  | durum metinleri: {'Boş': 2, 'Açıldı': 17, 'Devam ediyor': 1, 'Zaman aşımı': 0} | kayıt bağlantısı 0
+  au -> 200  | durum metinleri: {'Boş': 2, 'Açıldı': 17, 'Devam ediyor': 1, 'Zaman aşımı': 0} | kayıt bağlantısı 0
+  sa -> 302 /account/access-denied?ReturnUrl=%2Fmachine-board | durum metinleri:  | kayıt bağlantısı 
+  run 4 versiyon alanı: Üç fazlı planlı temizlik, versiyon 1 Sahip QA Operatör 3 Açı
+== F1-A2 PIN ve iş eylemi aynı işlemde (PIN sıfırlama, hedef Denetçi 3001)
+  yanlış PIN -> 200  ['İşlem tamamlanamadı', 'PIN hatalı.'] | m1 sayaç 1 | hedef PIN değişti False
+  doğru PIN -> 302 /users/edit/5 | m1 sayaç 0 | hedef PIN sıfırlandı (1, 1)
+
+== K14 tetikleyiciler (kopya .qa/f4/k14.db; son satır şema NOT NULL nedeniyle anlamsız deneme)
+K14: kopya .qa/f4/k14.db (qa.db yedeği)
+  UPDATE CleaningEvents PayloadJson                    RET: Olay günlüğü değiştirilemez.
+  UPDATE CleaningEvents Hash                           RET: Olay günlüğü değiştirilemez.
+  DELETE CleaningEvents                                RET: Olay günlüğü değiştirilemez.
+  DELETE NumberSequences                               RET: Numara sayacı silinemez.
+  UPDATE NumberSequences LastValue azaltma             RET: Numara sayacı yalnız artırılabilir.
+  UPDATE NumberSequences LastValue artırma             KABUL
+  İkinci açık kayıt aynı makine (INSERT)               RET: NOT NULL constraint failed: CleaningRecords.FacilityCodeSnapshot
+  tetikleyiciler: ['TR_CleaningEvents_NoUpdate', 'TR_CleaningEvents_NoDelete', 'TR_RecordSteps_NoTimeChange', 'TR_NumberSequences_NoDelete', 'TR_NumberSequences_OnlyIncrease']
+
+== K15 olay zinciri: Development (user-secrets anahtarı bellekte okundu, yazdırılmadı) bağımsız HMAC hesabı (hmac_dev.py)
+dev: op2 makine 2 aç -> 302 /records/run/2
+dev: malzeme ekle -> 302 /records/run/2
+dev: malzeme çıkar -> 302 /records/run/2
+  kayıt 1 olay 1 RecordOpened     önceki=-… özet=dd08a47ed599… bağımsız hesap AYNI
+  kayıt 2 olay 1 RecordOpened     önceki=-… özet=242f8de40345… bağımsız hesap AYNI
+  kayıt 2 olay 2 MaterialAdded    önceki=242f8de40345… özet=10ea070d52b0… bağımsız hesap AYNI
+  kayıt 2 olay 3 MaterialRemoved  önceki=10ea070d52b0… özet=c366a3762065… bağımsız hesap AYNI
+HMAC zinciri: 4 olay doğru, 0 farklı (anahtar yazdırılmadı)
+Production (5401, süreç içi rastgele anahtar): 23 olay, önceki özet bağlantısı ve biçim doğru 23, hatalı 0; türler {'RecordOpened': 17, 'RecordTimedOut': 1, 'MaterialAdded': 3, 'MaterialRemoved': 2}; olay sayısı / kayıt sayısı 23 / 17
+Örnek RecordOpened payload: {"RecordNo":"T3-H1-A7-P2026-1","MachineId":17,"CleaningTypeId":1,"ProcedureVersionId":1,"VersionNo":1,"LockMinutes":90,"LockExpiresAtUtc":"2026-11-15T04:26:40.5895973Z","WorkOrderNo":"IE-JS-K13","MaterialLotIds":[1]}
+
+== K21 demo veri (fresh.db)
+K21: fresh.db = sıfırdan migration + DemoData.sql iki kez
+Sayılar: {'Facilities': 2, 'ProductionLines': 3, 'Machines': 5, 'Shifts': 3, 'Materials': 3, 'MaterialLots': 5, 'CleaningTypes': 3, 'MachineCleaningTypes': 8, 'ProcedureVersions': 3, 'ProcedurePhases': 7, 'ProcedureSteps': 19, 'StepMedia': 0, 'CleaningRecords': 0, 'CleaningEvents': 0, 'NumberSequences': 0}
+İkinci uygulamadan sonra aynı: True
+PLN3: [(3, 'PLN3', 'Üç fazlı planlı temizlik', 1, 90, 1)]
+Versiyon: [(3, 1, 2, None, 0)]
+Fazlar: [(1, 'Hazırlık', 900, 5), (2, 'Temizlik', 900, 3), (3, 'Kontrol ve teslim', 900, 4)]
+Eşleme: [(1,), (2,), (3,), (5,)] | Faz 3 tipleri: [(1, 'PLN'), (2, 'ACL')]
+SystemSettings: [('SessionMinutes', 30), ('PinLength', 4), ('PinAttemptLimit', 5), ('MaxLockMinutes', 120), ('MaxPhotoMb', 10), ('MaxVideoMb', 100)]

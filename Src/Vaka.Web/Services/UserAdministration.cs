@@ -1,5 +1,3 @@
-using System.Data;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Vaka.Web.Authorization;
 using Vaka.Web.Data;
@@ -11,13 +9,12 @@ public sealed class UserAdministration : IUserAdministration
 {
     private const int RegistryNoMaxLength = 32;
     private const int FullNameMaxLength = 120;
-    private const int SqliteBusy = 5;
-    private const int SqliteLocked = 6;
     private const string DuplicateRegistryNo = "Bu sicil no kayıtlı.";
 
     private readonly VakaDbContext _db;
     private readonly ICredentialHasher _hasher;
     private readonly IPinService _pins;
+    private readonly IWriteTransactionRunner _transactions;
     private readonly IOpenWorkProvider _openWork;
     private readonly TimeProvider _time;
 
@@ -25,12 +22,14 @@ public sealed class UserAdministration : IUserAdministration
         VakaDbContext db,
         ICredentialHasher hasher,
         IPinService pins,
+        IWriteTransactionRunner transactions,
         IOpenWorkProvider openWork,
         TimeProvider time)
     {
         _db = db;
         _hasher = hasher;
         _pins = pins;
+        _transactions = transactions;
         _openWork = openWork;
         _time = time;
     }
@@ -140,30 +139,18 @@ public sealed class UserAdministration : IUserAdministration
 
     public async Task<CommandResult> DeactivateAsync(int actorId, int targetId, string? pin, CancellationToken cancellationToken)
     {
-        var resolved = await ResolveTargetAsync(actorId, targetId, cancellationToken);
-        if (resolved.Failure is not null)
-        {
-            return resolved.Failure;
-        }
-
-        var block = await GetDeactivateBlockAsync(actorId, targetId, resolved.Target!, cancellationToken);
-        if (block is not null)
-        {
-            return CommandResult.Rejected(string.Empty, block);
-        }
-
-        var pinFailure = await CheckPinAsync(actorId, pin, cancellationToken);
-        if (pinFailure is not null)
-        {
-            return pinFailure;
-        }
-
         return await RunExclusiveAsync(actorId, targetId, async (target, _) =>
         {
-            var lockedBlock = await GetDeactivateBlockAsync(actorId, targetId, target, cancellationToken);
-            if (lockedBlock is not null)
+            var block = await GetDeactivateBlockAsync(actorId, targetId, target, cancellationToken);
+            if (block is not null)
             {
-                return CommandResult.Rejected(string.Empty, lockedBlock);
+                return CommandResult.Rejected(string.Empty, block);
+            }
+
+            var pinFailure = await _pins.ConfirmAsync(actorId, pin, cancellationToken);
+            if (pinFailure is not null)
+            {
+                return pinFailure;
             }
 
             target.IsActive = false;
@@ -183,90 +170,63 @@ public sealed class UserAdministration : IUserAdministration
         return block;
     }
 
+
     /// <summary>
-    /// PL-29: aktif Süper admin sayısını azaltabilen işlemler (pasifleştirme, rol güncelleme) başta yazma kilidi alan tek işlemde çalışır.
-    /// Microsoft.Data.Sqlite hem Unspecified (EF varsayılanı) hem Serializable yalıtımda yazma kilidini hemen alır (<c>BEGIN IMMEDIATE</c>, denendi);
-    /// Serializable niyeti açık göstermek için yazıldı.
-    /// Kilitten sonra izleyici temizlenir; işlemi yapan kişi, hedef ve roller veritabanından yeniden okunur, işlemi yapan artık aktif değilse
-    /// ya da kapsamı kalmadıysa değişiklik yapılmaz. Kilidi bekleyen istek zaman aşımında anlamlı iş hatası alır.
+    /// PL-29, F1-A2: aktif Süper admin sayısını azaltabilen işlemler ve PIN isteyen her işlem başta yazma kilidi alan tek işlemde çalışır
+    /// (<see cref="IWriteTransactionRunner"/>). İşlemi yapan kişi, hedef ve roller kilitten sonra veritabanından yeniden okunur; işlemi yapan
+    /// artık aktif değilse ya da kapsamı kalmadıysa değişiklik yapılmaz. PIN doğrulaması iş kuralları geçtikten sonra, iş eyleminden önce
+    /// aynı işlemde yapılır: yanlış PIN'de yalnız hatalı deneme sayacı kalır, doğru PIN'den sonra iş reddinde hiçbir yazma kalmaz.
     /// </summary>
-    private async Task<CommandResult> RunExclusiveAsync(
+    private Task<CommandResult> RunExclusiveAsync(
         int actorId,
         int targetId,
         Func<User, string[], Task<CommandResult>> action,
-        CancellationToken cancellationToken)
-    {
-        try
+        CancellationToken cancellationToken) =>
+        _transactions.RunAsync(async token =>
         {
-            await using var transaction = await _db.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
-            _db.ChangeTracker.Clear();
-
-            if (!await UserQueries.IsActiveAsync(_db, actorId, cancellationToken))
+            if (!await UserQueries.IsActiveAsync(_db, actorId, token))
             {
                 return CommandResult.Forbidden();
             }
 
-            var resolved = await ResolveTargetAsync(actorId, targetId, cancellationToken);
-            if (resolved.Failure is not null)
-            {
-                return resolved.Failure;
-            }
-
-            var result = await action(resolved.Target!, resolved.ActorRoles);
-            if (result.Succeeded)
-            {
-                await transaction.CommitAsync(cancellationToken);
-            }
-
-            return result;
-        }
-        catch (SqliteException exception) when (exception.SqliteErrorCode is SqliteBusy or SqliteLocked)
-        {
-            return CommandResult.Rejected(string.Empty, "Sistem şu an meşgul. İşlemi birkaç saniye sonra yeniden deneyin.");
-        }
-    }
+            var resolved = await ResolveTargetAsync(actorId, targetId, token);
+            return resolved.Failure ?? await action(resolved.Target!, resolved.ActorRoles);
+        }, cancellationToken);
 
     public async Task<CommandResult> ActivateAsync(int actorId, int targetId, string? pin, CancellationToken cancellationToken)
     {
-        var resolved = await ResolveTargetAsync(actorId, targetId, cancellationToken);
-        if (resolved.Failure is not null)
+        return await RunExclusiveAsync(actorId, targetId, async (target, _) =>
         {
-            return resolved.Failure;
-        }
+            if (target.IsActive)
+            {
+                return CommandResult.Rejected(string.Empty, "Hesap zaten etkin.");
+            }
 
-        var target = resolved.Target!;
-        if (target.IsActive)
-        {
-            return CommandResult.Rejected(string.Empty, "Hesap zaten etkin.");
-        }
+            var pinFailure = await _pins.ConfirmAsync(actorId, pin, cancellationToken);
+            if (pinFailure is not null)
+            {
+                return pinFailure;
+            }
 
-        var pinFailure = await CheckPinAsync(actorId, pin, cancellationToken);
-        if (pinFailure is not null)
-        {
-            return pinFailure;
-        }
-
-        target.IsActive = true;
-        await _db.SaveChangesAsync(cancellationToken);
-        return CommandResult.Success(targetId);
+            target.IsActive = true;
+            await _db.SaveChangesAsync(cancellationToken);
+            return CommandResult.Success(targetId);
+        }, cancellationToken);
     }
 
     public async Task<CommandResult> ResetPinAsync(int actorId, int targetId, string? pin, CancellationToken cancellationToken)
     {
-        var resolved = await ResolveTargetAsync(actorId, targetId, cancellationToken);
-        if (resolved.Failure is not null)
+        return await RunExclusiveAsync(actorId, targetId, async (_, _) =>
         {
-            return resolved.Failure;
-        }
+            var pinFailure = await _pins.ConfirmAsync(actorId, pin, cancellationToken);
+            if (pinFailure is not null)
+            {
+                return pinFailure;
+            }
 
-        var pinFailure = await CheckPinAsync(actorId, pin, cancellationToken);
-        if (pinFailure is not null)
-        {
-            return pinFailure;
-        }
-
-        await _pins.ResetAsync(targetId, cancellationToken);
-        return CommandResult.Success(targetId);
+            await _pins.ResetAsync(targetId, cancellationToken);
+            return CommandResult.Success(targetId);
+        }, cancellationToken);
     }
 
     public async Task<CommandResult> ResetPasswordAsync(
@@ -276,29 +236,25 @@ public sealed class UserAdministration : IUserAdministration
         string? pin,
         CancellationToken cancellationToken)
     {
-        var resolved = await ResolveTargetAsync(actorId, targetId, cancellationToken);
-        if (resolved.Failure is not null)
+        return await RunExclusiveAsync(actorId, targetId, async (target, _) =>
         {
-            return resolved.Failure;
-        }
+            var passwordError = PasswordRules.Validate(temporaryPassword);
+            if (passwordError is not null)
+            {
+                return CommandResult.Rejected("TemporaryPassword", passwordError);
+            }
 
-        var passwordError = PasswordRules.Validate(temporaryPassword);
-        if (passwordError is not null)
-        {
-            return CommandResult.Rejected("TemporaryPassword", passwordError);
-        }
+            var pinFailure = await _pins.ConfirmAsync(actorId, pin, cancellationToken);
+            if (pinFailure is not null)
+            {
+                return pinFailure;
+            }
 
-        var pinFailure = await CheckPinAsync(actorId, pin, cancellationToken);
-        if (pinFailure is not null)
-        {
-            return pinFailure;
-        }
-
-        var target = resolved.Target!;
-        target.PasswordHash = _hasher.Hash(temporaryPassword!);
-        target.MustChangePassword = true;
-        await _db.SaveChangesAsync(cancellationToken);
-        return CommandResult.Success(targetId);
+            target.PasswordHash = _hasher.Hash(temporaryPassword!);
+            target.MustChangePassword = true;
+            await _db.SaveChangesAsync(cancellationToken);
+            return CommandResult.Success(targetId);
+        }, cancellationToken);
     }
 
     private async Task<(CommandResult? Failure, User? Target, string[] ActorRoles)> ResolveTargetAsync(
@@ -320,17 +276,6 @@ public sealed class UserAdministration : IUserAdministration
         return ManagementScope.CanManage(actorRoles, targetRoles)
             ? (null, target, actorRoles)
             : (CommandResult.Forbidden(), null, actorRoles);
-    }
-
-    private async Task<CommandResult?> CheckPinAsync(int actorId, string? pin, CancellationToken cancellationToken)
-    {
-        if (string.IsNullOrEmpty(pin))
-        {
-            return CommandResult.Rejected("Pin", "PIN girin.");
-        }
-
-        var status = await _pins.VerifyAsync(actorId, pin, cancellationToken);
-        return status == PinCheckStatus.Accepted ? null : CommandResult.FromPin(status, "Pin");
     }
 
     private static string CheckFullName(string? value, List<FieldError> errors)

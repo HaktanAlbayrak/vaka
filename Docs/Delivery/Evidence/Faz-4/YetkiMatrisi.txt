@@ -1,0 +1,26 @@
+Faz 4 teslim testi, 2026-11-15. Release yayını .qa/f4/build (çalışma ağacı, HEAD 64b9ad3). Port 5401 Production, DB .qa/f4/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5403 Development, .qa/f4/qa-dev.db, user-secrets anahtarı. Port 5402 Production, .qa/f4/empty.db (yalnız migration + iki kullanıcı). Saatler: veritabanında UTC, ekranda Türkiye (UTC+3).
+Ham soket, yönlendirme izlenmeden (mx.py).
+
+Kolonlar: anon | op3 (kayıt 4 sahibi) | op4 (Operatör, sahip değil) | m1 Yönetici | au Denetçi | sa Süper admin
+== GET
+/my-work                                 302>/account/login         | 200                        | 200                        | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied
+/records/create                          302>/account/login         | 200                        | 200                        | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied
+/records/lines?facilityId=1              302>/account/login         | 200                        | 200                        | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied
+/records/machines?lineId=1               302>/account/login         | 200                        | 200                        | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied
+/records/cleaning-types?machineId=1      302>/account/login         | 200                        | 200                        | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied
+/records/lots?q=                         302>/account/login         | 200                        | 200                        | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied
+/records/run/4                           302>/account/login         | 200                        | 200                        | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied
+/records/run/9999                        302>/account/login         | 404                        | 404                        | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied
+/machine-board                           302>/account/login         | 200                        | 200                        | 200                        | 200                        | 302>/account/access-denied
+/machine-board?facilityId=1              302>/account/login         | 200                        | 200                        | 200                        | 200                        | 302>/account/access-denied
+/                                        302>/account/login         | 302>/my-work               | 302>/my-work               | 200                        | 200                        | 302>/users                
+== POST geçerli belirteçle (gövde CommandId=yeni, MaterialLotId=4, RecordMaterialId=9, Pin) ; son üç kolon: op3 belirteçsiz (gövdesiz, Code=T9, Code=200)
+/records/create                302>/account/login | op4:200 | m1:302>/account/access-denied | au:302>/account/access-denied | sa:302>/account/access-denied | op3:400 | op3:400 | op3:400
+/records/add-material/4        302>/account/login | op4:403 | m1:302>/account/access-denied | au:302>/account/access-denied | sa:302>/account/access-denied | op3:400 | op3:400 | op3:400
+/records/remove-material/4     302>/account/login | op4:403 | m1:302>/account/access-denied | au:302>/account/access-denied | sa:302>/account/access-denied | op3:400 | op3:400 | op3:400
+== Veri önce/sonra (kayıt, olay, malzeme): (17, 23, 10) (17, 23, 10)
+== Menü bağlantıları (/ ya da yönlendirilen sayfa)
+  op4  ['/machine-board', '/my-work', '/records/create']
+  m1   ['/machine-board']
+  au   ['/machine-board']
+  sa   []

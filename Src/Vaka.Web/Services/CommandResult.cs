@@ -16,11 +16,12 @@ public sealed class CommandResult
 {
     private static readonly FieldError[] NoErrors = [];
 
-    private CommandResult(CommandStatus status, IReadOnlyList<FieldError> errors, int? entityId)
+    private CommandResult(CommandStatus status, IReadOnlyList<FieldError> errors, int? entityId, bool isPinFailure = false)
     {
         Status = status;
         Errors = errors;
         EntityId = entityId;
+        IsPinFailure = isPinFailure;
     }
 
     public CommandStatus Status { get; }
@@ -31,6 +32,9 @@ public sealed class CommandResult
     public int? EntityId { get; }
 
     public bool Succeeded => Status == CommandStatus.Succeeded;
+
+    /// <summary>PIN reddi: hatalı deneme sayacı yazıldığı için işlem geri alınmaz, yalnız sayaç kalır (BR-48).</summary>
+    public bool IsPinFailure { get; }
 
     public static CommandResult Success(int? entityId = null) => new(CommandStatus.Succeeded, NoErrors, entityId);
 
@@ -56,16 +60,19 @@ public sealed class CommandResult
     public static CommandResult NotFound() => new(CommandStatus.NotFound, NoErrors, null);
 
     public static CommandResult PinLocked(string field = "") =>
-        new(CommandStatus.PinLocked, [new FieldError(field, "PIN kilitlendi.")], null);
+        new(CommandStatus.PinLocked, [new FieldError(field, "PIN kilitlendi.")], null, isPinFailure: true);
 
     public static CommandResult FromPin(PinCheckStatus status, string field = "") => status switch
     {
-        PinCheckStatus.Wrong => Rejected(field, "PIN hatalı."),
-        PinCheckStatus.Locked => Rejected(field, "PIN kilitli. PIN'inizi sıfırlatmak için yöneticinize başvurun."),
-        PinCheckStatus.NotSet => Rejected(field, "PIN belirlenmemiş."),
+        PinCheckStatus.Wrong => PinRejected(field, "PIN hatalı."),
+        PinCheckStatus.Locked => PinRejected(field, "PIN kilitli. PIN'inizi sıfırlatmak için yöneticinize başvurun."),
+        PinCheckStatus.NotSet => PinRejected(field, "PIN belirlenmemiş."),
         PinCheckStatus.LockedNow => PinLocked(field),
         _ => throw new ArgumentOutOfRangeException(nameof(status), status, "Kabul edilen PIN hata üretmez.")
     };
+
+    private static CommandResult PinRejected(string field, string message) =>
+        new(CommandStatus.Rejected, [new FieldError(field, message)], null, isPinFailure: true);
 }
 
 public sealed record LookupResult<T>(CommandStatus Status, T? Value) where T : class

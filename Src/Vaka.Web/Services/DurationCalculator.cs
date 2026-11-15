@@ -116,4 +116,21 @@ public sealed class DurationCalculator : IDurationCalculator
 
     public long GetUploadBodyLimitBytes(int maxPhotoMb, int maxVideoMb) =>
         (long)Math.Max(maxPhotoMb, maxVideoMb) * BytesPerMegabyte + MultipartEnvelopeBytes;
+
+    /// <summary>
+    /// Makine kilidinin bitişi (SH-13, BR-45, K-38).
+    /// Kilit bitişi = en erken (Açılış + KilitSüresi dakika, açılış anını içeren vardiyanın bitişi)
+    /// Açılış bir vardiyaya düşmüyorsa ya da tesiste aktif vardiya yoksa: Kilit bitişi = Açılış + KilitSüresi dakika
+    /// </summary>
+    public DateTimeOffset CalculateLockExpiry(DateTimeOffset openedAt, int lockMinutes, ShiftOccurrence? shiftAtOpening)
+    {
+        var byLock = openedAt.AddMinutes(lockMinutes);
+        return shiftAtOpening is { } shift && shift.EndAt < byLock ? shift.EndAt : byLock;
+    }
+
+    /// <summary>
+    /// Kilit bitişinin geçip geçmediği (BR-26, BR-46).
+    /// Geçti: Şimdi &gt;= Kilit bitişi (bitiş anının kendisinde kilit kalkar)
+    /// </summary>
+    public bool IsLockExpired(DateTimeOffset lockExpiresAt, DateTimeOffset now) => now >= lockExpiresAt;
 }
