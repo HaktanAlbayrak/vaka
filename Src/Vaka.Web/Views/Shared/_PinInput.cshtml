@@ -13,7 +13,7 @@
                autocomplete="off" spellcheck="false" required
                maxlength="@(isSetMode ? Model.Length : null)"
                aria-describedby="@describedBy" aria-invalid="@(error is null ? null : "true")" data-pin-input />
-        <button type="button" class="icon-btn absolute right-0 top-0 h-12 w-12" data-pin-reveal aria-pressed="false" aria-label="PIN'i göster">
+        <button type="button" class="icon-btn field-reveal" data-pin-reveal aria-pressed="false" aria-label="PIN'i göster">
             <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#eye" /></svg>
         </button>
     </div>

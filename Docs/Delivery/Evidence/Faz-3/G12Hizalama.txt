@@ -1,0 +1,297 @@
+Faz 3 teslim testi, 2026-11-15. Release yayını .qa/f3/build (çalışma ağacı), port 5301 Production, DB .qa/f3/qa.db, Yönetici 1001.
+Yöntem (.qa/f3/g12.tmpl.js): getBoundingClientRect, tolerans 1 px. 360x800, 768x1024, 1024x768, 1440x900; açık ve koyu tema.
+a) alana gömülü düğme: kutu, alanın kenarlık içi kutusunda; dikey merkez farkı <= 1
+b) aynı satırdaki kontrol ve düğmeler (dikey örtüşme yarıdan fazla): üst kenar ve yükseklik farkı <= 1; etiket üst kenar farkı <= 1
+c) .field içinde etiket (legend), kontrol (ya da .choice kutusu), yardım ve hata metni sol kenar farkı <= 1
+d) .panel-head ve .panel-body birinci düzey öğeleri: sol kenar iç boşluk çizgisinde; blok öğeler sağ iç boşluk çizgisinde; sarılan satırların ilk öğesi sol çizgide
+e) kart ve panel içi düğme satırı: yükseklik ve dikey merkez farkı <= 1
+f) satır kartı: İşlem düğmeleri tek satır, en sağ düğme hücrenin sağ iç kenarında; kartın her satırında sağ kenar kartın sağ iç kenarında
+   (PL-55 istisnası: 2 sütunlu kartta İşlem kendi satırındayken önceki satırdaki boş yarım hücre; 4 sütunda istisna yok)
+Sonuç: genel ölçümde 338 hücre (sayfa x genişlik x tema), kusurlu hücre 0; hedefli ölçümde (dosya sonu) /procedure-versions/edit 1024 açık ve koyu kusurlu (B2). Kontrol sayıları: {'a': 176, 'b': 294, 'c': 914, 'd': 848, 'e': 182, 'f': 72}
+
+== Ekran@genişlik: sonuç
+/cleaning-types                              360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/cleaning-types?showInactive=true            360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/cleaning-types/details/1                    360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/cleaning-types/details/2                    360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/cleaning-types/details/3                    360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/procedure-versions/edit/3                   360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/procedure-versions/details/1                360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/procedure-versions/details/2                360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/cleaning-types/create                       360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/cleaning-types/edit/1                       360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/cleaning-types/edit/2                       360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/cleaning-types/machines/1                   360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/users                                       360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/facilities                                  360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/shifts                                      360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/machines                                    360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/materials                                   360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/facilities/details/1                        360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/materials/details/1                         360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/materials/details/2                         360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/                                            360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/users/create                                360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/users/edit/3                                360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/users/edit/4                                360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/users/deactivate/3                          360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/account/security                            360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/facilities/create                           360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/facilities/edit/1                           360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/lines/edit/1                                360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/shifts/create?facilityId=1                  360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/shifts/edit/1                               360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/machines/create                             360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/machines/edit/1                             360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/machines/edit/4                             360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/machines/retire/1                           360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/machines/retire/4                           360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/materials/create                            360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/materials/edit/1                            360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/material-lots/create?materialId=1           360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/material-lots/edit/1                        360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/account/login                               360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/account/first-login                         360x800 light: kusur 0, 768x1024 light: kusur 0, 1024x768 light: kusur 0, 1440x900 light: kusur 0, 360x800 dark: kusur 0, 768x1024 dark: kusur 0, 1024x768 dark: kusur 0, 1440x900 dark: kusur 0
+/cleaning-types (5302 boş)                   360x800 light: kusur 0, 1440x900 light: kusur 0
+
+== K16 göz düğmesi ölçümleri (a)
+/procedure-versions/edit/3@360x800-light göz input#publish-pin[Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/procedure-versions/edit/3@768x1024-light göz input#publish-pin[Pin] kutu 44x48 alan 676x52 merkez farkı 0
+/procedure-versions/edit/3@1024x768-light göz input#publish-pin[Pin] kutu 44x48 alan 308x52 merkez farkı 0
+/procedure-versions/edit/3@1440x900-light göz input#publish-pin[Pin] kutu 44x48 alan 308x52 merkez farkı 0
+/procedure-versions/edit/3@360x800-dark göz input#publish-pin[Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/procedure-versions/edit/3@768x1024-dark göz input#publish-pin[Pin] kutu 44x48 alan 676x52 merkez farkı 0
+/procedure-versions/edit/3@1024x768-dark göz input#publish-pin[Pin] kutu 44x48 alan 308x52 merkez farkı 0
+/procedure-versions/edit/3@1440x900-dark göz input#publish-pin[Pin] kutu 44x48 alan 308x52 merkez farkı 0
+/users/create@360x800-light göz input#TemporaryPassword[TemporaryPassword] kutu 44x44 alan 292x48 merkez farkı 0
+/users/edit/3@360x800-light göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/users/edit/3@360x800-light göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 292x48 merkez farkı 0
+/users/edit/3@360x800-light göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/users/edit/4@360x800-light göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/users/edit/4@360x800-light göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 292x48 merkez farkı 0
+/users/edit/4@360x800-light göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/users/edit/4@360x800-light göz input#Activate-Pin[Activate.Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/users/deactivate/3@360x800-light göz input#Pin[Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/account/security@360x800-light göz input#Password-CurrentPassword[Password.CurrentPasswo] kutu 44x44 alan 292x48 merkez farkı 0
+/account/security@360x800-light göz input#Password-NewPassword[Password.NewPassword] kutu 44x44 alan 292x48 merkez farkı 0
+/account/security@360x800-light göz input#Password-ConfirmPassword[Password.ConfirmPasswo] kutu 44x44 alan 292x48 merkez farkı 0
+/account/security@360x800-light göz input#Pin-CurrentPin[Pin.CurrentPin] kutu 44x48 alan 292x52 merkez farkı 0
+/account/security@360x800-light göz input#Pin-NewPin[Pin.NewPin] kutu 44x48 alan 292x52 merkez farkı 0
+/account/security@360x800-light göz input#Pin-ConfirmPin[Pin.ConfirmPin] kutu 44x48 alan 292x52 merkez farkı 0
+/users/create@768x1024-light göz input#TemporaryPassword[TemporaryPassword] kutu 44x44 alan 448x48 merkez farkı 0
+/users/edit/3@768x1024-light göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/3@768x1024-light göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 676x48 merkez farkı 0
+/users/edit/3@768x1024-light göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@768x1024-light göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@768x1024-light göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 676x48 merkez farkı 0
+/users/edit/4@768x1024-light göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@768x1024-light göz input#Activate-Pin[Activate.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/deactivate/3@768x1024-light göz input#Pin[Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@768x1024-light göz input#Password-CurrentPassword[Password.CurrentPasswo] kutu 44x44 alan 676x48 merkez farkı 0
+/account/security@768x1024-light göz input#Password-NewPassword[Password.NewPassword] kutu 44x44 alan 676x48 merkez farkı 0
+/account/security@768x1024-light göz input#Password-ConfirmPassword[Password.ConfirmPasswo] kutu 44x44 alan 676x48 merkez farkı 0
+/account/security@768x1024-light göz input#Pin-CurrentPin[Pin.CurrentPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@768x1024-light göz input#Pin-NewPin[Pin.NewPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@768x1024-light göz input#Pin-ConfirmPin[Pin.ConfirmPin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/create@1024x768-light göz input#TemporaryPassword[TemporaryPassword] kutu 44x44 alan 448x48 merkez farkı 0
+/users/edit/3@1024x768-light göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/3@1024x768-light göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 684x48 merkez farkı 0
+/users/edit/3@1024x768-light göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@1024x768-light göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@1024x768-light göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 684x48 merkez farkı 0
+/users/edit/4@1024x768-light göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@1024x768-light göz input#Activate-Pin[Activate.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/deactivate/3@1024x768-light göz input#Pin[Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@1024x768-light göz input#Password-CurrentPassword[Password.CurrentPasswo] kutu 44x44 alan 684x48 merkez farkı 0
+/account/security@1024x768-light göz input#Password-NewPassword[Password.NewPassword] kutu 44x44 alan 684x48 merkez farkı 0
+/account/security@1024x768-light göz input#Password-ConfirmPassword[Password.ConfirmPasswo] kutu 44x44 alan 684x48 merkez farkı 0
+/account/security@1024x768-light göz input#Pin-CurrentPin[Pin.CurrentPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@1024x768-light göz input#Pin-NewPin[Pin.NewPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@1024x768-light göz input#Pin-ConfirmPin[Pin.ConfirmPin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/create@1440x900-light göz input#TemporaryPassword[TemporaryPassword] kutu 44x44 alan 448x48 merkez farkı 0
+/users/edit/3@1440x900-light göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/3@1440x900-light göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 340x48 merkez farkı 0
+/users/edit/3@1440x900-light göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@1440x900-light göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@1440x900-light göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 340x48 merkez farkı 0
+/users/edit/4@1440x900-light göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@1440x900-light göz input#Activate-Pin[Activate.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/deactivate/3@1440x900-light göz input#Pin[Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@1440x900-light göz input#Password-CurrentPassword[Password.CurrentPasswo] kutu 44x44 alan 510x48 merkez farkı 0
+/account/security@1440x900-light göz input#Password-NewPassword[Password.NewPassword] kutu 44x44 alan 510x48 merkez farkı 0
+/account/security@1440x900-light göz input#Password-ConfirmPassword[Password.ConfirmPasswo] kutu 44x44 alan 510x48 merkez farkı 0
+/account/security@1440x900-light göz input#Pin-CurrentPin[Pin.CurrentPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@1440x900-light göz input#Pin-NewPin[Pin.NewPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@1440x900-light göz input#Pin-ConfirmPin[Pin.ConfirmPin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/create@360x800-dark göz input#TemporaryPassword[TemporaryPassword] kutu 44x44 alan 292x48 merkez farkı 0
+/users/edit/3@360x800-dark göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/users/edit/3@360x800-dark göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 292x48 merkez farkı 0
+/users/edit/3@360x800-dark göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/users/edit/4@360x800-dark göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/users/edit/4@360x800-dark göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 292x48 merkez farkı 0
+/users/edit/4@360x800-dark göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/users/edit/4@360x800-dark göz input#Activate-Pin[Activate.Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/users/deactivate/3@360x800-dark göz input#Pin[Pin] kutu 44x48 alan 292x52 merkez farkı 0
+/account/security@360x800-dark göz input#Password-CurrentPassword[Password.CurrentPasswo] kutu 44x44 alan 292x48 merkez farkı 0
+/account/security@360x800-dark göz input#Password-NewPassword[Password.NewPassword] kutu 44x44 alan 292x48 merkez farkı 0
+/account/security@360x800-dark göz input#Password-ConfirmPassword[Password.ConfirmPasswo] kutu 44x44 alan 292x48 merkez farkı 0
+/account/security@360x800-dark göz input#Pin-CurrentPin[Pin.CurrentPin] kutu 44x48 alan 292x52 merkez farkı 0
+/account/security@360x800-dark göz input#Pin-NewPin[Pin.NewPin] kutu 44x48 alan 292x52 merkez farkı 0
+/account/security@360x800-dark göz input#Pin-ConfirmPin[Pin.ConfirmPin] kutu 44x48 alan 292x52 merkez farkı 0
+/users/create@768x1024-dark göz input#TemporaryPassword[TemporaryPassword] kutu 44x44 alan 448x48 merkez farkı 0
+/users/edit/3@768x1024-dark göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/3@768x1024-dark göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 676x48 merkez farkı 0
+/users/edit/3@768x1024-dark göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@768x1024-dark göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@768x1024-dark göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 676x48 merkez farkı 0
+/users/edit/4@768x1024-dark göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@768x1024-dark göz input#Activate-Pin[Activate.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/deactivate/3@768x1024-dark göz input#Pin[Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@768x1024-dark göz input#Password-CurrentPassword[Password.CurrentPasswo] kutu 44x44 alan 676x48 merkez farkı 0
+/account/security@768x1024-dark göz input#Password-NewPassword[Password.NewPassword] kutu 44x44 alan 676x48 merkez farkı 0
+/account/security@768x1024-dark göz input#Password-ConfirmPassword[Password.ConfirmPasswo] kutu 44x44 alan 676x48 merkez farkı 0
+/account/security@768x1024-dark göz input#Pin-CurrentPin[Pin.CurrentPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@768x1024-dark göz input#Pin-NewPin[Pin.NewPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@768x1024-dark göz input#Pin-ConfirmPin[Pin.ConfirmPin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/create@1024x768-dark göz input#TemporaryPassword[TemporaryPassword] kutu 44x44 alan 448x48 merkez farkı 0
+/users/edit/3@1024x768-dark göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/3@1024x768-dark göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 684x48 merkez farkı 0
+/users/edit/3@1024x768-dark göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@1024x768-dark göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@1024x768-dark göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 684x48 merkez farkı 0
+/users/edit/4@1024x768-dark göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@1024x768-dark göz input#Activate-Pin[Activate.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/deactivate/3@1024x768-dark göz input#Pin[Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@1024x768-dark göz input#Password-CurrentPassword[Password.CurrentPasswo] kutu 44x44 alan 684x48 merkez farkı 0
+/account/security@1024x768-dark göz input#Password-NewPassword[Password.NewPassword] kutu 44x44 alan 684x48 merkez farkı 0
+/account/security@1024x768-dark göz input#Password-ConfirmPassword[Password.ConfirmPasswo] kutu 44x44 alan 684x48 merkez farkı 0
+/account/security@1024x768-dark göz input#Pin-CurrentPin[Pin.CurrentPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@1024x768-dark göz input#Pin-NewPin[Pin.NewPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@1024x768-dark göz input#Pin-ConfirmPin[Pin.ConfirmPin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/create@1440x900-dark göz input#TemporaryPassword[TemporaryPassword] kutu 44x44 alan 448x48 merkez farkı 0
+/users/edit/3@1440x900-dark göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/3@1440x900-dark göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 340x48 merkez farkı 0
+/users/edit/3@1440x900-dark göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@1440x900-dark göz input#ResetPin-Pin[ResetPin.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@1440x900-dark göz input#ResetPassword-TemporaryPassword[ResetPassword.Temporar] kutu 44x44 alan 340x48 merkez farkı 0
+/users/edit/4@1440x900-dark göz input#ResetPassword-Pin[ResetPassword.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/edit/4@1440x900-dark göz input#Activate-Pin[Activate.Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/users/deactivate/3@1440x900-dark göz input#Pin[Pin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@1440x900-dark göz input#Password-CurrentPassword[Password.CurrentPasswo] kutu 44x44 alan 510x48 merkez farkı 0
+/account/security@1440x900-dark göz input#Password-NewPassword[Password.NewPassword] kutu 44x44 alan 510x48 merkez farkı 0
+/account/security@1440x900-dark göz input#Password-ConfirmPassword[Password.ConfirmPasswo] kutu 44x44 alan 510x48 merkez farkı 0
+/account/security@1440x900-dark göz input#Pin-CurrentPin[Pin.CurrentPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@1440x900-dark göz input#Pin-NewPin[Pin.NewPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/security@1440x900-dark göz input#Pin-ConfirmPin[Pin.ConfirmPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/login@360x800-light göz input#Password[Password] kutu 44x44 alan 292x48 merkez farkı 0
+/account/login@768x1024-light göz input#Password[Password] kutu 44x44 alan 484x48 merkez farkı 0
+/account/login@1024x768-light göz input#Password[Password] kutu 44x44 alan 484x48 merkez farkı 0
+/account/login@1440x900-light göz input#Password[Password] kutu 44x44 alan 468x48 merkez farkı 0
+/account/login@360x800-dark göz input#Password[Password] kutu 44x44 alan 292x48 merkez farkı 0
+/account/login@768x1024-dark göz input#Password[Password] kutu 44x44 alan 484x48 merkez farkı 0
+/account/login@1024x768-dark göz input#Password[Password] kutu 44x44 alan 484x48 merkez farkı 0
+/account/login@1440x900-dark göz input#Password[Password] kutu 44x44 alan 468x48 merkez farkı 0
+/account/first-login@360x800-light göz input#CurrentPassword[CurrentPassword] kutu 44x44 alan 292x48 merkez farkı 0
+/account/first-login@360x800-light göz input#NewPassword[NewPassword] kutu 44x44 alan 292x48 merkez farkı 0
+/account/first-login@360x800-light göz input#ConfirmPassword[ConfirmPassword] kutu 44x44 alan 292x48 merkez farkı 0
+/account/first-login@360x800-light göz input#NewPin[NewPin] kutu 44x48 alan 292x52 merkez farkı 0
+/account/first-login@360x800-light göz input#ConfirmPin[ConfirmPin] kutu 44x48 alan 292x52 merkez farkı 0
+/account/first-login@768x1024-light göz input#CurrentPassword[CurrentPassword] kutu 44x44 alan 676x48 merkez farkı 0
+/account/first-login@768x1024-light göz input#NewPassword[NewPassword] kutu 44x44 alan 676x48 merkez farkı 0
+/account/first-login@768x1024-light göz input#ConfirmPassword[ConfirmPassword] kutu 44x44 alan 676x48 merkez farkı 0
+/account/first-login@768x1024-light göz input#NewPin[NewPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/first-login@768x1024-light göz input#ConfirmPin[ConfirmPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/first-login@1024x768-light göz input#CurrentPassword[CurrentPassword] kutu 44x44 alan 592x48 merkez farkı 0
+/account/first-login@1024x768-light göz input#NewPassword[NewPassword] kutu 44x44 alan 592x48 merkez farkı 0
+/account/first-login@1024x768-light göz input#ConfirmPassword[ConfirmPassword] kutu 44x44 alan 592x48 merkez farkı 0
+/account/first-login@1024x768-light göz input#NewPin[NewPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/first-login@1024x768-light göz input#ConfirmPin[ConfirmPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/first-login@1440x900-light göz input#CurrentPassword[CurrentPassword] kutu 44x44 alan 992x48 merkez farkı 0
+/account/first-login@1440x900-light göz input#NewPassword[NewPassword] kutu 44x44 alan 992x48 merkez farkı 0
+/account/first-login@1440x900-light göz input#ConfirmPassword[ConfirmPassword] kutu 44x44 alan 992x48 merkez farkı 0
+/account/first-login@1440x900-light göz input#NewPin[NewPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/first-login@1440x900-light göz input#ConfirmPin[ConfirmPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/first-login@360x800-dark göz input#CurrentPassword[CurrentPassword] kutu 44x44 alan 292x48 merkez farkı 0
+/account/first-login@360x800-dark göz input#NewPassword[NewPassword] kutu 44x44 alan 292x48 merkez farkı 0
+/account/first-login@360x800-dark göz input#ConfirmPassword[ConfirmPassword] kutu 44x44 alan 292x48 merkez farkı 0
+/account/first-login@360x800-dark göz input#NewPin[NewPin] kutu 44x48 alan 292x52 merkez farkı 0
+/account/first-login@360x800-dark göz input#ConfirmPin[ConfirmPin] kutu 44x48 alan 292x52 merkez farkı 0
+/account/first-login@768x1024-dark göz input#CurrentPassword[CurrentPassword] kutu 44x44 alan 676x48 merkez farkı 0
+/account/first-login@768x1024-dark göz input#NewPassword[NewPassword] kutu 44x44 alan 676x48 merkez farkı 0
+/account/first-login@768x1024-dark göz input#ConfirmPassword[ConfirmPassword] kutu 44x44 alan 676x48 merkez farkı 0
+/account/first-login@768x1024-dark göz input#NewPin[NewPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/first-login@768x1024-dark göz input#ConfirmPin[ConfirmPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/first-login@1024x768-dark göz input#CurrentPassword[CurrentPassword] kutu 44x44 alan 592x48 merkez farkı 0
+/account/first-login@1024x768-dark göz input#NewPassword[NewPassword] kutu 44x44 alan 592x48 merkez farkı 0
+/account/first-login@1024x768-dark göz input#ConfirmPassword[ConfirmPassword] kutu 44x44 alan 592x48 merkez farkı 0
+/account/first-login@1024x768-dark göz input#NewPin[NewPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/first-login@1024x768-dark göz input#ConfirmPin[ConfirmPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/first-login@1440x900-dark göz input#CurrentPassword[CurrentPassword] kutu 44x44 alan 992x48 merkez farkı 0
+/account/first-login@1440x900-dark göz input#NewPassword[NewPassword] kutu 44x44 alan 992x48 merkez farkı 0
+/account/first-login@1440x900-dark göz input#ConfirmPassword[ConfirmPassword] kutu 44x44 alan 992x48 merkez farkı 0
+/account/first-login@1440x900-dark göz input#NewPin[NewPin] kutu 44x48 alan 320x52 merkez farkı 0
+/account/first-login@1440x900-dark göz input#ConfirmPin[ConfirmPin] kutu 44x48 alan 320x52 merkez farkı 0
+
+== Kart modunda satır hover (hücreler ayrı gri kutu değil)
+/cleaning-types@360x800-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/cleaning-types?showInactive=true@360x800-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/cleaning-types/details/1@360x800-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/cleaning-types/details/2@360x800-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/cleaning-types@768x1024-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/cleaning-types?showInactive=true@768x1024-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/cleaning-types/details/1@768x1024-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/cleaning-types/details/2@768x1024-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/cleaning-types@1024x768-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/cleaning-types?showInactive=true@1024x768-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/cleaning-types/details/1@1024x768-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/cleaning-types/details/2@1024x768-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/users@360x800-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/facilities@360x800-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/shifts@360x800-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/machines@360x800-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/materials@360x800-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/facilities/details/1@360x800-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/materials/details/1@360x800-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/materials/details/2@360x800-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/users@768x1024-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/facilities@768x1024-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/shifts@768x1024-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/machines@768x1024-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/materials@768x1024-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/facilities/details/1@768x1024-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/materials/details/1@768x1024-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/materials/details/2@768x1024-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/users@1024x768-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/facilities@1024x768-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/shifts@1024x768-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/machines@1024x768-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/materials@1024x768-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/facilities/details/1@1024x768-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/materials/details/1@1024x768-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+/materials/details/2@1024x768-light tr önce rgba(0, 0, 0, 0) sonra rgba(224, 230, 234, 0.5), td şeffaf=True
+
+== Ön tur 2 (düzeltme öncesi) bulguları ve kapanışı
+- /materials/details lot tablosu: Lot no 1 sütun (768: 1. satır 177 px kısa) -> stack-wide ile Lot no:2@1, c2 satır kartı kusur 0
+- /material-lots formu: LotNo 48,0 px, ExpiryDate 50,0 px aynı satırda -> .input[type=date|time] height 3rem; ölçülen 48,0 / 48,0; 1024 tek sütun 312 px, tarih metni tam (/shifts saat alanları 48,0)
+
+== Hedefli ölçüm: iki sütunlu alan ızgaralarında aynı satırdaki alanların kontrol üst kenarı (row.js; 12 form ekranı x 360/768/1024/1440 x açık/koyu)
+Not: genel (b) kontrolü "dikey örtüşme yarıdan fazla" eşiğiyle satır kuruyor; 24 px kaymada örtüşme tam yarı olduğu için aynı satır sayılmadı. Bu ölçüm alanları ızgara satırına göre eşler.
+/procedure-versions/edit/5@1024-dark: phase-11-input-title+phase-11-input-min üst farkı 24.0 yükseklik farkı 0.0 etiket yükseklikleri 24/48
+/procedure-versions/edit/5@1024-light: phase-11-input-title+phase-11-input-min üst farkı 24.0 yükseklik farkı 0.0 etiket yükseklikleri 24/48
+new-phase-title+new-phase-min üst farkı 24.0 yükseklik farkı 0.0 etiket yükseklikleri 24/48
+phase-12-input-title+phase-12-input-min üst farkı 24.0 yükseklik farkı 0.0 etiket yükseklikleri 24/48
+phase-13-input-title+phase-13-input-min üst farkı 24.0 yükseklik farkı 0.0 etiket yükseklikleri 24/48
+Diğer 11 ekran ve diğer genişlikler: kusur 0.
+
+
+== Tur 2 (2026-11-15)
+Release yayını .qa/f3/build (çalışma ağacı, B1/B2 düzeltmeleri), port 5301 qa.db, 5302 empty.db. Bu bölümde belirteç hiçbir isteğe elle eklenmedi.
+Genel ölçüm: 338 hücre, kusurlu 0, kontroller {'a': 176, 'b': 286, 'c': 914, 'd': 864, 'e': 182, 'f': 72}
+Hedefli satır ölçümü (row.js, 12 form ekranı x 360/768/1024/1440 x açık/koyu): kusur 0
+/procedure-versions/edit/5 1024: faz formu ızgarası tek sütun (ana kolon 356 px), "Faz adı" ve "Minimum süre" alanları alt alta.
+
+
+== Tur 3 (2026-11-15)
+Release yayını .qa/f3/build (B3/B4 düzeltmeleri), port 5301 qa.db, 5302 empty.db. Tarayıcının kendi gönderimi; elle kurulmuş gövde ya da belirteç yok.
+Değişen görünümler (tesis, hat, malzeme, vardiya, tip formları, düzenleyici) ve listeler: 128 hücre, kusurlu 0, kontroller {'a': 8, 'b': 128, 'c': 320, 'd': 328, 'e': 74, 'f': 36}
+Hedefli satır ölçümü (row.js, 12 form ekranı x 4 genişlik x 2 tema): kusur 0

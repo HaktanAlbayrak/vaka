@@ -1,0 +1,164 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Procedures
+@model CleaningTypeDetailViewModel
+@{
+    var isPlanned = Model.Kind == CleaningTypeKind.Planned;
+    ViewData["Title"] = Model.Name;
+    ViewData["Lead"] = "Temizlik tipi kodu " + Model.Code;
+    ViewData["NavKey"] = "cleaning-types";
+    ViewData["StatusMessage"] = Model.StatusMessage;
+}
+
+@section Actions {
+    <div class="flex flex-wrap gap-2">
+        <a class="btn btn-secondary" href="/cleaning-types">
+            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-left" /></svg>
+            Temizlik tipleri
+        </a>
+        @if (Model.CanMapMachines)
+        {
+            <a class="btn btn-secondary" href="/cleaning-types/machines/@Model.Id">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#cog" /></svg>
+                Makineleri eşle
+            </a>
+        }
+        <a class="btn btn-secondary" href="/cleaning-types/edit/@Model.Id">
+            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
+            Tipi düzenle
+        </a>
+    </div>
+}
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <section class="panel min-w-0" aria-labelledby="versions-title">
+        <div class="panel-head">
+            <h2 id="versions-title" class="panel-title">Prosedür versiyonları</h2>
+            @if (Model.CanCreateDraft)
+            {
+                <form method="post" action="/procedure-versions/create-draft" data-busy-form asp-antiforgery="true">
+                    <input type="hidden" name="CleaningTypeId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-primary">
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#plus" /></svg>
+                        Yeni taslak aç
+                    </button>
+                </form>
+            }
+        </div>
+        @if (!Model.Versions.Any())
+        {
+            <div class="p-4 md:p-5">
+                <div class="state-box" data-kind="empty">
+                    <span class="state-icon"><svg class="icon icon-lg" aria-hidden="true"><use href="/lib/icons/Icons.svg#file-text" /></svg></span>
+                    <div class="max-w-prose">
+                        <h3 class="text-xl font-bold">Bu tipin prosedürü yok</h3>
+                        <p class="mt-1 text-muted">Kayıt açılabilmesi için yürürlükte bir versiyon gerekir. Boş taslak açın, faz ve adımları ekleyip yayınlayın.</p>
+                    </div>
+                    @if (Model.CanCreateDraft)
+                    {
+                        <form method="post" action="/procedure-versions/create-draft" data-busy-form asp-antiforgery="true">
+                            <input type="hidden" name="CleaningTypeId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-primary btn-lg">Taslak aç</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <table class="data-table table-stack table-stack-rail">
+                <caption class="sr-only">@Model.Name versiyonları, @Model.Versions.Length kayıt</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Versiyon</th>
+                        <th scope="col">Durum</th>
+                        <th scope="col">Yayın</th>
+                        <th scope="col">Doküman no</th>
+                        <th scope="col">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var version in Model.Versions)
+                    {
+                        var styleKey = version.Status switch
+                        {
+                            ProcedureVersionStatus.Draft => "version.draft",
+                            ProcedureVersionStatus.Current => "version.current",
+                            _ => "version.archived"
+                        };
+                        <tr>
+                            <td data-label="Versiyon"><span class="record-no text-sm">v@(version.VersionNo)</span></td>
+                            <td data-label="Durum"><partial name="_LabelBadge" model='(version.StatusLabel, styleKey)' /></td>
+                            <td data-label="Yayın" class="cell-long break-words stack-wide stack-lead">
+                                @if (version.PublishedAtLocal is not null)
+                                {
+                                    <span class="mono block">@version.PublishedAtLocal.Value.ToString("dd.MM.yyyy HH:mm")</span>
+                                    @if (version.PublishedByName is not null)
+                                    {
+                                        <span class="block text-muted">@version.PublishedByName</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Yayınlanmadı</span>
+                                }
+                            </td>
+                            <td data-label="Doküman no">
+                                @if (version.DocumentRef is not null)
+                                {
+                                    <span class="mono break-all">@version.DocumentRef</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Yok</span>
+                                }
+                            </td>
+                            <td data-label="İşlem" class="cell-action max-md:col-span-2 md:max-lg:col-span-3 lg:max-xl:col-span-2">
+                                @if (version.Status == ProcedureVersionStatus.Draft)
+                                {
+                                    <a class="btn btn-secondary" href="@version.Url" aria-label="v@(version.VersionNo) taslağını düzenle">
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
+                                        Düzenle
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-secondary" href="@version.Url" aria-label="v@(version.VersionNo) versiyonunu görüntüle">
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#eye" /></svg>
+                                        Görüntüle
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </section>
+
+    <aside class="min-w-0" aria-label="Tip bilgisi">
+        <section class="panel" aria-labelledby="type-title">
+            <div class="panel-head"><h2 id="type-title" class="panel-title">Tip</h2></div>
+            <dl class="kv p-4 md:p-5">
+                <div><dt>Kod</dt><dd class="mono">@Model.Code</dd></div>
+                <div><dt>Ad</dt><dd>@Model.Name</dd></div>
+                <div><dt>Tür</dt><dd class="mt-1"><partial name="_LabelBadge" model='(Model.KindLabel, isPlanned ? "kind.planned" : "kind.emergency")' /></dd></div>
+                @if (Model.DefaultLockMinutes is not null)
+                {
+                    <div><dt>Varsayılan kilit süresi</dt><dd class="mono">@Model.DefaultLockMinutes dakika</dd></div>
+                }
+                @if (isPlanned)
+                {
+                    <div><dt>Eşli makine</dt><dd class="mono">@Model.MachineCount</dd></div>
+                }
+                <div><dt>Durum</dt><dd class="mt-1"><partial name="_LabelBadge" model='(Model.IsActive ? "Aktif" : "Pasif", Model.IsActive ? "type.active" : "type.inactive")' /></dd></div>
+            </dl>
+            @if (!Model.IsActive)
+            {
+                <p class="notice notice-info m-4 mt-0 md:mx-5" role="note">
+                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#info" /></svg>
+                    <span>Pasif tip yeni kayıtta seçilemez.</span>
+                </p>
+            }
+        </section>
+    </aside>
+</div>

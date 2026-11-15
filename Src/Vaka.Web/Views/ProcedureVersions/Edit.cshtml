@@ -1,0 +1,352 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Procedures
+@model ProcedureDraftViewModel
+@{
+    var isPlanned = Model.Kind == CleaningTypeKind.Planned;
+    var error = Model.Error;
+    if (error is { Target: "header", MaterialRequired: not null })
+    {
+        Model.MaterialRequired = error.MaterialRequired.Value;
+    }
+    var stepTotal = Model.Phases.Sum(phase => phase.Steps.Length);
+    ViewData["Title"] = Model.CleaningTypeName + " taslak v" + Model.VersionNo;
+    ViewData["Lead"] = "Taslak yalnız yöneticiye görünür. Yayınlanınca değiştirilemez, değişiklik yeni taslakla yapılır.";
+    ViewData["NavKey"] = "cleaning-types";
+
+    bool Has(string target) => error is not null && error.Target == target;
+    string[] MessagesOf(string target) => Has(target) ? error!.Messages : [];
+}
+
+@section Actions {
+    <a class="btn btn-secondary" href="/cleaning-types/details/@Model.CleaningTypeId">
+        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-left" /></svg>
+        Tip detayı
+    </a>
+}
+
+<div data-editor-host data-max-photo-mb="@Model.MaxPhotoSizeMb" data-max-video-mb="@Model.MaxVideoSizeMb">
+    <p class="sr-only" role="status" data-editor-announce></p>
+    <div data-editor-region>
+        @if (!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <p class="notice notice-info mb-5" tabindex="-1" data-editor-status>
+                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#info" /></svg>
+                <span>@Model.StatusMessage</span>
+            </p>
+        }
+
+        <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+            <div class="min-w-0 space-y-5">
+                <section class="panel" id="editor-header" tabindex="-1" aria-labelledby="header-title">
+                    <div class="panel-head"><h2 id="header-title" class="panel-title">Versiyon bilgisi</h2></div>
+                    <form method="post" action="/procedure-versions/update-header/@Model.Id" class="panel-body space-y-5" data-editor-form data-focus="editor-header" asp-antiforgery="true">
+                        <partial name="_EditorError" model='MessagesOf("header")' />
+                        <label class="choice max-w-md">
+                            <input type="checkbox" asp-for="MaterialRequired" />
+                            <span class="min-w-0">
+                                <span class="block font-bold">Kayıtta malzeme zorunlu</span>
+                                <span class="mt-0.5 block text-sm text-muted">İşaretliyse kayıt açılırken malzeme ve lot seçilmeden başlanamaz.</span>
+                            </span>
+                        </label>
+                        <div class="field max-w-md">
+                            <label class="field-label" for="header-document-ref">Doküman no</label>
+                            <input id="header-document-ref" name="DocumentRef" class="input" type="text" autocomplete="off" spellcheck="false" value="@(Has("header") ? error!.DocumentRef : Model.DocumentRef)" aria-describedby="header-document-ref-hint" />
+                            <p id="header-document-ref-hint" class="field-hint">İsteğe bağlı. Prosedürün bağlı olduğu kalite dokümanının numarası.</p>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#save" /></svg>
+                            Bilgiyi kaydet
+                        </button>
+                    </form>
+                </section>
+
+                <section class="space-y-4" aria-labelledby="phases-title">
+                    <h2 id="phases-title" class="text-xl font-bold" tabindex="-1">Fazlar ve adımlar</h2>
+
+                    @if (!Model.Phases.Any())
+                    {
+                        <div class="state-box" data-kind="empty">
+                            <span class="state-icon"><svg class="icon icon-lg" aria-hidden="true"><use href="/lib/icons/Icons.svg#list-ordered" /></svg></span>
+                            <div class="max-w-prose">
+                                <h3 class="text-xl font-bold">Taslakta faz yok</h3>
+                                <p class="mt-1 text-muted">Prosedür fazlardan, her faz adımlardan oluşur. Aşağıdan ilk fazı ekleyin.</p>
+                            </div>
+                        </div>
+                    }
+
+                    @foreach (var phase in Model.Phases)
+                    {
+                        var phaseKey = "phase:" + phase.Id;
+                        var addStepKey = "add-step:" + phase.Id;
+                        var phaseOpen = Has(phaseKey);
+                        var addStepOpen = Has(addStepKey) || !phase.Steps.Any();
+                        <section class="panel" id="phase-@phase.Id" tabindex="-1" aria-labelledby="phase-@(phase.Id)-title">
+                            <div class="panel-head">
+                                <h3 id="phase-@(phase.Id)-title" class="panel-title flex min-w-0 items-center gap-3">
+                                    <span class="step-stamp" aria-hidden="true">@phase.OrderNo</span>
+                                    <span class="min-w-0 break-words"><span class="sr-only">Faz @phase.OrderNo: </span>@phase.Title</span>
+                                </h3>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    @if (isPlanned)
+                                    {
+                                        if (phase.MinDurationMinutes is not null)
+                                        {
+                                            <span class="chip">Minimum <span class="mono">@phase.MinDurationMinutes</span> dakika</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="chip text-warn">Minimum süre yok</span>
+                                        }
+                                    }
+                                    @if (phase.CanMoveUp)
+                                    {
+                                        <form method="post" action="/procedure-versions/move-phase/@phase.Id" data-editor-form data-focus="phase-@(phase.Id)-up phase-@(phase.Id)-down phase-@phase.Id" asp-antiforgery="true">
+                                            <button id="phase-@(phase.Id)-up" type="submit" class="icon-btn border-line-strong" name="Direction" value="@((int)MoveDirection.Up)" aria-label="Faz @phase.OrderNo fazını yukarı taşı">
+                                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-up" /></svg>
+                                            </button>
+                                        </form>
+                                    }
+                                    @if (phase.CanMoveDown)
+                                    {
+                                        <form method="post" action="/procedure-versions/move-phase/@phase.Id" data-editor-form data-focus="phase-@(phase.Id)-down phase-@(phase.Id)-up phase-@phase.Id" asp-antiforgery="true">
+                                            <button id="phase-@(phase.Id)-down" type="submit" class="icon-btn border-line-strong" name="Direction" value="@((int)MoveDirection.Down)" aria-label="Faz @phase.OrderNo fazını aşağı taşı">
+                                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-down" /></svg>
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="space-y-4 p-4 md:p-5">
+                                <details class="tool" open="@phaseOpen">
+                                    <summary>Faz ayarları</summary>
+                                    <div class="tool-body space-y-4">
+                                        <form method="post" action="/procedure-versions/update-phase/@phase.Id" class="space-y-4" data-editor-form data-focus="phase-@phase.Id" asp-antiforgery="true">
+                                            <partial name="_EditorError" model='MessagesOf(phaseKey)' />
+                                            <div class="grid gap-4 xl:grid-cols-2">
+                                                <div class="field">
+                                                    <label class="field-label" for="phase-@(phase.Id)-input-title">Faz adı</label>
+                                                    <input id="phase-@(phase.Id)-input-title" name="Title" class="input" type="text" autocomplete="off" required value="@(Has(phaseKey) ? error!.Title : phase.Title)" />
+                                                </div>
+                                                @if (isPlanned)
+                                                {
+                                                    <div class="field">
+                                                        <label class="field-label" for="phase-@(phase.Id)-input-min">Minimum süre (dakika)</label>
+                                                        <input id="phase-@(phase.Id)-input-min" name="MinDurationMinutes" class="input mono" type="number" min="1" step="1" inputmode="numeric" autocomplete="off" value="@(Has(phaseKey) ? error!.MinDurationMinutes : phase.MinDurationMinutes)" aria-describedby="phase-@(phase.Id)-min-hint" />
+                                                        <p id="phase-@(phase.Id)-min-hint" class="field-hint">Planlı tipte yayın için gerekir.</p>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <button type="submit" class="btn btn-secondary">
+                                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#save" /></svg>
+                                                Fazı kaydet
+                                            </button>
+                                        </form>
+                                        <details class="tool tool-danger">
+                                            <summary>Fazı çıkar</summary>
+                                            <div class="tool-body space-y-3">
+                                                <p>Faz ve altındaki <span class="mono font-bold">@phase.Steps.Length</span> adım taslaktan çıkarılır.</p>
+                                                <form method="post" action="/procedure-versions/remove-phase/@phase.Id" data-editor-form data-focus="phases-title" asp-antiforgery="true">
+                                                    <button type="submit" class="btn btn-danger" aria-label="Faz @phase.OrderNo fazını ve adımlarını çıkar">
+                                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#trash-2" /></svg>
+                                                        Evet, fazı çıkar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </details>
+                                    </div>
+                                </details>
+
+                                <ol class="step-list" aria-label="Faz @phase.OrderNo adımları">
+                                    @foreach (var step in phase.Steps)
+                                    {
+                                        var stepKey = "step:" + step.Id;
+                                        var mediaKey = "media:" + step.Id;
+                                        var stepOpen = Has(stepKey) || Has(mediaKey);
+                                        <li class="step" id="step-@step.Id" tabindex="-1">
+                                            <span class="step-stamp" aria-hidden="true">@step.OrderNo</span>
+                                            <div class="min-w-0 space-y-3">
+                                                <div class="flex flex-wrap items-start justify-between gap-3">
+                                                    <div class="min-w-0 flex-1">
+                                                        <p class="break-words font-bold"><span class="sr-only">Adım @step.OrderNo: </span>@step.Title</p>
+                                                        @if (!string.IsNullOrWhiteSpace(step.Description))
+                                                        {
+                                                            <p class="mt-1 whitespace-pre-line break-words text-muted">@step.Description</p>
+                                                        }
+                                                    </div>
+                                                    <div class="flex items-center gap-2">
+                                                        @if (step.CanMoveUp)
+                                                        {
+                                                            <form method="post" action="/procedure-versions/move-step/@step.Id" data-editor-form data-focus="step-@(step.Id)-up step-@(step.Id)-down step-@step.Id" asp-antiforgery="true">
+                                                                <button id="step-@(step.Id)-up" type="submit" class="icon-btn border-line-strong" name="Direction" value="@((int)MoveDirection.Up)" aria-label="Faz @phase.OrderNo adım @step.OrderNo adımını yukarı taşı">
+                                                                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-up" /></svg>
+                                                                </button>
+                                                            </form>
+                                                        }
+                                                        @if (step.CanMoveDown)
+                                                        {
+                                                            <form method="post" action="/procedure-versions/move-step/@step.Id" data-editor-form data-focus="step-@(step.Id)-down step-@(step.Id)-up step-@step.Id" asp-antiforgery="true">
+                                                                <button id="step-@(step.Id)-down" type="submit" class="icon-btn border-line-strong" name="Direction" value="@((int)MoveDirection.Down)" aria-label="Faz @phase.OrderNo adım @step.OrderNo adımını aşağı taşı">
+                                                                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-down" /></svg>
+                                                                </button>
+                                                            </form>
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                <partial name="_MediaList" model='(step.Media, true, step.Id)' />
+
+                                                <details class="tool" open="@stepOpen">
+                                                    <summary>Adımı düzenle</summary>
+                                                    <div class="tool-body space-y-5">
+                                                        <form method="post" action="/procedure-versions/update-step/@step.Id" class="space-y-4" data-editor-form data-focus="step-@step.Id" asp-antiforgery="true">
+                                                            <partial name="_EditorError" model='MessagesOf(stepKey)' />
+                                                            <div class="field">
+                                                                <label class="field-label" for="step-@(step.Id)-input-title">Adım adı</label>
+                                                                <input id="step-@(step.Id)-input-title" name="Title" class="input" type="text" autocomplete="off" required value="@(Has(stepKey) ? error!.Title : step.Title)" />
+                                                            </div>
+                                                            <div class="field">
+                                                                <label class="field-label" for="step-@(step.Id)-input-desc">Açıklama</label>
+                                                                <textarea id="step-@(step.Id)-input-desc" name="Description" class="input" rows="3" autocomplete="off">@(Has(stepKey) ? error!.Description : step.Description)</textarea>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-secondary">
+                                                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#save" /></svg>
+                                                                Adımı kaydet
+                                                            </button>
+                                                        </form>
+
+                                                        <form method="post" action="/procedure-versions/upload-media/@step.Id" enctype="multipart/form-data" class="space-y-3 border-t-2 border-line pt-4" data-editor-form data-focus="step-@step.Id" asp-antiforgery="true">
+                                                            <partial name="_EditorError" model='MessagesOf(mediaKey)' />
+                                                            <div class="field">
+                                                                <label class="field-label" for="step-@(step.Id)-file">Fotoğraf ya da video ekle</label>
+                                                                <input id="step-@(step.Id)-file" name="File" class="input" type="file" accept="@Model.MediaAccept" autocomplete="off" required data-media-input aria-describedby="step-@(step.Id)-file-hint" />
+                                                                <p id="step-@(step.Id)-file-hint" class="field-hint">Fotoğraf (JPEG, PNG, WebP) en çok <span class="mono">@Model.MaxPhotoSizeMb</span> MB, video (MP4) en çok <span class="mono">@Model.MaxVideoSizeMb</span> MB.</p>
+                                                                <p class="field-error" data-media-error hidden></p>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-secondary">
+                                                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#upload" /></svg>
+                                                                Medyayı yükle
+                                                            </button>
+                                                        </form>
+
+                                                        <details class="tool tool-danger">
+                                                            <summary>Adımı çıkar</summary>
+                                                            <div class="tool-body space-y-3">
+                                                                <p>Adım ve medya bağlantıları taslaktan çıkarılır.</p>
+                                                                <form method="post" action="/procedure-versions/remove-step/@step.Id" data-editor-form data-focus="phase-@phase.Id" asp-antiforgery="true">
+                                                                    <button type="submit" class="btn btn-danger" aria-label="Faz @phase.OrderNo adım @step.OrderNo adımını çıkar">
+                                                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#trash-2" /></svg>
+                                                                        Evet, adımı çıkar
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </details>
+                                                    </div>
+                                                </details>
+                                            </div>
+                                        </li>
+                                    }
+                                </ol>
+
+                                <details class="tool" open="@addStepOpen">
+                                    <summary>Adım ekle</summary>
+                                    <form method="post" action="/procedure-versions/add-step/@phase.Id" class="tool-body space-y-4" data-editor-form data-focus="phase-@phase.Id" asp-antiforgery="true">
+                                        <partial name="_EditorError" model='MessagesOf(addStepKey)' />
+                                        <div class="field">
+                                            <label class="field-label" for="phase-@(phase.Id)-new-step-title">Adım adı</label>
+                                            <input id="phase-@(phase.Id)-new-step-title" name="Title" class="input" type="text" autocomplete="off" required value="@(Has(addStepKey) ? error!.Title : null)" />
+                                        </div>
+                                        <div class="field">
+                                            <label class="field-label" for="phase-@(phase.Id)-new-step-desc">Açıklama</label>
+                                            <textarea id="phase-@(phase.Id)-new-step-desc" name="Description" class="input" rows="3" autocomplete="off">@(Has(addStepKey) ? error!.Description : null)</textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">
+                                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#plus" /></svg>
+                                            Adımı ekle
+                                        </button>
+                                    </form>
+                                </details>
+                            </div>
+                        </section>
+                    }
+
+                    <section class="panel panel-tag" aria-labelledby="add-phase-title">
+                        <div class="panel-head"><h3 id="add-phase-title" class="panel-title">Faz ekle</h3></div>
+                        <form method="post" action="/procedure-versions/add-phase/@Model.Id" class="panel-body space-y-4" data-editor-form data-focus="phases-title" asp-antiforgery="true">
+                            <partial name="_EditorError" model='MessagesOf("add-phase")' />
+                            <div class="grid gap-4 xl:grid-cols-2">
+                                <div class="field">
+                                    <label class="field-label" for="new-phase-title">Faz adı</label>
+                                    <input id="new-phase-title" name="Title" class="input" type="text" autocomplete="off" required value="@(Has("add-phase") ? error!.Title : null)" />
+                                </div>
+                                @if (isPlanned)
+                                {
+                                    <div class="field">
+                                        <label class="field-label" for="new-phase-min">Minimum süre (dakika)</label>
+                                        <input id="new-phase-min" name="MinDurationMinutes" class="input mono" type="number" min="1" step="1" inputmode="numeric" autocomplete="off" value="@(Has("add-phase") ? error!.MinDurationMinutes : null)" aria-describedby="new-phase-min-hint" />
+                                        <p id="new-phase-min-hint" class="field-hint">Planlı tipte yayın için gerekir, sonra da girilebilir.</p>
+                                    </div>
+                                }
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#plus" /></svg>
+                                Fazı ekle
+                            </button>
+                        </form>
+                    </section>
+                </section>
+            </div>
+
+            <aside class="min-w-0 space-y-5 lg:sticky lg:top-20" aria-label="Taslak özeti ve yayın">
+                <section class="panel" aria-labelledby="draft-title">
+                    <div class="panel-head"><h2 id="draft-title" class="panel-title">Taslak</h2></div>
+                    <dl class="kv p-4 md:p-5">
+                        <div><dt>Tip</dt><dd>@Model.CleaningTypeName</dd></div>
+                        <div><dt>Tür</dt><dd class="mt-1"><partial name="_LabelBadge" model='(Model.KindLabel, isPlanned ? "kind.planned" : "kind.emergency")' /></dd></div>
+                        <div><dt>Versiyon no</dt><dd class="mono">v@(Model.VersionNo)</dd></div>
+                        <div><dt>İçerik</dt><dd class="mono">@Model.Phases.Length faz, @stepTotal adım</dd></div>
+                    </dl>
+                </section>
+
+                <section class="panel" id="publish" aria-labelledby="publish-title">
+                    <div class="panel-head"><h2 id="publish-title" class="panel-title">Yayınla</h2></div>
+                    <div class="space-y-4 p-4 md:p-5">
+                        @if (Model.PublishBlockers.Length > 0)
+                        {
+                            <div class="notice notice-warn">
+                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>
+                                <div class="min-w-0">
+                                    <p class="font-semibold">Yayın için tamamlanacaklar</p>
+                                    <ul class="mt-1 list-inside list-disc text-sm">
+                                        @foreach (var blocker in Model.PublishBlockers)
+                                        {
+                                            <li class="break-words">@blocker</li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="notice notice-ok">
+                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-check" /></svg>
+                                <span>Taslak yayına hazır.</span>
+                            </p>
+                        }
+                        <p class="text-sm text-muted">Yayın PIN ister. Yayınlanınca versiyon değiştirilemez ve önceki yürürlükteki versiyon arşive geçer.</p>
+                        <form method="post" action="/procedure-versions/publish/@Model.Id" class="space-y-4" data-validate data-busy-form asp-antiforgery="true">
+                            <partial name="_EditorError" model='MessagesOf("publish")' />
+                            <partial name="_PinInput" model='("publish-pin", "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                            <button type="submit" class="btn btn-primary btn-block btn-lg" disabled="@(Model.PublishBlockers.Length > 0)" data-requires-online>
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#send" /></svg>
+                                Versiyonu yayınla
+                            </button>
+                        </form>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </div>
+</div>
+
+<partial name="_MediaDialog" />

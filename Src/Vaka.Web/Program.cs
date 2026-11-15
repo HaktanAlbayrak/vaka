@@ -56,6 +56,17 @@ builder.Services.AddScoped<IMachineService, MachineService>();
 builder.Services.AddScoped<IMachineRetirement, MachineRetirement>();
 builder.Services.AddScoped<IMaterialService, MaterialService>();
 builder.Services.AddScoped<IMaterialLotService, MaterialLotService>();
+builder.Services.AddSingleton<IMediaStore, MediaStore>();
+builder.Services.AddScoped<UploadLimitFilter>();
+builder.Services.AddScoped<IProcedureLinks, ProcedureLinks>();
+builder.Services.AddScoped<ICleaningTypeBlockProvider, NoCleaningTypeBlockProvider>();
+builder.Services.AddScoped<ICleaningTypeService, CleaningTypeService>();
+builder.Services.AddScoped<IMachineMappingService, MachineMappingService>();
+builder.Services.AddScoped<IProcedureVersionReader, ProcedureVersionReader>();
+builder.Services.AddScoped<IProcedureVersionPublisher, ProcedureVersionPublisher>();
+builder.Services.AddScoped<IProcedureDraftEditor, ProcedureDraftEditor>();
+builder.Services.AddScoped<IProcedureStepEditor, ProcedureStepEditor>();
+builder.Services.AddScoped<IStepMediaService, StepMediaService>();
 builder.Services.AddScoped<IUserDirectory, UserDirectory>();
 builder.Services.AddScoped<IUserAdministration, UserAdministration>();
 

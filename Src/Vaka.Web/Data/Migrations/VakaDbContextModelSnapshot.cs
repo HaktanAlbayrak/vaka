@@ -17,6 +17,47 @@ namespace Vaka.Web.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.15");
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.CleaningType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("TEXT")
+                        .UseCollation("NOCASE");
+
+                    b.Property<int?>("DefaultLockMinutes")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(true);
+
+                    b.Property<int>("Kind")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("CleaningTypes", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_CleaningTypes_Kind", "\"Kind\" IN (1, 2)");
+
+                            t.HasCheckConstraint("CK_CleaningTypes_LockMinutes", "(\"Kind\" = 1 AND \"DefaultLockMinutes\" > 0) OR (\"Kind\" = 2 AND \"DefaultLockMinutes\" IS NULL)");
+                        });
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.Facility", b =>
                 {
                     b.Property<int>("Id")
@@ -86,6 +127,21 @@ namespace Vaka.Web.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.MachineCleaningType", b =>
+                {
+                    b.Property<int>("MachineId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CleaningTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("MachineId", "CleaningTypeId");
+
+                    b.HasIndex("CleaningTypeId");
+
+                    b.ToTable("MachineCleaningTypes", (string)null);
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.Material", b =>
                 {
                     b.Property<int>("Id")
@@ -140,6 +196,122 @@ namespace Vaka.Web.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("MaterialLots", (string)null);
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProcedurePhase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MinDurationSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("OrderNo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProcedureVersionId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcedureVersionId", "OrderNo");
+
+                    b.ToTable("ProcedurePhases", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_ProcedurePhases_MinDuration", "\"MinDurationSeconds\" IS NULL OR \"MinDurationSeconds\" > 0");
+
+                            t.HasCheckConstraint("CK_ProcedurePhases_OrderNo", "\"OrderNo\" > 0");
+                        });
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProcedureStep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("OrderNo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProcedurePhaseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcedurePhaseId", "OrderNo");
+
+                    b.ToTable("ProcedureSteps", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_ProcedureSteps_OrderNo", "\"OrderNo\" > 0");
+                        });
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProcedureVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CleaningTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("DocumentRef")
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("MaterialRequired")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("PublishedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("PublishedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("VersionNo")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PublishedByUserId");
+
+                    b.HasIndex("CleaningTypeId", "VersionNo")
+                        .IsUnique();
+
+                    b.HasIndex(new[] { "CleaningTypeId" }, "IX_ProcedureVersions_OneCurrent")
+                        .IsUnique()
+                        .HasFilter("\"Status\" = 2");
+
+                    b.HasIndex(new[] { "CleaningTypeId" }, "IX_ProcedureVersions_OneDraft")
+                        .IsUnique()
+                        .HasFilter("\"Status\" = 1");
+
+                    b.ToTable("ProcedureVersions", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_ProcedureVersions_Published", "(\"Status\" = 1 AND \"PublishedAtUtc\" IS NULL) OR (\"Status\" <> 1 AND \"PublishedAtUtc\" IS NOT NULL)");
+
+                            t.HasCheckConstraint("CK_ProcedureVersions_Status", "\"Status\" IN (1, 2, 3)");
+
+                            t.HasCheckConstraint("CK_ProcedureVersions_VersionNo", "\"VersionNo\" > 0");
+                        });
                 });
 
             modelBuilder.Entity("Vaka.Web.Domain.Entities.ProductionLine", b =>
@@ -240,6 +412,50 @@ namespace Vaka.Web.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.StepMedia", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MediaType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProcedureStepId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Sha256")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("SizeBytes")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProcedureStepId");
+
+                    b.ToTable("StepMedia", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_StepMedia_MediaType", "\"MediaType\" IN (1, 2)");
+
+                            t.HasCheckConstraint("CK_StepMedia_Sha256", "length(\"Sha256\") = 64");
+
+                            t.HasCheckConstraint("CK_StepMedia_SizeBytes", "\"SizeBytes\" > 0");
+                        });
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.SystemSetting", b =>
                 {
                     b.Property<int>("Id")
@@ -290,6 +506,27 @@ namespace Vaka.Web.Data.Migrations
                             Key = "PinAttemptLimit",
                             Unit = "deneme",
                             Value = 5
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Key = "MaxLockMinutes",
+                            Unit = "dakika",
+                            Value = 120
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Key = "MaxPhotoMb",
+                            Unit = "MB",
+                            Value = 10
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Key = "MaxVideoMb",
+                            Unit = "MB",
+                            Value = 100
                         });
                 });
 
@@ -403,6 +640,25 @@ namespace Vaka.Web.Data.Migrations
                     b.Navigation("Line");
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.MachineCleaningType", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.CleaningType", "CleaningType")
+                        .WithMany("MachineLinks")
+                        .HasForeignKey("CleaningTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vaka.Web.Domain.Entities.Machine", "Machine")
+                        .WithMany("CleaningTypeLinks")
+                        .HasForeignKey("MachineId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CleaningType");
+
+                    b.Navigation("Machine");
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.MaterialLot", b =>
                 {
                     b.HasOne("Vaka.Web.Domain.Entities.Material", "Material")
@@ -412,6 +668,46 @@ namespace Vaka.Web.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Material");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProcedurePhase", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.ProcedureVersion", "Version")
+                        .WithMany("Phases")
+                        .HasForeignKey("ProcedureVersionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Version");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProcedureStep", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.ProcedurePhase", "Phase")
+                        .WithMany("Steps")
+                        .HasForeignKey("ProcedurePhaseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Phase");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProcedureVersion", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.CleaningType", "CleaningType")
+                        .WithMany("Versions")
+                        .HasForeignKey("CleaningTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vaka.Web.Domain.Entities.User", "PublishedBy")
+                        .WithMany()
+                        .HasForeignKey("PublishedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CleaningType");
+
+                    b.Navigation("PublishedBy");
                 });
 
             modelBuilder.Entity("Vaka.Web.Domain.Entities.ProductionLine", b =>
@@ -455,6 +751,17 @@ namespace Vaka.Web.Data.Migrations
                     b.Navigation("Facility");
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.StepMedia", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.ProcedureStep", "Step")
+                        .WithMany("Media")
+                        .HasForeignKey("ProcedureStepId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Step");
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.UserRole", b =>
                 {
                     b.HasOne("Vaka.Web.Domain.Entities.User", "User")
@@ -466,6 +773,13 @@ namespace Vaka.Web.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.CleaningType", b =>
+                {
+                    b.Navigation("MachineLinks");
+
+                    b.Navigation("Versions");
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.Facility", b =>
                 {
                     b.Navigation("Lines");
@@ -473,9 +787,29 @@ namespace Vaka.Web.Data.Migrations
                     b.Navigation("Shifts");
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.Machine", b =>
+                {
+                    b.Navigation("CleaningTypeLinks");
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.Material", b =>
                 {
                     b.Navigation("Lots");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProcedurePhase", b =>
+                {
+                    b.Navigation("Steps");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProcedureStep", b =>
+                {
+                    b.Navigation("Media");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.ProcedureVersion", b =>
+                {
+                    b.Navigation("Phases");
                 });
 
             modelBuilder.Entity("Vaka.Web.Domain.Entities.ProductionLine", b =>

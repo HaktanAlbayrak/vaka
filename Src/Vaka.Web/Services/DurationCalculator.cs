@@ -2,6 +2,9 @@ namespace Vaka.Web.Services;
 
 public sealed class DurationCalculator : IDurationCalculator
 {
+    private const long BytesPerMegabyte = 1_048_576;
+    private const long MultipartEnvelopeBytes = 65_536;
+
     private readonly ITurkeyClock _clock;
 
     public DurationCalculator(ITurkeyClock clock)
@@ -98,4 +101,19 @@ public sealed class DurationCalculator : IDurationCalculator
         shift.End > shift.Start
             ? [(shift.Start.Ticks, shift.End.Ticks)]
             : [(shift.Start.Ticks, TimeSpan.TicksPerDay), (0, shift.End.Ticks)];
+
+    public int MinutesToSeconds(int minutes) => checked(minutes * 60);
+
+    public int SecondsToMinutes(int seconds) => seconds / 60;
+
+    public bool IsMinimumMissing(bool isPlanned, int? minDurationSeconds) => isPlanned && minDurationSeconds is null;
+
+    public bool IsLockWithinLimit(int lockMinutes, int maxLockMinutes) => lockMinutes > 0 && lockMinutes <= maxLockMinutes;
+
+    public bool IsMediaWithinLimit(long sizeBytes, int maxMegabytes) => sizeBytes > 0 && sizeBytes <= GetMediaLimitBytes(maxMegabytes);
+
+    public long GetMediaLimitBytes(int maxMegabytes) => (long)maxMegabytes * BytesPerMegabyte;
+
+    public long GetUploadBodyLimitBytes(int maxPhotoMb, int maxVideoMb) =>
+        (long)Math.Max(maxPhotoMb, maxVideoMb) * BytesPerMegabyte + MultipartEnvelopeBytes;
 }

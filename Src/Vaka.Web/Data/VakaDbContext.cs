@@ -19,6 +19,12 @@ public class VakaDbContext : DbContext
     public DbSet<Shift> Shifts => Set<Shift>();
     public DbSet<Material> Materials => Set<Material>();
     public DbSet<MaterialLot> MaterialLots => Set<MaterialLot>();
+    public DbSet<CleaningType> CleaningTypes => Set<CleaningType>();
+    public DbSet<MachineCleaningType> MachineCleaningTypes => Set<MachineCleaningType>();
+    public DbSet<ProcedureVersion> ProcedureVersions => Set<ProcedureVersion>();
+    public DbSet<ProcedurePhase> ProcedurePhases => Set<ProcedurePhase>();
+    public DbSet<ProcedureStep> ProcedureSteps => Set<ProcedureStep>();
+    public DbSet<StepMedia> StepMedia => Set<StepMedia>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

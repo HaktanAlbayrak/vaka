@@ -52,7 +52,7 @@
                     @foreach (var lot in Model.Lots)
                     {
                         <tr>
-                            <td data-label="Lot no" class="cell-long break-words"><span class="record-no text-sm">@lot.LotNo</span></td>
+                            <td data-label="Lot no" class="cell-long break-words stack-wide stack-lead"><span class="record-no text-sm">@lot.LotNo</span></td>
                             <td data-label="Son kullanma tarihi"><span class="mono">@lot.ExpiryDate.ToString("dd.MM.yyyy")</span></td>
                             <td data-label="Durum">
                                 @if (lot.IsExpired)
@@ -64,7 +64,7 @@
                                     <span class="chip">Kullanılabilir</span>
                                 }
                             </td>
-                            <td data-label="İşlem">
+                            <td data-label="İşlem" class="cell-action max-md:col-span-2 md:max-lg:col-span-4 lg:max-xl:col-span-2">
                                 <a class="btn btn-secondary" href="/material-lots/edit/@lot.Id" aria-label="@lot.LotNo lotunu düzenle">
                                     <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
                                     Düzenle

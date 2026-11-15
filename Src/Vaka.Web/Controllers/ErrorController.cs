@@ -5,6 +5,7 @@ namespace Vaka.Web.Controllers;
 
 [AllowAnonymous]
 [IgnoreAntiforgeryToken]
+[NoFormBinding]
 [Route("error")]
 public sealed class ErrorController : Controller
 {

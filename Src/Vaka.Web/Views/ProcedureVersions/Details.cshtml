@@ -1,0 +1,98 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Procedures
+@model ProcedureVersionViewModel
+@{
+    ViewData["Title"] = Model.CleaningTypeName + " v" + Model.VersionNo;
+    ViewData["Lead"] = "Yayınlanmış prosedür versiyonu. Faz, adım ve medya değiştirilemez.";
+    ViewData["NavKey"] = "cleaning-types";
+    ViewData["StatusMessage"] = Model.StatusMessage;
+    var styleKey = Model.Status switch
+    {
+        ProcedureVersionStatus.Draft => "version.draft",
+        ProcedureVersionStatus.Current => "version.current",
+        _ => "version.archived"
+    };
+    var isManager = User.IsInRole(Roles.Manager);
+    var stepTotal = Model.Phases.Sum(phase => phase.Steps.Length);
+}
+
+@section Actions {
+    @if (isManager)
+    {
+        <a class="btn btn-secondary" href="/cleaning-types/details/@Model.CleaningTypeId">
+            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-left" /></svg>
+            Tip detayı
+        </a>
+    }
+}
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <section class="min-w-0 space-y-4" aria-labelledby="phases-title">
+        <h2 id="phases-title" class="text-xl font-bold">Fazlar ve adımlar</h2>
+        @if (!Model.Phases.Any())
+        {
+            <partial name="_State" model='("empty", "file-text", "Bu versiyonda faz yok", "Yayınlanmış versiyonlar en az bir faz taşır. Bu kayıt tutarsız görünüyor, yöneticiye bildirin.", (string?)null, (string?)null)' />
+        }
+        @foreach (var phase in Model.Phases)
+        {
+            var phaseId = "phase-" + phase.OrderNo;
+            <section class="panel" aria-labelledby="@phaseId">
+                <div class="panel-head">
+                    <h3 id="@phaseId" class="panel-title flex min-w-0 items-center gap-3">
+                        <span class="step-stamp" aria-hidden="true">@phase.OrderNo</span>
+                        <span class="min-w-0 break-words"><span class="sr-only">Faz @phase.OrderNo: </span>@phase.Title</span>
+                    </h3>
+                    @if (phase.MinDurationMinutes is not null)
+                    {
+                        <span class="chip">Minimum <span class="mono">@phase.MinDurationMinutes</span> dakika</span>
+                    }
+                </div>
+                <ol class="step-list p-4 md:p-5">
+                    @foreach (var step in phase.Steps)
+                    {
+                        <li class="step">
+                            <span class="step-stamp" aria-hidden="true">@step.OrderNo</span>
+                            <div class="min-w-0 space-y-2">
+                                <p class="break-words font-bold"><span class="sr-only">Adım @step.OrderNo: </span>@step.Title</p>
+                                @if (!string.IsNullOrWhiteSpace(step.Description))
+                                {
+                                    <p class="whitespace-pre-line break-words text-muted">@step.Description</p>
+                                }
+                                <partial name="_MediaList" model='(step.Media, false, 0)' />
+                            </div>
+                        </li>
+                    }
+                    @if (!phase.Steps.Any())
+                    {
+                        <li class="text-muted">Bu fazda adım yok.</li>
+                    }
+                </ol>
+            </section>
+        }
+    </section>
+
+    <aside class="min-w-0 space-y-5" aria-label="Versiyon bilgisi">
+        <section class="panel" aria-labelledby="version-title">
+            <div class="panel-head"><h2 id="version-title" class="panel-title">Versiyon</h2></div>
+            <dl class="kv p-4 md:p-5">
+                <div><dt>Tip</dt><dd>@Model.CleaningTypeName</dd></div>
+                <div><dt>Tür</dt><dd class="mt-1"><partial name="_LabelBadge" model='(Model.KindLabel, Model.Kind == CleaningTypeKind.Planned ? "kind.planned" : "kind.emergency")' /></dd></div>
+                <div><dt>Versiyon no</dt><dd class="mono">v@(Model.VersionNo)</dd></div>
+                <div><dt>Durum</dt><dd class="mt-1"><partial name="_LabelBadge" model='(Model.StatusLabel, styleKey)' /></dd></div>
+                @if (Model.PublishedAtLocal is not null)
+                {
+                    <div><dt>Yayın zamanı</dt><dd class="mono">@Model.PublishedAtLocal.Value.ToString("dd.MM.yyyy HH:mm")</dd></div>
+                }
+                @if (Model.PublishedByName is not null)
+                {
+                    <div><dt>Yayınlayan</dt><dd>@Model.PublishedByName</dd></div>
+                }
+                <div><dt>Doküman no</dt><dd class="mono">@(Model.DocumentRef ?? "Yok")</dd></div>
+                <div><dt>Malzeme</dt><dd>@(Model.MaterialRequired ? "Kayıtta malzeme zorunlu" : "Malzeme zorunlu değil")</dd></div>
+                <div><dt>İçerik</dt><dd class="mono">@Model.Phases.Length faz, @stepTotal adım</dd></div>
+            </dl>
+        </section>
+    </aside>
+</div>
+
+<partial name="_MediaDialog" />

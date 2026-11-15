@@ -1,0 +1,64 @@
+@using Vaka.Web.ViewModels.Procedures
+@model MachineMappingViewModel
+@{
+    ViewData["Title"] = "Makine eşleme";
+    ViewData["Lead"] = Model.CleaningTypeName + " tipinin uygulanacağı makineleri seçin. Pasif ya da kullanımdan kaldırılmış makine seçilemez.";
+    ViewData["NavKey"] = "cleaning-types";
+    var selectedTotal = Model.Groups.Sum(group => group.Machines.Count(machine => machine.IsSelected));
+}
+
+<partial name="_FormSummary" model='"Makine eşleme kaydedilemedi"' />
+
+<form method="post" class="space-y-5" data-busy-form data-unsaved-guard aria-label="Makine eşleme" asp-antiforgery="true">
+    @if (!Model.Groups.Any())
+    {
+        <partial name="_State" model='("empty", "cog", "Eşlenecek makine yok", "Makineler bir hatta bağlanır. Önce tesis, hat ve makine tanımlayın.", "Makineler", "/machines")' />
+    }
+    else
+    {
+        var groupIndex = 0;
+        foreach (var group in Model.Groups)
+        {
+            groupIndex++;
+            var groupId = "group-" + groupIndex;
+            <section class="panel" aria-labelledby="@groupId">
+                <div class="panel-head">
+                    <h2 id="@groupId" class="panel-title min-w-0 break-words">
+                        <span class="block text-xs font-bold uppercase tracking-wide text-muted">@group.FacilityLabel</span>
+                        @group.LineLabel
+                    </h2>
+                    <span class="chip mono">@group.Machines.Length makine</span>
+                </div>
+                <ul class="grid gap-3 p-4 sm:grid-cols-2 md:p-5 xl:grid-cols-3">
+                    @foreach (var machine in group.Machines)
+                    {
+                        var reasonId = "machine-" + machine.Id + "-reason";
+                        <li class="min-w-0">
+                            <label class="choice h-full">
+                                <input type="checkbox" name="SelectedMachineIds" value="@machine.Id" checked="@machine.IsSelected" disabled="@(!machine.IsSelectable)"
+                                       aria-describedby="@(machine.NotSelectableReason is null ? null : reasonId)" />
+                                <span class="min-w-0">
+                                    <span class="record-no block break-all text-sm">@machine.Code</span>
+                                    <span class="block break-words font-semibold">@machine.Name</span>
+                                    @if (machine.NotSelectableReason is not null)
+                                    {
+                                        <span id="@reasonId" class="mt-1 block text-sm text-muted">@machine.NotSelectableReason</span>
+                                    }
+                                </span>
+                            </label>
+                        </li>
+                    }
+                </ul>
+            </section>
+        }
+
+        <div class="flex flex-wrap items-center gap-3">
+            <button type="submit" class="btn btn-primary btn-lg" data-requires-online>
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#save" /></svg>
+                Eşlemeyi kaydet
+            </button>
+            <a class="btn btn-secondary btn-lg" href="/cleaning-types/details/@Model.CleaningTypeId">Vazgeç</a>
+            <p class="text-sm text-muted">Şu an <span class="mono font-bold">@selectedTotal</span> makine eşli.</p>
+        </div>
+    }
+</form>

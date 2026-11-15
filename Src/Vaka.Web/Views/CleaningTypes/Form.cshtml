@@ -1,0 +1,150 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Procedures
+@model CleaningTypeFormViewModel
+@{
+    var isCreate = Model.Id is null;
+    var isEmergency = Model.Kind == CleaningTypeKind.Emergency;
+    var showLock = !(Model.KindLocked && isEmergency);
+    ViewData["Title"] = isCreate ? "Temizlik tipi ekle" : "Temizlik tipini düzenle";
+    ViewData["Lead"] = isCreate ? "Tür bir kez seçilir, kaydedildikten sonra değiştirilemez." : Model.Name + ", kod " + Model.Code;
+    ViewData["NavKey"] = "cleaning-types";
+
+    string? ErrorOf(string key) =>
+        ViewData.ModelState.TryGetValue(key, out var entry) && entry.Errors.Count > 0 ? entry.Errors[0].ErrorMessage : null;
+
+    var kindError = ErrorOf("Kind");
+    var lockError = ErrorOf("DefaultLockMinutes");
+    var activeError = ErrorOf("IsActive");
+    var lockDescribedBy = "DefaultLockMinutes-hint" + (lockError is null ? "" : " DefaultLockMinutes-error");
+}
+
+<partial name="_FormSummary" model='isCreate ? "Temizlik tipi eklenemedi" : "Temizlik tipi kaydedilemedi"' />
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard data-kind-form aria-labelledby="type-form-title" asp-antiforgery="true">
+        <div class="panel-head">
+            <h2 id="type-form-title" class="panel-title">Tip bilgileri</h2>
+        </div>
+        <div class="panel-body space-y-6">
+            <div class="grid gap-5 md:grid-cols-2">
+                <partial name="_Field" model='("Code", "Kod", Model.Code, "text", "off", "Büyük küçük harf ayırmaz, tipler arasında benzersizdir. Kayıt numarasına girmez.", true, false)' />
+                <partial name="_Field" model='("Name", "Ad", Model.Name, "text", "off", (string?)null, true, false)' />
+            </div>
+
+            @if (Model.KindLocked)
+            {
+                <div class="space-y-1.5">
+                    <p class="field-label" id="kind-fixed-label">Tür</p>
+                    <input type="hidden" name="Kind" value="@(Model.Kind is null ? "" : ((int)Model.Kind.Value).ToString())" />
+                    <p><partial name="_LabelBadge" model='(Model.KindLabel ?? "", isEmergency ? "kind.emergency" : "kind.planned")' /></p>
+                    <p class="field-hint">Tür değiştirilemez.</p>
+                </div>
+            }
+            else
+            {
+                <fieldset id="Kind" class="space-y-2" aria-describedby="@(kindError is null ? null : "Kind-error")">
+                    <legend class="field-label mb-2">Tür</legend>
+                    <div class="grid gap-3 sm:grid-cols-2">
+                        @foreach (var option in Model.KindOptions)
+                        {
+                            <label class="choice">
+                                <input type="radio" name="Kind" value="@option.Id" checked="@(Model.Kind is not null && (int)Model.Kind.Value == option.Id)" required
+                                       data-required-message="Tür seçin." data-kind-radio data-emergency="@(option.Id == (int)CleaningTypeKind.Emergency ? "true" : "false")" />
+                                <span class="min-w-0 font-bold">@option.Label</span>
+                            </label>
+                        }
+                    </div>
+                    @if (kindError is not null)
+                    {
+                        <p id="Kind-error" class="field-error">
+                            <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+                            <span>@kindError</span>
+                        </p>
+                    }
+                </fieldset>
+            }
+
+            @if (showLock)
+            {
+                <div class="field max-w-sm" data-field data-lock-field>
+                    <label class="field-label" for="DefaultLockMinutes">Varsayılan kilit süresi (dakika)</label>
+                    <input id="DefaultLockMinutes" name="DefaultLockMinutes" type="number" class="input mono" inputmode="numeric" min="1" max="@Model.MaxLockMinutes" step="1"
+                           value="@Model.DefaultLockMinutes" autocomplete="off" aria-describedby="@lockDescribedBy" aria-invalid="@(lockError is null ? null : "true")" data-lock-input />
+                    <p id="DefaultLockMinutes-hint" class="field-hint">Yalnız planlı tipte. En çok <span class="mono">@Model.MaxLockMinutes</span> dakika.</p>
+                    @if (lockError is not null)
+                    {
+                        <p id="DefaultLockMinutes-error" class="field-error">
+                            <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+                            <span>@lockError</span>
+                        </p>
+                    }
+                </div>
+            }
+
+            @if (isCreate)
+            {
+                <input type="hidden" name="IsActive" value="true" />
+            }
+            else
+            {
+                <div class="space-y-3">
+                    <label class="choice max-w-md">
+                        <input type="checkbox" asp-for="IsActive" aria-describedby="@(activeError is null ? null : "IsActive-error")" aria-invalid="@(activeError is null ? null : "true")" />
+                        <span class="min-w-0">
+                            <span class="block font-bold">Aktif</span>
+                            <span class="mt-0.5 block text-sm text-muted">Pasif tip yeni kayıtta seçilemez, geçmiş kayıtlar korunur.</span>
+                        </span>
+                    </label>
+                    @if (activeError is not null)
+                    {
+                        <p id="IsActive-error" class="field-error">
+                            <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+                            <span>@activeError</span>
+                        </p>
+                    }
+                    @if (Model.BlockingRecords.Any())
+                    {
+                        <section aria-labelledby="blocking-title" class="space-y-3">
+                            <h3 id="blocking-title" class="text-lg font-bold">Engelleyen kayıtlar</h3>
+                            <ul class="divide-y divide-line border-2 border-line">
+                                @foreach (var record in Model.BlockingRecords)
+                                {
+                                    <li class="flex flex-wrap items-center justify-between gap-2 p-3">
+                                        <span class="record-no break-all">@record.RecordNo</span>
+                                        <span class="flex flex-wrap items-center gap-2">
+                                            <span class="chip">@record.StatusLabel</span>
+                                            @if (record.Url is not null)
+                                            {
+                                                <a class="btn btn-secondary" href="@record.Url" aria-label="@record.RecordNo kaydını aç">Aç</a>
+                                            }
+                                        </span>
+                                    </li>
+                                }
+                            </ul>
+                        </section>
+                    }
+                </div>
+            }
+
+            <div class="flex flex-wrap items-center gap-3 border-t-2 border-line pt-5">
+                <button type="submit" class="btn btn-primary btn-lg" data-requires-online>
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#save" /></svg>
+                    @(isCreate ? "Tipi ekle" : "Değişiklikleri kaydet")
+                </button>
+                <a class="btn btn-secondary btn-lg" href="@(isCreate ? "/cleaning-types" : "/cleaning-types/details/" + Model.Id)">Vazgeç</a>
+            </div>
+        </div>
+    </form>
+
+    <aside class="min-w-0" aria-label="Bilgi">
+        <section class="panel" aria-labelledby="type-help-title">
+            <div class="panel-head"><h2 id="type-help-title" class="panel-title">Bilmeniz gerekenler</h2></div>
+            <ul class="list-inside list-disc space-y-2 p-4 md:p-5">
+                <li>Planlı tip makinelerle eşlenir ve varsayılan kilit süresi taşır.</li>
+                <li>Acil tip makine eşlemesi ve kilit süresi almaz.</li>
+                <li>Kod sonradan değişebilir, tür değişmez.</li>
+                <li>Prosedür, tip kaydedildikten sonra detay ekranında taslak olarak hazırlanır.</li>
+            </ul>
+        </section>
+    </aside>
+</div>

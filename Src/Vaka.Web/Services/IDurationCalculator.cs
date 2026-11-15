@@ -49,4 +49,44 @@ public interface IDurationCalculator
     /// </summary>
     /// <remarks>Bugünkü SKT geçmiş sayılmaz; lot o günün sonuna kadar kullanılabilir.</remarks>
     bool IsLotExpired(DateOnly expiryDate, DateOnly today);
+
+    /// <summary>
+    /// Faz minimumunun dakikadan saniyeye çevrimi (PL-14, FR-05); saklanan değer saniyedir.
+    /// Saniye = Dakika x 60
+    /// </summary>
+    int MinutesToSeconds(int minutes);
+
+    /// <summary>
+    /// Saklanan faz minimumunun düzenleyicide gösterilen dakikası.
+    /// Dakika = Saniye / 60 (tam bölme; arayüz yalnız tam dakika yazar, kopyalanan değer de dakikadan gelir)
+    /// </summary>
+    int SecondsToMinutes(int seconds);
+
+    /// <summary>
+    /// Planlı tipte fazın yayını engelleyen minimum eksiği (PL-14).
+    /// Eksik: tip planlı ve faz minimumu tanımsız (boş)
+    /// </summary>
+    /// <remarks>Acil tipte minimum alanı yoktur, eksik sayılmaz.</remarks>
+    bool IsMinimumMissing(bool isPlanned, int? minDurationSeconds);
+
+    /// <summary>
+    /// Varsayılan kilit süresinin azami sınır içinde olup olmadığı (BR-45).
+    /// Kabul: 0 &lt; Dakika &lt;= AzamiKilitSüresi (dakika; sınıra eşit kabul)
+    /// </summary>
+    bool IsLockWithinLimit(int lockMinutes, int maxLockMinutes);
+
+    /// <summary>
+    /// Medya dosyasının azami boyut içinde olup olmadığı (K-26, PL-47, PL-51).
+    /// Sınır baytı = AzamiMB x 1 048 576; Kabul: 0 &lt; Boyut &lt;= Sınır baytı (sınıra eşit kabul)
+    /// </summary>
+    bool IsMediaWithinLimit(long sizeBytes, int maxMegabytes);
+
+    /// <summary>Medya sınırı (bayt) = AzamiMB x 1 048 576 (PL-51).</summary>
+    long GetMediaLimitBytes(int maxMegabytes);
+
+    /// <summary>
+    /// İstek gövdesi üst sınırı (bayt) = max(AzamiFotoğrafMB, AzamiVideoMB) x 1 048 576 + zarf payı;
+    /// zarf payı çok parçalı gövdedeki alan başlıkları ve antiforgery alanı içindir.
+    /// </summary>
+    long GetUploadBodyLimitBytes(int maxPhotoMb, int maxVideoMb);
 }

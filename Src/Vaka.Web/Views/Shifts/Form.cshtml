@@ -10,7 +10,7 @@
 <partial name="_FormSummary" model='isCreate ? "Vardiya eklenemedi" : "Vardiya kaydedilemedi"' />
 
 <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
-    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard aria-labelledby="shift-form-title">
+    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard aria-labelledby="shift-form-title" asp-antiforgery="true">
         <div class="panel-head">
             <h2 id="shift-form-title" class="panel-title">Vardiya bilgileri</h2>
         </div>
@@ -30,8 +30,7 @@
             </div>
 
             <label class="choice max-w-md">
-                <input type="hidden" name="IsActive" value="false" />
-                <input type="checkbox" name="IsActive" value="true" checked="@Model.IsActive" />
+                <input type="checkbox" asp-for="IsActive" />
                 <span class="min-w-0">
                     <span class="block font-bold">Aktif</span>
                     <span class="mt-0.5 block text-sm text-muted">Pasif vardiya çakışma kontrolüne ve süre hesaplarına girmez.</span>

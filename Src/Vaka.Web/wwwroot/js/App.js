@@ -8,6 +8,9 @@ import { FormValidation } from "./FormValidation.js";
 import { FormBusy, bindBusyLinks } from "./FormBusy.js";
 import { UnsavedGuard } from "./UnsavedGuard.js";
 import { CascadeSelect } from "./CascadeSelect.js";
+import { KindToggle } from "./KindToggle.js";
+import { ProcedureEditor } from "./ProcedureEditor.js";
+import { MediaViewer } from "./MediaViewer.js";
 
 new ThemeToggle(document.querySelector("[data-theme-toggle]"));
 new ShellNav(document);
@@ -19,5 +22,8 @@ document.querySelectorAll("form[data-validate]").forEach((form) => new FormValid
 document.querySelectorAll("form[data-busy-form]").forEach((form) => new FormBusy(form));
 document.querySelectorAll("form[data-unsaved-guard]").forEach((form) => new UnsavedGuard(form));
 document.querySelectorAll("select[data-cascade-url]").forEach((select) => new CascadeSelect(select));
+document.querySelectorAll("form[data-kind-form]").forEach((form) => new KindToggle(form));
+document.querySelectorAll("[data-editor-host]").forEach((host) => new ProcedureEditor(host));
+document.querySelectorAll("[data-media-dialog]").forEach((dialog) => new MediaViewer(dialog));
 bindBusyLinks(document);
 (document.querySelector('main [aria-invalid="true"]') ?? document.querySelector("main [data-form-summary]"))?.focus();

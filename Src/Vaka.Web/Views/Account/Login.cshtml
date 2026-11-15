@@ -5,7 +5,7 @@
     ViewData["StatusMessage"] = Model.StatusMessage;
 }
 
-<form method="post" class="panel panel-tag" data-validate data-busy-form aria-labelledby="login-title">
+<form method="post" class="panel panel-tag" data-validate data-busy-form aria-labelledby="login-title" asp-antiforgery="true">
     <div class="panel-head">
         <h2 id="login-title" class="panel-title">Sicil girişi</h2>
     </div>

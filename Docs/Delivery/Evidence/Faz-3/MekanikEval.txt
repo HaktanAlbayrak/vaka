@@ -1,0 +1,285 @@
+Faz 3 teslim testi, 2026-11-15. Release yayını .qa/f3/build, port 5301 (qa.db) ve 5302 (empty.db). Ölçüm şablonu .qa/f3/m3.tmpl.js, çözümleme an.py.
+Paketler: tl3 (4 liste + 9 ayrıntı/düzenleyici/versiyon adresi x 360/390/768/1024/1280/1440/1920), tf3 (5 form x 360/768/1024/1440/1920), tk3 koyu (360/1024/1440/1920),
+tr3 reduced-motion (390 açık, 1440 koyu), tz3 %200 (320x640 açık, 640x400 koyu), ta3 Denetçi versiyon görüntüleme, t2l/t2f Faz 1-2 gerilemesi (360/768/1024/1440),
+tan oturumsuz, tfl ilk giriş, tem boş kopya (5302). Onay kutusu ve radyo düğmelerinin 20x20 ölçümü .choice etiketi içinde (en az 56 px) istisna sayıldı (Faz 2 ile aynı).
+
+===== tl3 91
+  sınıflar {'temiz': 91} kontrast>= 5.28 topbar<= 64
+===== tf3 25
+  sınıflar {'temiz': 25} kontrast>= 5.43 topbar<= 64
+===== tk3 72
+  sınıflar {'temiz': 72} kontrast>= 5.45 topbar<= 64
+===== tr3 36
+  sınıflar {'temiz': 36} kontrast>= 5.28 topbar<= 64
+===== tz3 36
+  sınıflar {'temiz': 36} kontrast>= 5.28 topbar<= 64
+===== ta3 6
+  sınıflar {'temiz': 6} kontrast>= 5.28 topbar<= 64
+===== te3 2
+  sınıflar {'temiz': 2} kontrast>= 5.43 topbar<= 64
+===== t2l 32
+  sınıflar {'temiz': 32} kontrast>= 5.28 topbar<= 64
+===== t2f 80
+  sınıflar {'temiz': 80} kontrast>= 5.28 topbar<= 64
+===== tan 4
+  sınıflar {'temiz': 4} kontrast>= 5.95 topbar<= 64
+===== tfl 2
+  sınıflar {'temiz': 2} kontrast>= 5.95 topbar<= 64
+===== tem 8
+  sınıflar {'temiz': 8} kontrast>= 5.95 topbar<= 64
+
+Reduced-motion hücrelerinde görünür animasyon: 0 (36 ölçüm)
+
+== G11 (PL-55): ölçülen imza ve frontend devir notundaki beklenen imza (g11f3.py)
+AYNI  /cleaning-types 360x800-light card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 276
+AYNI  /cleaning-types?kind=1 360x800-light card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 276
+AYNI  /cleaning-types?kind=2 360x800-light card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 276
+AYNI  /cleaning-types?showInactive=true 360x800-light card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 276
+AYNI  /cleaning-types/details/1 360x800-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 216
+AYNI  /cleaning-types/details/2 360x800-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /cleaning-types/details/5 360x800-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /cleaning-types 390x844-light card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 270
+AYNI  /cleaning-types?kind=1 390x844-light card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 270
+AYNI  /cleaning-types?kind=2 390x844-light card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 270
+AYNI  /cleaning-types?showInactive=true 390x844-light card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 270
+AYNI  /cleaning-types/details/1 390x844-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 216
+AYNI  /cleaning-types/details/2 390x844-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /cleaning-types/details/5 390x844-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /cleaning-types 768x1024-light card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types?kind=1 768x1024-light card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types?kind=2 768x1024-light card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types?showInactive=true 768x1024-light card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types/details/1 768x1024-light card Versiyon:1@1 Durum:1@1 Yayın:2@1 Doküman no:1@2 İşlem:3@2   minH 124
+AYNI  /cleaning-types/details/2 768x1024-light card Versiyon:1@1 Durum:1@1 Yayın:2@1 Doküman no:1@2 İşlem:3@2   minH 136
+AYNI  /cleaning-types/details/5 768x1024-light card Versiyon:1@1 Durum:1@1 Yayın:2@1 Doküman no:1@2 İşlem:3@2   minH 136
+AYNI  /cleaning-types 1024x768-light card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types?kind=1 1024x768-light card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types?kind=2 1024x768-light card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types?showInactive=true 1024x768-light card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types/details/1 1024x768-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 216
+AYNI  /cleaning-types/details/2 1024x768-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /cleaning-types/details/5 1024x768-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /cleaning-types 1280x900-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types?kind=1 1280x900-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types?kind=2 1280x900-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types?showInactive=true 1280x900-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types/details/1 1280x900-light table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/2 1280x900-light table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 105
+AYNI  /cleaning-types/details/5 1280x900-light table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 85
+AYNI  /cleaning-types 1440x900-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types?kind=1 1440x900-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types?kind=2 1440x900-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types?showInactive=true 1440x900-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types/details/1 1440x900-light table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/2 1440x900-light table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/5 1440x900-light table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types 1920x1080-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types?kind=1 1920x1080-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types?kind=2 1920x1080-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types?showInactive=true 1920x1080-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/1 1920x1080-light table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/2 1920x1080-light table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/5 1920x1080-light table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /users 360x800-light card Ad soyad:2@1 Sicil no:1@2 Roller:1@2 Durum:1@3 İşlem:2@4 boşluk=3(ARA)  minH 204
+AYNI  /facilities 360x800-light card Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:2@4   minH 216
+AYNI  /shifts 360x800-light card Ad:2@1 Başlangıç:1@2 Bitiş:1@2 Durum:1@3 İşlem:1@3   minH 168
+AYNI  /machines 360x800-light card Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /machines?showRetired=true 360x800-light card Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /materials 360x800-light card Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:2@4 boşluk=3(ARA)  minH 216
+AYNI  /materials/details/1 360x800-light card Lot no:2@1 Son kullanma tarihi:1@2 Durum:1@2 İşlem:2@3   minH 168
+AYNI  /facilities/details/1 360x800-light card Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3   minH 164
+AYNI  /users 768x1024-light card Sicil no:1@1 Ad soyad:2@1 Roller:1@1 Durum:1@2 İşlem:3@2   minH 124
+AYNI  /facilities 768x1024-light card Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:2@2   minH 118
+AYNI  /shifts 768x1024-light card Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:3@2   minH 122
+AYNI  /machines 768x1024-light card Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:3@2   minH 138
+AYNI  /machines?showRetired=true 768x1024-light card Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:3@2   minH 138
+AYNI  /materials 768x1024-light card Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:3@2   minH 118
+AYNI  /materials/details/1 768x1024-light card Lot no:2@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:4@2   minH 122
+AYNI  /facilities/details/1 768x1024-light card Kod:1@1 Ad:2@1 Makine:1@1 Durum:1@2 İşlem:3@2   minH 118
+AYNI  /users 1024x768-light card Sicil no:1@1 Ad soyad:2@1 Roller:1@1 Durum:1@2 İşlem:3@2   minH 124
+AYNI  /facilities 1024x768-light card Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:2@2   minH 118
+AYNI  /shifts 1024x768-light card Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:3@2   minH 122
+AYNI  /machines 1024x768-light card Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:3@2   minH 138
+AYNI  /machines?showRetired=true 1024x768-light card Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:3@2   minH 138
+AYNI  /materials 1024x768-light card Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:3@2   minH 118
+AYNI  /materials/details/1 1024x768-light card Lot no:2@1 Son kullanma tarihi:1@2 Durum:1@2 İşlem:2@3   minH 168
+AYNI  /facilities/details/1 1024x768-light card Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3   minH 164
+AYNI  /users 1440x900-light table Sicil no:1@1 Ad soyad:1@1 Roller:1@1 Durum:1@1 İşlem:1@1   minH 56
+AYNI  /facilities 1440x900-light table Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /shifts 1440x900-light table Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /machines 1440x900-light table Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /machines?showRetired=true 1440x900-light table Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /materials 1440x900-light table Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /materials/details/1 1440x900-light table Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /facilities/details/1 1440x900-light table Kod:1@1 Ad:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types 360x800-dark card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 276
+AYNI  /cleaning-types?kind=1 360x800-dark card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 276
+AYNI  /cleaning-types?kind=2 360x800-dark card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 276
+AYNI  /cleaning-types?showInactive=true 360x800-dark card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 276
+AYNI  /cleaning-types/details/1 360x800-dark card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 216
+AYNI  /cleaning-types/details/2 360x800-dark card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /cleaning-types/details/5 360x800-dark card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /cleaning-types 1024x768-dark card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types?kind=1 1024x768-dark card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types?kind=2 1024x768-dark card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types?showInactive=true 1024x768-dark card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types/details/1 1024x768-dark card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 216
+AYNI  /cleaning-types/details/2 1024x768-dark card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /cleaning-types/details/5 1024x768-dark card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /cleaning-types 1440x900-dark table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types?kind=1 1440x900-dark table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types?kind=2 1440x900-dark table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types?showInactive=true 1440x900-dark table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types/details/1 1440x900-dark table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/2 1440x900-dark table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/5 1440x900-dark table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types 1920x1080-dark table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types?kind=1 1920x1080-dark table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types?kind=2 1920x1080-dark table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types?showInactive=true 1920x1080-dark table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/1 1920x1080-dark table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/2 1920x1080-dark table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/5 1920x1080-dark table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types 390x844-light-reduce card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 270
+AYNI  /cleaning-types?kind=1 390x844-light-reduce card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 270
+AYNI  /cleaning-types?kind=2 390x844-light-reduce card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 270
+AYNI  /cleaning-types?showInactive=true 390x844-light-reduce card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 270
+AYNI  /cleaning-types/details/1 390x844-light-reduce card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 216
+AYNI  /cleaning-types/details/2 390x844-light-reduce card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /cleaning-types/details/5 390x844-light-reduce card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /cleaning-types 1440x900-dark-reduce table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types?kind=1 1440x900-dark-reduce table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types?kind=2 1440x900-dark-reduce table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types?showInactive=true 1440x900-dark-reduce table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types/details/1 1440x900-dark-reduce table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/2 1440x900-dark-reduce table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/5 1440x900-dark-reduce table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+G11: aynı 123 farklı 0
+
+== Form ve ayrıntı iskeleti (ana kolon + ray)
+/cleaning-types/details/1@360x800-light ray altta (ana 328px, ray 328px)
+/cleaning-types/details/2@360x800-light ray altta (ana 328px, ray 328px)
+/cleaning-types/details/3@360x800-light ray altta (ana 328px, ray 328px)
+/cleaning-types/details/5@360x800-light ray altta (ana 328px, ray 328px)
+/procedure-versions/edit/5@360x800-light ray altta (ana 328px, ray 328px)
+/procedure-versions/details/3@360x800-light ray altta (ana 328px, ray 328px)
+/procedure-versions/details/1@360x800-light ray altta (ana 328px, ray 328px)
+/procedure-versions/details/2@360x800-light ray altta (ana 328px, ray 328px)
+/procedure-versions/details/4@360x800-light ray altta (ana 328px, ray 328px)
+/cleaning-types/details/1@768x1024-light ray altta (ana 720px, ray 720px)
+/cleaning-types/details/2@768x1024-light ray altta (ana 720px, ray 720px)
+/cleaning-types/details/3@768x1024-light ray altta (ana 720px, ray 720px)
+/cleaning-types/details/5@768x1024-light ray altta (ana 720px, ray 720px)
+/procedure-versions/edit/5@768x1024-light ray altta (ana 720px, ray 720px)
+/procedure-versions/details/3@768x1024-light ray altta (ana 720px, ray 720px)
+/procedure-versions/details/1@768x1024-light ray altta (ana 720px, ray 720px)
+/procedure-versions/details/2@768x1024-light ray altta (ana 720px, ray 720px)
+/procedure-versions/details/4@768x1024-light ray altta (ana 720px, ray 720px)
+/cleaning-types/details/1@1024x768-light yan yana (ana 356px, ray 352px)
+/cleaning-types/details/2@1024x768-light yan yana (ana 356px, ray 352px)
+/cleaning-types/details/3@1024x768-light yan yana (ana 356px, ray 352px)
+/cleaning-types/details/5@1024x768-light yan yana (ana 356px, ray 352px)
+/procedure-versions/edit/5@1024x768-light yan yana (ana 356px, ray 352px)
+/procedure-versions/details/3@1024x768-light yan yana (ana 356px, ray 352px)
+/procedure-versions/details/1@1024x768-light yan yana (ana 356px, ray 352px)
+/procedure-versions/details/2@1024x768-light yan yana (ana 356px, ray 352px)
+/procedure-versions/details/4@1024x768-light yan yana (ana 356px, ray 352px)
+/cleaning-types/details/1@1440x900-light yan yana (ana 756px, ray 352px)
+/cleaning-types/details/2@1440x900-light yan yana (ana 756px, ray 352px)
+/cleaning-types/details/3@1440x900-light yan yana (ana 756px, ray 352px)
+/cleaning-types/details/5@1440x900-light yan yana (ana 756px, ray 352px)
+/procedure-versions/edit/5@1440x900-light yan yana (ana 756px, ray 352px)
+/procedure-versions/details/3@1440x900-light yan yana (ana 756px, ray 352px)
+/procedure-versions/details/1@1440x900-light yan yana (ana 756px, ray 352px)
+/procedure-versions/details/2@1440x900-light yan yana (ana 756px, ray 352px)
+/procedure-versions/details/4@1440x900-light yan yana (ana 756px, ray 352px)
+/cleaning-types/create@360x800-light ray altta (ana 328px, ray 328px)
+/cleaning-types/edit/1@360x800-light ray altta (ana 328px, ray 328px)
+/cleaning-types/edit/2@360x800-light ray altta (ana 328px, ray 328px)
+/cleaning-types/create@768x1024-light ray altta (ana 720px, ray 720px)
+/cleaning-types/edit/1@768x1024-light ray altta (ana 720px, ray 720px)
+/cleaning-types/edit/2@768x1024-light ray altta (ana 720px, ray 720px)
+/cleaning-types/create@1024x768-light yan yana (ana 356px, ray 352px)
+/cleaning-types/edit/1@1024x768-light yan yana (ana 356px, ray 352px)
+/cleaning-types/edit/2@1024x768-light yan yana (ana 356px, ray 352px)
+/cleaning-types/create@1440x900-light yan yana (ana 756px, ray 352px)
+/cleaning-types/edit/1@1440x900-light yan yana (ana 756px, ray 352px)
+/cleaning-types/edit/2@1440x900-light yan yana (ana 756px, ray 352px)
+
+== Boş durum (5302)
+/cleaning-types@360x800-light durum="Henüz temizlik tipi yok" bağlantılar=['Temizlik tipi ekle', 'Filtreleri temizle']
+/cleaning-types/create@360x800-light durum="" bağlantılar=['Vazgeç']
+/cleaning-types@768x1024-light durum="Henüz temizlik tipi yok" bağlantılar=['Temizlik tipi ekle', 'Filtreleri temizle']
+/cleaning-types/create@768x1024-light durum="" bağlantılar=['Vazgeç']
+/cleaning-types@1440x900-light durum="Henüz temizlik tipi yok" bağlantılar=['Temizlik tipi ekle', 'Filtreleri temizle']
+/cleaning-types/create@1440x900-light durum="" bağlantılar=['Vazgeç']
+/cleaning-types@1440x900-dark durum="Henüz temizlik tipi yok" bağlantılar=['Temizlik tipi ekle', 'Filtreleri temizle']
+/cleaning-types/create@1440x900-dark durum="" bağlantılar=['Vazgeç']
+
+
+== Tur 2 (2026-11-15)
+Release yayını .qa/f3/build (çalışma ağacı, B1/B2 düzeltmeleri), port 5301 qa.db, 5302 empty.db. Bu bölümde belirteç hiçbir isteğe elle eklenmedi.
+
+===== r3l 40
+  sınıflar {'temiz': 40} kontrast>= 5.28 topbar<= 64
+===== r3e 44
+  sınıflar {'temiz': 44} kontrast>= 5.28 topbar<= 64
+===== r2f 64
+  sınıflar {'temiz': 64} kontrast>= 5.43 topbar<= 64
+===== ran 2
+  sınıflar {'temiz': 2} kontrast>= 5.95 topbar<= 64
+===== rfl 2
+  sınıflar {'temiz': 2} kontrast>= 5.95 topbar<= 64
+
+== G11 (g11f3.py, r3l)
+AYNI  /cleaning-types 360x800-light card Ad:2@1 Kod:1@2 Tür:1@2 Versiyon:1@3 Makine:1@3 Durum:1@4 İşlem:2@5 boşluk=4(ARA)  minH 276
+AYNI  /cleaning-types/details/1 360x800-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 216
+AYNI  /cleaning-types/details/2 360x800-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /users 360x800-light card Ad soyad:2@1 Sicil no:1@2 Roller:1@2 Durum:1@3 İşlem:2@4 boşluk=3(ARA)  minH 204
+AYNI  /facilities 360x800-light card Ad:2@1 Kod:1@2 Hat:1@2 Vardiya:1@3 Durum:1@3 İşlem:2@4   minH 216
+AYNI  /shifts 360x800-light card Ad:2@1 Başlangıç:1@2 Bitiş:1@2 Durum:1@3 İşlem:1@3   minH 168
+AYNI  /machines 360x800-light card Ad:2@1 Kod:1@2 Tesis ve hat:1@2 Durum:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /materials 360x800-light card Ad:2@1 Kod:1@2 Lotlar:1@2 Durum:1@3 İşlem:2@4 boşluk=3(ARA)  minH 216
+AYNI  /facilities/details/1 360x800-light card Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3   minH 164
+AYNI  /materials/details/1 360x800-light card Lot no:2@1 Son kullanma tarihi:1@2 Durum:1@2 İşlem:2@3   minH 168
+AYNI  /cleaning-types 768x1024-light card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types/details/1 768x1024-light card Versiyon:1@1 Durum:1@1 Yayın:2@1 Doküman no:1@2 İşlem:3@2   minH 124
+AYNI  /cleaning-types/details/2 768x1024-light card Versiyon:1@1 Durum:1@1 Yayın:2@1 Doküman no:1@2 İşlem:3@2   minH 136
+AYNI  /users 768x1024-light card Sicil no:1@1 Ad soyad:2@1 Roller:1@1 Durum:1@2 İşlem:3@2   minH 124
+AYNI  /facilities 768x1024-light card Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:2@2   minH 118
+AYNI  /shifts 768x1024-light card Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:3@2   minH 122
+AYNI  /machines 768x1024-light card Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:3@2   minH 138
+AYNI  /materials 768x1024-light card Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:3@2   minH 118
+AYNI  /facilities/details/1 768x1024-light card Kod:1@1 Ad:2@1 Makine:1@1 Durum:1@2 İşlem:3@2   minH 118
+AYNI  /materials/details/1 768x1024-light card Lot no:2@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:4@2   minH 122
+AYNI  /cleaning-types 1024x768-light card Kod:1@1 Ad:2@1 Tür:1@1 Versiyon:2@2 Makine:1@2 Durum:1@2 İşlem:4@3   minH 178
+AYNI  /cleaning-types/details/1 1024x768-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 216
+AYNI  /cleaning-types/details/2 1024x768-light card Yayın:2@1 Versiyon:1@2 Durum:1@2 Doküman no:1@3 İşlem:2@4 boşluk=3(ARA)  minH 236
+AYNI  /users 1024x768-light card Sicil no:1@1 Ad soyad:2@1 Roller:1@1 Durum:1@2 İşlem:3@2   minH 124
+AYNI  /facilities 1024x768-light card Kod:1@1 Ad:2@1 Hat:1@1 Vardiya:1@2 Durum:1@2 İşlem:2@2   minH 118
+AYNI  /shifts 1024x768-light card Ad:2@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@2 İşlem:3@2   minH 122
+AYNI  /machines 1024x768-light card Kod:1@1 Ad:2@1 Tesis ve hat:1@1 Durum:1@2 İşlem:3@2   minH 138
+AYNI  /materials 1024x768-light card Kod:1@1 Ad:2@1 Lotlar:1@1 Durum:1@2 İşlem:3@2   minH 118
+AYNI  /facilities/details/1 1024x768-light card Ad:2@1 Kod:1@2 Makine:1@2 Durum:1@3 İşlem:1@3   minH 164
+AYNI  /materials/details/1 1024x768-light card Lot no:2@1 Son kullanma tarihi:1@2 Durum:1@2 İşlem:2@3   minH 168
+AYNI  /cleaning-types 1440x900-light table Kod:1@1 Ad:1@1 Tür:1@1 Versiyon:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 121
+AYNI  /cleaning-types/details/1 1440x900-light table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /cleaning-types/details/2 1440x900-light table Versiyon:1@1 Durum:1@1 Yayın:1@1 Doküman no:1@1 İşlem:1@1   minH 69
+AYNI  /users 1440x900-light table Sicil no:1@1 Ad soyad:1@1 Roller:1@1 Durum:1@1 İşlem:1@1   minH 56
+AYNI  /facilities 1440x900-light table Kod:1@1 Ad:1@1 Hat:1@1 Vardiya:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /shifts 1440x900-light table Ad:1@1 Başlangıç:1@1 Bitiş:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /machines 1440x900-light table Kod:1@1 Ad:1@1 Tesis ve hat:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /materials 1440x900-light table Kod:1@1 Ad:1@1 Lotlar:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /facilities/details/1 1440x900-light table Kod:1@1 Ad:1@1 Makine:1@1 Durum:1@1 İşlem:1@1   minH 69
+AYNI  /materials/details/1 1440x900-light table Lot no:1@1 Son kullanma tarihi:1@1 Durum:1@1 İşlem:1@1   minH 69
+G11: aynı 40 farklı 0
+
+
+== Tur 3 (2026-11-15)
+Release yayını .qa/f3/build (B3/B4 düzeltmeleri), port 5301 qa.db, 5302 empty.db. Tarayıcının kendi gönderimi; elle kurulmuş gövde ya da belirteç yok.
+
+===== s3l 40
+  sınıflar {'temiz': 40} kontrast>= 5.28 topbar<= 64
+===== s3f 90
+  sınıflar {'temiz': 90} kontrast>= 5.2 topbar<= 64
+G11 (g11f3.py, s3l): 40 ölçüm beklenen imzayla aynı, 0 farklı.

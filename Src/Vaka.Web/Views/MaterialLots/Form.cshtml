@@ -10,7 +10,7 @@
 <partial name="_FormSummary" model='isCreate ? "Lot eklenemedi" : "Lot kaydedilemedi"' />
 
 <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
-    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard aria-labelledby="lot-form-title">
+    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard aria-labelledby="lot-form-title" asp-antiforgery="true">
         <div class="panel-head">
             <h2 id="lot-form-title" class="panel-title">Lot bilgileri</h2>
         </div>
@@ -20,7 +20,7 @@
                 <div><dt>Malzeme</dt><dd>@Model.MaterialName</dd></div>
             </dl>
 
-            <div class="grid gap-5 md:grid-cols-2">
+            <div class="grid gap-5 xl:grid-cols-2">
                 <partial name="_Field" model='("LotNo", "Lot no", Model.LotNo, "text", "off", "Malzeme içinde benzersizdir.", true, false)' />
                 <partial name="_ValueField" model='("ExpiryDate", "Son kullanma tarihi", "date", Model.ExpiryDate?.ToString("yyyy-MM-dd"), "Bu tarihten sonraki gün lot SKT geçmiş sayılır.", "Son kullanma tarihini girin.")' />
             </div>

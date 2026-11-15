@@ -1,0 +1,47 @@
+Faz 3 teslim testi, 2026-11-15. Release yayını .qa/f3/build (çalışma ağacı, HEAD 08c793d). Port 5301 Production, DB .qa/f3/qa.db (App_Data/vaka.db salt okunur yedeği + uygulama üzerinden QA verisi), medya kökü .qa/f3/media. Port 5302 Production, .qa/f3/empty.db (yalnız migration, tanım verisi yok).
+
+== K8 yükleme, sınırlar, tek kopya, 413, /media sunumu (k5.py; HTTP, geçerli belirteç elle eklendi)
+taslak 3 adÄ±mlar [8, 9, 10, 11, 12, 13]
+== K8 yÃ¼kleme (medya kÃ¶kÃ¼ Ã¶nce: 0 dosya)
+  JPEG                                  1383556 bayt -> 302 /procedure-versions/edit/3 
+  PNG                                       161 bayt -> 302 /procedure-versions/edit/3 
+  WebP                                       84 bayt -> 302 /procedure-versions/edit/3 
+  MP4                                     12928 bayt -> 302 /procedure-versions/edit/3 
+  GIF (izinsiz biÃ§im)                       129 bayt -> 200  | hata formu /procedure-versions/upload-media/9 | Dosya biÃ§imi desteklenmiyor. Ä°zinli biÃ§imler: JPEG, PNG, WebP, MP4.
+  GIF iÃ§erikli .png                         129 bayt -> 200  | hata formu /procedure-versions/upload-media/9 | Dosya iÃ§eriÄŸi uzantÄ±sÄ±yla uyuÅŸmuyor.
+  PNG iÃ§erik .jpg uzantÄ±                    161 bayt -> 200  | hata formu /procedure-versions/upload-media/9 | Dosya iÃ§eriÄŸi uzantÄ±sÄ±yla uyuÅŸmuyor.
+  JPEG iÃ§erik .mp4 uzantÄ±               1383556 bayt -> 200  | hata formu /procedure-versions/upload-media/9 | Dosya iÃ§eriÄŸi uzantÄ±sÄ±yla uyuÅŸmuyor.
+  PNG 10 485 760                       10485760 bayt -> 302 /procedure-versions/edit/3 
+  PNG 10 485 761                       10485761 bayt -> 200  | hata formu /procedure-versions/upload-media/10 | FotoÄŸraf en Ã§ok 10 MB olabilir.
+  JPEG 10 485 760                      10485760 bayt -> 302 /procedure-versions/edit/3 
+  MP4 104 857 600                     104857600 bayt -> 302 /procedure-versions/edit/3 
+  MP4 104 857 601                     104857601 bayt -> 200  | hata formu /procedure-versions/upload-media/11 | Video en Ã§ok 100 MB olabilir.
+  aynÄ± PNG ikinci adÄ±ma                     161 bayt -> 302 /procedure-versions/edit/3 
+   diskte dosya 7 -> 7 | aynÄ± Ã¶zetli satÄ±r: [(2, 2)]
+  ayar foto 1 MB: JPEG 1 383 556        1383556 bayt -> 200  | hata formu /procedure-versions/upload-media/12 | FotoÄŸraf en Ã§ok 1 MB olabilir.
+   ayar 1 iken dÃ¼zenleyici sÄ±nÄ±rÄ±: ['1'] ['FotoÄŸraf (JPEG, PNG, WebP) en Ã§ok 1 MB']
+   ayar geri: [(10,)]
+   StepMedia satÄ±rlarÄ±: [(1, 8, 1, 'ornek.jpg', 'image/jpeg', 1383556), (2, 8, 1, 'ornek.png', 'image/png', 161), (3, 8, 1, 'ornek.webp', 'image/webp', 84), (4, 9, 2, 'ornek.mp4', 'video/mp4', 12928), (5, 10, 1, 'png-10485760.png', 'image/png', 10485760), (6, 10, 1, 'jpg-10485760.jpg', 'image/jpeg', 10485760), (7, 11, 2, 'mp4-104857600.mp4', 'video/mp4', 104857600), (8, 12, 1, 'ornek2-ayni.png', 'image/png', 161)]
+   medya kÃ¶kÃ¼: [('0eed79674f164f0533a809bdee2bbf2bbba92f811ce1885d3054989473793b9b', 10485760), ('44de41569b2cbd7812b994ce8c243027122e59ff7c1854a8891b39abbd20dd84', 161), ('5d6798f12029aee65e57aa32265ab3c87f77e106e233cf5dd7d4619561645438', 12928), ('73e9426ba1b7be4c6a89c47d0db71247d6e7ad77abcf6fe0c0d53783c6aedd06', 104857600), ('76f4dad25dce43cc7cef19596373d628ba7b2d4348f372406a12ff470a3f1fa8', 10485760), ('c6b1b40d7dffd93ae7edd42db6f7f94be310b814ed56f9d5bc26e6425c8089c2', 84), ('d54262032574b15ccf541e40fa13475ffb39d8682c19383e917f3ed5e8bbca71', 1383556)]
+== 413 (gÃ¶vde sÄ±nÄ±rÄ± Ã¼stÃ¼)
+  106 MB istek -> 413 | baÅŸlÄ±k: ['Bir hata olu&#x15F;tu - Vaka'] | ham sunucu metni yok: True
+== /media sunumu
+  Range 0-99 -> 206 bytes 0-99/12928 bytes video/mp4 no-cache,no-store 100
+  PNG tam -> 200 image/png bytes
+  taslak medyasÄ± op -> 404 
+  taslak medyasÄ± au -> 404 
+  oturumsuz /media -> 302 http://127.0.0.1:5301/account/login?ReturnUrl=%2Fmedia%2F2
+
+== Tarayıcıdan yükleme ve önizleme (up.js, Chromium 1440; düzenleyici formlarında belirteç olmadığı için sayfadaki geçerli belirteç forma eklenerek, yalnız davranış ölçümü)
+1 WebP yükle (fetch): POST /procedure-versions/upload-media/18 302 | medya sayısı 8 -> 9
+2 PNG 10 485 761 (JS ön denetim): istek 0 | ileti: Fotoğraf en çok 10 MB olabilir.
+3 GIF içerikli .png (sunucu): POST /procedure-versions/upload-media/18 200 | metin="Dosya içeriği uzantısıyla uyuşmuyor." form=/procedure-versions/upload-media/18 odakta=true
+4 medya önizleme: diyalog açık
+  Esc sonrası: kapandı; odak media-thumb
+
+== Video ileri sarma (vid.js, Google Chrome, H.264; ornek.mp4 Chrome MediaRecorder ile üretildi, 12 928 bayt, 5,97 sn)
+video /media/4: {"duration":5.971667,"seekable":"0.00-5.97","seekTo":4,"currentTime":4,"seekMs":3,"readyState":4}
+video /media/7: {"duration":5.971667,"seekable":"0.00-5.97","seekTo":4,"currentTime":4,"seekMs":2,"readyState":4}
+media yanıtları (durum, Range, Content-Range): 200 -  || 200 -  || 200 -  || 200 -  || 206 bytes=0- bytes 0-12927/12928 || 206 bytes=0- bytes 0-104857599/104857600
+
+Test dosyaları (.qa/f3/files): ornek.jpg (Windows duvar kağıdı kopyası, 1 383 556 bayt), ornek.png/webp/gif ve gif-icerik.png (PIL), sınır dosyaları geçerli imza + sıfır dolgu.

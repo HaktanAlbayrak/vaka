@@ -1,0 +1,128 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Procedures
+@model CleaningTypeListViewModel
+@{
+    ViewData["Title"] = "Temizlik tipleri";
+    ViewData["Lead"] = "Temizlik tiplerini ve her tipin prosedür versiyonlarını yönetin. Planlı tip makinelerle eşlenir, acil tip eşleme almaz.";
+    ViewData["NavKey"] = "cleaning-types";
+    ViewData["StatusMessage"] = Model.StatusMessage;
+
+    var isFiltered = Model.Kind is not null || Model.ShowInactive;
+}
+
+@section Actions {
+    <a class="btn btn-primary" href="/cleaning-types/create">
+        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#plus" /></svg>
+        Temizlik tipi ekle
+    </a>
+}
+
+<form method="get" action="/cleaning-types" class="panel mb-5" aria-label="Temizlik tipi filtresi" data-busy-form>
+    <div class="grid gap-4 p-4 md:grid-cols-2 md:p-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] xl:items-end">
+        <div class="field">
+            <label class="field-label" for="kind">Tür</label>
+            <select id="kind" name="kind" class="input">
+                <option value="">Tüm türler</option>
+                @foreach (var option in Model.KindOptions)
+                {
+                    <option value="@option.Id" selected="@(Model.Kind is not null && (int)Model.Kind.Value == option.Id)">@option.Label</option>
+                }
+            </select>
+        </div>
+        <label class="choice min-h-12">
+            <input type="checkbox" name="showInactive" value="true" checked="@Model.ShowInactive" />
+            <span class="font-bold">Pasif tipleri de göster</span>
+        </label>
+        <div class="flex flex-wrap gap-2 md:col-span-2 xl:col-span-1">
+            <button type="submit" class="btn btn-primary min-h-12">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#funnel" /></svg>
+                Filtrele
+            </button>
+            <a class="btn btn-secondary min-h-12" href="/cleaning-types">Filtreleri temizle</a>
+        </div>
+    </div>
+</form>
+
+<partial name="_ListSkeleton" />
+
+<div data-loading-target>
+    @if (!Model.Items.Any())
+    {
+        if (isFiltered)
+        {
+            <partial name="_State" model='("empty", "search", "Filtreye uyan temizlik tipi yok", "Türü değiştirin ya da pasif tipleri de göstermeyi deneyin.", "Filtreleri temizle", "/cleaning-types")' />
+        }
+        else
+        {
+            <partial name="_State" model='("empty", "clipboard-list", "Henüz temizlik tipi yok", "Kayıt açarken tip seçilir. Önce tipi tanımlayın, sonra prosedürünü taslakta hazırlayıp yayınlayın.", "Temizlik tipi ekle", "/cleaning-types/create")' />
+        }
+    }
+    else
+    {
+        <div class="panel">
+            <table class="data-table table-stack">
+                <caption class="sr-only">Temizlik tipleri, @Model.Items.Length kayıt</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Kod</th>
+                        <th scope="col">Ad</th>
+                        <th scope="col">Tür</th>
+                        <th scope="col">Versiyon</th>
+                        <th scope="col">Makine</th>
+                        <th scope="col">Durum</th>
+                        <th scope="col">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td data-label="Kod"><span class="record-no text-sm">@item.Code</span></td>
+                            <td data-label="Ad" class="max-w-xs break-words font-semibold stack-wide stack-lead">@item.Name</td>
+                            <td data-label="Tür"><partial name="_LabelBadge" model='(item.KindLabel, item.Kind == CleaningTypeKind.Planned ? "kind.planned" : "kind.emergency")' /></td>
+                            <td data-label="Versiyon" class="md:max-xl:col-span-2">
+                                <div class="space-y-1">
+                                    @if (item.CurrentVersionNo is not null)
+                                    {
+                                        <p><span class="chip">Yürürlükte <span class="mono">v@(item.CurrentVersionNo)</span></span></p>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted">Yürürlükte versiyon yok</p>
+                                    }
+                                    @if (item.DraftVersionNo is not null)
+                                    {
+                                        <p><span class="chip">Taslak <span class="mono">v@(item.DraftVersionNo)</span></span></p>
+                                    }
+                                </div>
+                            </td>
+                            <td data-label="Makine">
+                                @if (item.Kind == CleaningTypeKind.Planned)
+                                {
+                                    <span class="mono">@item.MachineCount makine</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Eşleme yok</span>
+                                }
+                            </td>
+                            <td data-label="Durum"><partial name="_LabelBadge" model='(item.IsActive ? "Aktif" : "Pasif", item.IsActive ? "type.active" : "type.inactive")' /></td>
+                            <td data-label="İşlem" class="cell-action max-md:col-span-2 md:max-xl:col-span-4">
+                                <div class="action-row">
+                                    <a class="btn btn-secondary" href="/cleaning-types/details/@item.Id" aria-label="@item.Name tipinin detayını aç">
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#list" /></svg>
+                                        Detay
+                                    </a>
+                                    <a class="btn btn-secondary" href="/cleaning-types/edit/@item.Id" aria-label="@item.Name tipini düzenle">
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
+                                        Düzenle
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

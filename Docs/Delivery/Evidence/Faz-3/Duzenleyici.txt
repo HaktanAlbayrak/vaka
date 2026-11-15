@@ -1,0 +1,291 @@
+Faz 3 teslim testi, 2026-11-15. Release yayını .qa/f3/build (çalışma ağacı), port 5301 Production, DB .qa/f3/qa.db, Yönetici 1001.
+
+== 1. Antiforgery belirteci form denetimi (sayfa HTML'i, Yönetici oturumu; /account/logout formları sayılmadı)
+/procedure-versions/edit/5   POST formu 48, belirteçli 0 (update-header, add-phase, update-phase, move-phase, remove-phase, add-step, update-step,
+                             move-step, remove-step, upload-media, remove-media, publish formlarının hepsi belirteçsiz)
+/cleaning-types/details/5    POST formu 1 (create-draft), belirteçsiz
+/cleaning-types/create, /cleaning-types/edit/1, /cleaning-types/machines/1: 1 form, belirteçli (action özniteliği yok, form yardımcısı belirteci kendisi ekliyor)
+/facilities/create, /machines/edit/1, /users/edit/4 (4 form), /account/security (2 form): belirteçli
+Kaynak: action özniteliği yazılı ve asp-antiforgery="true" taşımayan POST formları
+  Views/ProcedureVersions/Edit.cshtml: 13 form tanımı (satır 38, 100, 108, 121, 146, 177, 185, 199, 215, 233, 250, 272, 334)
+  Views/Shared/_MediaList.cshtml:26 (remove-media)
+  Views/CleaningTypes/Details.cshtml:38 ve :58 (create-draft)
+  Karşılaştırma: Views/Account/Security.cshtml:12, :29, Views/Users/Form.cshtml:133, :153, :174, Views/Shared/_SwitchUser.cshtml:24, :33 asp-antiforgery="true" taşıyor.
+
+== 2. JS kapalı gerçek tarayıcı gönderimi (jsoff.js, Chromium, 1024)
+1 tip 6 "Yeni taslak aç" tıklandı -> Bir hata oluştu - Vaka | /procedure-versions/create-draft
+2 taslak 5 "Fazı ekle" -> Bir hata oluştu - Vaka | /procedure-versions/add-phase/5
+3 faz 12 yukarı -> Bir hata oluştu - Vaka | /procedure-versions/move-phase/12
+4 yayın (yanlış PIN) -> Bir hata oluştu - Vaka | /procedure-versions/publish/5
+POST yanıtları: POST /procedure-versions/create-draft 400 || POST /procedure-versions/add-phase/5 400 || POST /procedure-versions/move-phase/12 400 || POST /procedure-versions/publish/5 400
+DB: tip 6 için taslak oluşmadı (0 versiyon); taslak 5'in fazları değişmedi.
+
+== 3. JS açık, fetch (ed.js, Chromium 1024). Önce belirteç eklenmeden; ardından yalnız davranışı ölçmek için her gönderimden önce
+sayfadaki geçerli belirteç (logout formundan) düzenleyici formlarına eklendi. Bu ikinci bölüm kullanıcının yaşadığı akış değildir.
+A belirteç enjekte edilmeden fetch: POST /procedure-versions/add-phase/5 400 fetch | form içi ileti: İşlem tamamlanamadı. Bağlantıyı kontrol edip tekrar deneyin.
+-- bundan sonra her gönderimden önce sayfadaki geçerli belirteç formlara eklenerek (yalnız davranış ölçümü) --
+0 açılış: panel {"disabled":false,"blockers":[],"hazir":true,"marker":"ayni-sayfa"} gezinme=2
+1 fazı ekle (min boş): panel {"disabled":true,"blockers":["Faz 4 adımı yok","Faz 4 minimum süresi yok"],"hazir":false,"marker":"ayni-sayfa"} gezinme=2 odak phases-title [Fazlar ve adımlar] halka=3px none form=-
+  yeni faz id 14
+2 adım ekle: panel {"disabled":true,"blockers":["Faz 4 minimum süresi yok"],"hazir":false,"marker":"ayni-sayfa"} gezinme=2 odak phase-14 [4 Faz 4: QA tarayıcı fazı Minimum süre yok Faz aya] halka=3px none form=-
+3 minimum 7 dakika: panel {"disabled":false,"blockers":[],"hazir":true,"marker":"ayni-sayfa"} gezinme=2 odak phase-14 [4 Faz 4: QA tarayıcı fazı Minimum 7 dakika Faz aya] halka=3px none form=-
+4 Shift+Tab ile phase-14-up: 4 adımda; odak phase-14-up [Faz 4 fazını yukarı taşı] halka=3px solid form=/procedure-versions/move-phase/14
+  Enter (yukarı taşı) sonrası odak phase-14-up [Faz 3 fazını yukarı taşı] halka=3px solid form=/procedure-versions/move-phase/14 gezinme=2 işaret=ayni-sayfa
+  faz sırası ["Hazırlık","Temizlik","QA tarayıcı fazı","Kontrol"]
+5 boşluklu faz adı (fetch): metin="Faz adı girin." form=/procedure-versions/add-phase/5 görünür=true bölüm açık=- role=alert odakta=true gezinme=2
+6 faz adı boşluk (fetch): metin="Faz adı girin." form=/procedure-versions/update-phase/14 görünür=true bölüm açık=true role=alert odakta=true
+7 QA fazı çıkarıldı: panel {"disabled":false,"blockers":[],"hazir":true,"marker":"ayni-sayfa"} odak phases-title [Fazlar ve adımlar] halka=3px none form=- gezinme=2
+istekler: POST /procedure-versions/add-phase/5 400 fetch || POST /procedure-versions/add-phase/5 302 fetch || GET /procedure-versions/edit/5 200 fetch || POST /procedure-versions/add-step/14 302 fetch || GET /procedure-versions/edit/5 200 fetch || POST /procedure-versions/update-phase/14 302 fetch || GET /procedure-versions/edit/5 200 fetch || POST /procedure-versions/move-phase/14 302 fetch || GET /procedure-versions/edit/5 200 fetch || POST /procedure-versions/add-phase/5 200 fetch || POST /procedure-versions/update-phase/14 200 fetch || POST /procedure-versions/remove-phase/14 302 fetch || GET /procedure-versions/edit/5 200 fetch
+konsol hatası: Failed to load resource: the server responded with a status of 400 (Bad Request); ana çerçeve gezinmesi 2 (1 = yalnız açılış)
+Görüntü: Duzenleyici-400.png (belirteçsiz fetch sonrası "Faz ekle" formundaki ileti).
+
+
+== Tur 2 (2026-11-15)
+Release yayını .qa/f3/build (çalışma ağacı, B1/B2 düzeltmeleri), port 5301 qa.db, 5302 empty.db. Bu bölümde belirteç hiçbir isteğe elle eklenmedi.
+
+== G5a form belirteci sayımı (g5a.py; Faz 1-3 sayfaları, Yönetici, Süper admin, Operatör, Denetçi, ilk giriş, oturumsuz)
+m1   /                                          200 POST formu   3, belirteçsiz 0 
+m1   /account/security                          200 POST formu   5, belirteçsiz 0 
+m1   /users                                     200 POST formu   3, belirteçsiz 0 
+m1   /users/create                              200 POST formu   4, belirteçsiz 0 
+m1   /users/edit/3                              200 POST formu   6, belirteçsiz 0 
+m1   /users/edit/4                              200 POST formu   7, belirteçsiz 0 
+m1   /users/deactivate/3                        200 POST formu   4, belirteçsiz 0 
+m1   /facilities                                200 POST formu   3, belirteçsiz 0 
+m1   /facilities?showInactive=true              200 POST formu   3, belirteçsiz 0 
+m1   /facilities/create                         200 POST formu   4, belirteçsiz 0 
+m1   /facilities/edit/1                         200 POST formu   4, belirteçsiz 0 
+m1   /facilities/details/1                      200 POST formu   3, belirteçsiz 0 
+m1   /facilities/details/3                      200 POST formu   3, belirteçsiz 0 
+m1   /lines/create?facilityId=1                 200 POST formu   4, belirteçsiz 0 
+m1   /lines/edit/1                              200 POST formu   4, belirteçsiz 0 
+m1   /shifts                                    200 POST formu   3, belirteçsiz 0 
+m1   /shifts?facilityId=1                       200 POST formu   3, belirteçsiz 0 
+m1   /shifts/create?facilityId=1                200 POST formu   4, belirteçsiz 0 
+m1   /shifts/edit/1                             200 POST formu   4, belirteçsiz 0 
+m1   /machines                                  200 POST formu   3, belirteçsiz 0 
+m1   /machines?showRetired=true                 200 POST formu   3, belirteçsiz 0 
+m1   /machines/create                           200 POST formu   4, belirteçsiz 0 
+m1   /machines/create?facilityId=1              200 POST formu   4, belirteçsiz 0 
+m1   /machines/edit/1                           200 POST formu   4, belirteçsiz 0 
+m1   /machines/edit/4                           200 POST formu   4, belirteçsiz 0 
+m1   /machines/retire/1                         200 POST formu   4, belirteçsiz 0 
+m1   /machines/retire/4                         200 POST formu   4, belirteçsiz 0 
+m1   /materials                                 200 POST formu   3, belirteçsiz 0 
+m1   /materials/create                          200 POST formu   4, belirteçsiz 0 
+m1   /materials/edit/1                          200 POST formu   4, belirteçsiz 0 
+m1   /materials/details/1                       200 POST formu   3, belirteçsiz 0 
+m1   /material-lots/create?materialId=1         200 POST formu   4, belirteçsiz 0 
+m1   /material-lots/edit/1                      200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types                            200 POST formu   3, belirteçsiz 0 
+m1   /cleaning-types?kind=1&showInactive=true   200 POST formu   3, belirteçsiz 0 
+m1   /cleaning-types/create                     200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/edit/1                     200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/edit/2                     200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/machines/1                 200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/machines/3                 200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/details/1                  200 POST formu   3, belirteçsiz 0 
+m1   /cleaning-types/details/2                  200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/details/3                  200 POST formu   5, belirteçsiz 0 
+m1   /cleaning-types/details/4                  200 POST formu   5, belirteçsiz 0 
+m1   /cleaning-types/details/5                  200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/details/6                  200 POST formu   5, belirteçsiz 0 
+m1   /procedure-versions/details/1              200 POST formu   3, belirteçsiz 0 
+m1   /procedure-versions/details/3              200 POST formu   3, belirteçsiz 0 
+m1   /procedure-versions/details/4              200 POST formu   3, belirteçsiz 0 
+m1   /procedure-versions/edit/5                 200 POST formu  52, belirteçsiz 0 
+sa   /                                          302 POST formu   0, belirteçsiz 0 
+sa   /users                                     200 POST formu   3, belirteçsiz 0 
+sa   /users/create                              200 POST formu   4, belirteçsiz 0 
+sa   /users/edit/2                              200 POST formu   6, belirteçsiz 0 
+sa   /users/deactivate/2                        200 POST formu   4, belirteçsiz 0 
+sa   /account/security                          200 POST formu   5, belirteçsiz 0 
+op   /                                          200 POST formu   3, belirteçsiz 0 
+op   /account/security                          200 POST formu   5, belirteçsiz 0 
+au   /                                          200 POST formu   3, belirteçsiz 0 
+au   /procedure-versions/details/3              200 POST formu   3, belirteçsiz 0 
+fl   /account/first-login                       200 POST formu   2, belirteçsiz 0 
+anon /account/login                             200 POST formu   1, belirteçsiz 0 
+anon /account/access-denied                     200 POST formu   0, belirteçsiz 0 
+m1   /cleaning-types (5302 boş) 200 POST formu 3
+TOPLAM: 63 sayfa, 278 POST formu, belirteçsiz 0
+
+== JS açık, gerçek form gönderimi (uion.js, Chromium 1024, tip 5 QAK1D, "Yeni taslak aç" başlık formu; durum = role=status metni, yayin = yayın düğmesi ve engeller, isaret = sayfa yenilenmediyse "ayni-sayfa")
+tip 5 detayında "Yeni taslak aç" formu 1; kullanılan: baş
+Yeni taslak aç                       POST: 302 /procedure-versions/create-draft | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+Üst bilgi kaydet                     POST: 302 /procedure-versions/update-header/6 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Üst bilgi kaydedildi.","odak":"editor-header none","yayin":"etkin []","isaret":"ayni-sayfa"}
+Faz ekle (min 5)                     POST: 302 /procedure-versions/add-phase/6 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Faz eklendi.","odak":"phases-title none","yayin":"devre dışı [Faz 3 adımı yok]","isaret":"ayni-sayfa"}
+Faz ekle (min boş)                   POST: 302 /procedure-versions/add-phase/6 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Faz eklendi.","odak":"phases-title none","yayin":"devre dışı [Faz 3 adımı yok; Faz 4 adımı yok; Faz 4 minimum süresi yok]","isaret":"ayni-sayfa"}
+Adım ekle (Faz 1, 1)                 POST: 302 /procedure-versions/add-step/19 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Adım eklendi.","odak":"phase-19 none","yayin":"devre dışı [Faz 4 adımı yok; Faz 4 minimum süresi yok]","isaret":"ayni-sayfa"}
+Adım ekle (Faz 1, 2)                 POST: 302 /procedure-versions/add-step/19 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Adım eklendi.","odak":"phase-19 none","yayin":"devre dışı [Faz 4 adımı yok; Faz 4 minimum süresi yok]","isaret":"ayni-sayfa"}
+Adım ekle (Faz 2)                    POST: 302 /procedure-versions/add-step/20 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Adım eklendi.","odak":"phase-20 none","yayin":"devre dışı [Faz 4 minimum süresi yok]","isaret":"ayni-sayfa"}
+Faz düzenle (Faz 2 min 3)            POST: 302 /procedure-versions/update-phase/20 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Faz güncellendi.","odak":"phase-20 none","yayin":"etkin []","isaret":"ayni-sayfa"}
+Adım düzenle                         POST: 302 /procedure-versions/update-step/30 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Adım güncellendi.","odak":"step-30 none","yayin":"etkin []","isaret":"ayni-sayfa"}
+Adım yukarı taşı (Adım 2)            POST: 302 /procedure-versions/move-step/31 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Adım taşındı.","odak":"step-31-down none","yayin":"etkin []","isaret":"ayni-sayfa"}
+Adım aşağı taşı (Adım 2)             POST: 302 /procedure-versions/move-step/31 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Adım taşındı.","odak":"step-31-up none","yayin":"etkin []","isaret":"ayni-sayfa"}
+Faz yukarı taşı (Faz 2)              POST: 302 /procedure-versions/move-phase/20 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Faz taşındı.","odak":"phase-20-up none","yayin":"etkin []","isaret":"ayni-sayfa"}
+Faz aşağı taşı (Faz 2)               POST: 302 /procedure-versions/move-phase/20 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Faz taşındı.","odak":"phase-20-up none","yayin":"etkin []","isaret":"ayni-sayfa"}
+Fotoğraf yükle (PNG)                 POST: 302 /procedure-versions/upload-media/30 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Medya eklendi.","odak":"step-30 none","yayin":"etkin []","isaret":"ayni-sayfa"}
+Video yükle (MP4)                    POST: 302 /procedure-versions/upload-media/30 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Medya eklendi.","odak":"step-30 none","yayin":"etkin []","isaret":"ayni-sayfa"}
+Fotoğraf 10 485 761 bayt             POST: istek yok | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Medya eklendi.","odak":"step-30-file none","yayin":"etkin []","isaret":"ayni-sayfa"}
+GIF içerikli .png                    POST: 200 /procedure-versions/upload-media/30 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"Dosya içeriği uzantısıyla uyuşmuyor. @/procedure-versions/upload-media/30","ag":"","durum":"Dosya içeriği uzantısıyla uyuşmuyor.","odak":"data-editor-error none","yayin":"etkin []","isaret":"ayni-sayfa"}
+  adım 30 medya çıkarma formu: null
+Adım çıkar (Adım 2)                  POST: 302 /procedure-versions/remove-step/31 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Adım çıkarıldı.","odak":"phase-19 none","yayin":"etkin []","isaret":"ayni-sayfa"}
+Faz ekle (silinecek)                 POST: 302 /procedure-versions/add-phase/6 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Faz eklendi.","odak":"phases-title none","yayin":"devre dışı [Faz 5 adımı yok]","isaret":"ayni-sayfa"}
+Faz çıkar                            POST: 302 /procedure-versions/remove-phase/22 | gezinme +0 | url /procedure-versions/edit/6 | {"hata":"","ag":"","durum":"Faz çıkarıldı.","odak":"phases-title none","yayin":"etkin []","isaret":"ayni-sayfa"}
+Yayın yanlış PIN                     POST: 200 /procedure-versions/publish/6 | gezinme +1 | url /procedure-versions/publish/6 | {"hata":"PIN hatalı. @/procedure-versions/publish/6","ag":"","durum":"","odak":"data-editor-error solid","yayin":"etkin []","isaret":"-"}
+Yayın doğru PIN                      POST: 302 /procedure-versions/publish/6 | gezinme +1 | url /cleaning-types/details/5 | {"hata":"","ag":"","durum":"v2 yayınlandı.","odak":"BODY none","yayin":"-","isaret":"-"}
+V=6 P1=19 P2=20 S1=30 S2=31 P3=22
+400 yanıtı: 0 / 21 POST
+konsol hatası: 0
+
+== JS kapalı, tam sayfa (uioff.js, tip 4 QAK1AX, boş durumdaki "Yeni taslak aç" formu)
+tip 4 detayında "Yeni taslak aç" formu 2; kullanılan: boş durum
+Yeni taslak aç                       POST: 302 /procedure-versions/create-draft | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"devre dışı [En az bir faz gerekir]","isaret":"-"}
+Üst bilgi kaydet                     POST: 302 /procedure-versions/update-header/7 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"devre dışı [En az bir faz gerekir]","isaret":"-"}
+Faz ekle (min 5)                     POST: 302 /procedure-versions/add-phase/7 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"devre dışı [Faz 1 adımı yok]","isaret":"-"}
+Faz ekle (min boş)                   POST: 302 /procedure-versions/add-phase/7 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"devre dışı [Faz 1 adımı yok; Faz 2 adımı yok; Faz 2 minimum süresi yok]","isaret":"-"}
+Adım ekle (Faz 1, 1)                 POST: 302 /procedure-versions/add-step/17 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"devre dışı [Faz 2 adımı yok; Faz 2 minimum süresi yok]","isaret":"-"}
+Adım ekle (Faz 1, 2)                 POST: 302 /procedure-versions/add-step/17 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"devre dışı [Faz 2 adımı yok; Faz 2 minimum süresi yok]","isaret":"-"}
+Adım ekle (Faz 2)                    POST: 302 /procedure-versions/add-step/18 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"devre dışı [Faz 2 minimum süresi yok]","isaret":"-"}
+Faz düzenle (Faz 2 min 3)            POST: 302 /procedure-versions/update-phase/18 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+Adım düzenle                         POST: 302 /procedure-versions/update-step/27 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+Adım yukarı taşı (Adım 2)            POST: 302 /procedure-versions/move-step/28 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+Adım aşağı taşı (Adım 2)             POST: 302 /procedure-versions/move-step/28 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+Faz yukarı taşı (Faz 2)              POST: 302 /procedure-versions/move-phase/18 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+Faz aşağı taşı (Faz 2)               POST: 302 /procedure-versions/move-phase/18 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+Fotoğraf yükle (PNG)                 POST: 302 /procedure-versions/upload-media/27 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+Video yükle (MP4)                    POST: 302 /procedure-versions/upload-media/27 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+Fotoğraf 10 485 761 bayt             POST: 200 /procedure-versions/upload-media/27 | gezinme +1 | url /procedure-versions/upload-media/27 | {"hata":"Fotoğraf en çok 10 MB olabilir. @/procedure-versions/upload-media/27","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+GIF içerikli .png                    POST: 200 /procedure-versions/upload-media/27 | gezinme +1 | url /procedure-versions/upload-media/27 | {"hata":"Dosya içeriği uzantısıyla uyuşmuyor. @/procedure-versions/upload-media/27","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+  adım 27 medya çıkarma formu: null
+Adım çıkar (Adım 2)                  POST: 302 /procedure-versions/remove-step/28 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+Faz ekle (silinecek)                 POST: 302 /procedure-versions/add-phase/7 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"devre dışı [Faz 3 adımı yok]","isaret":"-"}
+Faz çıkar                            POST: 302 /procedure-versions/remove-phase/21 | gezinme +1 | url /procedure-versions/edit/7 | {"hata":"","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+Yayın yanlış PIN                     POST: 200 /procedure-versions/publish/7 | gezinme +1 | url /procedure-versions/publish/7 | {"hata":"PIN hatalı. @/procedure-versions/publish/7","ag":"","durum":"","odak":"BODY none","yayin":"etkin []","isaret":"-"}
+Yayın doğru PIN                      POST: 302 /procedure-versions/publish/7 | gezinme +1 | url /cleaning-types/details/4 | {"hata":"","ag":"","durum":"v1 yayınlandı.","odak":"BODY none","yayin":"-","isaret":"-"}
+V=7 P1=17 P2=18 S1=27 S2=28 P3=21
+400 yanıtı: 0 / 22 POST
+konsol hatası: 0
+
+== Ek: durum iletisi, medya çıkarma ve JS ön denetimi (st.js)
+JS false faz ekle: 302 /procedure-versions/add-phase/8 | role=status: ["DIV=","sr-only="] | görünür ileti: Faz eklendi.
+JS false medya çıkar /procedure-versions/remove-media/9: 302 /procedure-versions/remove-media/9 | medya formu 9 -> 8 | odak BODY
+JS true faz ekle: 302 /procedure-versions/add-phase/8 | role=status: ["DIV=","sr-only=Faz eklendi."] | görünür ileti: Faz eklendi.
+JS true medya çıkar /procedure-versions/remove-media/10: 302 /procedure-versions/remove-media/10 | medya formu 8 -> 7 | odak step-18
+JS ön denetim 10 485 761: istek 0 | ileti: Fotoğraf en çok 10 MB olabilir. (odakta=true)
+
+== Klavye ve PL-53 (ed2.js, 1024, belirteç eklenmeden)
+A fetch (kendi belirteci): GET /procedure-versions/edit/5 200 fetch | form içi ileti: yok
+-- tur 2: belirteç eklenmiyor, formların kendi belirteci --
+0 açılış: panel {"disabled":true,"blockers":["Faz 4 adımı yok","Faz 4 minimum süresi yok"],"hazir":false,"marker":"ayni-sayfa"} gezinme=2
+1 fazı ekle (min boş): panel {"disabled":true,"blockers":["Faz 4 adımı yok","Faz 4 minimum süresi yok","Faz 5 adımı yok","Faz 5 minimum süresi yok"],"hazir":false,"marker":"ayni-sayfa"} gezinme=2 odak phases-title [Fazlar ve adımlar] halka=3px none form=-
+  yeni faz id 27
+2 adım ekle: panel {"disabled":true,"blockers":["Faz 4 adımı yok","Faz 4 minimum süresi yok","Faz 5 minimum süresi yok"],"hazir":false,"marker":"ayni-sayfa"} gezinme=2 odak phase-27 [5 Faz 5: QA tarayıcı fazı Minimum süre yok Faz aya] halka=3px none form=-
+3 minimum 7 dakika: panel {"disabled":true,"blockers":["Faz 4 adımı yok","Faz 4 minimum süresi yok"],"hazir":false,"marker":"ayni-sayfa"} gezinme=2 odak phase-27 [5 Faz 5: QA tarayıcı fazı Minimum 7 dakika Faz aya] halka=3px none form=-
+4 Shift+Tab ile phase-27-up: 4 adımda; odak phase-27-up [Faz 5 fazını yukarı taşı] halka=3px solid form=/procedure-versions/move-phase/27
+  Enter (yukarı taşı) sonrası odak phase-27-up [Faz 4 fazını yukarı taşı] halka=3px solid form=/procedure-versions/move-phase/27 gezinme=2 işaret=ayni-sayfa
+  faz sırası ["Hazırlık","Temizlik","Kontrol","QA tarayıcı fazı","QA belirteçsiz deneme"]
+5 boşluklu faz adı (fetch): metin="Faz adı girin." form=/procedure-versions/add-phase/5 görünür=true bölüm açık=- role=alert odakta=true gezinme=2
+6 faz adı boşluk (fetch): metin="Faz adı girin." form=/procedure-versions/update-phase/27 görünür=true bölüm açık=true role=alert odakta=true
+7 QA fazı çıkarıldı: panel {"disabled":true,"blockers":["Faz 4 adımı yok","Faz 4 minimum süresi yok"],"hazir":false,"marker":"ayni-sayfa"} odak phases-title [Fazlar ve adımlar] halka=3px none form=- gezinme=2
+istekler: POST /procedure-versions/add-phase/5 302 fetch || GET /procedure-versions/edit/5 200 fetch || POST /procedure-versions/add-phase/5 302 fetch || GET /procedure-versions/edit/5 200 fetch || POST /procedure-versions/add-step/27 302 fetch || GET /procedure-versions/edit/5 200 fetch || POST /procedure-versions/update-phase/27 302 fetch || GET /procedure-versions/edit/5 200 fetch || POST /procedure-versions/move-phase/27 302 fetch || GET /procedure-versions/edit/5 200 fetch || POST /procedure-versions/add-phase/5 200 fetch || POST /procedure-versions/update-phase/27 200 fetch || POST /procedure-versions/remove-phase/27 302 fetch || GET /procedure-versions/edit/5 200 fetch
+konsol hatası: 0; ana çerçeve gezinmesi 2 (1 = yalnız açılış)
+
+== Veritabanı sonucu
+Versiyonlar (tip 4 JS kapalı akış, tip 5 JS açık akış): [(7, 4, 1, 2, 0, 'DOK-UI-K', 2), (4, 5, 1, 3, 1, 'DOK-QA-1', 2), (6, 5, 2, 2, 0, 'DOK-UI-A', 2)]
+versiyon 4
+   faz 1 Faz A güncel 600 [(1, 'Adım A2', [])]
+   faz 2 Faz C 120 [(1, 'Adım C1', [])]
+versiyon 6
+   faz 1 Faz A güncel 600 [(1, 'Adım A2', [])]
+   faz 2 Faz C 120 [(1, 'Adım C1', [])]
+   faz 3 UI Faz 1 300 [(1, 'UI Adım 1 güncel', [('ornek.png', 1), ('ornek.mp4', 2)])]
+   faz 4 UI Faz 2 180 [(1, 'UI Adım 3', [])]
+versiyon 7
+   faz 1 UI Faz 1 300 [(1, 'UI Adım 1 güncel', [('ornek.png', 1), ('ornek.mp4', 2)])]
+   faz 2 UI Faz 2 180 [(1, 'UI Adım 3', [])]
+PIN sayacı 1001: [(0,)]
+
+== B3: "Kayıtta malzeme zorunlu" (mr.js, taslak 8)
+JS true: önce işaretli=false, işaretlenip kaydedildi, gönderilen gövde: MaterialRequired=false&MaterialRequired=true, yeniden açınca işaretli=false
+JS false: önce işaretli=false, işaretlenip kaydedildi, gönderilen gövde: MaterialRequired=false&MaterialRequired=true, yeniden açınca işaretli=false
+
+== B4: Faz 2 aktiflik onay kutusu (bool.js, bool2.js)
+/facilities/edit/3: önce işaretli=false, işaretlenip kaydedildi, gövde IsActive=false&IsActive=true, sonra işaretli=false
+/cleaning-types/edit/4: önce işaretli=true, işaretlenip kaydedildi, gövde IsActive=true&IsActive=false, sonra işaretli=true
+/lines/edit/4: önce işaretli=true, değiştirilmeden kaydedildi, gövde IsActive=false&IsActive=true, sonra işaretli=false
+/materials/edit/3: önce işaretli=false, değiştirilmeden kaydedildi, gövde IsActive=false, sonra işaretli=false
+Hat 4 testten sonra HTTP ile yeniden aktif yapıldı.
+
+
+== Tur 3 (2026-11-15)
+Release yayını .qa/f3/build (B3/B4 düzeltmeleri), port 5301 qa.db, 5302 empty.db. Tarayıcının kendi gönderimi; elle kurulmuş gövde ya da belirteç yok.
+
+== G5a form belirteci sayımı (g5a.py)
+m1   /                                          200 POST formu   3, belirteçsiz 0 
+m1   /account/security                          200 POST formu   5, belirteçsiz 0 
+m1   /users                                     200 POST formu   3, belirteçsiz 0 
+m1   /users/create                              200 POST formu   4, belirteçsiz 0 
+m1   /users/edit/3                              200 POST formu   6, belirteçsiz 0 
+m1   /users/edit/4                              200 POST formu   7, belirteçsiz 0 
+m1   /users/deactivate/3                        200 POST formu   4, belirteçsiz 0 
+m1   /facilities                                200 POST formu   3, belirteçsiz 0 
+m1   /facilities?showInactive=true              200 POST formu   3, belirteçsiz 0 
+m1   /facilities/create                         200 POST formu   4, belirteçsiz 0 
+m1   /facilities/edit/1                         200 POST formu   4, belirteçsiz 0 
+m1   /facilities/details/1                      200 POST formu   3, belirteçsiz 0 
+m1   /facilities/details/3                      200 POST formu   3, belirteçsiz 0 
+m1   /lines/create?facilityId=1                 200 POST formu   4, belirteçsiz 0 
+m1   /lines/edit/1                              200 POST formu   4, belirteçsiz 0 
+m1   /shifts                                    200 POST formu   3, belirteçsiz 0 
+m1   /shifts?facilityId=1                       200 POST formu   3, belirteçsiz 0 
+m1   /shifts/create?facilityId=1                200 POST formu   4, belirteçsiz 0 
+m1   /shifts/edit/1                             200 POST formu   4, belirteçsiz 0 
+m1   /machines                                  200 POST formu   3, belirteçsiz 0 
+m1   /machines?showRetired=true                 200 POST formu   3, belirteçsiz 0 
+m1   /machines/create                           200 POST formu   4, belirteçsiz 0 
+m1   /machines/create?facilityId=1              200 POST formu   4, belirteçsiz 0 
+m1   /machines/edit/1                           200 POST formu   4, belirteçsiz 0 
+m1   /machines/edit/4                           200 POST formu   4, belirteçsiz 0 
+m1   /machines/retire/1                         200 POST formu   4, belirteçsiz 0 
+m1   /machines/retire/4                         200 POST formu   4, belirteçsiz 0 
+m1   /materials                                 200 POST formu   3, belirteçsiz 0 
+m1   /materials/create                          200 POST formu   4, belirteçsiz 0 
+m1   /materials/edit/1                          200 POST formu   4, belirteçsiz 0 
+m1   /materials/details/1                       200 POST formu   3, belirteçsiz 0 
+m1   /material-lots/create?materialId=1         200 POST formu   4, belirteçsiz 0 
+m1   /material-lots/edit/1                      200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types                            200 POST formu   3, belirteçsiz 0 
+m1   /cleaning-types?kind=1&showInactive=true   200 POST formu   3, belirteçsiz 0 
+m1   /cleaning-types/create                     200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/edit/1                     200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/edit/2                     200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/machines/1                 200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/machines/3                 200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/details/1                  200 POST formu   3, belirteçsiz 0 
+m1   /cleaning-types/details/2                  200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/details/3                  200 POST formu   3, belirteçsiz 0 
+m1   /cleaning-types/details/4                  200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/details/5                  200 POST formu   4, belirteçsiz 0 
+m1   /cleaning-types/details/6                  200 POST formu   5, belirteçsiz 0 
+m1   /procedure-versions/details/1              200 POST formu   3, belirteçsiz 0 
+m1   /procedure-versions/details/3              200 POST formu   3, belirteçsiz 0 
+m1   /procedure-versions/details/4              200 POST formu   3, belirteçsiz 0 
+m1   /procedure-versions/edit/5                 200 POST formu  55, belirteçsiz 0 
+m1   /procedure-versions/edit/8                 200 POST formu  19, belirteçsiz 0 
+sa   /                                          302 POST formu   0, belirteçsiz 0 
+sa   /users                                     200 POST formu   3, belirteçsiz 0 
+sa   /users/create                              200 POST formu   4, belirteçsiz 0 
+sa   /users/edit/2                              200 POST formu   6, belirteçsiz 0 
+sa   /users/deactivate/2                        200 POST formu   4, belirteçsiz 0 
+sa   /account/security                          200 POST formu   5, belirteçsiz 0 
+op   /                                          200 POST formu   3, belirteçsiz 0 
+op   /account/security                          200 POST formu   5, belirteçsiz 0 
+au   /                                          200 POST formu   3, belirteçsiz 0 
+au   /procedure-versions/details/3              200 POST formu   3, belirteçsiz 0 
+fl   /account/first-login                       200 POST formu   2, belirteçsiz 0 
+anon /account/login                             200 POST formu   1, belirteçsiz 0 
+anon /account/access-denied                     200 POST formu   0, belirteçsiz 0 
+m1   /cleaning-types (5302 boş) 200 POST formu 3
+TOPLAM: 64 sayfa, 297 POST formu, belirteçsiz 0

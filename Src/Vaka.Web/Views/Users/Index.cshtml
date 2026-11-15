@@ -45,11 +45,11 @@
             </select>
         </div>
         <div class="flex flex-wrap gap-2">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary min-h-12">
                 <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#funnel" /></svg>
                 Filtrele
             </button>
-            <a class="btn btn-secondary" href="/users">Filtreleri temizle</a>
+            <a class="btn btn-secondary min-h-12" href="/users">Filtreleri temizle</a>
         </div>
     </div>
 </form>
@@ -121,7 +121,7 @@
                                     }
                                 </div>
                             </td>
-                            <td data-label="İşlem">
+                            <td data-label="İşlem" class="cell-action max-md:col-span-2 md:max-xl:col-span-3">
                                 @if (item.CanManage)
                                 {
                                     <a class="btn btn-secondary" href="/users/edit/@item.Id" aria-label="@item.FullName hesabını düzenle">

@@ -30,3 +30,6 @@ Docs/Local/
 
 # Kişisel Claude ayarları
 .claude/settings.local.json
+
+# Yüklenen medya (Faz 3, PL-47); veri, repoya girmez
+Src/Vaka.Web/App_Data/

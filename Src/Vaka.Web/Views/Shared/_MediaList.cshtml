@@ -1,0 +1,36 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Procedures
+@model (StepMediaViewModel[] Media, bool Editable, int StepId)
+@if (Model.Media.Length > 0)
+{
+    <ul class="media-list" aria-label="Adım medyası">
+        @foreach (var media in Model.Media)
+        {
+            var isPhoto = media.MediaType == StepMediaType.Photo;
+            <li class="media-item">
+                <a class="media-thumb" href="@media.Url" data-media-viewer data-media-kind="@(isPhoto ? "photo" : "video")" data-media-name="@media.OriginalFileName"
+                   aria-label="@media.MediaTypeLabel önizle: @media.OriginalFileName">
+                    @if (isPhoto)
+                    {
+                        <img src="@media.Url" alt="" width="96" height="96" loading="lazy" class="h-full w-full object-cover" />
+                    }
+                    else
+                    {
+                        <svg class="icon icon-lg" aria-hidden="true"><use href="/lib/icons/Icons.svg#video" /></svg>
+                    }
+                </a>
+                <span class="media-name" title="@media.OriginalFileName">@media.OriginalFileName</span>
+                <span class="text-xs font-bold uppercase tracking-wide text-muted">@media.MediaTypeLabel</span>
+                @if (Model.Editable)
+                {
+                    <form method="post" action="/procedure-versions/remove-media/@media.Id" data-editor-form data-focus="step-@Model.StepId" asp-antiforgery="true">
+                        <button type="submit" class="btn btn-secondary w-full" aria-label="@media.OriginalFileName medyasını adımdan çıkar">
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#trash-2" /></svg>
+                            Çıkar
+                        </button>
+                    </form>
+                }
+            </li>
+        }
+    </ul>
+}

@@ -15,7 +15,7 @@
             <input id="@id" name="@Model.Name" class="input pr-14" type="password" inputmode="text" autocomplete="@(Model.Autocomplete ?? "off")"
                    spellcheck="false" autocapitalize="none" required="@Model.Required" data-required-message="@Model.Label alanını doldurun."
                    aria-describedby="@(describedBy == "" ? null : describedBy)" aria-invalid="@(error is null ? null : "true")" data-reveal-input />
-            <button type="button" class="icon-btn absolute right-0 top-0 h-12 w-12" data-reveal-toggle aria-pressed="false" aria-label="Parolayı göster">
+            <button type="button" class="icon-btn field-reveal" data-reveal-toggle aria-pressed="false" aria-label="Parolayı göster">
                 <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#eye" /></svg>
             </button>
         </div>

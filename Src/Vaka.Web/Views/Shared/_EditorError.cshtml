@@ -1,0 +1,13 @@
+@model string[]
+@if (Model.Length > 0)
+{
+    <div class="notice notice-danger" role="alert" tabindex="-1" data-editor-error data-form-summary>
+        <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+        <div class="min-w-0 space-y-1">
+            @foreach (var message in Model)
+            {
+                <p class="break-words font-semibold">@message</p>
+            }
+        </div>
+    </div>
+}

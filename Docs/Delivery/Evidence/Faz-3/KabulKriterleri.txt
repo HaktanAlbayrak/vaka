@@ -1,0 +1,270 @@
+Faz 3 teslim testi, 2026-11-15. Release yayını .qa/f3/build (çalışma ağacı, HEAD 08c793d). Port 5301 Production, DB .qa/f3/qa.db (App_Data/vaka.db salt okunur yedeği + uygulama üzerinden QA verisi), medya kökü .qa/f3/media. Port 5302 Production, .qa/f3/empty.db (yalnız migration, tanım verisi yok).
+
+== K1, K2, K13, K3 (k1.py)
+== K1
+  planlı 120 -> 302 /cleaning-types/details/4  
+   DB (4, 'QAK1A', 1, 120, 1)
+  planlı 121 -> 200  {"DefaultLockMinutes": "Varsayılan kilit süresi 1 ile 120 dakika arasında olmalı."} Temizlik tipi eklenemedi Varsayılan kilit süresi 1 ile 120 dakika arasında olmalı.
+   DB None
+  planlı süre boş -> 200  {"DefaultLockMinutes": "Varsayılan kilit süresini girin."} Temizlik tipi eklenemedi Varsayılan kilit süresini girin.
+  planlı 0 -> 200  {"DefaultLockMinutes": "Varsayılan kilit süresi 1 ile 120 dakika arasında olmalı."} Temizlik tipi eklenemedi Varsayılan kilit süresi 1 ile 120 dakika arasında olmalı.
+  tür seçilmedi -> 200  {"Kind": "Tür seçin."} Temizlik tipi eklenemedi Tür seçin.
+  yinelenen kod küçük harf -> 200  {"Code": "Bu tip kodu kayıtlı."} Temizlik tipi eklenemedi Bu tip kodu kayıtlı.
+  ayar 60, süre 61 -> 200  {"DefaultLockMinutes": "Varsayılan kilit süresi 1 ile 60 dakika arasında olmalı."} Temizlik tipi eklenemedi Varsayılan kilit süresi 1 ile 60 dakika arasında olmalı.
+  ayar 60, süre 60 -> 302 /cleaning-types/details/5  
+   form ipucu (ayar 60): ['60'] max= ['60']
+   ayar geri 120: [(120,)]
+  acil + süre 30 -> 200  {"DefaultLockMinutes": "Acil tipte kilit süresi girilmez."} Temizlik tipi eklenemedi Acil tipte kilit süresi girilmez.
+   DB None
+  acil süresiz -> 302 /cleaning-types/details/6  
+   DB (6, 'QAK1C', 2, None, 1)
+   acil düzenleme formu: DefaultLockMinutes alanı False | tür kilitli metin: Tür
+   acil detay: eşleme bağlantısı False
+   planlı detay: eşleme bağlantısı True
+  acil düzenleme + süre 30 -> 200  {} Temizlik tipi kaydedilemedi Acil tipte kilit süresi girilmez.
+   DB (6, 'QAK1C', 2, None, 1)
+== K2
+  planlı tipe Kind=2 -> 200  {} Temizlik tipi kaydedilemedi Tür kayıttan sonra değiştirilemez.
+   DB (4, 'QAK1A', 1, 120, 1)
+  planlı tipe Kind=2, süre yok -> 200  {"DefaultLockMinutes": "Varsayılan kilit süresini girin."} Temizlik tipi kaydedilemedi Tür kayıttan sonra değiştirilemez. Varsayılan kilit süresini girin.
+   DB (4, 'QAK1A', 1, 120, 1)
+  acil tipe Kind=1 + süre -> 200  {} Temizlik tipi kaydedilemedi Tür kayıttan sonra değiştirilemez. Acil tipte kilit süresi girilmez.
+   DB (6, 'QAK1C', 2, None, 1)
+  kod değişikliği (PL-51 serbest) -> 302 /cleaning-types/details/4  
+   DB (4, 'QAK1AX', 1, 120, 1)
+== K13
+   edit formunda IsActive girdileri: ['<input type="checkbox" checked="checked" data-val="true" data-val-required="The IsActive field is required." id="IsActive" name="IsActive" value="true" />', '<input name="IsActive" type="hidden" value="false" />']
+  pasifleştir (yalnız gizli false) -> 302 /cleaning-types/details/4  
+   DB (4, 'QAK1AX', 1, 120, 0)
+   varsayılan listede: False
+   showInactive satırı: QAK1AX QA planlı 120 kod değişti Planlı Yürürlükte versiyon yok 0 makine Pasif Detay Düzenle
+  yeniden etkinleştir -> 302 /cleaning-types/details/4  
+   DB (4, 'QAK1AX', 1, 120, 1)
+== K3
+   makine 1 checked - | M01 Karıştırıcı
+   makine 2 checked - | M02 Tartı ünitesi
+   makine 9 - - | MAKINEKODU16XYZW Uzun kodlu dolum makinesi Abdurrahmanoğullarıkarşıyakalılar ikinci kat sıvı ürün
+   makine 3 checked - | M01 Dolum makinesi
+   makine 4 - disabled | M02 Etiketleme makinesi Makine kullanımdan kaldırılmış.
+   makine 7 checked disabled | MQ2 QA pasif hat makinesi eşli Hat pasif.
+   makine 8 - disabled | MQ3 QA pasif hat makinesi eşsiz Hat pasif.
+   makine 5 checked disabled | M01 Depo asansörü Tesis pasif.
+   makine 6 - disabled | MQ1 QA pasif tesis makinesi Tesis pasif.
+   eşleme önce [(1,), (2,), (3,), (5,), (7,)]
+  POST 1,2 + seçilemez eşsiz 8 ve 4 (3 çıkarıldı) -> 302 /cleaning-types/details/1  
+   eşleme sonra [(1,), (2,), (5,), (7,)] (beklenen 1,2,5,7: 5 ve 7 eşli-seçilemez korunur, 8 ve 4 eşlenmez)
+  POST 1,2,3,9 (geri) -> 302 /cleaning-types/details/1  
+   eşleme [(1,), (2,), (3,), (5,), (7,), (9,)]
+   acil GET /cleaning-types/machines/2 -> 302 /cleaning-types/details/2
+     durum iletisi: []
+   acil POST -> 302 /cleaning-types/details/2 | eşleme satırı [(0,)]
+
+== K4, K5 (yeni planlı tip QAK1D), düzenleyici hata bölgeleri, tam sayfa yanıt (k4.py)
+== taslak aç (tip 5, yürürlükte yok)
+  create-draft -> 302 /procedure-versions/edit/4
+  taslak (4, 1, 1) faz []
+== yayın engelleri
+  boş taslak yayın (doğru PIN) -> 200  | hata formu /procedure-versions/publish/4 | En az bir faz gerekir BÖLGE DOĞRU
+   PIN sayacı 0 -> 0
+  faz ekle A (min boş) -> 302 /procedure-versions/edit/4  
+  faz ekle B (min 5) -> 302 /procedure-versions/edit/4  
+  faz ekle boş başlık -> 200  | hata formu /procedure-versions/add-phase/4 | Faz adı girin. BÖLGE DOĞRU
+  faz ekle min 0 -> 200  | hata formu /procedure-versions/add-phase/4 | Minimum süre pozitif bir tam sayı (dakika) olmalı. BÖLGE DOĞRU
+  yayın: adımsız fazlar -> 200  | hata formu /procedure-versions/publish/4 | Faz 1 adımı yok Faz 1 minimum süresi yok Faz 2 adımı yok BÖLGE DOĞRU
+  adım ekle Adım A1 -> 302 /procedure-versions/edit/4  
+  adım ekle Adım A2 -> 302 /procedure-versions/edit/4  
+  adım ekle B1 -> 302 /procedure-versions/edit/4  
+  adım ekle boş -> 200  | hata formu /procedure-versions/add-step/9 | Adım adı girin. BÖLGE DOĞRU
+  yayın: Faz 1 minimum yok -> 200  | hata formu /procedure-versions/publish/4 | Faz 1 minimum süresi yok BÖLGE DOĞRU
+  ağaç [(1, 'Faz A', None, [(1, 'Adım A1'), (2, 'Adım A2')]), (2, 'Faz B', 300, [(1, 'Adım B1')])]
+== taşıma
+  A2 yukarı -> 302 /procedure-versions/edit/4  
+    [(1, 'Adım A2'), (2, 'Adım A1')]
+  A2 (artık ilk) yukarı -> 302 /procedure-versions/edit/4  BÖLGE YANLIŞ (None) [sınırda taşıma: hata beklenmez, 302 ve sıra değişmedi]
+    [(1, 'Adım A2'), (2, 'Adım A1')]
+  B yukarı -> 302 /procedure-versions/edit/4  
+    [(1, 'Faz B'), (2, 'Faz A')]
+  B (ilk) yukarı -> 302 /procedure-versions/edit/4  BÖLGE YANLIŞ (None) [sınırda taşıma: hata beklenmez, 302 ve sıra değişmedi]
+    [(1, 'Faz B'), (2, 'Faz A')]
+  A (son) aşağı -> 302 /procedure-versions/edit/4  BÖLGE YANLIŞ (None) [sınırda taşıma: hata beklenmez, 302 ve sıra değişmedi]
+    [(1, 'Faz B'), (2, 'Faz A')]
+  B aşağı -> 302 /procedure-versions/edit/4  
+    [(1, 'Faz A'), (2, 'Faz B')]
+== güncelleme ve hata bölgeleri
+  faz A min 0 -> 200  | hata formu /procedure-versions/update-phase/8 | Minimum süre pozitif bir tam sayı (dakika) olmalı. BÖLGE DOĞRU
+  faz A min -3 -> 200  | hata formu /procedure-versions/update-phase/8 | Minimum süre pozitif bir tam sayı (dakika) olmalı. BÖLGE DOĞRU
+  faz A boş başlık -> 200  | hata formu /procedure-versions/update-phase/8 | Faz adı girin. BÖLGE DOĞRU
+  faz A min 10 -> 302 /procedure-versions/edit/4  
+   DB [(8, 1, 'Faz A güncel', 600), (9, 2, 'Faz B', 300)]
+  adım A1 boş başlık -> 200  | hata formu /procedure-versions/update-step/14 | Adım adı girin. BÖLGE DOĞRU
+  adım A1 1001 karakter açıklama -> 200  | hata formu /procedure-versions/update-step/14 | Açıklama en çok 1000 karakter olabilir. BÖLGE DOĞRU
+  başlık doküman no 65 -> 200  | hata formu /procedure-versions/update-header/4 | Doküman no en çok 64 karakter olabilir. BÖLGE DOĞRU
+  başlık doküman no DOK-QA-1 + malzeme -> 302 /procedure-versions/edit/4  
+   DB [(1, 'DOK-QA-1')]
+== çıkarma ve sıra no
+  faz C ekle -> 302 /procedure-versions/edit/4  
+  C adım -> 302 /procedure-versions/edit/4  
+  B ortadaki faz çıkar? (önce A1 adımı çıkar) -> 302 /procedure-versions/edit/4  
+    [(1, 'Faz A güncel', 600, [(1, 'Adım A2')]), (2, 'Faz B', 300, [(1, 'Adım B1')]), (3, 'Faz C', 120, [(1, 'Adım C1')])]
+  faz B (sıra 1) çıkar -> 302 /procedure-versions/edit/4  
+    [(1, 'Faz A güncel', 600, [(1, 'Adım A2')]), (2, 'Faz C', 120, [(1, 'Adım C1')])] | B adımları kaldı mı: [(0,)]
+== yayın PIN
+  yanlış PIN -> 200  | hata formu /procedure-versions/publish/4 | PIN hatalı. BÖLGE DOĞRU
+   PIN sayacı 0 -> 1
+  boş PIN -> 200  | hata formu /procedure-versions/publish/4 | PIN girin. BÖLGE DOĞRU
+   PIN sayacı 1
+  doğru PIN -> 302 /cleaning-types/details/5
+   durum iletisi: ['v1 yayınlandı.'] | PIN sayacı 0
+   DB [(4, 1, 2, '2026-11-15 01:09:16.5056256', 2, 1, 'DOK-QA-1')]
+
+== K5 (PLN v2), K6 derin kopya, K7 yayınlanmış versiyona rota reddi (k5.py, k6.py)
+== K5 PLN v2 yayÄ±n
+  yanlÄ±ÅŸ PIN -> 200 ('/procedure-versions/publish/3', 'PIN hatalÄ±.') sayaÃ§ 1
+  doÄŸru PIN -> 302 /cleaning-types/details/1 ['v2 yayÄ±nlandÄ±.'] sayaÃ§ 0
+  versiyonlar [(1, 1, 3, '2026-10-01 08:00:00', None), (3, 2, 2, '2026-11-15 01:10:00.9317737', 2)]
+Traceback (most recent call last):
+  File "C:\projects\vaka\.qa\f3\k5.py", line 58, in <module>
+    print('  operatör yayınlanmış medya ->', C('op').req('/media/%d' % pid)[0])
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\projects/vaka/.qa/f3\lib3.py", line 12, in req
+    try: x = self.op.open(r); return x.status, (x.headers.get('Location') or '').replace(self.B, ''), x.read().decode()
+                                                                                                      ^^^^^^^^^^^^^^^^^
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x89 in position 0: invalid start byte
+  operatör yayınlanmış medya -> 200
+== K6 derin kopya
+  create-draft -> 302 /procedure-versions/edit/5
+  yeni taslak (5, 3)
+  v2 ve v3 içerik aynı: True | faz 3 adım 6 medya 8
+  başlık alanları v2/v3: [(3, 1, None), (5, 1, None)]
+  ikinci taslak -> 302 /cleaning-types/details/1 ['Bu tipin taslağı zaten var.'] | taslak sayısı [(1,)]
+== K7 yayınlanmış versiyona düzenleme rotaları (v2 = 3)
+  update-header  -> 302 /procedure-versions/details/3 | Yayınlanmış versiyon değiştirilemez. Değişiklik için yeni taslak açın.
+  add-phase      -> 302 /procedure-versions/details/3 | Yayınlanmış versiyon değiştirilemez. Değişiklik için yeni taslak açın.
+  update-phase   -> 302 /procedure-versions/details/3 | Yayınlanmış versiyon değiştirilemez. Değişiklik için yeni taslak açın.
+  move-phase     -> 302 /procedure-versions/details/3 | Yayınlanmış versiyon değiştirilemez. Değişiklik için yeni taslak açın.
+  remove-phase   -> 302 /procedure-versions/details/3 | Yayınlanmış versiyon değiştirilemez. Değişiklik için yeni taslak açın.
+  add-step       -> 302 /procedure-versions/details/3 | Yayınlanmış versiyon değiştirilemez. Değişiklik için yeni taslak açın.
+  update-step    -> 302 /procedure-versions/details/3 | Yayınlanmış versiyon değiştirilemez. Değişiklik için yeni taslak açın.
+  move-step      -> 302 /procedure-versions/details/3 | Yayınlanmış versiyon değiştirilemez. Değişiklik için yeni taslak açın.
+  remove-step    -> 302 /procedure-versions/details/3 | Yayınlanmış versiyon değiştirilemez. Değişiklik için yeni taslak açın.
+  remove-media   -> 302 /procedure-versions/details/3 | Yayınlanmış versiyon değiştirilemez. Değişiklik için yeni taslak açın.
+  publish        -> 302 /procedure-versions/details/3 | Yayınlanmış versiyon değiştirilemez. Değişiklik için yeni taslak açın.
+  upload-media    -> 302 /procedure-versions/details/3
+  GET edit yayınlanmış -> 302 /procedure-versions/details/3
+  v2 içeriği değişmedi: True | başlık [(1, None, 2)]
+
+== K7 tetikleyiciler (kopya .qa/f3/k7.db)
+K7 tetikleyici denemesi, kopya .qa/f3/k7.db (qa.db yedeği). v1 Id 1 Arşiv, v2 Id 3 Yürürlükte, v3 Id 5 Taslak.
+  UPDATE faz (Yürürlükte) Title                              RET: Yayınlanmış versiyon değiştirilemez.
+  UPDATE faz (Arşiv) MinDurationSeconds                      RET: Yayınlanmış versiyon değiştirilemez.
+  DELETE faz (Yürürlükte)                                    RET: Yayınlanmış versiyon değiştirilemez.
+  INSERT faz (Yürürlükte versiyona)                          RET: Yayınlanmış versiyon değiştirilemez.
+  UPDATE adım (Yürürlükte) Title                             RET: Yayınlanmış versiyon değiştirilemez.
+  UPDATE adım taslak fazına taşı                             RET: Yayınlanmış versiyon değiştirilemez.
+  DELETE adım (Yürürlükte)                                   RET: Yayınlanmış versiyon değiştirilemez.
+  UPDATE medya (Yürürlükte) OriginalFileName                 RET: Yayınlanmış versiyon değiştirilemez.
+  DELETE medya (Yürürlükte)                                  RET: Yayınlanmış versiyon değiştirilemez.
+  UPDATE versiyon MaterialRequired (Yürürlükte)              RET: Yayınlanmış versiyon değiştirilemez.
+  UPDATE versiyon DocumentRef (Yürürlükte)                   RET: Yayınlanmış versiyon değiştirilemez.
+  UPDATE versiyon DocumentRef (Arşiv)                        RET: Yayınlanmış versiyon değiştirilemez.
+  UPDATE versiyon Status 3->2 (Arşiv geri)                   RET: Yayınlanmış versiyon değiştirilemez.
+  DELETE versiyon (Arşiv)                                    RET: Yayınlanmış versiyon değiştirilemez.
+  UPDATE taslak faz Title (Taslak, serbest olmalı)           KABUL
+  UPDATE versiyon Status 2->3 (Yürürlükte -> Arşiv)          KABUL
+  UPDATE versiyon Status 3->2 sonra                          RET: Yayınlanmış versiyon değiştirilemez.
+  trigger listesi: ['TR_ProcedurePhases_NoDeleteWhenPublished', 'TR_ProcedurePhases_NoInsertWhenPublished', 'TR_ProcedurePhases_NoUpdateWhenPublished', 'TR_ProcedureSteps_NoDeleteWhenPublished', 'TR_ProcedureSteps_NoInsertWhenPublished', 'TR_ProcedureSteps_NoUpdateWhenPublished', 'TR_ProcedureVersions_NoDeleteWhenPublished', 'TR_ProcedureVersions_NoUpdateWhenPublished', 'TR_StepMedia_NoDeleteWhenPublished', 'TR_StepMedia_NoInsertWhenPublished', 'TR_StepMedia_NoUpdateWhenPublished']
+
+== K12, K15 (sıfırdan migration)
+K12/K15: .qa/f3/fresh.db = boş dosyaya `dotnet ef database update --configuration Release` (3 migration) + DemoData.sql iki kez (2026-11-15).
+Migration geçmişi: ['20261114121621_AddUsersRolesAndSettings', '20261114143133_AddFacilitiesMachinesShiftsMaterials', '20261114205904_AddCleaningTypesAndProcedureVersions']
+SystemSettings: [(1, 'SessionMinutes', 30, 'dakika'), (2, 'PinLength', 4, 'hane'), (3, 'PinAttemptLimit', 5, 'deneme'), (4, 'MaxLockMinutes', 120, 'dakika'), (5, 'MaxPhotoMb', 10, 'MB'), (6, 'MaxVideoMb', 100, 'MB')]
+SettingChanges satırı: 0
+Satır sayıları (2 uygulamadan sonra): {'Facilities': 2, 'ProductionLines': 3, 'Machines': 5, 'Shifts': 3, 'Materials': 3, 'MaterialLots': 5, 'CleaningTypes': 2, 'MachineCleaningTypes': 4, 'ProcedureVersions': 2, 'ProcedurePhases': 4, 'ProcedureSteps': 7, 'StepMedia': 0}
+3. uygulamadan sonra aynı: True
+Tipler: [(1, 'PLN', 'Planlı temizlik', 1, 90, 1), (2, 'ACL', 'Acil müdahale', 2, None, 1)]
+Versiyonlar: [(1, 1, 1, 2, 1, None, '2026-10-01 08:00:00', None), (2, 2, 1, 2, 0, None, '2026-10-01 08:00:00', None)]
+Fazlar: [(1, 1, 'Hazırlık', 300, 2), (1, 2, 'Temizlik', 900, 3), (1, 3, 'Kontrol', 300, 1), (2, 1, 'Müdahale', None, 1)]
+Eşleme (tip 1): [1, 2, 3, 5] | aktif ve kaldırılmamış makineler: [1, 2, 3, 5] | acil tip eşleme: 0
+Up() içinde: DropTable 0 | UpdateData 0 | DeleteData 0 | AlterColumn 0 | InsertData 1 | CREATE TRIGGER 3 (UPDATE sözcüğü yalnız tetikleyici tanımlarında: BEFORE UPDATE)
+
+
+== Tur 3 (2026-11-15)
+Release yayını .qa/f3/build (B3/B4 düzeltmeleri), port 5301 qa.db, 5302 empty.db. Tarayıcının kendi gönderimi; elle kurulmuş gövde ya da belirteç yok.
+
+== G5b / K17 üç durum (tri.py + tri.tmpl.js): başlangıç değeri DB'de kurulur, tarayıcı işlemi yapar, DB okunur, kayıt sonrası sayfa yeniden açılıp kutu okunur. Her kayıttan sonra özgün değer geri yüklendi.
+tesis TQ3                  JS açık  başlangıç 1 dokunma  -> DB 1 (beklenen 1) | önce kutu True, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+tesis TQ3                  JS açık  başlangıç 1 kaldır   -> DB 0 (beklenen 0) | önce kutu True, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+tesis TQ3                  JS açık  başlangıç 0 dokunma  -> DB 0 (beklenen 0) | önce kutu False, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+tesis TQ3                  JS açık  başlangıç 0 işaretle -> DB 1 (beklenen 1) | önce kutu False, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+tesis TQ3                  JS kapalı başlangıç 1 dokunma  -> DB 1 (beklenen 1) | önce kutu True, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+tesis TQ3                  JS kapalı başlangıç 1 kaldır   -> DB 0 (beklenen 0) | önce kutu True, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+tesis TQ3                  JS kapalı başlangıç 0 dokunma  -> DB 0 (beklenen 0) | önce kutu False, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+tesis TQ3                  JS kapalı başlangıç 0 işaretle -> DB 1 (beklenen 1) | önce kutu False, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+hat HQ1                    JS açık  başlangıç 1 dokunma  -> DB 1 (beklenen 1) | önce kutu True, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+hat HQ1                    JS açık  başlangıç 1 kaldır   -> DB 0 (beklenen 0) | önce kutu True, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+hat HQ1                    JS açık  başlangıç 0 dokunma  -> DB 0 (beklenen 0) | önce kutu False, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+hat HQ1                    JS açık  başlangıç 0 işaretle -> DB 1 (beklenen 1) | önce kutu False, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+hat HQ1                    JS kapalı başlangıç 1 dokunma  -> DB 1 (beklenen 1) | önce kutu True, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+hat HQ1                    JS kapalı başlangıç 1 kaldır   -> DB 0 (beklenen 0) | önce kutu True, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+hat HQ1                    JS kapalı başlangıç 0 dokunma  -> DB 0 (beklenen 0) | önce kutu False, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+hat HQ1                    JS kapalı başlangıç 0 işaretle -> DB 1 (beklenen 1) | önce kutu False, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+malzeme MLZ003             JS açık  başlangıç 1 dokunma  -> DB 1 (beklenen 1) | önce kutu True, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+malzeme MLZ003             JS açık  başlangıç 1 kaldır   -> DB 0 (beklenen 0) | önce kutu True, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+malzeme MLZ003             JS açık  başlangıç 0 dokunma  -> DB 0 (beklenen 0) | önce kutu False, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+malzeme MLZ003             JS açık  başlangıç 0 işaretle -> DB 1 (beklenen 1) | önce kutu False, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+malzeme MLZ003             JS kapalı başlangıç 1 dokunma  -> DB 1 (beklenen 1) | önce kutu True, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+malzeme MLZ003             JS kapalı başlangıç 1 kaldır   -> DB 0 (beklenen 0) | önce kutu True, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+malzeme MLZ003             JS kapalı başlangıç 0 dokunma  -> DB 0 (beklenen 0) | önce kutu False, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+malzeme MLZ003             JS kapalı başlangıç 0 işaretle -> DB 1 (beklenen 1) | önce kutu False, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+vardiya Gece               JS açık  başlangıç 1 dokunma  -> DB 1 (beklenen 1) | önce kutu True, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+vardiya Gece               JS açık  başlangıç 1 kaldır   -> DB 0 (beklenen 0) | önce kutu True, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+vardiya Gece               JS açık  başlangıç 0 dokunma  -> DB 0 (beklenen 0) | önce kutu False, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+vardiya Gece               JS açık  başlangıç 0 işaretle -> DB 1 (beklenen 1) | önce kutu False, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+vardiya Gece               JS kapalı başlangıç 1 dokunma  -> DB 1 (beklenen 1) | önce kutu True, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+vardiya Gece               JS kapalı başlangıç 1 kaldır   -> DB 0 (beklenen 0) | önce kutu True, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+vardiya Gece               JS kapalı başlangıç 0 dokunma  -> DB 0 (beklenen 0) | önce kutu False, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+vardiya Gece               JS kapalı başlangıç 0 işaretle -> DB 1 (beklenen 1) | önce kutu False, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+tip QAK1AX                 JS açık  başlangıç 1 dokunma  -> DB 1 (beklenen 1) | önce kutu True, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+tip QAK1AX                 JS açık  başlangıç 1 kaldır   -> DB 0 (beklenen 0) | önce kutu True, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+tip QAK1AX                 JS açık  başlangıç 0 dokunma  -> DB 0 (beklenen 0) | önce kutu False, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+tip QAK1AX                 JS açık  başlangıç 0 işaretle -> DB 1 (beklenen 1) | önce kutu False, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+tip QAK1AX                 JS kapalı başlangıç 1 dokunma  -> DB 1 (beklenen 1) | önce kutu True, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+tip QAK1AX                 JS kapalı başlangıç 1 kaldır   -> DB 0 (beklenen 0) | önce kutu True, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+tip QAK1AX                 JS kapalı başlangıç 0 dokunma  -> DB 0 (beklenen 0) | önce kutu False, sonra kutu False | POST 302 gövde [IsActive=false]  TAMAM
+tip QAK1AX                 JS kapalı başlangıç 0 işaretle -> DB 1 (beklenen 1) | önce kutu False, sonra kutu True | POST 302 gövde [IsActive=true&IsActive=false]  TAMAM
+taslak 8 malzeme zorunlu   JS açık  başlangıç 1 dokunma  -> DB 1 (beklenen 1) | önce kutu True, sonra kutu True | POST 302 gövde [MaterialRequired=true&MaterialRequired=false]  TAMAM
+taslak 8 malzeme zorunlu   JS açık  başlangıç 1 kaldır   -> DB 0 (beklenen 0) | önce kutu True, sonra kutu False | POST 302 gövde [MaterialRequired=false]  TAMAM
+taslak 8 malzeme zorunlu   JS açık  başlangıç 0 dokunma  -> DB 0 (beklenen 0) | önce kutu False, sonra kutu False | POST 302 gövde [MaterialRequired=false]  TAMAM
+taslak 8 malzeme zorunlu   JS açık  başlangıç 0 işaretle -> DB 1 (beklenen 1) | önce kutu False, sonra kutu True | POST 302 gövde [MaterialRequired=true&MaterialRequired=false]  TAMAM
+taslak 8 malzeme zorunlu   JS kapalı başlangıç 1 dokunma  -> DB 1 (beklenen 1) | önce kutu True, sonra kutu True | POST 302 gövde [MaterialRequired=true&MaterialRequired=false]  TAMAM
+taslak 8 malzeme zorunlu   JS kapalı başlangıç 1 kaldır   -> DB 0 (beklenen 0) | önce kutu True, sonra kutu False | POST 302 gövde [MaterialRequired=false]  TAMAM
+taslak 8 malzeme zorunlu   JS kapalı başlangıç 0 dokunma  -> DB 0 (beklenen 0) | önce kutu False, sonra kutu False | POST 302 gövde [MaterialRequired=false]  TAMAM
+taslak 8 malzeme zorunlu   JS kapalı başlangıç 0 işaretle -> DB 1 (beklenen 1) | önce kutu False, sonra kutu True | POST 302 gövde [MaterialRequired=true&MaterialRequired=false]  TAMAM
+TOPLAM 48 durum, kusur 0
+
+== Kopyalanan taslakta malzeme zorunlu (cp.js, PLN v3 = Id 5, v2'den kopya)
+açılış: malzeme kutusu işaretli=true
+dokunmadan üst bilgi kaydı: 302 /procedure-versions/update-header/5 gövde [MaterialRequired=true&MaterialRequired=false] | yeniden çizimde işaretli=true
+engelli faz 26 çıkarıldı: 302 /procedure-versions/remove-phase/26 | yayın düğmesi etkin
+yayın: 302 /procedure-versions/publish/5 -> /cleaning-types/details/1 | v3 yayınlandı.
+versiyon görüntüleme /procedure-versions/details/5: Malzeme: Kayıtta malzeme zorunlusonra DB: [(1, 1, 3, 1, None), (3, 2, 3, 1, None), (5, 3, 2, 1, 'DOK-T3')]
+
+== Faz 2 aktiflik gerilemesi ve düzenleyici başlık hatası (reg.js, JS açık)
+K4 pasif 10:00-12:00 ekle (kutu işaretsiz): 302 /shifts/create?facilityId=1 -> /shifts?facilityId=1 | Vardiya eklendi. 
+  satır: QA T3 çakışan 10:00 12:00 Pasif Düzenle (id 4)
+K4 düzenlemede Aktif işaretle (Gündüz ile çakışır): 200 /shifts/edit/4 | hata: Vardiya kaydedilemedi Bu aralık "Gündüz" vardiyasıyla çakışıyor.
+  yeniden açınca kutu işaretli=false
+K4 Gece (23-07) pasife: 302 /shifts/edit/3 Vardiya güncellendi.
+K4 QA vardiyası 01-02 aktif (yalnız pasif Gece ile kesişir): 302 /shifts/edit/4 Vardiya güncellendi. 
+K4 Gece yeniden aktif (QA 01-02 ile çakışır): 200 /shifts/edit/3 | hata: Vardiya kaydedilemedi Bu aralık "QA T3 çakışan" vardiyasıyla çakışıyor.
+  geri: QA pasif, Gece aktif: 302 /shifts/edit/3 Vardiya güncellendi.
+K1 pasif tesis TQ3 hat ekle: 200 /lines/create?facilityId=3 | Hat eklenemedi Pasif tesise hat eklenemez.
+K8 /facilities "TQ3" görünür=false
+K8 /facilities?showInactive=true "TQ3" görünür=true satır: TQ3 QA pasif tesis 1 0 Pasif Hatlar Düzenle
+K8 /materials "MLZ003" görünür=false
+K8 /materials?showInactive=true "MLZ003" görünür=true satır: MLZ003 Temizlik bezi 0 lot Pasif Lotlar Düzenle
+K8 /cleaning-types "QAK1C" görünür=true
+K8 /shifts?facilityId=1 "QA T3" görünür=true satır: QA T3 çakışan 01:00 02:00 Pasif Düzenle
+Başlık hatası (doküman no 65): 200 /procedure-versions/update-header/8 | hata: Doküman no en çok 64 karakter olabilir. | kutu önce false, gönderilen true, yeniden çizimde true
+
+== G5b grep: Views/** içinde type="hidden" ve value="false" birlikte: 0 eşleşme. bool onay kutuları: Facilities/Form.cshtml:24, Lines/Form.cshtml:29, Materials/Form.cshtml:24, Shifts/Form.cshtml:33, ProcedureVersions/Edit.cshtml:45, CleaningTypes/Form.cshtml:92 (hepsi asp-for); diğer onay kutuları GET süzgeci (showInactive, showRetired) ve çoklu seçim (SelectedMachineIds, SelectedRoles).

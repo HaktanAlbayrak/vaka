@@ -10,4 +10,5 @@ public class Machine
     public DateTime? RetiredAtUtc { get; set; }
 
     public ProductionLine Line { get; set; } = null!;
+    public ICollection<MachineCleaningType> CleaningTypeLinks { get; set; } = new List<MachineCleaningType>();
 }

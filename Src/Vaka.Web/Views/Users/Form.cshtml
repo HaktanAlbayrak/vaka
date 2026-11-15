@@ -29,7 +29,7 @@
 <partial name="_FormSummary" model='isCreate ? "Kullanıcı eklenemedi" : "İşlem tamamlanamadı"' />
 
 <div class="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_24rem]">
-    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard aria-labelledby="account-title">
+    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard aria-labelledby="account-title" asp-antiforgery="true">
         <div class="panel-head">
             <h2 id="account-title" class="panel-title">Hesap bilgileri</h2>
         </div>

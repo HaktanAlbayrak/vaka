@@ -1,0 +1,19 @@
+@model (string Label, string Style)
+@functions {
+    private static readonly Dictionary<string, (string Icon, string Tone)> Styles = new()
+    {
+        ["kind.planned"] = ("clipboard-list", "badge-muted"),
+        ["kind.emergency"] = ("triangle-alert", "badge-danger"),
+        ["version.draft"] = ("pencil", "badge-warn"),
+        ["version.current"] = ("check", "badge-ok"),
+        ["version.archived"] = ("ban", "badge-muted"),
+        ["media.photo"] = ("image", "badge-muted"),
+        ["media.video"] = ("video", "badge-muted"),
+        ["type.inactive"] = ("ban", "badge-muted"),
+        ["type.active"] = ("check", "badge-ok")
+    };
+}
+@{
+    var style = Styles[Model.Style];
+}
+<span class="badge @style.Tone"><svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#@style.Icon" /></svg><span>@Model.Label</span></span>

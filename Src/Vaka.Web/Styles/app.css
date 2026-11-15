@@ -177,6 +177,9 @@
   .icon-btn {
     @apply inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-ui border-2 border-transparent text-ink transition-colors duration-150 hover:border-line-strong hover:bg-sunken;
   }
+  .field-reveal {
+    @apply absolute bottom-[2px] right-[2px] top-[2px] h-auto w-11;
+  }
   .conn-chip {
     @apply inline-flex h-11 shrink-0 items-center gap-2 rounded-ui border-2 border-line px-2 text-sm font-semibold sm:px-3;
   }
@@ -497,6 +500,10 @@
   .input[aria-invalid="true"] {
     @apply border-danger bg-danger-soft/40;
   }
+  .input[type="date"],
+  .input[type="time"] {
+    height: 3rem;
+  }
   select.input {
     @apply pr-9;
   }
@@ -588,6 +595,23 @@
       white-space: nowrap;
     }
   }
+  .table-stack td.cell-action {
+    @apply max-xl:flex max-xl:justify-end;
+  }
+  .table-stack td.cell-action::before {
+    content: none;
+  }
+  .action-row {
+    @apply flex gap-2 xl:flex-wrap;
+  }
+  @media (max-width: 1279.98px) {
+    .table-stack tbody tr:hover td {
+      background-color: transparent;
+    }
+    .table-stack tbody tr:hover {
+      background-color: rgb(var(--sunken) / 0.5);
+    }
+  }
   .table-stack td::before {
     @apply max-xl:mb-0.5 max-xl:block max-xl:text-xs max-xl:font-bold max-xl:uppercase max-xl:tracking-wide max-xl:text-muted;
     content: attr(data-label);
@@ -617,6 +641,49 @@
     .table-stack td::before {
       content: none;
     }
+  }
+
+  .tool > summary {
+    @apply btn btn-secondary cursor-pointer list-none;
+  }
+  .tool > summary::-webkit-details-marker {
+    display: none;
+  }
+  .tool[open] > summary {
+    @apply bg-sunken;
+  }
+  .tool-body {
+    @apply mt-3 rounded-card border-2 border-line bg-sunken/40 p-3 md:p-4;
+  }
+  .tool-danger > summary {
+    @apply border-danger text-danger;
+  }
+  .media-list {
+    @apply grid gap-3;
+    grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+  }
+  .media-item {
+    @apply flex min-w-0 flex-col gap-1.5;
+  }
+  .media-thumb {
+    @apply flex aspect-square w-full items-center justify-center overflow-hidden rounded-ui border-2 border-line-strong bg-sunken text-muted hover:border-accent;
+  }
+  .media-name {
+    @apply block truncate text-sm font-semibold;
+  }
+  .media-dialog {
+    @apply m-auto w-[min(96vw,60rem)] overflow-hidden rounded-card border-2 border-line-strong bg-surface p-0 text-ink;
+    max-height: 92dvh;
+    overscroll-behavior: contain;
+  }
+  .media-stage {
+    @apply flex items-center justify-center bg-sunken p-2;
+    max-height: calc(92dvh - 4rem);
+  }
+  .media-stage img,
+  .media-stage video {
+    @apply h-auto max-w-full;
+    max-height: calc(92dvh - 5rem);
   }
 
   .skeleton {

@@ -10,7 +10,7 @@
 <partial name="_FormSummary" model='isCreate ? "Hat eklenemedi" : "Hat kaydedilemedi"' />
 
 <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
-    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard aria-labelledby="line-form-title">
+    <form method="post" class="panel min-w-0" data-validate data-busy-form data-unsaved-guard aria-labelledby="line-form-title" asp-antiforgery="true">
         <div class="panel-head">
             <h2 id="line-form-title" class="panel-title">Hat bilgileri</h2>
         </div>
@@ -26,8 +26,7 @@
             </div>
 
             <label class="choice max-w-md">
-                <input type="hidden" name="IsActive" value="false" />
-                <input type="checkbox" name="IsActive" value="true" checked="@Model.IsActive" />
+                <input type="checkbox" asp-for="IsActive" />
                 <span class="min-w-0">
                     <span class="block font-bold">Aktif</span>
                     <span class="mt-0.5 block text-sm text-muted">Pasif hattın makineleri yeni kayıtta seçilemez.</span>

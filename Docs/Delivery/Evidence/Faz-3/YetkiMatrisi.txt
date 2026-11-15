@@ -1,0 +1,116 @@
+Faz 3 teslim testi, 2026-11-15. Release yayını .qa/f3/build (çalışma ağacı, HEAD 08c793d). Port 5301 Production, DB .qa/f3/qa.db (App_Data/vaka.db salt okunur yedeği + uygulama üzerinden QA verisi), medya kökü .qa/f3/media. Port 5302 Production, .qa/f3/empty.db (yalnız migration, tanım verisi yok).
+Kullanıcılar: 0001 Süper admin (yalnız SuperAdmin), 1001 Yönetici, 2001 Operatör, 3001 Denetçi. Ham soket, yönlendirme izlenmeden (mx.py).
+
+Taslak v3 Id 5, Yürürlükte v2 Id 3, taslak faz 11, adım 18, taslak medya 9, yayınlanmış medya 1
+== GET (yönlendirme izlenmeden). anon | op (Operatör 2001) | au (Denetçi 3001) | sa (Süper admin 0001) | m1 (Yönetici 1001)
+/cleaning-types                              302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/cleaning-types?kind=1&showInactive=true     302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/cleaning-types/create                       302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/cleaning-types/edit/1                       302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/cleaning-types/machines/1                   302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/cleaning-types/details/1                    302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/procedure-versions/edit/5                   302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/procedure-versions/details/3                302>/account/login         | 302>/account/access-denied | 200                        | 302>/account/access-denied | 200                       
+/procedure-versions/details/5                302>/account/login         | 302>/account/access-denied | 404                        | 302>/account/access-denied | 302>/procedure-versions/edit/5
+/media/1                                     302>/account/login         | 200                        | 200                        | 302>/account/access-denied | 200                       
+/media/9                                     302>/account/login         | 404                        | 404                        | 302>/account/access-denied | 200                       
+/procedure-versions/details/9999             302>/account/login         | 302>/account/access-denied | 404                        | 302>/account/access-denied | 404                       
+/media/9999                                  302>/account/login         | 404                        | 404                        | 302>/account/access-denied | 404                       
+   /account/access-denied (op): 403
+== POST geçerli belirteçle (gövde Title=QA&Code=QA9&Pin=0000&Direction=1&CleaningTypeId=1). anon (belirteçsiz) | op | au | sa ; m1 belirteçsiz
+/cleaning-types/create                       302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/cleaning-types/edit/1                       302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/cleaning-types/machines/1                   302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/create-draft             302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/update-header/5          302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/add-phase/5              302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/update-phase/11          302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/move-phase/11            302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/remove-phase/11          302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/add-step/11              302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/update-step/18           302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/move-step/18             302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/remove-step/18           302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/upload-media/18          302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/remove-media/9           302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/publish/5                302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+   upload-media çok parçalı belirteçsiz (m1): 400
+== Veri önce/sonra aynı: True
+== Menü (/ sayfası) Temizlik tipleri bağlantısı
+   op False False
+   au False False
+   sa False False
+   m1 True True
+   sa /users sayfasında: False
+
+
+== Tur 2 (2026-11-15)
+Release yayını .qa/f3/build (çalışma ağacı, B1/B2 düzeltmeleri), port 5301 qa.db, 5302 empty.db. Bu bölümde belirteç hiçbir isteğe elle eklenmedi.
+
+Taslak v3 Id 5, Yürürlükte v2 Id 3, taslak faz 11, adım 18, taslak medya 11, yayınlanmış medya 1
+== GET (yönlendirme izlenmeden). anon | op (Operatör 2001) | au (Denetçi 3001) | sa (Süper admin 0001) | m1 (Yönetici 1001)
+/cleaning-types                              302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/cleaning-types?kind=1&showInactive=true     302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/cleaning-types/create                       302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/cleaning-types/edit/1                       302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/cleaning-types/machines/1                   302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/cleaning-types/details/1                    302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/procedure-versions/edit/5                   302>/account/login         | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | 200                       
+/procedure-versions/details/3                302>/account/login         | 302>/account/access-denied | 200                        | 302>/account/access-denied | 200                       
+/procedure-versions/details/5                302>/account/login         | 302>/account/access-denied | 404                        | 302>/account/access-denied | 302>/procedure-versions/edit/5
+/media/1                                     302>/account/login         | 200                        | 200                        | 302>/account/access-denied | 200                       
+/media/11                                    302>/account/login         | 404                        | 404                        | 302>/account/access-denied | 200                       
+/procedure-versions/details/9999             302>/account/login         | 302>/account/access-denied | 404                        | 302>/account/access-denied | 404                       
+/media/9999                                  302>/account/login         | 404                        | 404                        | 302>/account/access-denied | 404                       
+   /account/access-denied (op): 403
+== POST geçerli belirteçle (gövde Title=QA&Code=QA9&Pin=0000&Direction=1&CleaningTypeId=1). anon (belirteçsiz) | op | au | sa ; m1 belirteçsiz
+/cleaning-types/create                       302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/cleaning-types/edit/1                       302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/cleaning-types/machines/1                   302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/create-draft             302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/update-header/5          302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/add-phase/5              302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/update-phase/11          302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/move-phase/11            302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/remove-phase/11          302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/add-step/11              302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/update-step/18           302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/move-step/18             302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/remove-step/18           302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/upload-media/18          302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/remove-media/11          302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+/procedure-versions/publish/5                302>/account/login | 302>/account/access-denied | 302>/account/access-denied | 302>/account/access-denied | m1:400 | m1:400 | m1:400
+   upload-media çok parçalı belirteçsiz (m1): 400
+== Veri önce/sonra aynı: True
+== Menü (/ sayfası) Temizlik tipleri bağlantısı
+   op False False
+   au False False
+   sa False False
+   m1 True True
+   sa /users sayfasında: False
+
+== G5 gerilemesi, Faz 1-2 belirteçsiz POST (g5b.py; gövdeler Name=Y | Code=T9&Name=Y | Code=200&Name=Y | code=404)
+/facilities/create         400 400 400 400
+/facilities/edit/1         400 400 400 400
+/lines/create              400 400 400 400
+/lines/edit/1              400 400 400 400
+/shifts/create             400 400 400 400
+/shifts/edit/1             400 400 400 400
+/machines/create           400 400 400 400
+/machines/edit/1           400 400 400 400
+/machines/retire/1         400 400 400 400
+/materials/create          400 400 400 400
+/materials/edit/1          400 400 400 400
+/material-lots/create      400 400 400 400
+/material-lots/edit/1      400 400 400 400
+/account/first-login       400 400 400 400
+/account/change-password   400 400 400 400
+/account/change-pin        400 400 400 400
+/users/create              400 400 400 400
+/users/edit/3              400 400 400 400
+/users/deactivate/3        400 400 400 400
+/users/activate/4          400 400 400 400
+/users/reset-pin/3         400 400 400 400
+/users/reset-password/3    400 400 400 400
+/account/login             400 400 400 400 (oturumsuz)
+400 olmayan: []
