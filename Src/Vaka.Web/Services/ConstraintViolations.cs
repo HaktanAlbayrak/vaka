@@ -16,4 +16,9 @@ public static class ConstraintViolations
         && (inner.Message.Contains("CleaningRecords.MachineId", StringComparison.Ordinal)
             || inner.Message.Contains("CleaningRecords.OwnerUserId", StringComparison.Ordinal)
             || inner.Message.Contains("CleaningRecords.RecordNo", StringComparison.Ordinal));
+
+    /// <summary>Kısmi ya da normal benzersiz index ihlali; <paramref name="column"/> <c>Tablo.Kolon</c> biçimindedir. İleti dilinden bağımsız, kolon adına bakılır.</summary>
+    public static bool IsUniqueViolation(DbUpdateException exception, string column) =>
+        exception.InnerException is SqliteException { SqliteErrorCode: SqliteConstraint } inner
+        && inner.Message.Contains(column, StringComparison.Ordinal);
 }

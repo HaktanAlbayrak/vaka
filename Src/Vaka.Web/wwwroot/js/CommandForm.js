@@ -32,6 +32,12 @@ export class CommandForm {
         return;
       }
       const next = new DOMParser().parseFromString(await response.text(), "text/html");
+      const finishForm = next.querySelector("form[data-finish-reason]");
+      const dialog = document.querySelector("[data-finish-dialog]");
+      if (finishForm && dialog) {
+        this.showFinish(dialog, finishForm, submitter);
+        return;
+      }
       const main = next.getElementById("main");
       if (!main) {
         this.fail("Sunucu yanıtı okunamadı. Sayfayı yenileyip kaydın durumunu kontrol edin.");
@@ -43,7 +49,28 @@ export class CommandForm {
     }
   }
 
+  showFinish(dialog, finishForm, submitter) {
+    bindFinishDialog(dialog);
+    const body = dialog.querySelector("[data-finish-body]");
+    const fromDialog = dialog.contains(this.form);
+    body.replaceChildren(document.importNode(finishForm, true));
+    document.dispatchEvent(new CustomEvent("vaka:content", { detail: { root: body } }));
+    if (!fromDialog) {
+      const pin = this.form.querySelector("[data-pin-input]");
+      if (pin) {
+        pin.value = "";
+        pin.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+      dialog.returnTarget = submitter ?? null;
+    }
+    this.setBusy(false);
+    if (!dialog.open) dialog.showModal();
+    const focus = body.querySelector('[aria-invalid="true"]') ?? body.querySelector("[data-form-summary]") ?? body.querySelector("textarea, input:not([type=hidden])");
+    focus?.focus();
+  }
+
   replace(main, title) {
+    document.querySelector("[data-finish-dialog][open]")?.close();
     const current = document.getElementById("main");
     current.replaceChildren(...[...main.childNodes].map((node) => document.importNode(node, true)));
     document.title = title;
@@ -68,4 +95,18 @@ export class CommandForm {
       button.disabled = on;
     });
   }
+}
+
+function bindFinishDialog(dialog) {
+  if (dialog.dataset.bound === "true") return;
+  dialog.dataset.bound = "true";
+  dialog.addEventListener("click", (event) => {
+    if (!event.target.closest("[data-finish-cancel]")) return;
+    event.preventDefault();
+    dialog.close();
+  });
+  dialog.addEventListener("close", () => {
+    dialog.querySelector("[data-finish-body]")?.replaceChildren();
+    dialog.returnTarget?.focus();
+  });
 }

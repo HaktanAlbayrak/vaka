@@ -1,0 +1,61 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Records
+@inject IDurationFormatter DurationFormatter
+@model FinishStepViewModel
+@{
+    ViewData["Title"] = "Süre altı gerekçe";
+    ViewData["Lead"] = "Faz minimum süreye ulaşmadı. Adımı bitirmek için gerekçe yazın.";
+    ViewData["NavKey"] = "my-work";
+    var reasonError = ViewData.ModelState.TryGetValue("BelowMinimumReason", out var entry) && entry.Errors.Count > 0 ? entry.Errors[0].ErrorMessage : null;
+    var runUrl = "/records/run/" + Model.RecordId;
+}
+
+<div class="mx-auto max-w-2xl">
+    <section class="panel panel-tag border-t-warn" aria-labelledby="below-title">
+        <div class="panel-head">
+            <h2 id="below-title" class="panel-title">Faz süre altında kalıyor</h2>
+        </div>
+        <div class="panel-body">
+            <form method="post" action="/records/finish-step/@Model.StepId" class="space-y-5" data-validate data-command-form data-finish-reason asp-antiforgery="true">
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="notice notice-danger" role="alert" tabindex="-1" data-form-summary>
+                        <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+                        <div class="min-w-0">
+                            <p class="font-semibold">İşlem yapılmadı</p>
+                            <p class="mt-0.5 text-sm">@Model.ErrorMessage</p>
+                        </div>
+                    </div>
+                }
+                <dl class="kv grid-cols-1 sm:grid-cols-3">
+                    <div><dt>Faz</dt><dd>@Model.PhaseTitle</dd></div>
+                    <div><dt>Net süre</dt><dd><partial name="_Duration" model="DurationFormatter.Format(Model.PhaseNetSeconds)" /></dd></div>
+                    <div><dt>Minimum</dt><dd><partial name="_Duration" model="DurationFormatter.Format(Model.MinDurationSeconds)" /></dd></div>
+                </dl>
+                <input type="hidden" name="CommandId" value="@Model.CommandId" />
+                <div class="field" data-field>
+                    <label class="field-label" for="BelowMinimumReason">Gerekçe</label>
+                    <textarea id="BelowMinimumReason" name="BelowMinimumReason" class="input" rows="4" autocomplete="off" required data-required-message="Gerekçeyi yazın."
+                              aria-describedby="@(reasonError is null ? "reason-hint" : "reason-hint BelowMinimumReason-error")" aria-invalid="@(reasonError is null ? null : "true")">@Model.BelowMinimumReason</textarea>
+                    <p id="reason-hint" class="field-hint">Süre neden minimumun altında kaldı. Gerekçe kayıtla birlikte saklanır ve ekranda görünür.</p>
+                    @if (reasonError is not null)
+                    {
+                        <partial name="_FieldError" model='("BelowMinimumReason-error", reasonError)' />
+                    }
+                </div>
+                <partial name="_PinInput" model='("pin-finish-below", "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                <div class="notice notice-danger" role="alert" data-command-status hidden>
+                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                    <p class="font-semibold" data-command-message></p>
+                </div>
+                <div class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
+                    <button type="submit" class="btn btn-primary btn-lg whitespace-nowrap">
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#check" /></svg>
+                        Gerekçeyle bitir
+                    </button>
+                    <a class="btn btn-secondary btn-lg" href="@runUrl" data-finish-cancel>Vazgeç</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>

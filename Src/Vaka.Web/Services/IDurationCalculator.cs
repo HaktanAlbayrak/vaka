@@ -107,4 +107,97 @@ public interface IDurationCalculator
     /// </summary>
     /// <remarks>Zaman aşımı anı olarak kaydedilen değer şimdi değil kilit bitişidir.</remarks>
     bool IsLockExpired(DateTimeOffset lockExpiresAt, DateTimeOffset now);
+
+    /// <summary>
+    /// Adımla kesişen mola süresi, saniye (SH-17, K-39, PL-19).
+    /// Adım molası = Σ max(0, min(Mola bitişi, Adım bitişi) - max(Mola başlangıcı, Adım başlangıcı)), yalnız kapanmış molalar
+    /// </summary>
+    /// <remarks>
+    /// Faz 5'te mola yalnız iki adım arasında verildiğinden hiçbir mola bir adım aralığıyla kesişmez ve sonuç 0 olur;
+    /// adım sürerken verilen mola Faz 7'de aynı formülle değer üretir (PL-57). Açık mola hesaba girmez.
+    /// </remarks>
+    int CalculateStepBreaks(DateTimeOffset stepStart, DateTimeOffset stepEnd, IReadOnlyList<BreakSpan> breaks);
+
+    /// <summary>
+    /// Adım süresi, saniye (SH-01).
+    /// Süre = (Bitiş - Başlangıç) - SH-17 adım molası; saniyeye aşağı yuvarlanır, 0'ın altına inmez
+    /// </summary>
+    int CalculateStepDuration(DateTimeOffset start, DateTimeOffset end, int stepBreakSeconds);
+
+    /// <summary>
+    /// Adım eforu, saniye (SH-02).
+    /// Efor = SH-01 adım süresi x adımın görevli sayısı (adım başlarken listedeki kişiler)
+    /// </summary>
+    /// <remarks>Faz 8'de görevli düzeltmesi geldiğinde orijinal sayı korunur ve düzeltilmiş efor ayrıca gösterilir (PL-09).</remarks>
+    int CalculateStepEffort(int durationSeconds, int participantCount);
+
+    /// <summary>
+    /// Faz brüt süresi, saniye (SH-03).
+    /// Brüt = Fazın son adımının bitişi - fazın ilk adımının başlangıcı
+    /// </summary>
+    /// <remarks>Kayıt açılış anı ve adımlar arası boşluk faz aralığı içindedir; açılış ile ilk adım arası hiçbir süreye girmez (BR-13).</remarks>
+    int CalculatePhaseGross(DateTimeOffset firstStepStart, DateTimeOffset lastStepEnd);
+
+    /// <summary>
+    /// Faz molası, saniye (SH-04).
+    /// Faz molası = Σ max(0, min(Mola bitişi, Faz bitişi) - max(Mola başlangıcı, Faz başlangıcı)), yalnız kapanmış molalar
+    /// </summary>
+    /// <remarks>Faz aralığının dışında kalan mola (iki faz arası) faz molasına girmez, kayıt molasına girer (SH-09).</remarks>
+    int CalculatePhaseBreaks(DateTimeOffset phaseStart, DateTimeOffset phaseEnd, IReadOnlyList<BreakSpan> breaks);
+
+    /// <summary>
+    /// Faz net süresi, saniye (SH-06).
+    /// Net = SH-03 faz brüt - SH-04 faz molası; 0'ın altına inmez
+    /// </summary>
+    /// <remarks>Faz 5'te beklemeler (SH-05) yoktur, terim Faz 7'de eklenir. Mola verilmeden geçen boşluk net süreye dahildir (SC-06).</remarks>
+    int CalculatePhaseNet(int phaseGrossSeconds, int phaseBreakSeconds);
+
+    /// <summary>
+    /// Faz minimum kontrolü (SH-07, BR-21).
+    /// Süre altında: minimum tanımlıysa ve SH-06 faz net &lt; minimum (saniye); minimum tanımsızsa false
+    /// </summary>
+    /// <remarks>Net süre minimuma eşitse süre altı sayılmaz.</remarks>
+    bool IsBelowMinimum(int phaseNetSeconds, int? minDurationSeconds);
+
+    /// <summary>
+    /// Kayıt brüt süresi, saniye (SH-08).
+    /// Brüt = Son adımın bitişi - ilk adımın başlangıcı
+    /// </summary>
+    /// <remarks>Açılış anı ayrı alandır; açılış ile ilk adım arasındaki süre hesaba girmez (BR-13).</remarks>
+    int CalculateRecordGross(DateTimeOffset firstStepStart, DateTimeOffset lastStepEnd);
+
+    /// <summary>
+    /// Kayıt molası, saniye (SH-09).
+    /// Kayıt molası = Σ max(0, min(Mola bitişi, Kayıt bitişi) - max(Mola başlangıcı, Kayıt başlangıcı)), yalnız kapanmış molalar
+    /// </summary>
+    int CalculateRecordBreaks(DateTimeOffset recordStart, DateTimeOffset recordEnd, IReadOnlyList<BreakSpan> breaks);
+
+    /// <summary>
+    /// Kayıt net süresi, saniye (SH-11).
+    /// Net = SH-08 kayıt brüt - SH-09 kayıt molası; 0'ın altına inmez
+    /// </summary>
+    /// <remarks>Faz 5'te bekleme (SH-10) yoktur, terim Faz 7'de eklenir.</remarks>
+    int CalculateRecordNet(int recordGrossSeconds, int recordBreakSeconds);
+
+    /// <summary>
+    /// Kayıt eforu, saniye (SH-12).
+    /// Efor = Σ kaydın tamamlanmış adımlarının SH-02 eforu
+    /// </summary>
+    int CalculateRecordEffort(IReadOnlyList<int> stepEffortSeconds);
+
+    /// <summary>
+    /// Canlı geçen süre, saniye (SH-14); adım, faz ve kayıt sayaçları için, sunucu hesaplar, JS yalnız ilerletir.
+    /// Canlı = (Şimdi - Başlangıç) - Σ max(0, min(Mola bitişi ya da Şimdi, Şimdi) - max(Mola başlangıcı, Başlangıç)); açık molanın bitişi Şimdi sayılır
+    /// </summary>
+    /// <remarks>
+    /// Açık mola süresince Şimdi ile mola başlangıcı birlikte ilerler, fark sabit kalır: değer artmaz. Mola bitince değer kaldığı yerden sürer.
+    /// Başlangıç Şimdi'den sonraysa 0. Faz 7'de beklemeler düşülür.
+    /// </remarks>
+    int CalculateLiveElapsed(DateTimeOffset start, DateTimeOffset now, IReadOnlyList<BreakSpan> breaks);
+
+    /// <summary>
+    /// Mola süresi, saniye (SH-14 canlı süre ve mola listesi, mola ekranı ve bandı).
+    /// Açık mola: Süre = Sunucu anı - Mola başlangıcı (bitiş yerine sunucu anı verilir); kapanmış mola: Süre = Bitiş - Başlangıç; 0'ın altına inmez
+    /// </summary>
+    int CalculateBreakSeconds(DateTimeOffset breakStart, DateTimeOffset breakEnd);
 }

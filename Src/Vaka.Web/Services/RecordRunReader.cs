@@ -9,21 +9,36 @@ public sealed class RecordRunReader : IRecordRunReader
     private readonly VakaDbContext _db;
     private readonly IRecordTimeouts _timeouts;
     private readonly ILotCatalog _lots;
+    private readonly IRunBreakReader _breaks;
+    private readonly IRunProgressReader _progress;
+    private readonly IParticipantDirectory _participants;
     private readonly ITurkeyClock _clock;
+    private readonly TimeProvider _time;
 
-    public RecordRunReader(VakaDbContext db, IRecordTimeouts timeouts, ILotCatalog lots, ITurkeyClock clock)
+    public RecordRunReader(
+        VakaDbContext db,
+        IRecordTimeouts timeouts,
+        ILotCatalog lots,
+        IRunBreakReader breaks,
+        IRunProgressReader progress,
+        IParticipantDirectory participants,
+        ITurkeyClock clock,
+        TimeProvider time)
     {
         _db = db;
         _timeouts = timeouts;
         _lots = lots;
+        _breaks = breaks;
+        _progress = progress;
+        _participants = participants;
         _clock = clock;
+        _time = time;
     }
 
     public async Task<LookupResult<RecordRunViewModel>> GetAsync(
         int recordId,
         int viewerUserId,
-        string? lotQuery,
-        int? pendingLotId,
+        RunViewOptions options,
         CancellationToken cancellationToken)
     {
         await _timeouts.ApplyAsync(TimeoutScope.ForRecord(recordId), cancellationToken);
@@ -61,7 +76,10 @@ public sealed class RecordRunReader : IRecordRunReader
             return LookupResult<RecordRunViewModel>.Missing();
         }
 
-        var phases = await ReadPhasesAsync(recordId, cancellationToken);
+        var context = new RunContext(recordId, viewerUserId, row.OwnerUserId, row.Status, row.MaterialRequired, _time.GetUtcNow());
+        var breakPanel = await _breaks.ReadAsync(context, cancellationToken);
+        var progress = await _progress.ReadAsync(context, breakPanel, row.OpenedAtUtc, cancellationToken);
+        var phases = progress.Phases;
         var materials = await ReadMaterialsAsync(recordId, cancellationToken);
         var isOwner = row.OwnerUserId == viewerUserId;
         var noStepStarted = phases.All(phase => phase.Steps.All(step => step.Status == StepStatus.Waiting));
@@ -92,58 +110,34 @@ public sealed class RecordRunReader : IRecordRunReader
             CommandId = Guid.NewGuid(),
             Materials = materials,
             Phases = phases,
-            LotQuery = lotQuery
+            LotQuery = options.LotQuery,
+            Breaks = breakPanel.Breaks,
+            OpenBreak = breakPanel.OpenBreak,
+            TimersRunning = breakPanel.OpenBreak is null,
+            CanStartBreak = progress.CanStartBreak,
+            CannotBreakReason = progress.CannotBreakReason,
+            Summary = progress.Summary,
+            FirstStepStartedByName = progress.FirstStepStartedByName,
+            PendingParticipant = options.PendingParticipant
         };
 
         if (canManage)
         {
-            var catalog = await _lots.FindAsync(lotQuery, pendingLotId, cancellationToken);
+            var catalog = await _lots.FindAsync(options.LotQuery, options.PendingLotId, recordId, cancellationToken);
             model.AvailableLots = catalog.Lots;
             model.AvailableLotsTruncated = catalog.Truncated;
         }
 
-        return LookupResult<RecordRunViewModel>.Found(model);
-    }
-
-    private async Task<RecordPhaseViewModel[]> ReadPhasesAsync(int recordId, CancellationToken cancellationToken)
-    {
-        var phases = await _db.RecordPhases
-            .AsNoTracking()
-            .Where(phase => phase.CleaningRecordId == recordId)
-            .OrderBy(phase => phase.ProcedurePhase.OrderNo)
-            .Select(phase => new RecordPhaseViewModel
-            {
-                Id = phase.Id,
-                OrderNo = phase.ProcedurePhase.OrderNo,
-                Title = phase.ProcedurePhase.Title,
-                MinDurationSeconds = phase.MinDurationSecondsSnapshot,
-                Status = phase.Status,
-                Steps = phase.Steps
-                    .OrderBy(step => step.ProcedureStep.OrderNo)
-                    .Select(step => new RecordStepViewModel
-                    {
-                        Id = step.Id,
-                        OrderNo = step.ProcedureStep.OrderNo,
-                        Title = step.ProcedureStep.Title,
-                        Status = step.Status
-                    })
-                    .ToArray()
-            })
-            .ToArrayAsync(cancellationToken);
-
-        var previousCompleted = true;
-        foreach (var phase in phases)
+        if (options.ParticipantStepId is { } stepId && phases.SelectMany(phase => phase.Steps).FirstOrDefault(step => step.Id == stepId) is { CanManageParticipants: true })
         {
-            phase.StatusLabel = RecordLabels.Phase(phase.Status);
-            foreach (var step in phase.Steps)
-            {
-                step.StatusLabel = RecordLabels.Step(step.Status);
-                step.IsNext = previousCompleted && step.Status == StepStatus.Waiting;
-                previousCompleted = step.Status == StepStatus.Completed;
-            }
+            var found = await _participants.SearchAsync(options.ParticipantQuery, stepId, options.PendingParticipant?.ParticipantUserId, cancellationToken);
+            model.ParticipantStepId = stepId;
+            model.ParticipantQuery = options.ParticipantQuery;
+            model.ParticipantOptions = found.Options;
+            model.ParticipantOptionsTruncated = found.Truncated;
         }
 
-        return phases;
+        return LookupResult<RecordRunViewModel>.Found(model);
     }
 
     private async Task<RecordMaterialViewModel[]> ReadMaterialsAsync(int recordId, CancellationToken cancellationToken)

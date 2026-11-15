@@ -1,0 +1,14 @@
+Faz 5 teslim testi, 2026-11-15. main çalışma ağacı (HEAD 4c0a01d). Release yayını .qa/f5/build (ön tur) ve .qa/f5/build2 (FE 10 sonrası, teslim testi). Port 5501 Production, DB .qa/f5/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5503 Development, .qa/f5/qa-dev.db, user-secrets anahtarı. Saatler: DB UTC, ekran Türkiye (UTC+3). Test PIN ve parolası yazılmadı.
+
+== K16 Ö-03 ve SC-37: yayınlanan Vaka.Web.dll içindeki DurationCalculator doğrudan çağrıldı (.qa/f5/calc, ITurkeyClock taklidi). Adım 1 10:00:00-10:00:12, adım 2 10:40:12 başlar, d sonra biter; mola 10:00:12-10:40:12
+d=0s molasız: adım1 12 sn, adım2 0 sn, faz brüt 2412 sn (40 dk 12 sn), faz mola 0 sn, faz net 2412 sn (40 dk 12 sn), minimum 900 sn ile süre altı: False
+d=0s 40 dk mola: adım1 12 sn, adım2 0 sn, faz brüt 2412 sn (40 dk 12 sn), faz mola 2400 sn, faz net 12 sn (0 dk 12 sn), minimum 900 sn ile süre altı: True
+d=30s molasız: adım1 12 sn, adım2 30 sn, faz brüt 2442 sn (40 dk 42 sn), faz mola 0 sn, faz net 2442 sn (40 dk 42 sn), minimum 900 sn ile süre altı: False
+d=30s 40 dk mola: adım1 12 sn, adım2 30 sn, faz brüt 2442 sn (40 dk 42 sn), faz mola 2400 sn, faz net 42 sn (0 dk 42 sn), minimum 900 sn ile süre altı: True
+d=300s molasız: adım1 12 sn, adım2 300 sn, faz brüt 2712 sn (45 dk 12 sn), faz mola 0 sn, faz net 2712 sn (45 dk 12 sn), minimum 900 sn ile süre altı: False
+d=300s 40 dk mola: adım1 12 sn, adım2 300 sn, faz brüt 2712 sn (45 dk 12 sn), faz mola 2400 sn, faz net 312 sn (5 dk 12 sn), minimum 900 sn ile süre altı: True
+SC-37: adım molası 40 dk, adım süresi 10 dk, efor (2 görevli) 20 dk
+SH-14 açık molada: başlangıç 10:00:00, mola 10:00:02.6- açık; şimdi 10:05:00.3 -> 3, şimdi 10:05:00.5 -> 3
+Son satır B1: açık molada aynı faz için sunucu anının saniye kesrine göre 2 ya da 3 (ayrı ayrı aşağı yuvarlama).
+
+== K20 IDurationCalculator XML yorumları: SH-17 CalculateStepBreaks, SH-01 CalculateStepDuration, SH-02 CalculateStepEffort, SH-03 CalculatePhaseGross, SH-04 CalculatePhaseBreaks, SH-06 CalculatePhaseNet, SH-07 IsBelowMinimum, SH-08 CalculateRecordGross, SH-09 CalculateRecordBreaks, SH-11 CalculateRecordNet, SH-12 CalculateRecordEffort, SH-14 CalculateLiveElapsed, açık mola CalculateBreakSeconds; kod DurationCalculator.cs:140-205 formüllerle aynı.

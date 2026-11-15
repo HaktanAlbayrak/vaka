@@ -118,3 +118,33 @@ INSERT OR IGNORE INTO "ProcedureSteps" ("Id","ProcedurePhaseId","OrderNo","Title
 UPDATE "ProcedureVersions" SET "Status" = 2, "PublishedAtUtc" = '2026-10-01 08:00:00'
  WHERE "Id" = 3 AND "Status" = 1 AND "PublishedByUserId" IS NULL
    AND EXISTS (SELECT 1 FROM "ProcedurePhases" WHERE "ProcedureVersionId" = "ProcedureVersions"."Id");
+
+-- Faz 5 notr demo verisi (DB-2026-007): dorduncu planli tip (KSA). Faz 4 duzeni: versiyon once Taslak yazilir,
+-- faz ve adimlar yalniz versiyon Taslak iken eklenir, en sonda Yururlukte yapilir. Onceki satirlar degismez.
+-- Ikinci calistirmada hicbir ifade satir eklemez ya da degistirmez.
+INSERT OR IGNORE INTO "CleaningTypes" ("Id","Code","Name","Kind","DefaultLockMinutes","IsActive") VALUES
+ (4,'KSA','Kısa planlı temizlik',1,90,1);
+
+INSERT OR IGNORE INTO "MachineCleaningTypes" ("MachineId","CleaningTypeId")
+ SELECT "Id", 4 FROM "Machines" WHERE "Id" IN (1,2,3,5) AND "IsActive" = 1 AND "RetiredAtUtc" IS NULL;
+
+INSERT OR IGNORE INTO "ProcedureVersions" ("Id","CleaningTypeId","VersionNo","Status","MaterialRequired","DocumentRef","PublishedAtUtc","PublishedByUserId") VALUES
+ (4,4,1,1,0,NULL,NULL,NULL);
+
+INSERT OR IGNORE INTO "ProcedurePhases" ("Id","ProcedureVersionId","OrderNo","Title","MinDurationSeconds")
+ SELECT column1, column2, column3, column4, column5 FROM (VALUES
+  (8,4,1,'Hazırlık',60),
+  (9,4,2,'Temizlik ve kontrol',60))
+ WHERE EXISTS (SELECT 1 FROM "ProcedureVersions" WHERE "Id" = 4 AND "Status" = 1);
+
+INSERT OR IGNORE INTO "ProcedureSteps" ("Id","ProcedurePhaseId","OrderNo","Title","Description")
+ SELECT column1, column2, column3, column4, column5 FROM (VALUES
+  (20,8,1,'Makineyi durdur',NULL),
+  (21,8,2,'Alanı hazırla',NULL),
+  (22,9,1,'Yüzeyi sil',NULL),
+  (23,9,2,'Alanı kontrol et ve teslim et',NULL))
+ WHERE EXISTS (SELECT 1 FROM "ProcedureVersions" WHERE "Id" = 4 AND "Status" = 1);
+
+UPDATE "ProcedureVersions" SET "Status" = 2, "PublishedAtUtc" = '2026-10-01 08:00:00'
+ WHERE "Id" = 4 AND "Status" = 1 AND "PublishedByUserId" IS NULL
+   AND EXISTS (SELECT 1 FROM "ProcedurePhases" WHERE "ProcedureVersionId" = "ProcedureVersions"."Id");

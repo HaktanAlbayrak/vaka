@@ -1,0 +1,146 @@
+@using Vaka.Web.ViewModels.Records
+@model (RecordRunViewModel Run, RecordStepViewModel Step)
+@{
+    var run = Model.Run;
+    var step = Model.Step;
+    var stepKey = "step-" + step.Id;
+    var filtering = run.ParticipantStepId == step.Id;
+    var pending = run.PendingParticipant is { } candidate && candidate.StepId == step.Id ? candidate : null;
+    var pendingOption = pending is null ? null : run.ParticipantOptions.FirstOrDefault(option => option.UserId == pending.ParticipantUserId);
+    var open = filtering || pending is not null;
+    var options = filtering ? run.ParticipantOptions : Array.Empty<ParticipantOptionViewModel>();
+}
+<div class="space-y-3">
+    @if (step.Participants.Length == 0)
+    {
+        <p class="text-sm text-muted">Bu adıma görevli eklenmedi. Adım bitince efor yazılmaz.</p>
+    }
+    else
+    {
+        <ul class="flex flex-wrap gap-2" aria-label="Görevliler">
+            @foreach (var person in step.Participants)
+            {
+                <li class="chip break-words">@person.FullName <span class="mono text-xs text-muted">@person.RegistryNo</span>@(person.IsOwner ? ", sahip" : "")</li>
+            }
+        </ul>
+    }
+
+    @if (step.CanManageParticipants)
+    {
+        <details class="tool" open="@open">
+            <summary>
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#users" /></svg>
+                Görevleri düzenle
+            </summary>
+            <div class="tool-body space-y-5">
+                @foreach (var person in step.Participants)
+                {
+                    <details class="tool tool-danger">
+                        <summary aria-label="@person.FullName görevlisini bu adımdan çıkarmak için aç">
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-x" /></svg>
+                            @person.FullName çıkar
+                        </summary>
+                        <form method="post" action="/records/remove-participant/@step.Id" class="tool-body space-y-3" data-validate data-command-form asp-antiforgery="true">
+                            <input type="hidden" name="CommandId" value="@run.CommandId" />
+                            <input type="hidden" name="ParticipantUserId" value="@person.UserId" />
+                            <p class="text-sm">@person.FullName bu adımdan çıkarılır. Onay için PIN'inizi girin.</p>
+                            <partial name="_PinInput" model='("pin-remove-person-" + step.Id + "-" + person.UserId, "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                            <div class="notice notice-danger" role="alert" data-command-status hidden>
+                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                                <p class="font-semibold" data-command-message></p>
+                            </div>
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-x" /></svg>
+                                Görevliyi çıkar
+                            </button>
+                        </form>
+                    </details>
+                }
+
+                <form method="get" action="/records/run/@run.Id" class="field" data-people-nojs>
+                    <input type="hidden" name="stepId" value="@step.Id" />
+                    <label class="field-label" for="@(stepKey)-people">Kişi ara</label>
+                    <div class="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
+                        <input id="@(stepKey)-people" name="people" type="search" class="input" value="@(filtering ? run.ParticipantQuery : null)" autocomplete="off" spellcheck="false" inputmode="search" />
+                        <button type="submit" class="btn btn-secondary min-h-12">
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#search" /></svg>
+                            Kişileri ara
+                        </button>
+                    </div>
+                </form>
+
+                <form method="post" action="/records/add-participant/@step.Id" class="space-y-4" data-validate data-command-form asp-antiforgery="true">
+                    <input type="hidden" name="CommandId" value="@run.CommandId" />
+                    <div class="space-y-3" data-people-picker data-people-url="/records/people" data-step-id="@step.Id">
+                        <div class="field" data-field data-people-js>
+                            <label class="field-label" for="@(stepKey)-search">Görevli ekle</label>
+                            <input id="@(stepKey)-search" type="search" class="input" autocomplete="off" spellcheck="false" inputmode="search" enterkeyhint="search"
+                                   aria-controls="@(stepKey)-results" aria-describedby="@(stepKey)-hint @(stepKey)-status" data-people-search />
+                            <p id="@(stepKey)-hint" class="field-hint">Ad ya da sicil no yazın.</p>
+                            <p id="@(stepKey)-status" class="field-hint" role="status" data-people-status></p>
+                        </div>
+                        <ul id="@(stepKey)-results" class="lot-results" aria-label="Bulunan kişiler" data-people-js data-people-results hidden></ul>
+                        <div class="space-y-2" data-people-js>
+                            <p class="text-sm" data-people-chosen hidden><span class="font-semibold">Seçilen kişi:</span> <span data-people-chosen-name></span></p>
+                            <div class="notice notice-warn" data-people-warning hidden>
+                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>
+                                <p class="text-sm">Bu kişinin kendi açık kaydı var. Yine de ekleyebilirsiniz.</p>
+                            </div>
+                            <input type="hidden" name="ParticipantUserId" disabled data-people-input />
+                        </div>
+                        @if (pending is not null)
+                        {
+                            <template data-people-pending data-user-id="@pending.ParticipantUserId" data-full-name="@(pendingOption?.FullName ?? "Önceden seçilen kişi")"
+                                      data-registry-no="@(pendingOption?.RegistryNo ?? "-")" data-warn="@(pendingOption?.HasOwnActiveRecord == true ? "true" : "false")"></template>
+                        }
+
+                        <fieldset class="space-y-2" data-people-nojs>
+                            <legend class="field-label">Görevli seç</legend>
+                            @if (!filtering)
+                            {
+                                <p class="text-sm text-muted">Önce kişi arayın.</p>
+                            }
+                            else if (options.Length == 0)
+                            {
+                                <p class="text-sm text-muted">Aramaya uyan kişi yok.</p>
+                            }
+                            else
+                            {
+                                @foreach (var option in options)
+                                {
+                                    <label class="choice @(option.IsAvailable ? null : "opacity-70")">
+                                        <input type="radio" name="ParticipantUserId" value="@option.UserId" checked="@(pending?.ParticipantUserId == option.UserId)" disabled="@(!option.IsAvailable)" />
+                                        <span class="min-w-0">
+                                            <span class="block break-words font-semibold">@option.FullName <span class="mono text-sm text-muted">@option.RegistryNo</span></span>
+                                            @if (!option.IsAvailable)
+                                            {
+                                                <span class="block text-sm text-muted">Eklenemez: @option.UnavailableReason</span>
+                                            }
+                                            else if (option.HasOwnActiveRecord)
+                                            {
+                                                <span class="block text-sm font-semibold text-warn">Kendi açık kaydı var, yine de eklenebilir.</span>
+                                            }
+                                        </span>
+                                    </label>
+                                }
+                                @if (run.ParticipantOptionsTruncated)
+                                {
+                                    <p class="text-sm text-muted">Liste kısaltıldı. Aramayı daraltın.</p>
+                                }
+                            }
+                        </fieldset>
+                    </div>
+                    <partial name="_PinInput" model='("pin-add-person-" + step.Id, "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                    <div class="notice notice-danger" role="alert" data-command-status hidden>
+                        <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                        <p class="font-semibold" data-command-message></p>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-plus" /></svg>
+                        Görevliyi ekle
+                    </button>
+                </form>
+            </div>
+        </details>
+    }
+</div>

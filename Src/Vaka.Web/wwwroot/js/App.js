@@ -4,6 +4,8 @@ import { ConnectionStatus } from "./ConnectionStatus.js";
 import { PinInput } from "./PinInput.js";
 import { RevealToggle } from "./RevealToggle.js";
 import { LiveCounter } from "./LiveCounter.js";
+import { LiveTimer } from "./LiveTimer.js";
+import { ParticipantPicker } from "./ParticipantPicker.js";
 import { FormValidation } from "./FormValidation.js";
 import { FormBusy, bindBusyLinks } from "./FormBusy.js";
 import { UnsavedGuard } from "./UnsavedGuard.js";
@@ -24,6 +26,8 @@ new ConnectionStatus(document.documentElement);
 function bindContent(root) {
   root.querySelectorAll("[data-pin]").forEach((element) => new PinInput(element));
   root.querySelectorAll("[data-reveal]").forEach((element) => new RevealToggle(element));
+  root.querySelectorAll("[data-live-timer]").forEach((element) => new LiveTimer(element));
+  root.querySelectorAll("[data-people-picker]").forEach((element) => new ParticipantPicker(element));
   root.querySelectorAll("[data-live-counter]").forEach((element) => new LiveCounter(element));
   root.querySelectorAll("form[data-validate]").forEach((form) => new FormValidation(form));
   root.querySelectorAll("form[data-busy-form]").forEach((form) => new FormBusy(form));
@@ -39,8 +43,8 @@ function bindContent(root) {
 }
 
 bindContent(document);
-document.addEventListener("vaka:content", () => {
-  const main = document.getElementById("main");
-  if (main) bindContent(main);
+document.addEventListener("vaka:content", (event) => {
+  const root = event.detail?.root ?? document.getElementById("main");
+  if (root) bindContent(root);
 });
 (document.querySelector('main [aria-invalid="true"]') ?? document.querySelector("main [data-form-summary]"))?.focus();

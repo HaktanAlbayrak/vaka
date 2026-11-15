@@ -7,7 +7,8 @@ public enum CommandStatus
     Forbidden,
     NotFound,
     PinLocked,
-    NotEditable
+    NotEditable,
+    OnBreak
 }
 
 public sealed record FieldError(string Field, string Message);
@@ -56,6 +57,10 @@ public sealed class CommandResult
     /// <summary>Yayınlanmış versiyona yönelik düzenleme isteği (BR-04); <see cref="EntityId"/> versiyon kimliğidir.</summary>
     public static CommandResult NotEditable(int versionId) =>
         new(CommandStatus.NotEditable, [new FieldError(string.Empty, "Yayınlanmış versiyon değiştirilemez. Değişiklik için yeni taslak açın.")], versionId);
+
+    /// <summary>Molada olan kişinin yazma isteği (BR-39, SC-26); controller <c>/breaks/current</c>'a yönlendirir.</summary>
+    public static CommandResult OnBreak() =>
+        new(CommandStatus.OnBreak, [new FieldError(string.Empty, "Açık molanız var. Önce molayı bitirin.")], null);
 
     public static CommandResult NotFound() => new(CommandStatus.NotFound, NoErrors, null);
 

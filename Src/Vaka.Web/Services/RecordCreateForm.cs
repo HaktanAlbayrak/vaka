@@ -55,7 +55,7 @@ public sealed class RecordCreateForm : IRecordCreateForm
         }
 
         model.Materials = await ResolveMaterialsAsync(posted, applyMaterialEdits, cancellationToken);
-        var catalog = await _lots.FindAsync(model.LotQuery, null, cancellationToken);
+        var catalog = await _lots.FindAsync(model.LotQuery, null, null, cancellationToken);
         model.AvailableLots = catalog.Lots;
         model.AvailableLotsTruncated = catalog.Truncated;
         return model;

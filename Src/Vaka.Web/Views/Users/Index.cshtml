@@ -37,12 +37,15 @@
         </div>
         <div class="field">
             <label class="field-label" for="status">Durum</label>
-            <select id="status" name="status" class="input">
+            <div class="select-wrap">
+                <select id="status" name="status" class="input">
                 @foreach (var option in statusOptions)
                 {
                     <option value="@option.Value" selected="@(option.Value == statusValue)">@option.Text</option>
                 }
             </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
         </div>
         <div class="flex flex-wrap gap-2">
             <button type="submit" class="btn btn-primary min-h-12">

@@ -44,4 +44,5 @@ public class CleaningRecord
     public ICollection<RecordPhase> Phases { get; set; } = new List<RecordPhase>();
     public ICollection<RecordMaterial> Materials { get; set; } = new List<RecordMaterial>();
     public ICollection<CleaningEvent> Events { get; set; } = new List<CleaningEvent>();
+    public ICollection<RecordBreak> Breaks { get; set; } = new List<RecordBreak>();
 }

@@ -33,6 +33,7 @@ public class VakaDbContext : DbContext
     public DbSet<CleaningEvent> CleaningEvents => Set<CleaningEvent>();
     public DbSet<ProcessedCommand> ProcessedCommands => Set<ProcessedCommand>();
     public DbSet<NumberSequence> NumberSequences => Set<NumberSequence>();
+    public DbSet<RecordBreak> RecordBreaks => Set<RecordBreak>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

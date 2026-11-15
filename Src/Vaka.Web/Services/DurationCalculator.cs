@@ -133,4 +133,68 @@ public sealed class DurationCalculator : IDurationCalculator
     /// Geçti: Şimdi &gt;= Kilit bitişi (bitiş anının kendisinde kilit kalkar)
     /// </summary>
     public bool IsLockExpired(DateTimeOffset lockExpiresAt, DateTimeOffset now) => now >= lockExpiresAt;
+
+    public int CalculateStepBreaks(DateTimeOffset stepStart, DateTimeOffset stepEnd, IReadOnlyList<BreakSpan> breaks) =>
+        OverlapSeconds(stepStart, stepEnd, breaks, null);
+
+    public int CalculateStepDuration(DateTimeOffset start, DateTimeOffset end, int stepBreakSeconds) =>
+        Math.Max(0, WholeSeconds(end - start) - stepBreakSeconds);
+
+    public int CalculateStepEffort(int durationSeconds, int participantCount) => checked(durationSeconds * participantCount);
+
+    public int CalculatePhaseGross(DateTimeOffset firstStepStart, DateTimeOffset lastStepEnd) =>
+        Math.Max(0, WholeSeconds(lastStepEnd - firstStepStart));
+
+    public int CalculatePhaseBreaks(DateTimeOffset phaseStart, DateTimeOffset phaseEnd, IReadOnlyList<BreakSpan> breaks) =>
+        OverlapSeconds(phaseStart, phaseEnd, breaks, null);
+
+    public int CalculatePhaseNet(int phaseGrossSeconds, int phaseBreakSeconds) => Math.Max(0, phaseGrossSeconds - phaseBreakSeconds);
+
+    public bool IsBelowMinimum(int phaseNetSeconds, int? minDurationSeconds) =>
+        minDurationSeconds is { } minimum && phaseNetSeconds < minimum;
+
+    public int CalculateRecordGross(DateTimeOffset firstStepStart, DateTimeOffset lastStepEnd) =>
+        Math.Max(0, WholeSeconds(lastStepEnd - firstStepStart));
+
+    public int CalculateRecordBreaks(DateTimeOffset recordStart, DateTimeOffset recordEnd, IReadOnlyList<BreakSpan> breaks) =>
+        OverlapSeconds(recordStart, recordEnd, breaks, null);
+
+    public int CalculateRecordNet(int recordGrossSeconds, int recordBreakSeconds) => Math.Max(0, recordGrossSeconds - recordBreakSeconds);
+
+    public int CalculateRecordEffort(IReadOnlyList<int> stepEffortSeconds) => stepEffortSeconds.Sum();
+
+    public int CalculateLiveElapsed(DateTimeOffset start, DateTimeOffset now, IReadOnlyList<BreakSpan> breaks)
+    {
+        if (now <= start)
+        {
+            return 0;
+        }
+
+        return Math.Max(0, WholeSeconds(now - start) - OverlapSeconds(start, now, breaks, now));
+    }
+
+    public int CalculateBreakSeconds(DateTimeOffset breakStart, DateTimeOffset breakEnd) => Math.Max(0, WholeSeconds(breakEnd - breakStart));
+
+    private static int OverlapSeconds(DateTimeOffset from, DateTimeOffset to, IReadOnlyList<BreakSpan> breaks, DateTimeOffset? openBreakEnd)
+    {
+        var ticks = 0L;
+        foreach (var span in breaks)
+        {
+            var end = span.End ?? openBreakEnd;
+            if (end is null)
+            {
+                continue;
+            }
+
+            var overlap = (end.Value < to ? end.Value : to) - (span.Start > from ? span.Start : from);
+            if (overlap > TimeSpan.Zero)
+            {
+                ticks += overlap.Ticks;
+            }
+        }
+
+        return WholeSeconds(TimeSpan.FromTicks(ticks));
+    }
+
+    private static int WholeSeconds(TimeSpan span) => (int)Math.Floor(span.TotalSeconds);
 }

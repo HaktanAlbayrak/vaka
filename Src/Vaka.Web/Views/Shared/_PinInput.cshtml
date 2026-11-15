@@ -1,5 +1,13 @@
+@using Vaka.Web.Services
+@inject ISystemSettingsReader Settings
 @model (string Id, string Label, string Mode, int? Length, string? Name, string? Error)
 @{
+    const string LengthKey = "Vaka.PinLength";
+    if (Context.Items[LengthKey] is not int pinLength)
+    {
+        pinLength = await Settings.GetValueAsync(SettingKeys.PinLength, Context.RequestAborted);
+        Context.Items[LengthKey] = pinLength;
+    }
     var isSetMode = Model.Mode == "set";
     var hintId = Model.Id + "-hint";
     var errorId = Model.Id + "-error";
@@ -10,8 +18,7 @@
     <label class="field-label" for="@Model.Id">@Model.Label</label>
     <div class="relative">
         <input id="@Model.Id" name="@Model.Name" class="input pin-input pr-14" type="password" inputmode="numeric" pattern="[0-9]*"
-               autocomplete="off" spellcheck="false" required
-               maxlength="@(isSetMode ? Model.Length : null)"
+               autocomplete="off" spellcheck="false" required maxlength="@pinLength"
                aria-describedby="@describedBy" aria-invalid="@(error is null ? null : "true")" data-pin-input />
         <button type="button" class="icon-btn field-reveal" data-pin-reveal aria-pressed="false" aria-label="PIN'i göster">
             <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#eye" /></svg>
@@ -20,13 +27,13 @@
     @if (isSetMode)
     {
         <div class="pin-slots" aria-hidden="true" data-pin-slots>
-            @for (var slot = 0; slot < Model.Length; slot++)
+            @for (var slot = 0; slot < pinLength; slot++)
             {
                 <span class="pin-slot"></span>
             }
         </div>
     }
-    <p id="@hintId" class="field-hint">@(isSetMode ? $"{Model.Length} hane, yalnız rakam." : "Kendi PIN'inizi girin.")</p>
+    <p id="@hintId" class="field-hint">@(isSetMode ? $"{pinLength} hane, yalnız rakam." : "Kendi PIN'inizi girin.")</p>
     @if (error is not null)
     {
         <p id="@errorId" class="field-error">

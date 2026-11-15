@@ -20,13 +20,16 @@
     <div class="grid gap-4 p-4 sm:grid-cols-[minmax(0,20rem)_auto] sm:items-end md:p-5">
         <div class="field">
             <label class="field-label" for="facilityId">Tesis</label>
-            <select id="facilityId" name="facilityId" class="input">
+            <div class="select-wrap">
+                <select id="facilityId" name="facilityId" class="input">
                 <option value="">Tüm tesisler</option>
                 @foreach (var facility in Model.Facilities)
                 {
                     <option value="@facility.Id" selected="@(facility.Id == Model.FacilityId)">@facility.Label</option>
                 }
             </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
         </div>
         <div class="flex flex-wrap gap-2">
             <button type="submit" class="btn btn-primary min-h-12">

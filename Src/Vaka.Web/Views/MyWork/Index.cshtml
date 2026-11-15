@@ -9,7 +9,18 @@
 
 <partial name="_RecordSkeleton" />
 
-<div data-loading-target>
+<div data-loading-target class="space-y-5">
+    @if (Model.OpenBreak is { } openBreak)
+    {
+        <div class="notice notice-warn" role="status">
+            <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#coffee" /></svg>
+            <div class="min-w-0">
+                <p class="font-semibold">Moladasınız</p>
+                <p class="mt-0.5 text-sm"><span class="mono whitespace-nowrap">@openBreak.RecordNo</span> kaydında <partial name="_Moment" model='(openBreak.StartedAtLocal, openBreak.StartedAtLocal)' /> saatinde mola başlattınız.</p>
+                <a class="btn btn-secondary mt-3" href="/breaks/current" data-busy-link>Mola ekranına git</a>
+            </div>
+        </div>
+    }
     @if (active is null && Model.CanOpenRecord)
     {
         <partial name="_State" model='("empty", "clipboard-list", "Açık işiniz yok", "Temizlik yapacağınız makineyi seçip kayıt açın. Kayıt açılınca makine sizin için tutulur.", "Yeni kayıt aç", "/records/create")' />
@@ -70,4 +81,32 @@
             </aside>
         </div>
     }
+
+    <section aria-labelledby="assigned-title">
+        <h2 id="assigned-title" class="mb-3 text-xl font-bold">Görevli olduğum adımlar</h2>
+        @if (Model.AssignedSteps.Length == 0)
+        {
+            <p class="rounded-card border-2 border-dashed border-line-strong p-4 text-muted">Başka bir kayıtta görevli olduğunuz bekleyen adım yok.</p>
+        }
+        else
+        {
+            <ul class="grid gap-2 md:grid-cols-2">
+                @foreach (var assigned in Model.AssignedSteps)
+                {
+                    <li class="panel flex min-w-0 flex-col gap-3 p-4">
+                        <div class="min-w-0">
+                            <p class="record-no whitespace-nowrap">@assigned.RecordNo</p>
+                            <p class="break-words font-semibold">@assigned.MachineLabel</p>
+                            <p class="mt-1 break-words">@assigned.StepTitle</p>
+                            <p class="text-sm text-muted">Kayıt sahibi: @assigned.OwnerName</p>
+                        </div>
+                        <a class="btn btn-secondary mt-auto" href="@assigned.Url" data-busy-link>
+                            Adıma git
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-right" /></svg>
+                        </a>
+                    </li>
+                }
+            </ul>
+        }
+    </section>
 </div>

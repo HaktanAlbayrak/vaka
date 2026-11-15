@@ -1,0 +1,57 @@
+@using Vaka.Web.ViewModels.Breaks
+@model CurrentBreakViewModel
+@{
+    ViewData["Title"] = "Mola";
+    ViewData["Lead"] = "Moladasınız. Molayı bitirene kadar başka işlem yapamazsınız.";
+    ViewData["NavKey"] = "my-work";
+}
+
+<div class="mx-auto max-w-2xl space-y-5">
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="notice notice-danger" role="alert" tabindex="-1" data-form-summary>
+            <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+            <div class="min-w-0">
+                <p class="font-semibold">İşlem yapılmadı</p>
+                <p class="mt-0.5 text-sm">@Model.ErrorMessage</p>
+            </div>
+        </div>
+    }
+
+    <section class="panel border-warn" aria-labelledby="break-now-title">
+        <div class="panel-head border-warn">
+            <h2 id="break-now-title" class="panel-title">Mola açık</h2>
+            <partial name="_Badge" model='"break.open"' />
+        </div>
+        <div class="panel-body space-y-5">
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span class="live-dot" data-paused="false" aria-hidden="true"></span>
+                <partial name="_LiveTimer" model='(Model.ElapsedSeconds, true, (string?)null, (int?)null, "step-clock text-3xl sm:text-4xl md:text-5xl")' />
+                <span class="text-sm text-muted">Mola süresi</span>
+            </div>
+            <dl class="kv grid-cols-2">
+                <div><dt>Kayıt</dt><dd class="mono whitespace-nowrap">@Model.RecordNo</dd></div>
+                <div><dt>Makine</dt><dd>@Model.MachineLabel</dd></div>
+                <div><dt>Başlangıç</dt><dd><partial name="_Moment" model='(Model.StartedAtLocal, Model.StartedAtLocal)' /></dd></div>
+                @if (!string.IsNullOrEmpty(Model.DuringStepTitle))
+                {
+                    <div><dt>Mola anındaki adım</dt><dd>@Model.DuringStepTitle</dd></div>
+                }
+            </dl>
+            <p>Mola boyunca kayıttaki sayaçlar durur ve diğer kişiler adım başlatıp bitiremez. Molayı yalnız siz bitirebilirsiniz. İsterseniz oturumu kapatabilirsiniz, mola açık kalır.</p>
+
+            <form method="post" action="/breaks/end/@Model.BreakId" class="run-action" data-validate data-command-form asp-antiforgery="true">
+                <input type="hidden" name="CommandId" value="@Model.CommandId" />
+                <partial name="_PinInput" model='("pin-end-break", "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                <div class="notice notice-danger" role="alert" data-command-status hidden>
+                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                    <p class="font-semibold" data-command-message></p>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#coffee" /></svg>
+                    Molayı bitir
+                </button>
+            </form>
+        </div>
+    </section>
+</div>

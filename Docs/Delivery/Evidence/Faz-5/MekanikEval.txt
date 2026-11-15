@@ -1,0 +1,105 @@
+Faz 5 teslim testi, 2026-11-15. main çalışma ağacı (HEAD 4c0a01d). Release yayını .qa/f5/build (ön tur) ve .qa/f5/build2 (FE 10 sonrası, teslim testi). Port 5501 Production, DB .qa/f5/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5503 Development, .qa/f5/qa-dev.db, user-secrets anahtarı. Saatler: DB UTC, ekran Türkiye (UTC+3). Test PIN ve parolası yazılmadı.
+
+== UiDelivery §3 mekanik eval (an.py). Ön tur: m3 m3n m4 m5 m7 m6 m8 m1 mm (build); FE 10 sonrası: r2 (Run), fsn (JS kapalı FinishStep sayfası); ek hücreler x1 x2 x3 (1920, 1280, 390 reduced-motion, 320x640 ve 640x400 %200 yakınlaştırma). KALDI satırlarının hepsi JS kapalı radyo düğmesi 20x20: label.choice (min-h-14, tam genişlik) içinde, dokunma hedefi etiket; kabul (Faz 3-4 onay kutusu düzeni)
+===== m3 24
+  sınıflar {'temiz': 24} kontrast>= 5.44 topbar<= 64
+===== m3n 16
+  KALDI /records/run/2 360x800-light-jsoff ['small:MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20']
+  KALDI /records/run/2?stepId=7&people=QA 360x800-light-jsoff ['small:ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20']
+  KALDI /records/run/2 768x1024-light-jsoff ['small:MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20']
+  KALDI /records/run/2?stepId=7&people=QA 768x1024-light-jsoff ['small:ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20']
+  KALDI /records/run/2 1024x768-light-jsoff ['small:MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20']
+  KALDI /records/run/2?stepId=7&people=QA 1024x768-light-jsoff ['small:ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20']
+  KALDI /records/run/2 1440x900-light-jsoff ['small:MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20']
+  KALDI /records/run/2?stepId=7&people=QA 1440x900-light-jsoff ['small:ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20']
+  KALDI /records/run/2 360x800-dark-jsoff ['small:MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20']
+  KALDI /records/run/2?stepId=7&people=QA 360x800-dark-jsoff ['small:ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20']
+  KALDI /records/run/2 768x1024-dark-jsoff ['small:MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20']
+  KALDI /records/run/2?stepId=7&people=QA 768x1024-dark-jsoff ['small:ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20']
+  KALDI /records/run/2 1024x768-dark-jsoff ['small:MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20']
+  KALDI /records/run/2?stepId=7&people=QA 1024x768-dark-jsoff ['small:ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20']
+  KALDI /records/run/2 1440x900-dark-jsoff ['small:MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20;MaterialLotId 20x20']
+  KALDI /records/run/2?stepId=7&people=QA 1440x900-dark-jsoff ['small:ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20;ParticipantUserId 20x20']
+  sınıflar {'small': 16} kontrast>= 5.44 topbar<= 64
+===== m4 8
+  sınıflar {'temiz': 8} kontrast>= 5.43 topbar<= 64
+===== m5 16
+  sınıflar {'temiz': 16} kontrast>= 5.43 topbar<= 64
+===== m7 16
+  sınıflar {'temiz': 16} kontrast>= 5.28 topbar<= 64
+===== m6 8
+  sınıflar {'temiz': 8} kontrast>= 5.58 topbar<= 64
+===== m8 16
+  sınıflar {'temiz': 16} kontrast>= 5.28 topbar<= 64
+===== m1 32
+  sınıflar {'temiz': 32} kontrast>= 5.28 topbar<= 64
+===== mm 136
+  sınıflar {'temiz': 136} kontrast>= 5.28 topbar<= 64
+===== r2 8
+  sınıflar {'temiz': 8} kontrast>= 5.28 topbar<= 64
+===== fsn 8
+  sınıflar {'temiz': 8} kontrast>= 5.95 topbar<= 64
+===== x1 10
+  sınıflar {'temiz': 10} kontrast>= 5.43 topbar<= 64
+===== x2 5
+  sınıflar {'temiz': 5} kontrast>= 5.58 topbar<= 64
+===== x3 10
+  sınıflar {'temiz': 10} kontrast>= 5.28 topbar<= 64
+
+== Hedefli ölçümler (f5ui.tmpl.js, anu.py): adım satırı (sarılan satırlar Faz 4 kabulü gibi ayrı sayıldı), .run-action, select (K26), PIN göz düğmesi (K26, K25 maxlength 4), mola bandı, canlı sayaç (1440 açık hücrede 2,3 sn bekleme), G5a, birincil düğme
+===== p2 16
+  sayım {'adım': 96, 'adım sarılmış': 44, 'run-action': 8, 'göz': 128, 'post': 176} kusurlu hücre 0
+===== p3 24
+  sayım {'adım': 64, 'adım sarılmış': 8, 'run-action': 16, 'göz': 160, 'post': 232} kusurlu hücre 0
+===== p3n 24
+  sayım {'adım': 96, 'adım sarılmış': 12, 'run-action': 24, 'göz': 240, 'post': 312} kusurlu hücre 0
+===== p4 8
+  sayım {'adım': 32, 'adım sarılmış': 8, 'run-action': 8, 'göz': 64, 'post': 88} kusurlu hücre 0
+===== p5 16
+  sayım {'adım': 32, 'adım sarılmış': 8, 'run-action': 8, 'göz': 8, 'post': 56} kusurlu hücre 0
+===== p7 16
+  sayım {'adım': 32, 'adım sarılmış': 6, 'post': 48} kusurlu hücre 0
+===== p6 16
+  sayım {'run-action': 16, 'göz': 16, 'post': 64} kusurlu hücre 0
+===== p8 16
+  sayım {'adım': 32, 'adım sarılmış': 8, 'post': 48} kusurlu hücre 0
+===== p1 32
+  sayım {'adım': 32, 'adım sarılmış': 8, 'post': 104, 'select': 32, 'göz': 8} kusurlu hücre 0
+===== pm 96
+  sayım {'select': 80, 'post': 368, 'göz': 72, 'göz parola': 40} kusurlu hücre 0
+===== d1 40
+  sayım {'göz': 200, 'göz parola': 120, 'post': 80} kusurlu hücre 0
+===== d2 32
+  sayım {'select': 40, 'göz': 40, 'post': 24, 'göz parola': 8} kusurlu hücre 0
+===== pr2 16
+  sayım {'adım': 96, 'adım sarılmış': 44, 'run-action': 8, 'göz': 120, 'post': 168} kusurlu hücre 0
+
+== G11: Faz 1-4 liste imzaları (g11f3.py)
+G11: aynı 72 farklı 0
+Run iskeleti: 360 ve 768 ray altta, 1024 yan yana (ana 388, ray 320), 1440 yan yana (ana 724, ray 384), 1920 ana kolon 1600 ile sınırlı. İşlerim görevli adımlar ızgarası: 360 1 sütun, 768/1024/1440 2 sütun (beklenen 1/2).
+
+== misc5: İşlerim ızgarası, T-B20, göz düğmesi ve select durumları
+İşlerim@360 {"cols":1,"items":2,"text":"T1-H1-M04-P2026-1 M04 - QA makine M04 Makineyi durdur Kayıt sahibi: QA Operatör 4 Adıma git","btnH":44}
+İşlerim@768 {"cols":2,"items":2,"text":"T1-H1-M04-P2026-1 M04 - QA makine M04 Makineyi durdur Kayıt sahibi: QA Operatör 4 Adıma git","btnH":44}
+İşlerim@1024 {"cols":2,"items":2,"text":"T1-H1-M04-P2026-1 M04 - QA makine M04 Makineyi durdur Kayıt sahibi: QA Operatör 4 Adıma git","btnH":44}
+İşlerim@1440 {"cols":2,"items":2,"text":"T1-H1-M04-P2026-1 M04 - QA makine M04 Makineyi durdur Kayıt sahibi: QA Operatör 4 Adıma git","btnH":44}
+Molayı bitir@320 {"h":56,"w":252,"lines":1,"ovf":false,"hScroll":false}
+Molayı bitir@360 {"h":56,"w":292,"lines":1,"ovf":false,"hScroll":false}
+Molayı bitir@768 {"h":56,"w":448,"lines":1,"ovf":false,"hScroll":false}
+Molayı bitir@1024 {"h":56,"w":448,"lines":1,"ovf":false,"hScroll":false}
+Molayı bitir@1440 {"h":56,"w":448,"lines":1,"ovf":false,"hScroll":false}
+Molayı bitir@1920 {"h":56,"w":448,"lines":1,"ovf":false,"hScroll":false}
+göz light/no-preference dinlenme {"bg":"rgba(0, 0, 0, 0)","fg":"rgb(79, 92, 105)","contrast":6.48,"outline":"none 3px rgb(79, 92, 105) off 0px","trans":"0.15s"} hover {"bg":"rgb(224, 230, 234)","fg":"rgb(20, 30, 40)","contrast":13.38,"outline":"none 3px rgb(20, 30, 40) off 0px","trans":"0.15s"} odak(true) {"bg":"rgb(224, 230, 234)","fg":"rgb(20, 30, 40)","contrast":13.38,"outline":"solid 3px rgb(33, 82, 160) off -3px","trans":"0.15s"}
+göz light/reduce dinlenme {"bg":"rgba(0, 0, 0, 0)","fg":"rgb(79, 92, 105)","contrast":6.48,"outline":"none 3px rgb(79, 92, 105) off 0px","trans":"1e-05s"} hover {"bg":"rgb(224, 230, 234)","fg":"rgb(20, 30, 40)","contrast":13.38,"outline":"none 3px rgb(20, 30, 40) off 0px","trans":"1e-05s"} odak(true) {"bg":"rgb(224, 230, 234)","fg":"rgb(20, 30, 40)","contrast":13.38,"outline":"solid 3px rgb(33, 82, 160) off -3px","trans":"1e-05s"}
+  reduce: select/btn geçiş 1e-05s,1e-05s,1e-05s canlı nokta animasyon none 1e-05s
+göz dark/no-preference dinlenme {"bg":"rgba(0, 0, 0, 0)","fg":"rgb(150, 163, 176)","contrast":6.54,"outline":"none 3px rgb(150, 163, 176) off 0px","trans":"0.15s"} hover {"bg":"rgb(31, 40, 49)","fg":"rgb(228, 234, 239)","contrast":12.31,"outline":"none 3px rgb(228, 234, 239) off 0px","trans":"0.15s"} odak(true) {"bg":"rgb(31, 40, 49)","fg":"rgb(228, 234, 239)","contrast":12.31,"outline":"solid 3px rgb(122, 170, 235) off -3px","trans":"0.15s"}
+göz dark/reduce dinlenme {"bg":"rgba(0, 0, 0, 0)","fg":"rgb(150, 163, 176)","contrast":6.54,"outline":"none 3px rgb(150, 163, 176) off 0px","trans":"1e-05s"} hover {"bg":"rgb(31, 40, 49)","fg":"rgb(228, 234, 239)","contrast":12.31,"outline":"none 3px rgb(228, 234, 239) off 0px","trans":"1e-05s"} odak(true) {"bg":"rgb(31, 40, 49)","fg":"rgb(228, 234, 239)","contrast":12.31,"outline":"solid 3px rgb(122, 170, 235) off -3px","trans":"1e-05s"}
+  reduce: select/btn geçiş 1e-05s,1e-05s,1e-05s canlı nokta animasyon none 1e-05s
+select light dinlenme {"border":"rgb(120, 135, 148)","outline":"none 3px rgb(20, 30, 40)","bg":"rgb(247, 249, 250)","arrow":"rgb(20, 30, 40)"} odak {"border":"rgb(120, 135, 148)","outline":"solid 3px rgb(33, 82, 160)","bg":"rgb(247, 249, 250)","arrow":"rgb(20, 30, 40)"}
+select dark dinlenme {"border":"rgb(112, 128, 142)","outline":"none 3px rgb(228, 234, 239)","bg":"rgb(23, 30, 37)","arrow":"rgb(228, 234, 239)"} odak {"border":"rgb(112, 128, 142)","outline":"solid 3px rgb(122, 170, 235)","bg":"rgb(23, 30, 37)","arrow":"rgb(228, 234, 239)"}
+
+== Klavye turu (kbd5)
+/records/run/18: ilk odak "İçeriğe geç", halkasız 1 | İçeriğe geç > İşlerim > Yeni kayıt > Makine panosu > Parola ve PIN > Kullanıcı değiştir > Daralt > Koyu tema > Faz 1: Hazırlık 2 adım > Fotoğraf önizle: ornek > Video önizle: ornek.mp > pin-finish-97 > PIN'i göster > Adımı bitir > Görevleri düzenle > Faz 2: Temizlik ve kon > İçeriğe geç Vaka İşler[halka yok] > İçeriğe geç > İşlerim > Yeni kayıt > Makine panosu > Parola ve PIN
+/breaks/current: ilk odak "İçeriğe geç", halkasız 1 | İçeriğe geç > İşlerim > Yeni kayıt > Makine panosu > Parola ve PIN > Kullanıcı değiştir > Daralt > Koyu tema > pin-end-break > PIN'i göster > Molayı bitir > İçeriğe geç Vaka İşler[halka yok] > İçeriğe geç > İşlerim > Yeni kayıt > Makine panosu > Parola ve PIN > Kullanıcı değiştir > Daralt > Koyu tema > pin-end-break > PIN'i göster
+/my-work: ilk odak "İçeriğe geç", halkasız 2 | İçeriğe geç > İşlerim > Yeni kayıt > Makine panosu > Parola ve PIN > Kullanıcı değiştir > Daralt > Koyu tema > Yürütmeye git > İçeriğe geç Vaka İşler[halka yok] > İçeriğe geç > İşlerim > Yeni kayıt > Makine panosu > Parola ve PIN > Kullanıcı değiştir > Daralt > Koyu tema > Yürütmeye git > İçeriğe geç Vaka İşler[halka yok] > İçeriğe geç > İşlerim
+("halka yok" satırı BODY: modal dışı tarayıcı arayüzü durağı; sayfa öğelerinin hepsinde odak halkası var)

@@ -52,7 +52,8 @@
                 <h3 class="text-lg font-bold">Makine</h3>
                 <div class="field" data-field>
                     <label class="field-label" for="FacilityId">Tesis</label>
-                    <select id="FacilityId" name="FacilityId" class="input" required data-required-message="Tesis seçin."
+                    <div class="select-wrap">
+                        <select id="FacilityId" name="FacilityId" class="input" required data-required-message="Tesis seçin."
                             data-cascade-url="/records/lines" data-cascade-target="LineId" data-cascade-status="line-status"
                             data-cascade-noun="Hatlar" data-cascade-none="Bu tesiste hat yok."
                             aria-describedby="@(facilityError is null ? null : "FacilityId-error")" aria-invalid="@(facilityError is null ? null : "true")">
@@ -62,6 +63,8 @@
                             <option value="@facility.Id" selected="@(facility.Id == Model.FacilityId)">@facility.Label</option>
                         }
                     </select>
+                        <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </div>
                     @if (facilityError is not null)
                     {
                         <partial name="_FieldError" model='("FacilityId-error", facilityError)' />
@@ -70,7 +73,8 @@
 
                 <div class="field" data-field>
                     <label class="field-label" for="LineId">Hat</label>
-                    <select id="LineId" name="LineId" class="input" required data-required-message="Hat seçin."
+                    <div class="select-wrap">
+                        <select id="LineId" name="LineId" class="input" required data-required-message="Hat seçin."
                             data-cascade-url="/records/machines" data-cascade-param="lineId" data-cascade-target="MachineId" data-cascade-status="machine-status"
                             data-cascade-noun="Makineler" data-cascade-none="Bu hatta makine yok."
                             aria-describedby="@(lineError is null ? "line-status" : "line-status LineId-error")" aria-invalid="@(lineError is null ? null : "true")">
@@ -80,6 +84,8 @@
                             <option value="@line.Id" selected="@(line.Id == Model.LineId)">@line.Label</option>
                         }
                     </select>
+                        <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </div>
                     <p id="line-status" class="field-hint" role="status"></p>
                     @if (lineError is not null)
                     {
@@ -89,7 +95,8 @@
 
                 <div class="field" data-field>
                     <label class="field-label" for="MachineId">Makine</label>
-                    <select id="MachineId" name="MachineId" class="input" required data-required-message="Makine seçin."
+                    <div class="select-wrap">
+                        <select id="MachineId" name="MachineId" class="input" required data-required-message="Makine seçin."
                             data-cascade-busy="machine-busy" data-cascade-busy-box="machine-busy-box"
                             aria-describedby="@(machineError is null ? "machine-status" : "machine-status MachineId-error")" aria-invalid="@(machineError is null ? null : "true")">
                         <option value="">Makine seçin</option>
@@ -98,6 +105,8 @@
                             <option value="@machine.Id" disabled="@(!machine.IsAvailable)" selected="@(machine.Id == Model.MachineId)">@(machine.IsAvailable ? machine.Label : machine.Label + " - " + machine.BusyReason)</option>
                         }
                     </select>
+                        <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </div>
                     <p id="machine-status" class="field-hint" role="status"></p>
                     @if (machineError is not null)
                     {

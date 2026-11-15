@@ -624,6 +624,63 @@ namespace Vaka.Web.Data.Migrations
                     b.ToTable("ProductionLines", (string)null);
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordBreak", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CleaningRecordId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("DuringStepId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("EndKind")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("EndReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("EndedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("EndedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("StartedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DuringStepId");
+
+                    b.HasIndex("EndedByUserId");
+
+                    b.HasIndex("CleaningRecordId", "StartedAtUtc");
+
+                    b.HasIndex(new[] { "CleaningRecordId" }, "IX_RecordBreaks_OneOpenPerRecord")
+                        .IsUnique()
+                        .HasFilter("\"EndedAtUtc\" IS NULL");
+
+                    b.HasIndex(new[] { "StartedByUserId" }, "IX_RecordBreaks_OneOpenPerUser")
+                        .IsUnique()
+                        .HasFilter("\"EndedAtUtc\" IS NULL");
+
+                    b.ToTable("RecordBreaks", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_RecordBreaks_EndFieldsTogether", "(\"EndedAtUtc\" IS NULL) = (\"EndKind\" IS NULL) AND (\"EndedAtUtc\" IS NULL) = (\"EndedByUserId\" IS NULL)");
+
+                            t.HasCheckConstraint("CK_RecordBreaks_EndKind", "\"EndKind\" IS NULL OR \"EndKind\" IN (1, 2, 3)");
+
+                            t.HasCheckConstraint("CK_RecordBreaks_EndedAfterStart", "\"EndedAtUtc\" IS NULL OR \"EndedAtUtc\" >= \"StartedAtUtc\"");
+                        });
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordMaterial", b =>
                 {
                     b.Property<int>("Id")
@@ -1277,6 +1334,39 @@ namespace Vaka.Web.Data.Migrations
                     b.Navigation("Facility");
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordBreak", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.CleaningRecord", "Record")
+                        .WithMany("Breaks")
+                        .HasForeignKey("CleaningRecordId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Vaka.Web.Domain.Entities.RecordStep", "DuringStep")
+                        .WithMany()
+                        .HasForeignKey("DuringStepId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Vaka.Web.Domain.Entities.User", "EndedBy")
+                        .WithMany()
+                        .HasForeignKey("EndedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Vaka.Web.Domain.Entities.User", "StartedBy")
+                        .WithMany()
+                        .HasForeignKey("StartedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DuringStep");
+
+                    b.Navigation("EndedBy");
+
+                    b.Navigation("Record");
+
+                    b.Navigation("StartedBy");
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordMaterial", b =>
                 {
                     b.HasOne("Vaka.Web.Domain.Entities.CleaningRecord", "Record")
@@ -1437,6 +1527,8 @@ namespace Vaka.Web.Data.Migrations
 
             modelBuilder.Entity("Vaka.Web.Domain.Entities.CleaningRecord", b =>
                 {
+                    b.Navigation("Breaks");
+
                     b.Navigation("Events");
 
                     b.Navigation("Materials");

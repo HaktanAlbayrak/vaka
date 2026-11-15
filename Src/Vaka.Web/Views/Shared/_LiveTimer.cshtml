@@ -1,0 +1,4 @@
+@using Vaka.Web.Services
+@inject IDurationFormatter DurationFormatter
+@model (int Seconds, bool Running, string? ProgressId, int? ProgressMax, string CssClass)
+<time class="@Model.CssClass" data-live-timer data-seconds="@Model.Seconds" data-running="@(Model.Running ? "true" : "false")" data-progress-target="@Model.ProgressId" data-progress-max="@Model.ProgressMax"><partial name="_Duration" model="DurationFormatter.Format(Model.Seconds)" /></time>

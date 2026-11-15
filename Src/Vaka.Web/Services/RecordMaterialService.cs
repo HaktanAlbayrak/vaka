@@ -11,6 +11,7 @@ public sealed class RecordMaterialService : IRecordMaterialService
     private readonly VakaDbContext _db;
     private readonly IWriteTransactionRunner _transactions;
     private readonly IRecordTimeouts _timeouts;
+    private readonly IBreakReader _breaks;
     private readonly IPinService _pins;
     private readonly ICleaningEventWriter _events;
     private readonly IProcessedCommands _commands;
@@ -22,6 +23,7 @@ public sealed class RecordMaterialService : IRecordMaterialService
         VakaDbContext db,
         IWriteTransactionRunner transactions,
         IRecordTimeouts timeouts,
+        IBreakReader breaks,
         IPinService pins,
         ICleaningEventWriter events,
         IProcessedCommands commands,
@@ -32,6 +34,7 @@ public sealed class RecordMaterialService : IRecordMaterialService
         _db = db;
         _transactions = transactions;
         _timeouts = timeouts;
+        _breaks = breaks;
         _pins = pins;
         _events = events;
         _commands = commands;
@@ -53,6 +56,11 @@ public sealed class RecordMaterialService : IRecordMaterialService
             if (await _commands.ReplayAsync(request.CommandId, actorUserId, token) is { } replay)
             {
                 return replay;
+            }
+
+            if (await _breaks.CheckAsync(actorUserId, token) is { } onBreak)
+            {
+                return onBreak;
             }
 
             if (await CheckEditableAsync(recordId, actorUserId, token) is { } failure)
@@ -131,6 +139,11 @@ public sealed class RecordMaterialService : IRecordMaterialService
             if (await _commands.ReplayAsync(request.CommandId, actorUserId, token) is { } replay)
             {
                 return replay;
+            }
+
+            if (await _breaks.CheckAsync(actorUserId, token) is { } onBreak)
+            {
+                return onBreak;
             }
 
             if (await CheckEditableAsync(recordId, actorUserId, token) is { } failure)

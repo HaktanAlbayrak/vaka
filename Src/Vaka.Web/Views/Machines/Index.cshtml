@@ -31,23 +31,29 @@
         </div>
         <div class="field">
             <label class="field-label" for="facilityId">Tesis</label>
-            <select id="facilityId" name="facilityId" class="input" data-cascade-url="/machines/lines" data-cascade-target="lineId" data-cascade-status="line-status">
+            <div class="select-wrap">
+                <select id="facilityId" name="facilityId" class="input" data-cascade-url="/machines/lines" data-cascade-target="lineId" data-cascade-status="line-status">
                 <option value="">Tüm tesisler</option>
                 @foreach (var facility in Model.Facilities)
                 {
                     <option value="@facility.Id" selected="@(facility.Id == Model.FacilityId)">@facility.Label</option>
                 }
             </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
         </div>
         <div class="field">
             <label class="field-label" for="lineId">Hat</label>
-            <select id="lineId" name="lineId" class="input" aria-describedby="line-status">
+            <div class="select-wrap">
+                <select id="lineId" name="lineId" class="input" aria-describedby="line-status">
                 <option value="">Tüm hatlar</option>
                 @foreach (var line in Model.Lines)
                 {
                     <option value="@line.Id" selected="@(line.Id == Model.LineId)">@line.Label</option>
                 }
             </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
             <p id="line-status" class="field-hint" role="status"></p>
         </div>
         <label class="choice min-h-12">

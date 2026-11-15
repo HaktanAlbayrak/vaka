@@ -5,6 +5,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Vaka.Web.Authorization;
 using Vaka.Web.Data;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Vaka.Web.Routing;
 using Vaka.Web.Services;
 
@@ -18,6 +19,8 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(typeof(FirstLoginGateFilter), -1000);
     options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
 });
+
+builder.Services.Configure<RazorViewEngineOptions>(options => options.ViewLocationExpanders.Add(new RecordViewLocationExpander()));
 
 var connectionString = new SqliteConnectionStringBuilder(builder.Configuration.GetConnectionString("Default"));
 if (!Path.IsPathRooted(connectionString.DataSource))
@@ -84,6 +87,16 @@ builder.Services.AddScoped<IRecordOpenValidator, RecordOpenValidator>();
 builder.Services.AddScoped<IRecordOpener, RecordOpener>();
 builder.Services.AddScoped<IRecordRunReader, RecordRunReader>();
 builder.Services.AddScoped<IRecordMaterialService, RecordMaterialService>();
+builder.Services.AddScoped<IBreakReader, BreakReader>();
+builder.Services.AddScoped<IBreakService, BreakService>();
+builder.Services.AddScoped<IParticipantDirectory, ParticipantDirectory>();
+builder.Services.AddScoped<IParticipantService, ParticipantService>();
+builder.Services.AddScoped<IRunBreakReader, RunBreakReader>();
+builder.Services.AddScoped<IRunProgressReader, RunProgressReader>();
+builder.Services.AddScoped<IRunCompletion, RunCompletion>();
+builder.Services.AddScoped<IStepLocator, StepLocator>();
+builder.Services.AddScoped<IStepStarter, StepStarter>();
+builder.Services.AddScoped<IStepFinisher, StepFinisher>();
 builder.Services.AddScoped<IMyWorkReader, MyWorkReader>();
 builder.Services.AddScoped<IMachineBoardReader, MachineBoardReader>();
 

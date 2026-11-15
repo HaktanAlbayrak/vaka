@@ -1,0 +1,216 @@
+Faz 5 teslim testi, 2026-11-15. main çalışma ağacı (HEAD 4c0a01d). Release yayını .qa/f5/build (ön tur) ve .qa/f5/build2 (FE 10 sonrası, teslim testi). Port 5501 Production, DB .qa/f5/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5503 Development, .qa/f5/qa-dev.db, user-secrets anahtarı. Saatler: DB UTC, ekran Türkiye (UTC+3). Test PIN ve parolası yazılmadı.
+
+== T1: KSA uçtan uca, iki görevli (op10 sahip, op11 görevli), K3 K1 K4 K9 K10 K11 K12 K13 K22, G9 (t1.py)
+kayıt 8 (8, 'T1-H1-M09-P2026-1', None, 1, '2026-11-15 13:34:43.8117419', None)
+K3/G9 görevli ekle iki gönderim: (302, '/records/run/8') (302, '/records/run/8') olay + 1 görevli satırı 1
+  olay ParticipantAdded aktör 13 payload {"StepId":39,"ParticipantUserId":14,"AddedByUserId":13}
+K3 yanlış PIN: 200 ['İşlem yapılmadı'] eklenmedi True sayaç 0 -> 1 olay + 0
+K1 sıra dışı başlat 40 NOFORM 200 ['İşlem yapılmadı'] olay + 0
+K1 sıra dışı başlat 41 NOFORM 200 ['İşlem yapılmadı'] olay + 0
+K9/G9 görevli başlat iki gönderim: (302, '/records/run/8') (302, '/records/run/8') olay + 1 | saha ref T1-SD-2026-6 durum 2 açılış 2026-11-15 13:34:43.8117419 başlangıç 2026-11-15 13:34:52.249255
+  ekranda saha ref: True | "Devam ediyor" rozet: True
+K1 BR-15 adım sürerken başka adım: NOFORM 200 ['İşlem yapılmadı'] olay + 0
+K4 başlamış adıma ekleme: NOFORM 200 ['İşlem yapılmadı'] olay + 0
+K4 başlamış adımdan çıkarma: NOFORM 200 ['İşlem yapılmadı'] olay + 0
+K13 adım sürerken mola: NOFORM 200 ['İşlem yapılmadı'] olay + 0 mola 0
+K10/G9 bitir iki gönderim: (302, '/records/run/8') (302, '/records/run/8') olay + 1
+  K10 DB: başlangıç 2026-11-15 13:34:52.249255 bitiş 2026-11-15 13:34:57.6734615 fark 5.424206 -> süre 5 efor 10 mola 0 | beklenen süre 5 efor 10 görevli 2 IsWorking kalan 0
+2. adım başlat 302
+K11 gerekçesiz: 200 Süre altı gerekçe olay + 0 komut + 0 PIN sayacı 0 -> 0 adım durumu 2
+  gerekçe formu CommandId aynı: True | net/minimum metni: Süre altı gerekçe Faz minimum süreye ulaşmadı. Adımı bitirmek için gerekçe yazın. Faz süre altında kalıyor Tamamlandı - süre altında Faz Hazırlık Net süre 11 sn
+K11 gerekçeli (aynı CommandId) iki gönderim: (302, '/records/run/8') (302, '/records/run/8') olay + 2 | faz (17, 1, 4, 14, 0, 14, 1, 'Hat ayarı önceden yapıldı, adımlar kısa sürdü.', 60) | adım bitiş 2026-11-15 13:35:06.3818363 > ilk istek (UTC) 2026-11-15 13:35:03.362 True
+  ekranda gerekçe: True | "süre altında" metni: True
+3. adım 302 /records/run/8
+K13/G9 mola başlat iki gönderim: (302, '/breaks/current') (302, '/breaks/current') olay + 1 açık mola 1 [(3, 13, None, '2026-11-15 13:35:08.8324586', None, None, None)]
+K13a molada görevli başlat: NOFORM 400  ['Sunucuda bir sorun var Yaptığınız işlem kaydedilmemiş olabilir. Birkaç dakika sonra yeniden deneyin. Sorun sürerse yöneticinize bildirin.'] olay + 0
+G9 mola bitir iki gönderim: (302, '/records/run/8') (302, '/records/run/8') olay + 1 [(3, 13, None, '2026-11-15 13:35:08.8324586', '2026-11-15 13:35:15.0089524', 13, 1)]
+4. adım gerekçesiz 200 Süre altı gerekçe
+4. adım gerekçeli (302, '/records/run/8')
+K12 kayıt: (8, 'T1-H1-M09-P2026-1', 'T1-SD-2026-6', 4, '2026-11-15 13:34:43.8117419', '2026-11-15 13:34:52.249255', '2026-11-15 13:35:17.1576576', 24, 6, 18, 19, '2026-11-15 15:34:43.8117419', None)
+K12 pano M09 bölümü: 
+ADIMLAR [(39, 1, 1, 3, '2026-11-15 13:34:52.249255', '2026-11-15 13:34:57.6734615', 0, 5, 10, 14, 13, 17), (40, 1, 2, 3, '2026-11-15 13:35:01.3260385', '2026-11-15 13:35:06.3818363', 0, 5, 5, 13, 13, 17), (41, 2, 1, 3, '2026-11-15 13:35:06.6059714', '2026-11-15 13:35:08.6367875', 0, 2, 2, 13, 13, 18), (42, 2, 2, 3, '2026-11-15 13:35:15.1276411', '2026-11-15 13:35:17.1576576', 0, 2, 2, 13, 13, 18)]
+FAZLAR [(17, 1, 4, 14, 0, 14, 1, 'Hat ayarı önceden yapıldı, adımlar kısa sürdü.', 60), (18, 2, 4, 10, 6, 4, 1, 'Son kontrol kısa sürdü.', 60)]
+MOLALAR [(3, 13, None, '2026-11-15 13:35:08.8324586', '2026-11-15 13:35:15.0089524', 13, 1)]
+Not: "K13a molada görevli başlat ... 400" satırı test düzeneği hatasıdır (form sayfada yokken belirteç ana bölümden aranıyordu); düzeltilmiş düzenekle K13a T3 ve T5 satırlarında.
+
+== T2: K16 Ö-03 kısa süreli (KSA minimum 60 sn): molasız ve 50 sn molalı (t2.py)
+== op12 kayıt 9 molasız
+son adım bitir (gerekçesiz) -> 302 /records/run/9  olay +2
+DB adım1 13:35:43.488-13:35:55.510 (12s), adım2 13:36:45.696-13:36:47.725; faz brüt elle 64.24 -> 64, mola elle 0.00 -> 0, net elle 64 | kayıtlı faz brüt 64 mola 0 net 64 durum 3 süre altı 0
+== op13 kayıt 10 molalı
+mola başlat 302 /breaks/current
+mola bitir 302 /records/run/10
+son adım bitir (gerekçesiz) -> 200  Süre altı gerekçe olay +0
+  form metni: alıyor Tamamlandı - süre altında Faz Hazırlık Net süre 14 sn Minimum 1 dk Gerekçe Süre neden minimum
+  gerekçeli -> 302 /records/run/10
+DB adım1 13:35:43.814-13:35:55.834 (12s), adım2 13:36:46.241-13:36:48.274; faz brüt elle 64.46 -> 64, mola elle 50.11 -> 50, net elle 14 | kayıtlı faz brüt 64 mola 50 net 14 durum 4 süre altı 1
+
+== T3: K2 K4 K5 K6 K7 K8 K13 K13a K14 K14a K15 K18 K23, eşzamanlılık, G9 çıkarma, F4-A1, F4-A2, K9 zaman aşımı (t3.py; K14a ilk denemede op10 sıradaki adımın görevlisi değildi, 403 SK-6 gereği; t3c ile yeniden)
+kayıtlar RA 15 RE 16 RB 18
+RA görevliler [(85, 21), (86, 21), (86, 22), (87, 13), (87, 21), (88, 21)]
+
+== K13 Açıldı kayıtta mola
+  Mola ver aracı görünür mü (sahip, Açıldı): (200, False)
+  K13 Açıldı kayıtta mola isteği -> NOFORM 200  ['İşlem yapılmadı'] olay +0
+
+== K2 görevli olmayan operatör (op2)
+  op2 RA GET 200 ve "Adımı başlat" görünür mü: (200, False)
+  K2 op2 başlat POST -> NOFORM 403   olay +0
+  adım durumu önce/sonra 1 1
+  op2 RA "Adımı bitir" görünür mü: (200, False)
+  K2 op2 bitir POST -> NOFORM 403   olay +0
+  adım durumu 2
+
+== K4 görevli ekleme kuralları
+  K4 sahip olmayan görevli (op19) ekleme -> NOFORM 403   olay +0
+  2021 pasifleştir 302 /users [(0,)]
+  K4 pasif kişi ekleme -> FORM 200  ['İşlem yapılmadı'] olay +0
+  K4 molada kişi (op6) ekleme -> FORM 200  ['İşlem yapılmadı'] olay +0
+  /records/people op6: [{'userId': 9, 'fullName': 'QA Operatör 6', 'registryNo': '2006', 'isAvailable': False, 'unavailableReason': 'Molada', 'hasOwnActiveRecord': True}] | pasif 2021 listede mi: True
+
+== K7 K-41 (op4 kendi kaydı Devam ediyor)
+  JSON: [{'userId': 7, 'fullName': 'QA Operatör 4', 'registryNo': '2004', 'isAvailable': True, 'unavailableReason': None, 'hasOwnActiveRecord': True}]
+  JS kapalı liste metni: Görevli seç Önce kişi arayın. PIN Kendi PIN'inizi girin. Görevliyi ekle PIN Kendi PIN'inizi girin. Adımı başlat Faz 2: Temizlik ve kontrol 2 adım 2.1 Yüzeyi sil
+  K7 op4 ekleme -> FORM 302 /records/run/15  olay +1
+
+== K13 mola: kayıtta görevi olmayan (op2), sıradaki adımın görevlisi (op19)
+  K13 op2 mola -> NOFORM 403   olay +0
+  op19 Run "Mola başlat" görünür mü: (200, True)
+  K13 op19 (sıradaki adımın görevlisi) mola -> FORM 302 /breaks/current  olay +1
+  molalar [(5, 22, None, '2026-11-15 13:51:56.036712', None, None, None)]
+
+== K13a kayıtta açık mola varken sahip (op18)
+  sahip Run: "Kayıtta mola açık" True | "Sayaçlar durdu" True | "Adımı başlat" görünür False
+  K13a başlat -> NOFORM 200  ['İşlem yapılmadı'] olay +0
+  K13a görevli ekle -> NOFORM 200  ['İşlem yapılmadı'] olay +0
+  K13a görevli çıkar -> NOFORM 200  ['İşlem yapılmadı'] olay +0
+  K13a malzeme ekle -> NOFORM 200  ['İşlem yapılmadı'] olay +0
+  K15 başkasının molasını bitirme (op18) -> NOFORM 403   olay +0
+
+== K14 molada olan op19
+  GET /my-work -> 302 /breaks/current
+  GET /records/run/15 -> 302 /breaks/current
+  GET /records/run/16 -> 302 /breaks/current
+  GET /records/create -> 200 
+  K14 başka kayıtta adım başlatma (RB) -> GET 302 /breaks/current  olay +0
+  K14 yeni kayıt açma -> 302 /breaks/current kayıt + 0
+  K14 kendi kaydına görevli ekleme (RE) -> GET 302 /breaks/current  olay +0
+  K14 kendi kaydına malzeme (RE) -> GET 302 /breaks/current  olay +0
+
+== K18 pasifleştirme engeli (op19: açık mola + tamamlanmamış adımda görevli)
+  ekran: Kullanıcıyı pasifleştir Pasif hesap giriş yapamaz. Geçmiş kayıtlar korunur. Onay Ad soyad QA Operatör 19 Sicil no 2019 Açık işleri var T1-H1-M20-P2026-1 (açıldı) Kayıt sahibi T1-H1-M16-P2026-1 Görevli adım T1-H1-M17-P2026-1 Görevli adım T1-H1-M16-P2026-1 Açık mola Kullanıcının açık işi var. Önce bu işler kapatılmalı. Hesaba dön Pasifleştirince Kullanıcı parolasıyla giriş yapamaz. Kullanıcı listesi
+  bağlantılar: [] | PIN alanı var mı: False
+  POST -> 200  aktif [(1,)]
+
+== K14 oturumu kapatabilir, molayı bitirir
+  çıkış -> 302 /account/login?reason=signed-out
+  yeniden giriş -> (302, '/')
+  /my-work -> 302 /breaks/current
+  mola bitir -> 302 /records/run/15 (5, 22, None, '2026-11-15 13:51:56.036712', '2026-11-15 13:51:56.7789868', 22, 1)
+
+== K23 sahip adım arasında çıkış ve giriş (op18)
+  çıkış -> 302 /account/login?reason=signed-out | eski çerezle /my-work -> (200, '')
+  pano M16: M16 QA makine M16 Devam ediyor Kayıt T1-H1-M16-P2026-1 Sahip QA Operatör 18 Açılış 16:50 M
+  op7 M16 kayıt açma -> 200 ['Kayıt açılamadı'] kayıt + 0
+  giriş -> (302, '/')
+  İşlerim: True True | kayıt durumu 2
+  Run sıradaki adım "Adımı başlat" formu step 86 : True
+
+== K6 BR-24: op19 RA adım 2 sürerken RB başlatma
+  RA adım 2 2
+  K6 RB başlat (op19 meşgul) -> FORM 200  ['İşlem yapılmadı'] olay +0
+  (faz 1 son adım gerekçe akışı)
+  RA adımlar [(85, 3), (86, 2), (87, 1), (88, 1)]
+
+== K14a: op10 başka kayıtta devam eden adımda iken mola (RA sıradaki adım görevlisi op10)
+  K6 eşzamanlı başlatma (ortak görevli op10): {'RD': (302, '/records/run/21', ''), 'RC': (200, '', ['İşlem yapılmadı'])} | op10 IsWorking satırı 1 | RC/RD adım1 durum 1 2
+  K14a op10 RA mola -> NOFORM 403   olay +0
+
+== Eşzamanlı iki mola (RG: op25 sahip, op26 sıradaki adım görevlisi)
+  sonuç: {'op26': (302, '/breaks/current', ''), 'op25': (200, '', ['İşlem yapılmadı'])} | açık mola 1 | BreakStarted olayı 1
+
+== G9 görevli çıkarma aynı CommandId
+  iki gönderim (302, '/records/run/13') (302, '/records/run/13') olay + 1 satır 0
+
+== K5 sahip kendini çıkarır, yine başlatıp bitirir (kayıt 13, adım 1)
+  sahip kendini çıkar -> 302 /records/run/13 [(14,)]
+  sahip başlat -> 302 /records/run/13
+  sahip bitir -> 302 /records/run/13 | süre 3 efor 3 başlatan/bitiren 19 19 (sahip id 19)
+  son görevliyi çıkarma (adım 2 yalnız sahip) -> 200 ['İşlem yapılmadı']
+
+== K8 / F4-A1 malzeme zorunlu tipte malzemesiz ilk adım (op5, PLN, makine 25)
+  kayıt 23 1
+  ekranda neden: True | başlat formu var mı False
+  K8 başlat -> NOFORM 200  ['İşlem yapılmadı'] olay +0
+  durum 1 1
+
+== F4-A2 HTTP
+  recordId=14: ['L2026-001']
+  recordId yok: ['L2026-001', 'L2027-001', 'L2027-002']
+  aynı lotu yeniden ekleme -> FORM 200  ['İşlem yapılmadı'] olay +0
+
+== K9 zaman aşımı (op20, kilit 1 dk, 63 sn sonra ilk adım): {'rid': 19, 'res': ('NOFORM', 200, '', ['İşlem yapılmadı'], 1, (19, 'T1-H1-M21-P2026-2', None, 5, '2026-11-15 13:51:53.6315741', None, None, None, None, None, None, '2026-11-15 13:52:53.6315741', '2026-11-15 13:52:53.6315741'), ['RecordOpened', 'RecordTimedOut'])}
+
+== T3c: K14a yeniden ve K6 mesajı
+op10 çalıştığı adım: [(109, 2)]
+op10 RA "Mola başlat" görünür: True
+K14a op10 RA mola -> FORM 200  | İşlem yapılmadı Başka kayıtta devam eden adımdasınız: T1-H1-M19-P2026-1. Mola verilemez. | olay + 0 | açık mola 0
+(Önce, t3b.py) K6 RB başlat -> 200 | İşlem yapılmadı QA Operatör 19 başka kayıtta devam eden adımda: T1-H1-M16-P2026-1. | RA kayıt no T1-H1-M16-P2026-1 | olay + 0
+
+== T5: ret nedenleri (t5.py)
+K13a molada başlat -> 200  | İşlem yapılmadı Kayıtta açık mola var. | olay +0
+K13a molada görevli ekle -> 200  | İşlem yapılmadı Kayıtta açık mola var. | olay +0
+K13a molada malzeme -> 200  | İşlem yapılmadı Malzeme yalnız ilk adım başlamadan önce eklenir ya da çıkarılır. | olay +0   (kayıt başlamış; molada kişinin malzeme isteği K14'te RE Açıldı kaydında 302 /breaks/current)
+K4 pasif kişi -> 200  | İşlem yapılmadı QA Pasif Operatör pasif, görevli olarak eklenemez. | olay +0
+K4 molada kişi (op26) -> 200  | İşlem yapılmadı QA Operatör 26 molada, görevli olarak eklenemez. | olay +0
+K4 başlamış adıma ekleme -> 200  | İşlem yapılmadı Adım başladıktan sonra görevli eklenmez ya da çıkarılmaz. | olay +0
+ikinci mola -> 200  | İşlem yapılmadı Kayıtta açık mola var. | olay +0
+K1 kilitli adım metni: Kilitli: Önceki adım tamamlanmadan başlatılamaz
+görevli olmayan Run mola satırı: Mola yok: Mola vermek için kayıt sahibi ya da sıradaki adımın görevlisi olmalısınız | başlat/bitir düğmesi: False
+
+== K17 kayıt 4 (mola op6, 16:14'ten beri açık): op7 ardışık GET (0,37 sn arayla), sayaçlar (data-running, data-seconds); ilk değer mola bandı "Mola süresi", ikinci faz net
+   0 [('true', '2379'), ('false', '2')] "Sayaçlar durdu"
+   1 [('true', '2379'), ('false', '2')] "Sayaçlar durdu"
+   2 [('true', '2380'), ('false', '2')] "Sayaçlar durdu"
+   3 [('true', '2380'), ('false', '2')] "Sayaçlar durdu"
+   4 [('true', '2380'), ('false', '3')] "Sayaçlar durdu"
+   5 [('true', '2381'), ('false', '2')] "Sayaçlar durdu"
+  mola (1, 9, None, '2026-11-15 13:14:38.7415312', None, None, None)
+  op6 molayı bitirdi -> 302 /records/run/4
+  mola sonrası 0 [('true', '2')] False
+  mola sonrası 1 [('true', '4')] False
+  mola sonrası 2 [('true', '5')] False
+  adım 1.1 2026-11-15 13:14:36.5246268 2026-11-15 13:14:38.5672955 mola 2026-11-15 13:14:38.7415312 2026-11-15 13:54:20.4755229
+  (Faz net mola öncesi 2,04 sn + adım sonu ile mola başı arası 0,17 sn = 2,22 sn; açık molada değer 2 ile 3 arasında oynuyor, B1)
+
+== K22 kayıt 8: açılış, ilk adım, brüt
+  açılış 2026-11-15 13:34:43.8117419 ilk adım 2026-11-15 13:34:52.249255 bekleme 8.437514 sn | son bitiş 2026-11-15 13:35:17.1576576 | brüt 24 = son bitiş - ilk adım 24 | açılıştan ölçülseydi 33
+  ekran özeti: Temizlik tamamlandı Tamamlandı Net süre 18 sn Brüt süre 24 sn Mola 6 sn Efor 19 sn İlk adım başlangıcı 16:34 Tamamlanma 16:35 Süreler ilk adımın başlangıcından ölçülür. Kaydın açılışı ile ilk adım arasındaki bekleme hiçbir süreye girmez.
+  başlık: Açılış 16:34 İş emri IE-QA5 Saha defteri
+
+== K19 tetikleyici (kopya k19.db)
+  RET   update RecordSteps set StartedAtUtc='2026-11-15 10:00:00' where Id=39 -> Başlamış ya da bitmiş adımın zamanı değiştirilemez.
+  RET   update RecordSteps set EndedAtUtc='2026-11-15 10:00:00' where Id=39 -> Başlamış ya da bitmiş adımın zamanı değiştirilemez.
+  RET   update RecordBreaks set StartedAtUtc='2026-11-15 10:00:00' where Id=3 -> Başlamış ya da bitmiş molanın zamanı değiştirilemez.
+  RET   update RecordBreaks set EndedAtUtc='2026-11-15 10:00:00' where Id=3 -> Başlamış ya da bitmiş molanın zamanı değiştirilemez.
+  KABUL update RecordSteps set StartedAtUtc=... where StartedAtUtc is null (başlamamış adım) 1
+  tetikleyiciler: ['TR_RecordSteps_NoTimeChange', 'TR_RecordBreaks_NoTimeChange', 'TR_RecordBreaks_NoDelete']
+
+== K16 gerçek 40 dk mola (kayıt 4): adım 1.1 13:14:36-13:14:38, mola 13:14:38-13:54:20, adım 1.2 13:57:37-13:57:39 -> faz brüt 2582, mola 2381, net 201 sn (molasız 3 dk boşluk net süreye dahil); süre altı değil, gerekçe istenmedi
+
+== K24 (base.db: App_Data kopyası + DemoData.sql iki kez): ikinci uygulamada 0 tablo farkı; eklenen CleaningTypes 2, MachineCleaningTypes 8, ProcedureVersions 2, ProcedurePhases 5, ProcedureSteps 16. KSA: Kind 1, kilit 90, v1 Yürürlükte, MaterialRequired 0, yayınlayan NULL, faz 60/60 sn, 2+2 adım, makine 1,2,3,5 (PLN ve PLN3 ile aynı). DemoData.sql farkı yalnız ekleme. /records/cleaning-types?machineId=1,2,3,5 KSA listeliyor.
+
+== Olay zinciri: Development bağımsız HMAC (chain.py; anahtar bellekte okundu, yazdırılmadı), Production önceki özet bağlantısı
+  kayıt 2 olay 1 RecordOpened     önceki=-… özet=9a8c5b71806e… bağımsız hesap AYNI
+  kayıt 2 olay 2 ParticipantAdded önceki=9a8c5b71806e… özet=95c4c3c53c33… bağımsız hesap AYNI
+  kayıt 2 olay 3 ParticipantRemoved önceki=95c4c3c53c33… özet=a1105bac42d3… bağımsız hesap AYNI
+  kayıt 2 olay 4 StepStarted      önceki=a1105bac42d3… özet=35702025969a… bağımsız hesap AYNI
+  kayıt 2 olay 5 StepFinished     önceki=35702025969a… özet=be36f60a7887… bağımsız hesap AYNI
+  kayıt 2 olay 6 BreakStarted     önceki=be36f60a7887… özet=561dbe5ddbaf… bağımsız hesap AYNI
+  kayıt 2 olay 7 BreakEnded       önceki=561dbe5ddbaf… özet=31900e181586… bağımsız hesap AYNI
+  kayıt 2 olay 8 StepStarted      önceki=31900e181586… özet=9e41ffea7456… bağımsız hesap AYNI
+  kayıt 2 olay 9 StepFinished     önceki=9e41ffea7456… özet=b34e58be2927… bağımsız hesap AYNI
+  kayıt 2 olay 10 PhaseCompleted   önceki=b34e58be2927… özet=36b6f43acae2… bağımsız hesap AYNI
+DEV HMAC zinciri: 12 olay doğru, 0 farklı (anahtar yazdırılmadı)
+PROD: olay 138, önceki özet bağlantısı doğru 138, kırık 0, sıra boşluğu 0, payload PIN içeren 0
+PROD olay türleri {'RecordOpened': 23, 'RecordTimedOut': 3, 'ParticipantAdded': 15, 'StepStarted': 38, 'StepFinished': 33, 'BreakStarted': 6, 'BreakEnded': 5, 'PhaseCompleted': 10, 'RecordCompleted': 2, 'ParticipantRemoved': 2, 'MaterialAdded': 1}

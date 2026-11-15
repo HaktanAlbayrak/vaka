@@ -36,6 +36,12 @@ public sealed class OpenWorkProvider : IOpenWorkProvider
             .Distinct()
             .ToListAsync(cancellationToken);
 
+        var onBreak = await _db.RecordBreaks
+            .AsNoTracking()
+            .Where(item => item.StartedByUserId == targetUserId && item.EndedAtUtc == null)
+            .Select(item => new { Id = item.CleaningRecordId, item.Record.RecordNo })
+            .ToListAsync(cancellationToken);
+
         return
         [
             .. owned.Select(row => new OpenWorkItemViewModel
@@ -47,6 +53,12 @@ public sealed class OpenWorkProvider : IOpenWorkProvider
             .. assigned.Select(row => new OpenWorkItemViewModel
             {
                 Kind = "Görevli adım",
+                Title = row.RecordNo,
+                Url = RecordLinks.For(roles, row.Id)
+            }),
+            .. onBreak.Select(row => new OpenWorkItemViewModel
+            {
+                Kind = "Açık mola",
                 Title = row.RecordNo,
                 Url = RecordLinks.For(roles, row.Id)
             })

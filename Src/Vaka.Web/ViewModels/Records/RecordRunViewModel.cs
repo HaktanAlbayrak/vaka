@@ -59,4 +59,31 @@ public sealed class RecordRunViewModel
     public PendingMaterialViewModel? PendingMaterial { get; set; }
 
     public string? ErrorMessage { get; set; }
+
+    public RecordBreakViewModel[] Breaks { get; set; } = [];
+
+    public OpenBreakViewModel? OpenBreak { get; set; }
+
+    /// <summary>Kayıtta açık mola yokken true; false iken ekran sayaçları ilerletmez ve "Sayaçlar durdu" yazar.</summary>
+    public bool TimersRunning { get; set; }
+
+    public bool CanStartBreak { get; set; }
+
+    public string? CannotBreakReason { get; set; }
+
+    public RecordSummaryViewModel Summary { get; set; } = new();
+
+    public string? FirstStepStartedByName { get; set; }
+
+    /// <summary>JS kapalı görevli ekleme: <c>?stepId=&amp;people=</c> süzgeci.</summary>
+    public int? ParticipantStepId { get; set; }
+
+    public string? ParticipantQuery { get; set; }
+
+    /// <summary>En çok 50 kişi; yalnız <c>ParticipantStepId</c> doluysa ve adımın görevlisi yönetilebiliyorsa dolar.</summary>
+    public ParticipantOptionViewModel[] ParticipantOptions { get; set; } = [];
+
+    public bool ParticipantOptionsTruncated { get; set; }
+
+    public PendingParticipantViewModel? PendingParticipant { get; set; }
 }

@@ -42,6 +42,15 @@ public static class RecordLabels
         _ => throw new ArgumentOutOfRangeException(nameof(state), state, "Bilinmeyen makine durumu.")
     };
 
+    public static string BreakEnd(BreakEndKind? kind) => kind switch
+    {
+        null => "Açık",
+        BreakEndKind.Person => "Kişi bitirdi",
+        BreakEndKind.Manager => "Yönetici bitirdi",
+        BreakEndKind.Intervention => "Müdahale ile kapandı",
+        _ => throw new ArgumentOutOfRangeException(nameof(kind), kind, "Bilinmeyen mola kapanış türü.")
+    };
+
     public static string ActiveRecordSummary(string ownerName, RecordStatus status, DateTime openedAtLocal) =>
         $"Sahip: {ownerName}, durum: {Status(status).ToLower(TurkishCulture)}, açılış: {openedAtLocal.ToString("dd.MM.yyyy HH:mm", TurkishCulture)}";
 

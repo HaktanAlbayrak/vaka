@@ -4,6 +4,7 @@ export class LotPicker {
   constructor(root) {
     this.root = root;
     this.url = root.dataset.lotUrl ?? "";
+    this.recordId = root.closest("[data-record-id]")?.dataset.recordId ?? "";
     this.single = root.dataset.lotMode === "single";
     this.nameId = root.dataset.nameId ?? "";
     this.nameReason = root.dataset.nameReason ?? "";
@@ -70,7 +71,9 @@ export class LotPicker {
     const token = ++this.pending;
     this.say("Lotlar aranıyor…");
     try {
-      const response = await fetch(`${this.url}?q=${encodeURIComponent(this.search.value.trim())}`, {
+      const query = new URLSearchParams({ q: this.search.value.trim() });
+      if (this.recordId) query.set("recordId", this.recordId);
+      const response = await fetch(`${this.url}?${query}`, {
         headers: { Accept: "application/json" },
         credentials: "same-origin",
       });

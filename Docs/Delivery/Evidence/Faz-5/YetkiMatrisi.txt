@@ -1,0 +1,66 @@
+Faz 5 teslim testi, 2026-11-15. main çalışma ağacı (HEAD 4c0a01d). Release yayını .qa/f5/build (ön tur) ve .qa/f5/build2 (FE 10 sonrası, teslim testi). Port 5501 Production, DB .qa/f5/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5503 Development, .qa/f5/qa-dev.db, user-secrets anahtarı. Saatler: DB UTC, ekran Türkiye (UTC+3). Test PIN ve parolası yazılmadı.
+Ham istek, yönlendirme izlenmeden (mx.py). "302>403": access-denied yönlendirmesi ve 403 sayfası. Belirteçli POST: kullanıcının kendi sayfasındaki belirteç; belirteçsiz: gövdede yalnız CommandId.
+
+== oturumsuz
+  GET /records/run/3 302 /account/login
+  GET /records/people?q=a&stepId=99 302 /account/login
+  GET /breaks/current 302 /account/login
+  GET /my-work 302 /account/login
+  GET /records/lots?q=L&recordId=14 302 /account/login
+  POST /records/start-step/99 belirteçli 302 /account/login | belirteçsiz 302 /account/login
+  POST /records/finish-step/99 belirteçli 302 /account/login | belirteçsiz 302 /account/login
+  POST /records/add-participant/99 belirteçli 302 /account/login | belirteçsiz 302 /account/login
+  POST /records/remove-participant/99 belirteçli 302 /account/login | belirteçsiz 302 /account/login
+  POST /breaks/start/18 belirteçli 302 /account/login | belirteçsiz 302 /account/login
+  POST /breaks/end/999 belirteçli 302 /account/login | belirteçsiz 302 /account/login
+== Yönetici (m1)
+  GET /records/run/3 302>403
+  GET /records/people?q=a&stepId=99 302>403
+  GET /breaks/current 302>403
+  GET /my-work 302>403
+  GET /records/lots?q=L&recordId=14 302>403
+  POST /records/start-step/99 belirteçli 302>403 | belirteçsiz 302>403
+  POST /records/finish-step/99 belirteçli 302>403 | belirteçsiz 302>403
+  POST /records/add-participant/99 belirteçli 302>403 | belirteçsiz 302>403
+  POST /records/remove-participant/99 belirteçli 302>403 | belirteçsiz 302>403
+  POST /breaks/start/18 belirteçli 302>403 | belirteçsiz 302>403
+  POST /breaks/end/999 belirteçli 302>403 | belirteçsiz 302>403
+== Denetçi (au)
+  GET /records/run/3 302>403
+  GET /records/people?q=a&stepId=99 302>403
+  GET /breaks/current 302>403
+  GET /my-work 302>403
+  GET /records/lots?q=L&recordId=14 302>403
+  POST /records/start-step/99 belirteçli 302>403 | belirteçsiz 302>403
+  POST /records/finish-step/99 belirteçli 302>403 | belirteçsiz 302>403
+  POST /records/add-participant/99 belirteçli 302>403 | belirteçsiz 302>403
+  POST /records/remove-participant/99 belirteçli 302>403 | belirteçsiz 302>403
+  POST /breaks/start/18 belirteçli 302>403 | belirteçsiz 302>403
+  POST /breaks/end/999 belirteçli 302>403 | belirteçsiz 302>403
+== Süper admin (sa)
+  GET /records/run/3 302>403
+  GET /records/people?q=a&stepId=99 302>403
+  GET /breaks/current 302>403
+  GET /my-work 302>403
+  GET /records/lots?q=L&recordId=14 302>403
+  POST /records/start-step/99 belirteçli 302>403 | belirteçsiz 302>403
+  POST /records/finish-step/99 belirteçli 302>403 | belirteçsiz 302>403
+  POST /records/add-participant/99 belirteçli 302>403 | belirteçsiz 302>403
+  POST /records/remove-participant/99 belirteçli 302>403 | belirteçsiz 302>403
+  POST /breaks/start/18 belirteçli 302>403 | belirteçsiz 302>403
+  POST /breaks/end/999 belirteçli 302>403 | belirteçsiz 302>403
+== Operatör (op, kayda yabancı)
+  GET /records/run/3 200
+  GET /records/people?q=a&stepId=99 200
+  GET /breaks/current 302 /my-work
+  GET /my-work 200
+  GET /records/lots?q=L&recordId=14 200
+  POST /records/start-step/99 belirteçli 403 | belirteçsiz 400
+  POST /records/finish-step/99 belirteçli 403 | belirteçsiz 400
+  POST /records/add-participant/99 belirteçli 403 | belirteçsiz 400
+  POST /records/remove-participant/99 belirteçli 403 | belirteçsiz 400
+  POST /breaks/start/18 belirteçli 403 | belirteçsiz 400
+  POST /breaks/end/999 belirteçli 404 | belirteçsiz 400
+Süper admin menüsünde /my-work, /breaks bağlantısı: False
+m1 menüde /my-work: False
+au menüde /my-work: False

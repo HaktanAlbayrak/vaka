@@ -4,11 +4,13 @@
 @model RecordRunViewModel
 @{
     ViewData["Title"] = "Yürütme";
-    ViewData["Lead"] = "Kaydın bilgileri, malzemesi ve faz listesi.";
+    ViewData["Lead"] = "Sıradaki adımı PIN'inizle başlatın ve bitirin.";
     ViewData["NavKey"] = "my-work";
 
     var isOpened = Model.Status == RecordStatus.Opened;
+    var isCompleted = Model.Status == RecordStatus.Completed;
     var totalSteps = Model.Phases.Sum(phase => phase.Steps.Length);
+    var hasLive = Model.Phases.Any(phase => phase.Status == PhaseStatus.InProgress);
     var stateByPhase = new Dictionary<PhaseStatus, string>
     {
         [PhaseStatus.Waiting] = "waiting",
@@ -32,10 +34,19 @@
             MaterialLotId = lot.Id, ExpiredReason = Model.PendingMaterial.ExpiredReason, MaterialCode = lot.MaterialCode, MaterialName = lot.MaterialName,
             LotNo = lot.LotNo, ExpiryDate = lot.ExpiryDate, IsExpired = lot.IsExpired
         }).ToArray();
-    var firstOpenPhase = Model.Phases.FirstOrDefault(phase => phase.Status is PhaseStatus.InProgress or PhaseStatus.Waiting)?.Id;
+    var focusStep = Model.Phases.SelectMany(phase => phase.Steps).FirstOrDefault(step => step.Status == StepStatus.InProgress || (step.Status == StepStatus.Waiting && step.IsNext));
+    var firstOpenPhase = focusStep is null
+        ? Model.Phases.FirstOrDefault(phase => phase.Status is PhaseStatus.InProgress or PhaseStatus.Waiting)?.Id
+        : Model.Phases.First(phase => phase.Steps.Any(step => step.Id == focusStep.Id)).Id;
+    var phaseOpenByDefault = Model.ParticipantStepId is { } filterStep
+        ? Model.Phases.FirstOrDefault(phase => phase.Steps.Any(step => step.Id == filterStep))?.Id
+        : Model.PendingParticipant is { } pendingPerson
+            ? Model.Phases.FirstOrDefault(phase => phase.Steps.Any(step => step.Id == pendingPerson.StepId))?.Id
+            : null;
+    string ActionId(string kind, int stepId) => "pin-" + kind + "-" + stepId;
 }
 
-<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_24rem]">
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_24rem]" data-record-id="@Model.Id">
     <div class="min-w-0 space-y-5">
         @if (!string.IsNullOrEmpty(Model.ErrorMessage))
         {
@@ -68,6 +79,10 @@
                     <div><dt>Açılış</dt><dd><partial name="_Moment" model='(Model.OpenedAtLocal, Model.OpenedAtLocal)' /></dd></div>
                     <div><dt>İş emri</dt><dd class="mono">@Model.WorkOrderNo</dd></div>
                     <div><dt>Saha defteri</dt><dd class="mono whitespace-nowrap">@(string.IsNullOrEmpty(Model.FieldBookRef) ? "Atanmadı" : Model.FieldBookRef)</dd></div>
+                    @if (!string.IsNullOrEmpty(Model.FirstStepStartedByName))
+                    {
+                        <div><dt>İlk adımı başlatan</dt><dd>@Model.FirstStepStartedByName</dd></div>
+                    }
                     @if (!string.IsNullOrWhiteSpace(Model.Note))
                     {
                         <div class="col-span-2"><dt>Açıklama</dt><dd class="font-normal">@Model.Note</dd></div>
@@ -87,6 +102,70 @@
             </div>
         }
 
+        @if (Model.OpenBreak is { } openBreak)
+        {
+            <section class="panel border-warn" aria-labelledby="open-break-title" role="status">
+                <div class="panel-head border-warn">
+                    <h2 id="open-break-title" class="panel-title">Kayıtta mola açık</h2>
+                    <partial name="_Badge" model='"break.open"' />
+                </div>
+                <div class="panel-body space-y-3">
+                    <p class="font-semibold">Sayaçlar durdu.</p>
+                    <p>Faz ve adım süreleri ilerlemez. Adım başlatma ve bitirme, mola bitene kadar kapalıdır. Molayı yalnız başlatan kişi bitirir.</p>
+                    <dl class="kv grid-cols-2">
+                        <div><dt>Başlatan</dt><dd>@openBreak.StartedByName</dd></div>
+                        <div><dt>Başlangıç</dt><dd><partial name="_Moment" model='(openBreak.StartedAtLocal, Model.OpenedAtLocal)' /></dd></div>
+                        <div><dt>Mola süresi</dt><dd><partial name="_LiveTimer" model='(openBreak.ElapsedSeconds, true, (string?)null, (int?)null, "text-base")' /></dd></div>
+                        @if (!string.IsNullOrEmpty(openBreak.DuringStepTitle))
+                        {
+                            <div class="col-span-2"><dt>Mola anındaki adım</dt><dd>@openBreak.DuringStepTitle</dd></div>
+                        }
+                    </dl>
+                </div>
+            </section>
+        }
+
+        @if (isCompleted)
+        {
+            var summary = Model.Summary;
+            <section class="panel panel-tag border-t-ok" aria-labelledby="summary-title">
+                <div class="panel-head">
+                    <h2 id="summary-title" class="panel-title">Temizlik tamamlandı</h2>
+                    <partial name="_Badge" model='"RecordStatus.Completed"' />
+                </div>
+                <div class="panel-body space-y-4">
+                    <dl class="kv grid-cols-2 md:grid-cols-4">
+                        @if (summary.NetSeconds is not null)
+                        {
+                            <div><dt>Net süre</dt><dd><partial name="_Duration" model="DurationFormatter.Format(summary.NetSeconds.Value)" /></dd></div>
+                        }
+                        @if (summary.GrossSeconds is not null)
+                        {
+                            <div><dt>Brüt süre</dt><dd><partial name="_Duration" model="DurationFormatter.Format(summary.GrossSeconds.Value)" /></dd></div>
+                        }
+                        @if (summary.BreakSeconds is not null)
+                        {
+                            <div><dt>Mola</dt><dd><partial name="_Duration" model="DurationFormatter.Format(summary.BreakSeconds.Value)" /></dd></div>
+                        }
+                        @if (summary.EffortSeconds is not null)
+                        {
+                            <div><dt>Efor</dt><dd><partial name="_Duration" model="DurationFormatter.Format(summary.EffortSeconds.Value)" /></dd></div>
+                        }
+                        @if (summary.StartedAtLocal is not null)
+                        {
+                            <div><dt>İlk adım başlangıcı</dt><dd><partial name="_Moment" model='(summary.StartedAtLocal.Value, Model.OpenedAtLocal)' /></dd></div>
+                        }
+                        @if (summary.CompletedAtLocal is not null)
+                        {
+                            <div><dt>Tamamlanma</dt><dd><partial name="_Moment" model='(summary.CompletedAtLocal.Value, Model.OpenedAtLocal)' /></dd></div>
+                        }
+                    </dl>
+                    <p class="text-sm text-muted">Süreler ilk adımın başlangıcından ölçülür. Kaydın açılışı ile ilk adım arasındaki bekleme hiçbir süreye girmez.</p>
+                    <a class="btn btn-secondary" href="/my-work" data-busy-link>İşlerime dön</a>
+                </div>
+            </section>
+        }
+
         <section aria-labelledby="phases-title">
             <h2 id="phases-title" class="mb-3 text-xl font-bold">Fazlar</h2>
             @if (Model.Phases.Length == 0)
@@ -98,22 +177,106 @@
                 <ol class="phase-strip" aria-label="Fazlar">
                     @foreach (var phase in Model.Phases)
                     {
-                        <li class="phase-cell" data-state="@stateByPhase[phase.Status]" aria-current="@(phase.Status == PhaseStatus.InProgress ? "step" : null)">
+                        var phaseState = stateByPhase[phase.Status];
+                        var progressId = "phase-progress-" + phase.Id;
+                        var shownSeconds = phase.Status == PhaseStatus.InProgress ? phase.LiveNetSeconds : phase.NetSeconds;
+                        var done = phase.Steps.Count(step => step.Status == StepStatus.Completed);
+                        <li class="phase-cell" data-state="@phaseState" aria-current="@(phase.Status == PhaseStatus.InProgress ? "step" : null)">
                             <div class="flex flex-wrap items-center justify-between gap-2">
                                 <span class="phase-num">Faz @phase.OrderNo</span>
                                 <partial name="_Badge" model='"PhaseStatus." + phase.Status' />
                             </div>
                             <p class="phase-title">@phase.Title</p>
-                            <p class="text-sm text-muted">@phase.Steps.Length adım</p>
+                            <p class="text-sm text-muted">@done / @phase.Steps.Length adım</p>
+                            @if (phase.MinDurationSeconds is { } minimum && shownSeconds is not null)
+                            {
+                                <progress id="@progressId" class="meter" value="@shownSeconds.Value" max="@minimum" aria-label="Faz net süresi, minimuma göre"
+                                          data-tone="@(phase.Status == PhaseStatus.CompletedBelowMinimum ? "warn" : phase.Status == PhaseStatus.Completed ? "ok" : null)"></progress>
+                            }
+                            @if (shownSeconds is not null)
+                            {
+                                <p class="flex flex-wrap items-center gap-x-1.5 text-sm">
+                                    @if (phase.Status == PhaseStatus.InProgress)
+                                    {
+                                        <span class="live-dot" data-paused="@(Model.TimersRunning ? "false" : "true")" aria-hidden="true"></span>
+                                    }
+                                    <span>Net</span>
+                                    @if (phase.Status == PhaseStatus.InProgress)
+                                    {
+                                        <partial name="_LiveTimer" model='(shownSeconds.Value, Model.TimersRunning, phase.MinDurationSeconds is null ? null : progressId, phase.MinDurationSeconds, "text-base")' />
+                                    }
+                                    else
+                                    {
+                                        <partial name="_Duration" model="DurationFormatter.Format(shownSeconds.Value)" />
+                                    }
+                                </p>
+                            }
                             @if (phase.MinDurationSeconds is not null)
                             {
                                 <p class="text-sm"><span class="text-muted">Minimum </span><partial name="_Duration" model="DurationFormatter.Format(phase.MinDurationSeconds.Value)" /></p>
                             }
+                            @if (phase.Status is PhaseStatus.Completed or PhaseStatus.CompletedBelowMinimum && phase.GrossSeconds is not null)
+                            {
+                                <p class="text-sm text-muted">
+                                    Brüt <partial name="_Duration" model="DurationFormatter.Format(phase.GrossSeconds.Value)" />
+                                    @if (phase.BreakSeconds is > 0)
+                                    {
+                                        <text>, mola </text><partial name="_Duration" model="DurationFormatter.Format(phase.BreakSeconds.Value)" />
+                                    }
+                                </p>
+                            }
                         </li>
                     }
                 </ol>
+                @if (!Model.TimersRunning && hasLive)
+                {
+                    <p class="mt-2 flex items-center gap-2 text-sm font-semibold text-warn" role="status">
+                        <svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#pause" /></svg>
+                        Sayaçlar durdu, kayıtta mola açık.
+                    </p>
+                }
             }
         </section>
+
+        @if (Model.CanStartBreak && !isCompleted)
+        {
+            <section class="panel" aria-labelledby="break-title">
+                <div class="panel-head">
+                    <h2 id="break-title" class="panel-title">Mola</h2>
+                    <span class="text-sm text-muted">İki adım arasında</span>
+                </div>
+                <div class="panel-body">
+                    <details class="tool">
+                        <summary>
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#coffee" /></svg>
+                            Mola ver
+                        </summary>
+                        <form method="post" action="/breaks/start/@Model.Id" class="tool-body space-y-3" data-validate data-command-form asp-antiforgery="true">
+                            <input type="hidden" name="CommandId" value="@Model.CommandId" />
+                            <p class="text-sm">Mola boyunca kayıttaki ve sizin tüm işlemleriniz durur. Molayı yalnız siz bitirirsiniz. Onay için PIN'inizi girin.</p>
+                            <div class="grid gap-3 md:max-w-md">
+                                <partial name="_PinInput" model='("pin-start-break", "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                                <div class="notice notice-danger" role="alert" data-command-status hidden>
+                                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                                    <p class="font-semibold" data-command-message></p>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#coffee" /></svg>
+                                    Mola başlat
+                                </button>
+                            </div>
+                        </form>
+                    </details>
+                </div>
+            </section>
+        }
+        else if (!string.IsNullOrEmpty(Model.CannotBreakReason) && Model.Status == RecordStatus.InProgress && Model.OpenBreak is null)
+        {
+            <p class="flex items-start gap-2 text-sm text-muted">
+                <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#coffee" /></svg>
+                <span>Mola yok: @Model.CannotBreakReason</span>
+            </p>
+        }
 
         @if (totalSteps > 0)
         {
@@ -121,26 +284,158 @@
                 <h2 id="steps-title" class="text-xl font-bold">Adımlar</h2>
                 @foreach (var phase in Model.Phases)
                 {
-                    <details class="panel" open="@(phase.Id == firstOpenPhase)">
+                    <details class="panel" open="@(phase.Id == (phaseOpenByDefault ?? firstOpenPhase))">
                         <summary class="panel-head cursor-pointer">
                             <span class="panel-title">Faz @phase.OrderNo: @phase.Title</span>
                             <span class="text-sm text-muted">@phase.Steps.Length adım</span>
                         </summary>
+                        @if (phase.Status == PhaseStatus.CompletedBelowMinimum)
+                        {
+                            <div class="notice notice-warn m-3 md:m-4">
+                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>
+                                <div class="min-w-0">
+                                    <p class="font-semibold">Faz süre altında tamamlandı</p>
+                                    <p class="mt-0.5 break-words text-sm"><span class="font-semibold">Gerekçe:</span> @phase.BelowMinimumReason</p>
+                                </div>
+                            </div>
+                        }
                         <ol class="step-list p-3 md:p-4">
                             @foreach (var step in phase.Steps)
                             {
-                                <li class="step" data-state="@StepState(step)">
+                                var state = StepState(step);
+                                var isRunning = step.Status == StepStatus.InProgress;
+                                var isReady = state == "ready";
+                                var isLocked = state == "waiting" && step.Status == StepStatus.Waiting;
+                                <li class="step" data-state="@state" id="step-@step.Id">
                                     <span class="step-stamp">@(phase.OrderNo).@(step.OrderNo)</span>
-                                    <div class="min-w-0 space-y-1.5">
+                                    <div class="min-w-0 space-y-3">
                                         <div class="flex min-h-11 flex-wrap items-center gap-x-3 gap-y-1">
                                             <h3 class="break-words text-lg font-bold leading-tight">@step.Title</h3>
                                             <partial name="_Badge" model="StepKey(step)" />
                                         </div>
-                                        @if (step.Status == StepStatus.Waiting && !step.IsNext)
+
+                                        @if (isLocked)
                                         {
-                                            <p class="text-sm text-muted">Önceki adım bitmeden başlatılamaz.</p>
+                                            <p class="flex items-start gap-2 text-sm text-muted">
+                                                <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#lock" /></svg>
+                                                <span>Kilitli: @(string.IsNullOrEmpty(step.CannotStartReason) ? "Önceki adım bitmeden başlatılamaz." : step.CannotStartReason)</span>
+                                            </p>
+                                        }
+
+                                        @if (isReady || isRunning)
+                                        {
+                                            @if (!string.IsNullOrWhiteSpace(step.Description))
+                                            {
+                                                <p class="max-w-prose break-words">@step.Description</p>
+                                            }
+                                            @if (step.Media.Length > 0)
+                                            {
+                                                <partial name="_MediaList" model='(step.Media, false, 0)' />
+                                            }
+                                        }
+
+                                        @if (isRunning)
+                                        {
+                                            <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                                                <span class="live-dot" data-paused="@(Model.TimersRunning ? "false" : "true")" aria-hidden="true"></span>
+                                                @if (step.LiveElapsedSeconds is { } elapsed)
+                                                {
+                                                    <partial name="_LiveTimer" model='(elapsed, Model.TimersRunning, (string?)null, (int?)null, "step-clock text-3xl sm:text-4xl md:text-5xl")' />
+                                                }
+                                                <span class="text-sm text-muted">
+                                                    @if (!Model.TimersRunning)
+                                                    {
+                                                        <text>Sayaç durdu, mola açık</text>
+                                                    }
+                                                    else if (step.StartedAtLocal is { } startedAt)
+                                                    {
+                                                        <text>Başladı </text><partial name="_Moment" model='(startedAt, Model.OpenedAtLocal)' />
+                                                    }
+                                                </span>
+                                            </div>
+                                        }
+
+                                        @if (step.Status == StepStatus.Completed)
+                                        {
+                                            <dl class="kv grid-cols-2 md:grid-cols-3">
+                                                @if (step.StartedAtLocal is { } doneStart)
+                                                {
+                                                    <div><dt>Başlatan</dt><dd>@step.StartedByName, <partial name="_Moment" model='(doneStart, Model.OpenedAtLocal)' /></dd></div>
+                                                }
+                                                @if (step.EndedAtLocal is { } doneEnd)
+                                                {
+                                                    <div><dt>Bitiren</dt><dd>@step.EndedByName, <partial name="_Moment" model='(doneEnd, Model.OpenedAtLocal)' /></dd></div>
+                                                }
+                                                @if (step.DurationSeconds is not null)
+                                                {
+                                                    <div><dt>Süre</dt><dd><partial name="_Duration" model="DurationFormatter.Format(step.DurationSeconds.Value)" /></dd></div>
+                                                }
+                                                @if (step.EffortSeconds is not null)
+                                                {
+                                                    <div><dt>Efor</dt><dd><partial name="_Duration" model="DurationFormatter.Format(step.EffortSeconds.Value)" /></dd></div>
+                                                }
+                                                @if (step.BreakSeconds is > 0)
+                                                {
+                                                    <div><dt>Mola</dt><dd><partial name="_Duration" model="DurationFormatter.Format(step.BreakSeconds.Value)" /></dd></div>
+                                                }
+                                            </dl>
+                                        }
+
+                                        @if ((!isLocked || step.CanManageParticipants) && step.Status != StepStatus.Interrupted)
+                                        {
+                                            <partial name="_Participants" model="(Model, step)" />
+                                        }
+
+                                        @if (isReady && !step.CanStart && !string.IsNullOrEmpty(step.CannotStartReason))
+                                        {
+                                            <p class="flex items-start gap-2 text-sm font-semibold">
+                                                <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#info" /></svg>
+                                                <span>@step.CannotStartReason</span>
+                                            </p>
+                                        }
+                                        @if (isRunning && !step.CanFinish && !string.IsNullOrEmpty(step.CannotFinishReason))
+                                        {
+                                            <p class="flex items-start gap-2 text-sm font-semibold">
+                                                <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#info" /></svg>
+                                                <span>@step.CannotFinishReason</span>
+                                            </p>
                                         }
                                     </div>
+
+                                    @if (isReady && step.CanStart && !isCompleted)
+                                    {
+                                        <form method="post" action="/records/start-step/@step.Id" class="run-action" data-validate data-command-form asp-antiforgery="true">
+                                            <input type="hidden" name="CommandId" value="@Model.CommandId" />
+                                            <partial name="_PinInput" model='(ActionId("start", step.Id), "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                                            <div class="notice notice-danger" role="alert" data-command-status hidden>
+                                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                                                <p class="font-semibold" data-command-message></p>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-lg">
+                                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#play" /></svg>
+                                                Adımı başlat
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (isRunning && step.CanFinish && !isCompleted)
+                                    {
+                                        <form method="post" action="/records/finish-step/@step.Id" class="run-action" data-validate data-command-form asp-antiforgery="true">
+                                            <input type="hidden" name="CommandId" value="@Model.CommandId" />
+                                            @if (step.IsLastOfPhase && phase.MinDurationSeconds is not null)
+                                            {
+                                                <p class="text-sm text-muted">Fazın son adımı. Faz süresi minimumun altındaysa gerekçe istenir.</p>
+                                            }
+                                            <partial name="_PinInput" model='(ActionId("finish", step.Id), "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                                            <div class="notice notice-danger" role="alert" data-command-status hidden>
+                                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                                                <p class="font-semibold" data-command-message></p>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-lg">
+                                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#check" /></svg>
+                                                Adımı bitir
+                                            </button>
+                                        </form>
+                                    }
                                 </li>
                             }
                         </ol>
@@ -151,6 +446,50 @@
     </div>
 
     <aside class="min-w-0 space-y-5" aria-label="Kayıt ayrıntısı">
+        <section class="panel" aria-labelledby="breaks-title">
+            <div class="panel-head">
+                <h2 id="breaks-title" class="panel-title">Molalar</h2>
+                <span class="text-sm text-muted">@Model.Breaks.Length</span>
+            </div>
+            @if (Model.Breaks.Length == 0)
+            {
+                <p class="p-4 text-muted md:p-5">Bu kayıtta mola verilmedi.</p>
+            }
+            else
+            {
+                <ul class="divide-y divide-line">
+                    @foreach (var item in Model.Breaks)
+                    {
+                        <li class="space-y-1 px-4 py-3 md:px-5">
+                            <p class="font-semibold">@item.StartedByName</p>
+                            <p class="text-sm">
+                                <partial name="_Moment" model='(item.StartedAtLocal, Model.OpenedAtLocal)' />
+                                @if (item.EndedAtLocal is { } endedAt)
+                                {
+                                    <text> - </text><partial name="_Moment" model='(endedAt, Model.OpenedAtLocal)' />
+                                }
+                                else
+                                {
+                                    <text> - sürüyor</text>
+                                }
+                            </p>
+                            <p class="text-sm text-muted">
+                                @if (item.DurationSeconds is not null)
+                                {
+                                    <partial name="_Duration" model="DurationFormatter.Format(item.DurationSeconds.Value)" /><text>, </text>
+                                }
+                                @item.EndKindLabel
+                            </p>
+                            @if (!string.IsNullOrEmpty(item.DuringStepTitle))
+                            {
+                                <p class="text-sm text-muted">Adım: @item.DuringStepTitle</p>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+        </section>
+
         <section class="panel" aria-labelledby="material-title">
             <div class="panel-head">
                 <h2 id="material-title" class="panel-title">Malzeme</h2>
@@ -245,3 +584,15 @@
         </section>
     </aside>
 </div>
+
+@if (!isCompleted && Model.Phases.Any(phase => phase.Steps.Any(step => step.CanFinish)))
+{
+    <dialog class="finish-dialog backdrop:bg-ink/60" data-finish-dialog aria-labelledby="finish-dialog-title">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-line px-4 py-3 md:px-5">
+            <h2 id="finish-dialog-title" class="panel-title">Faz süre altında kalıyor</h2>
+        </div>
+        <div class="p-4 md:p-5" data-finish-body></div>
+    </dialog>
+}
+
+<partial name="_MediaDialog" />

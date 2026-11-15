@@ -3,6 +3,18 @@ export class PinInput {
     this.input = element.querySelector("[data-pin-input]");
     this.slots = [...element.querySelectorAll("[data-pin-slots] > span")];
     this.reveal = element.querySelector("[data-pin-reveal]");
+    this.input.addEventListener("beforeinput", (event) => {
+      if (event.inputType?.startsWith("insert") && event.data && /\D/.test(event.data)) event.preventDefault();
+    });
+    this.input.addEventListener("paste", (event) => {
+      event.preventDefault();
+      const digits = (event.clipboardData?.getData("text") ?? "").replace(/\D/g, "");
+      const { selectionStart: from, selectionEnd: to, value, maxLength } = this.input;
+      const room = maxLength > 0 ? maxLength - (value.length - (to - from)) : digits.length;
+      if (room <= 0 || digits.length === 0) return;
+      this.input.setRangeText(digits.slice(0, room), from, to, "end");
+      this.input.dispatchEvent(new Event("input", { bubbles: true }));
+    });
     this.input.addEventListener("input", () => {
       this.input.value = this.input.value.replace(/\D/g, "");
       this.paint();

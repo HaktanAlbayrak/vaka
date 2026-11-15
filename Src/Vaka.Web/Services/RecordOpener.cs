@@ -12,6 +12,7 @@ public sealed class RecordOpener : IRecordOpener
     private readonly IWriteTransactionRunner _transactions;
     private readonly IRecordTimeouts _timeouts;
     private readonly IRecordOpenValidator _validator;
+    private readonly IBreakReader _breaks;
     private readonly IPinService _pins;
     private readonly IShiftLocator _shifts;
     private readonly IDurationCalculator _calculator;
@@ -26,6 +27,7 @@ public sealed class RecordOpener : IRecordOpener
         IWriteTransactionRunner transactions,
         IRecordTimeouts timeouts,
         IRecordOpenValidator validator,
+        IBreakReader breaks,
         IPinService pins,
         IShiftLocator shifts,
         IDurationCalculator calculator,
@@ -39,6 +41,7 @@ public sealed class RecordOpener : IRecordOpener
         _transactions = transactions;
         _timeouts = timeouts;
         _validator = validator;
+        _breaks = breaks;
         _pins = pins;
         _shifts = shifts;
         _calculator = calculator;
@@ -75,6 +78,11 @@ public sealed class RecordOpener : IRecordOpener
         if (replay is not null)
         {
             return new OpenOutcome(replay, null);
+        }
+
+        if (await _breaks.CheckAsync(ownerUserId, cancellationToken) is { } onBreak)
+        {
+            return new OpenOutcome(onBreak, null);
         }
 
         if (!await _db.Users.AnyAsync(user => user.Id == ownerUserId && user.IsActive, cancellationToken))

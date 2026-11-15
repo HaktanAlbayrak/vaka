@@ -16,7 +16,7 @@
 | 2 | Tesis yapısı, vardiya ve malzeme | Tesis, hat, makine, vardiya, malzeme ve lot ekranları | Evet | TESLİM ALINDI (tur 2, 2026-11-14) |
 | 3 | Temizlik tipi ve prosedür versiyonu | Tip, makine eşleme, taslak düzenleyici, yayınlama | Evet | TESLİM ALINDI (tur 3, 2026-11-15) |
 | 4 | Kayıt açma ve makine kilidi | Yeni kayıt, İşlerim, Açıldı hali, makine panosu, zaman aşımı | Evet | TESLİM ALINDI (tur 2, 2026-11-15) |
-| 5 | Adım yürütme, görevli ve mola | Adım başlat/bitir, sahibin eklediği görevliler, iki adım arasında mola, otomatik tamamlanma | Evet | BEKLİYOR |
+| 5 | Adım yürütme, görevli ve mola | Adım başlat/bitir, sahibin eklediği görevliler, iki adım arasında mola, otomatik tamamlanma | Evet | TESLİM ALINDI (tur 1, 2026-11-15) |
 | 6 | Kayıt listesi, detay, bütünlük ve müdahale | 13 soruyu yanıtlayan detay ve yazdırılabilir denetim çıktısı, olay günlüğü, bütünlük, iptal, yarıda kapatma, yöneticinin molayı bitirmesi | Evet | BEKLİYOR |
 | 6A | Acil müdahale, süre raporu ve malzeme izlenebilirliği | Acil müdahale ekranı ve "Acil" ayrımı, süre ve efor raporu (tablo), lot ve makine bazlı malzeme sorgusu | Evet | BEKLİYOR |
 | 7 | Talep, beklemeye alma ve yönetici panosu (Salı sonrası) | Talepler, Taleplerim, bekleme ve devam, yönetici panosu, adım sürerken mola, görevli PIN onayı | Evet | BEKLİYOR |
@@ -707,6 +707,7 @@ otomatik tamamlanması. Adım sürerken mola (K-39) ve görevlinin kendi PIN'iyl
 | 7 | FE | `LiveTimer.js` (sunucunun verdiği saniyeden gösterimi ilerletir, `TimersRunning` false iken ilerletmez, hesap yapmaz), `ParticipantPicker.js` | frontend-engineer |
 | 8 | FE | İlk iş, kullanıcı isteği (2026-11-15, PL-66): PIN bileşeni doğrulama modunda da `maxlength` güncel `<PinUzunluğu>` olur ve rakam dışı karakteri istemcide kabul etmez. Değer `_PinInput.cshtml`'de `@inject ISystemSettingsReader` ile `SettingKeys.PinLength`'ten okunur (tek yer, görünümde sabit yok); sunucu kuralları değişmez. Faz 1-4'teki tüm PIN alanlarına uygulanır; Faz 4 raporu değişmez | frontend-engineer |
 | 9 | FE | İlk iş, görsel rötuş (PL-66; DNA kartı değişmez, `Dna.md` bileşen notu güncellenir): (a) PIN göz düğmesi dinlenmede dolgusuz, alanın iç köşe yarıçapıyla uyumlu, hover ve odakta token renginden hafif ton, odak halkası görünür, 44 px hedef korunur; (b) tüm `<select>`'ler `appearance-none`, `.input` ile aynı kenarlık, yarıçap, yükseklik, iç boşluk ve odak; ok proje sprite'ındaki `chevron-down`, açık ve koyu tema ile pasif hali; Faz 1-4'teki tüm select'ler | frontend-engineer |
+| 10 | FE | Kullanıcı isteği (2026-11-15, PL-70): süre altı gerekçe JS açıkken yürütme ekranında `<dialog>` içinde. "Bitir" POST'u sunucudan `FinishStep` görünümüyle (200) dönerse `CommandForm.js` sayfayı değiştirmez; yanıttaki `form[data-finish-reason]`'ı dialoga yerleştirir: faz adı, faz net süresi, minimum, gerekçe (zorunlu), PIN, "Gerekçeyle bitir", "Vazgeç". Gönderim aynı `CommandId` ile; ret yanıtı yine `FinishStep` görünümü olduğu için dialog içeriği yenilenir. Odak açılışta ilk alana, kapanışta "Bitir" düğmesine döner; Esc ve "Vazgeç" kapatır, adım "Devam ediyor" kalır. JS kapalıyken `FinishStep.cshtml` sayfası yedektir. Sunucu kuralı ve sözleşme değişmez; backend'e iş yok | frontend-engineer |
 
 **Paralel:** Evet. Gerekçe: ekranın tüm kararları ViewModel bayraklarından gelir (`CanStart`, `CanFinish`, `CanManageParticipants`, `CanStartBreak`, `TimersRunning`); route'lar aşağıda; dosyalar ayrık.
 
@@ -749,7 +750,8 @@ Sözleşme ekleri (PL-68, paralel başlangıç için):
 **Dosya sınırı:** frontend `Views/Records/Run.cshtml`, `Views/Records/FinishStep.cshtml`, `Views/Records/_Participants.cshtml`, `Views/Breaks/**`,
 `Views/Shared/_PinInput.cshtml`, `Styles/**`, `Docs/Design/Dna.md` (bileşen notu), FE 9 için yalnız select işaretlemesi olarak Faz 1-4 görünümleri,
 `Views/MyWork/**`, `wwwroot/js/LiveTimer.js`, `wwwroot/js/ParticipantPicker.js`; backend `Controllers/RecordsController.cs`, `Controllers/BreaksController.cs`,
-adım, görevli ve mola servisleri, `Services/DurationCalculator.cs`, `ViewModels/Records/**`, `ViewModels/Breaks/**`.
+adım, görevli ve mola servisleri, `Services/DurationCalculator.cs`, `ViewModels/Records/**`, `ViewModels/Breaks/**`; `Controllers/RecordStepsController.cs`
+(adım ve görevli action'ları, route'lar değişmez) ve `Program.cs`'te yalnız `RecordSteps` ile `Breaks` için `/Views/Records/` arama konumu (PL-69).
 
 **Kabul kriterleri**
 
@@ -791,6 +793,11 @@ adım, görevli ve mola servisleri, `Services/DurationCalculator.cs`, `ViewModel
 - [ ] K26 (PL-66): PIN göz düğmesi ve tüm select'ler Faz 1-5 ekranlarında 360, 768, 1024 ve 1440 px'te, açık ve koyu temada: select yüksekliği aynı
   satırdaki `.input` ile eşit, ok ikonu dikey ortalı (G12); göz düğmesi alanın kenarlık içinde, köşesi alanla uyumlu; hover ve odak hali görünür,
   kontrast AA; `prefers-reduced-motion` açıkken geçiş yok; dokunma hedefi en az 44 px; pasif select ayırt edilir. Faz 1-4 G11 imzaları değişmez.
+- [ ] K27 (PL-70): JS açıkken fazın son adımı süre altındayken "Bitir" yürütme ekranında dialog açar; dialog faz adını, net süreyi ve minimumu
+  gösterir; gerekçesiz ve yanlış PIN'li gönderim dialog içinde alan hatasıyla reddedilir, adım "Devam ediyor" kalır, olay yazılmaz; gerekçe ve
+  doğru PIN'le faz "Tamamlandı - süre altında" olur, aynı `CommandId` tek etki üretir (G9). Dialog `<dialog>` ve erişilebilir adlı, açılışta odak
+  içeride, Tab dışarı çıkmaz, Esc kapatır, kapanışta odak "Bitir"e döner; 360 px'te yatay kaydırma yok, düğmeler 44 px; G5a (dialogdaki form
+  belirteci), G12. JS kapalıyken aynı akış `FinishStep` sayfasıyla çalışır (K11).
 
 **Faz 4'ten devreden (PL-67):**
 
@@ -803,6 +810,9 @@ adım, görevli ve mola servisleri, `Services/DurationCalculator.cs`, `ViewModel
 - [ ] T-B20 (FE): Mola panelindeki ve mola ekranındaki "Molayı bitir" 320-1920 px'te tek satır ve 56 px yüksekliğindedir; adım eylem düğmeleriyle aynı ızgarayı kullanır.
 
 **Kapsam dışı:** Yöneticinin molayı bitirmesi ve kayıt detayı (Faz 6), beklemeye alma, adım sürerken mola ve görevli PIN onayı (Faz 7, PL-57), kişi düzeyi mola ve adımın ayrıca duraklatılması (K-39, K-21).
+
+**Sonuç (2026-11-15):** TESLİM ALINDI (tur 1). Kabul kriterleri 46/46; F4-A1, F4-A2 kapandı. DÜŞÜK B1 (canlı sayaç yuvarlaması), B2 (koyu tema
+dialog perdesi) ve A1 (açık iş bağlantıları) Faz 6'ya devredildi (PL-71). Rapor: `Docs/Delivery/Faz-5-Teslim.md`.
 
 ---
 
@@ -822,6 +832,9 @@ PIN'le iptal etmesi, yarıda kapatması ve açık molayı bitirmesi (O-03, PL-46
 | 5 | BE | Müdahale servisi (BR-27, BR-40): iptal (Açıldı ya da Devam ediyor kayıtta) ve yarıda kapatma (Devam ediyor kayıtta); gerekçe ve PIN zorunlu, PIN doğrulaması ve iş eylemi aynı veritabanı işleminde. Aynı işlemde: devam eden adım Kesildi, bitişi müdahale anı, adım molası ve süresi SH-17 ve SH-01 ile; tamamlanmamış fazlar Kesildi; açık mola müdahale anında "Müdahale" türüyle kapanır; görevlilerin çalışıyor bayrağı kalkar; makine kilidi kalkar; kapanış türü, kapatan, gerekçe ve anı kayda yazılır. Kayıt silinmez, sahip değişmez, kayıt no yeniden kullanılmaz. Yönetici açık molayı gerekçe ve PIN'le bitirir, bitiş işlem anıdır; adım "Devam ediyor" kalır. Zaman aşımı kuralı (BR-26) müdahaleden önce aynı işlemde uygulanır | backend-engineer |
 | 6 | BE | Ana sayfa Yönetici ve Denetçi'yi `/records`'a yönlendirir (Faz 7'de `/dashboard` olur); `PrototypeController` ve prototip görünümleri kaldırılır (PL-10) | backend-engineer, frontend-engineer |
 | 7 | FE | E-19 Kayıtlar, E-20 Kayıt detayı (zaman çizelgesi, görevliler ve onay zamanları, molalar, malzemeler, olay günlüğü, bütünlük rozeti, kapanış bilgisi; yazdırma katmanı: menü, üst bar, alt çubuk ve eylem düğmeleri gizli, çıktı denetim çıktısı içeriğini taşır, Ö-07, PL-56), E-21 Bütünlük doğrulama, E-26 Müdahale formu (iptal, yarıda kapatma) ve mola bitirme formu; detayda "Müdahale et" ve "Molayı bitir" yalnız Yönetici'de | frontend-engineer |
+| 8 | BE | İlk iş, Faz 5'ten devreden F5-B1 (PL-71): `CalculateLiveElapsed` farkı tick düzeyinde alıp tek kez yuvarlar, XML yorumu kodla aynı. F5-A1: pasifleştirme ekranındaki açık işlerde kayıt bağlantısı görüntüleyenin erişebildiği detaya gider (PL-16) | backend-engineer |
+| 9 | FE | İlk iş, Faz 5'ten devreden F5-B2 (PL-71): dialog perdesi açık ve koyu temada koyu kalan token (`Run.cshtml`, `_MediaDialog.cshtml`) | frontend-engineer |
+| 10 | BE | Oturum sertleştirmesi (Faz 1 gözlemi, ORTA, PL-71): her girişte rastgele oturum kimliği claim'i (`VakaClaimTypes.SessionId`); çıkışta kimlik sunucu belleğinde iptal listesine `<OturumSüresi>` boyunca yazılır; çerez doğrulamasında iptal edilmiş kimlik reddedilir ve giriş sayfasına yönlenir. Şema değişmez. Sınır: uygulama yeniden başlayınca liste boşalır; kalıcı çözüm (kullanıcı satırında oturum sürümü) ALTER'dir, kullanıcı onayıyla Salı sonrası | backend-engineer |
 
 **Paralel:** Evet. Gerekçe: veri yapısı Faz 4-5'te oluştu; müdahale yeni tablo istemez (kolonlar önden, PL-02); route, ViewModel ve rol aşağıda; dosyalar ayrık.
 
@@ -839,9 +852,10 @@ PIN'le iptal etmesi, yarıda kapatması ve açık molayı bitirmesi (O-03, PL-46
 `AllowedTypes`: Açıldı kayıtta yalnız İptal, Devam ediyor kayıtta İptal ve Yarıda kapatma; diğer durumlarda boş ve `BlockReason` dolu.
 Formun alanı göstermesi yetmez; tür, durum ve gerekçe serviste yeniden denetlenir. Makine panosundaki kayıt bağlantısı Yönetici ve Denetçi'de detaya gider (Faz 4 sözleşmesi).
 
-**Dosya sınırı:** frontend `Views/Records/Index.cshtml`, `Views/Records/Details.cshtml`, `Views/Records/Integrity.cshtml`, `Views/Interventions/**`,
+**Dosya sınırı:** frontend `Views/Records/Run.cshtml` ve `Views/Shared/_MediaDialog.cshtml` (yalnız F5-B2), `Views/Users/Deactivate.cshtml` (F5-A1 bağlantısı gerekirse), `Views/Records/Index.cshtml`, `Views/Records/Details.cshtml`, `Views/Records/Integrity.cshtml`, `Views/Interventions/**`,
 `Views/Prototype/**` (kaldırma), `Styles/**` (yazdırma katmanı); backend `Controllers/RecordsController.cs` (okuma action'ları),
-`Controllers/InterventionsController.cs`, `Controllers/HomeController.cs`, `Controllers/PrototypeController.cs` (kaldırma), sorgu, bütünlük ve
+`Controllers/InterventionsController.cs`, `Controllers/HomeController.cs`, `Controllers/PrototypeController.cs` (kaldırma), `Controllers/AccountController.cs`,
+`Authorization/**` ve `Program.cs` (oturum sertleştirmesi), `Services/DurationCalculator.cs` (F5-B1), açık iş sağlayıcısı (F5-A1), sorgu, bütünlük ve
 müdahale servisleri, `ViewModels/Records/**`, `ViewModels/Interventions/**`.
 
 **Kabul kriterleri**
@@ -867,6 +881,11 @@ müdahale servisleri, `ViewModels/Records/**`, `ViewModels/Interventions/**`.
 - [ ] K19: Gerekçesiz ya da yanlış PIN'li müdahale ve mola bitirme kaydı değiştirmez ve olay üretmez; yanlış PIN hatalı deneme sayılır. Tamamlandı, Zaman aşımı, İptal edildi ve Yarıda kapatıldı kayıtta müdahale reddedilir. Kilit bitişi geçmiş Açıldı kayıtta iptal isteği kaydı Zaman aşımı yapar (zaman aşımı olayı, anı kilit bitişi) ve iptal "Kayıt zaman aşımına düştü" nedeniyle reddedilir (BR-26).
 - [ ] K20 (eski Faz 7 K15): SC-16 uçtan uca: yönetici kaydı yarıda kapatır, diğer kaydın sahibi kişiyi henüz başlamamış adımdan çıkarır, ardından pasifleştirme yapılır; sahip hiçbir aşamada değişmez.
 - [ ] K21 (eski Faz 7 K16, müdahale kısmı): Olay günlüğünde iptal, yarıda kapatma ve yöneticinin mola bitirme olayları yapan, gerekçe ve zamanla yer alır (BR-30); bütünlük rozeti müdahaleden sonra "Doğrulandı" kalır.
+- [ ] K22 (F5-B1, F5-B2, F5-A1): Kayıtta açık mola varken yürütme ekranı art arda yenilendiğinde faz ve kayıt sayaçları aynı değeri gösterir;
+  `IDurationCalculator` SH-14 yorumu kodla aynıdır. Koyu temada dialog perdesi koyu, içerik kontrastı AA. Pasifleştirme ekranındaki açık işler
+  Yönetici'de kayıt detayına bağlantılıdır, Süper admin'de bağlantısızdır.
+- [ ] K23 (PL-71): "Kullanıcı değiştir" ile çıkıştan sonra, çıkıştan önce alınmış oturum çereziyle yapılan istek (ör. `/my-work`) giriş
+  sayfasına yönlenir; aynı kullanıcının başka tarayıcıdaki oturumu etkilenmez. Uygulama yeniden başlatıldıktan sonraki davranış raporda not edilir.
 
 **Kapsam dışı:** Ayrı denetim çıktısı adresi E-32 ve CSV (Faz 9), acil müdahale ve raporlar (Faz 6A), yönetici panosu ve SH-16 (Faz 7), beklemeye alma ve talepler (Faz 7).
 

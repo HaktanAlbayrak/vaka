@@ -47,20 +47,26 @@
         </div>
         <div class="field">
             <label class="field-label" for="status">Durum</label>
-            <select id="status" name="status" class="input">
+            <div class="select-wrap">
+                <select id="status" name="status" class="input">
                 @foreach (var option in statusOptions)
                 {
                     <option value="@option.Value" selected="@(option.Value == statusFilter)">@option.Text</option>
                 }
             </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
         </div>
         <div class="field">
             <label class="field-label" for="kind">Tür</label>
-            <select id="kind" name="kind" class="input">
+            <div class="select-wrap">
+                <select id="kind" name="kind" class="input">
                 <option value="">Planlı ve acil</option>
                 <option value="planned" selected="@(kindFilter == "planned")">Planlı</option>
                 <option value="emergency" selected="@(kindFilter == "emergency")">Acil</option>
             </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
         </div>
         <div class="flex flex-wrap gap-2">
             <button type="submit" class="btn btn-primary">

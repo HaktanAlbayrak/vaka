@@ -1,6 +1,6 @@
 namespace Vaka.Web.ViewModels.Records;
 
-/// <summary>Faz 5 ve Faz 7 alanları (atanan adımlar, bekleyen kayıtlar, açık mola) o fazlarda eklenir.</summary>
+/// <summary>Faz 7 alanları (bekleyen kayıtlar) o fazda eklenir.</summary>
 public sealed class MyWorkViewModel
 {
     public ActiveRecordViewModel? ActiveRecord { get; set; }
@@ -10,4 +10,8 @@ public sealed class MyWorkViewModel
     public string? CannotOpenReason { get; set; }
 
     public string? CannotOpenUrl { get; set; }
+
+    public AssignedStepViewModel[] AssignedSteps { get; set; } = [];
+
+    public MyWorkBreakViewModel? OpenBreak { get; set; }
 }

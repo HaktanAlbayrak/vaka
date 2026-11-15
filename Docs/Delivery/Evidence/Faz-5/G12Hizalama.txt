@@ -1,0 +1,29 @@
+Faz 5 teslim testi, 2026-11-15. main çalışma ağacı (HEAD 4c0a01d). Release yayını .qa/f5/build (ön tur) ve .qa/f5/build2 (FE 10 sonrası, teslim testi). Port 5501 Production, DB .qa/f5/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5503 Development, .qa/f5/qa-dev.db, user-secrets anahtarı. Saatler: DB UTC, ekran Türkiye (UTC+3). Test PIN ve parolası yazılmadı.
+
+== G12 (an12.py): a gömülü düğme, b aynı satır kontrolleri, c alan sol kenarı, d panel iç boşluğu, e düğme satırı, f satır kartı. Ön tur g3 g4 g5 g7 g6 g8 g9 g1 gm (JS açık), g3n (JS kapalı Run, kişi ve lot arama formları); FE 10 sonrası gr2 (Run) ve gfsn (JS kapalı FinishStep)
+===== g3 24
+  kontrol sayıları {'a+': 160, 'c+': 240, 'd+': 104} kusurlu hücre 0
+===== g4 8
+  kontrol sayıları {'a+': 64, 'c+': 88, 'd+': 40} kusurlu hücre 0
+===== g5 16
+  kontrol sayıları {'a+': 8, 'c+': 8, 'd+': 40} kusurlu hücre 0
+===== g7 16
+  kontrol sayıları {'d+': 56} kusurlu hücre 0
+===== g6 8
+  kontrol sayıları {'a+': 8, 'c+': 8, 'd+': 16} kusurlu hücre 0
+===== g8 16
+  kontrol sayıları {'d+': 56} kusurlu hücre 0
+===== g9 8
+  kontrol sayıları {'a+': 120, 'c+': 176, 'd+': 48} kusurlu hücre 0
+===== g1 32
+  kontrol sayıları {'a+': 8, 'b+': 14, 'c+': 80, 'd+': 72, 'e+': 14} kusurlu hücre 0
+===== gm 136
+  kontrol sayıları {'a+': 72, 'b+': 114, 'c+': 256, 'd+': 240, 'e+': 82, 'f+': 54} kusurlu hücre 0
+===== g3n 24
+  kontrol sayıları {'a+': 240, 'b+': 90, 'c+': 384, 'd+': 120} kusurlu hücre 0
+===== gfsn 8
+  kontrol sayıları {'a+': 8, 'b+': 6, 'c+': 16, 'd+': 16, 'e+': 6} kusurlu hücre 0
+===== gr2 16
+  kontrol sayıları {'a+': 120, 'c+': 176, 'd+': 88} kusurlu hücre 0
+
+== K27 dialog içi hizalama: j-k27.txt satırları (fieldLeftDiff 0, düğmeler aynı üst kenar ve 56 px, göz düğmesi alan içinde ve ortalı)

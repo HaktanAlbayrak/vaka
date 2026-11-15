@@ -16,6 +16,7 @@ public sealed class RecordsController : Controller
     private readonly ILotCatalog _lots;
     private readonly IRecordRunReader _run;
     private readonly IRecordMaterialService _materials;
+    private readonly IBreakReader _breaks;
 
     public RecordsController(
         IRecordCreateForm form,
@@ -23,7 +24,8 @@ public sealed class RecordsController : Controller
         IRecordOptions options,
         ILotCatalog lots,
         IRecordRunReader run,
-        IRecordMaterialService materials)
+        IRecordMaterialService materials,
+        IBreakReader breaks)
     {
         _form = form;
         _opener = opener;
@@ -31,6 +33,7 @@ public sealed class RecordsController : Controller
         _lots = lots;
         _run = run;
         _materials = materials;
+        _breaks = breaks;
     }
 
     [HttpGet]
@@ -60,6 +63,11 @@ public sealed class RecordsController : Controller
             return StatusCode(StatusCodes.Status403Forbidden);
         }
 
+        if (outcome.Result.Status == CommandStatus.OnBreak)
+        {
+            return RedirectToAction("Current", "Breaks");
+        }
+
         ModelState.AddErrors(outcome.Result);
         model.ErrorMessage = JoinGeneral(outcome.Result);
         model.ErrorUrl = outcome.BlockingRecordId is { } blockingId ? RecordLinks.Run(blockingId) : null;
@@ -79,12 +87,19 @@ public sealed class RecordsController : Controller
         Json(await _options.ListCleaningTypesAsync(machineId, cancellationToken));
 
     [HttpGet]
-    public async Task<IActionResult> Lots(string? q, CancellationToken cancellationToken) =>
-        Json((await _lots.FindAsync(q, null, cancellationToken)).Lots);
+    public async Task<IActionResult> Lots(string? q, int? recordId, CancellationToken cancellationToken) =>
+        Json((await _lots.FindAsync(q, null, recordId, cancellationToken)).Lots);
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> Run(int id, string? q, CancellationToken cancellationToken) =>
-        await ShowRunAsync(id, q, null, null, null, cancellationToken);
+    public async Task<IActionResult> Run(int id, string? q, int? stepId, string? people, CancellationToken cancellationToken)
+    {
+        if (await _breaks.IsOnBreakAsync(User.GetUserId(), cancellationToken))
+        {
+            return RedirectToAction("Current", "Breaks");
+        }
+
+        return await ShowRunAsync(id, new RunViewOptions(q, null, stepId, people), null, null, null, cancellationToken);
+    }
 
     [HttpPost("{id:int}")]
     public async Task<IActionResult> AddMaterial(int id, AddMaterialViewModel model, CancellationToken cancellationToken)
@@ -126,20 +141,22 @@ public sealed class RecordsController : Controller
                 return NotFound();
             case CommandStatus.Forbidden:
                 return StatusCode(StatusCodes.Status403Forbidden);
+            case CommandStatus.OnBreak:
+                return RedirectToAction("Current", "Breaks");
             default:
-                return await ShowRunAsync(id, null, pending, string.Join(" ", result.Errors.Select(error => error.Message)), commandId, cancellationToken);
+                return await ShowRunAsync(id, new RunViewOptions(PendingLotId: pending?.MaterialLotId), pending, string.Join(" ", result.Errors.Select(error => error.Message)), commandId, cancellationToken);
         }
     }
 
     private async Task<IActionResult> ShowRunAsync(
         int id,
-        string? lotQuery,
+        RunViewOptions options,
         PendingMaterialViewModel? pending,
         string? errorMessage,
         Guid? commandId,
         CancellationToken cancellationToken)
     {
-        var lookup = await _run.GetAsync(id, User.GetUserId(), lotQuery, pending?.MaterialLotId, cancellationToken);
+        var lookup = await _run.GetAsync(id, User.GetUserId(), options, cancellationToken);
         if (lookup.Value is not { } model)
         {
             return NotFound();

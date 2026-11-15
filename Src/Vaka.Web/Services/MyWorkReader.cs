@@ -37,9 +37,19 @@ public sealed class MyWorkReader : IMyWorkReader
             })
             .FirstOrDefaultAsync(cancellationToken);
 
+        var assigned = await ReadAssignedStepsAsync(userId, cancellationToken);
+        var openBreak = await _db.RecordBreaks
+            .AsNoTracking()
+            .Where(item => item.StartedByUserId == userId && item.EndedAtUtc == null)
+            .Select(item => new { item.Id, item.Record.RecordNo, item.StartedAtUtc })
+            .FirstOrDefaultAsync(cancellationToken);
+        var breakModel = openBreak is null
+            ? null
+            : new MyWorkBreakViewModel { BreakId = openBreak.Id, RecordNo = openBreak.RecordNo, StartedAtLocal = _clock.ToLocal(openBreak.StartedAtUtc) };
+
         if (row is null)
         {
-            return new MyWorkViewModel { CanOpenRecord = true };
+            return new MyWorkViewModel { CanOpenRecord = true, AssignedSteps = assigned, OpenBreak = breakModel };
         }
 
         var url = RecordLinks.Run(row.Id);
@@ -61,7 +71,39 @@ public sealed class MyWorkReader : IMyWorkReader
             },
             CanOpenRecord = false,
             CannotOpenReason = $"Açık kaydınız var: {row.RecordNo} ({RecordLabels.Status(row.Status).ToLowerInvariant()}). Yeni kayıt açmadan önce onu sürdürün.",
-            CannotOpenUrl = url
+            CannotOpenUrl = url,
+            AssignedSteps = assigned,
+            OpenBreak = breakModel
         };
+    }
+
+    private async Task<AssignedStepViewModel[]> ReadAssignedStepsAsync(int userId, CancellationToken cancellationToken)
+    {
+        var rows = await _db.StepParticipants
+            .AsNoTracking()
+            .Where(item => item.UserId == userId
+                && item.Step.Phase.Record.OwnerUserId != userId
+                && (item.Step.Status == StepStatus.Waiting || item.Step.Status == StepStatus.InProgress)
+                && (item.Step.Phase.Record.Status == RecordStatus.Opened || item.Step.Phase.Record.Status == RecordStatus.InProgress))
+            .OrderBy(item => item.Step.Phase.Record.OpenedAtUtc).ThenBy(item => item.Step.Phase.ProcedurePhase.OrderNo).ThenBy(item => item.Step.ProcedureStep.OrderNo)
+            .Select(item => new
+            {
+                RecordId = item.Step.Phase.CleaningRecordId,
+                item.Step.Phase.Record.RecordNo,
+                Machine = item.Step.Phase.Record.MachineCodeSnapshot + " - " + item.Step.Phase.Record.MachineNameSnapshot,
+                StepTitle = item.Step.ProcedureStep.Title,
+                OwnerName = item.Step.Phase.Record.Owner.FullName
+            })
+            .ToListAsync(cancellationToken);
+
+        return [.. rows.Select(row => new AssignedStepViewModel
+        {
+            RecordId = row.RecordId,
+            RecordNo = row.RecordNo,
+            MachineLabel = row.Machine,
+            StepTitle = row.StepTitle,
+            OwnerName = row.OwnerName,
+            Url = RecordLinks.Run(row.RecordId)
+        })];
     }
 }

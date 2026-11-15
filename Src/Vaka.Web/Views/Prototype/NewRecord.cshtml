@@ -88,7 +88,8 @@ else
 
                 <div class="field" data-field>
                     <label class="field-label" for="machine">Makine</label>
-                    <select id="machine" name="MachineId" class="input" required data-required-message="Makine seçin."
+                    <div class="select-wrap">
+                        <select id="machine" name="MachineId" class="input" required data-required-message="Makine seçin."
                             aria-describedby="@(hasErrors ? "machine-hint machine-error" : "machine-hint")" aria-invalid="@(hasErrors ? "true" : null)">
                         <option value="">Makine seçin</option>
                         @foreach (var group in machineGroups)
@@ -101,6 +102,8 @@ else
                             </optgroup>
                         }
                     </select>
+                        <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </div>
                     <p id="machine-hint" class="field-hint">Kilitli makineler seçilemez.</p>
                     @if (hasErrors)
                     {
@@ -140,23 +143,29 @@ else
                 <div class="grid gap-5 md:grid-cols-2">
                     <div class="field" data-field>
                         <label class="field-label" for="material">Malzeme</label>
-                        <select id="material" name="MaterialId" class="input" required data-required-message="Malzeme seçin.">
+                        <div class="select-wrap">
+                            <select id="material" name="MaterialId" class="input" required data-required-message="Malzeme seçin.">
                             <option value="">Malzeme seçin</option>
                             <option value="alkali" selected="@hasErrors">Alkali deterjan</option>
                             <option value="asidik">Asidik deterjan</option>
                             <option value="dezenfektan">Dezenfektan</option>
                         </select>
+                            <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                        </div>
                         <p class="field-hint">Seçilen tip malzeme gerektiriyor.</p>
                     </div>
                     <div class="field" data-field>
                         <label class="field-label" for="lot">Lot</label>
-                        <select id="lot" name="MaterialLotId" class="input" required data-required-message="Lot seçin."
+                        <div class="select-wrap">
+                            <select id="lot" name="MaterialLotId" class="input" required data-required-message="Lot seçin."
                                 aria-describedby="@(hasErrors ? "lot-hint lot-error" : "lot-hint")" aria-invalid="@(hasErrors ? "true" : null)">
                             <option value="">Lot seçin</option>
                             <option value="DT2411-08">DT2411-08 · SKT 30.04.2027</option>
                             <option value="DT2410-03">DT2410-03 · SKT 31.01.2027</option>
                             <option value="DT2307-02" selected="@hasErrors">DT2307-02 · SKT geçmiş</option>
                         </select>
+                            <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                        </div>
                         <p id="lot-hint" class="field-hint">Son kullanma tarihi geçmiş lot kullanılamaz.</p>
                         @if (hasErrors)
                         {

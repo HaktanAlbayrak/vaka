@@ -1,0 +1,114 @@
+Faz 5 teslim testi, 2026-11-15. main çalışma ağacı (HEAD 4c0a01d). Release yayını .qa/f5/build (ön tur) ve .qa/f5/build2 (FE 10 sonrası, teslim testi). Port 5501 Production, DB .qa/f5/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5503 Development, .qa/f5/qa-dev.db, user-secrets anahtarı. Saatler: DB UTC, ekran Türkiye (UTC+3). Test PIN ve parolası yazılmadı.
+
+== K27 süre altı gerekçe dialogu (k27.tmpl.js, kayıt 11 PLN3, minimum 15 dk)
+1 açılış: {"open":true,"modal":true,"name":"Faz süre altında kalıyor","focusInside":true,"focus":"BelowMinimumReason","text":"Faz süre altında kalıyor FAZ Hazırlık NET SÜRE 45sn MİNİMUM 15dk Gerekçe Süre neden minimumun altında kaldı. Gerekçe kayıtla birlikte saklanır ve ekranda görünür. PIN Kendi PIN'inizi girin. Gerekçeyle bitir Vazgeç","tokens":1,"forms":1,"cid":"a971194c-3e70-4aac-b19a-92ee002b265e","reason":"","errors":[],"btns":[{"t":"","h":48,"top":527,"w":44},{"t":"Gerekçeyle bitir","h":56,"top":623,"w":286},{"t":"Vazgeç","h":56,"top":691,"w":286}],"fieldLeftDiff":[0,0],"eyeOk":true,"box":"19,30 322x699","overflowX":false,"hScroll":false,"bg":"rgb(247, 249, 250)","color":"rgb(20, 30, 40)","url":"/records/run/11"}
+  sayfa CommandId = dialog CommandId: true
+2 Tab x14: dışarı 2 | pin-finish-below > BUTTON > Gerekçeyle bitir > Vazgeç > İçeriğe geç
+
+    > Faz süre altında > BelowMinimumReason > pin-finish-below > BUTTON > Gerekçeyle bitir > Vazgeç > İçeriğe geç
+
+    > Faz süre altında > BelowMinimumReason
+3 gerekçesiz gönder: POST 0 | {"open":true,"errors":["Gerekçeyi yazın."],"focus":"BelowMinimumReason"}
+4 yanlış PIN: {"open":true,"errors":["İşlem yapılmadı PIN hatalı.","PIN hatalı."],"reason":"QA gerekçe denemesi","focus":"pin-finish-below","url":"/records/run/11","tokens":1,"cid":true}
+5 Esc: {"open":false,"body":0,"focusOnFinish":true,"focus":"Adımı bitir"}
+6 Vazgeç: {"open":false,"focusOnFinish":true,"url":"/records/run/11"}
+768-light-no-preference: {"box":"96,229 576x567","hScroll":false,"overflowX":false,"btns":[{"t":"","h":48,"top":621,"w":44},{"t":"Gerekçeyle bitir","h":56,"top":717,"w":411},{"t":"Vazgeç","h":56,"top":717,"w":109}],"fieldLeftDiff":[0,0],"eyeOk":true,"focusInside":true,"tokens":1,"bg":"rgb(247, 249, 250)","minContrast":6.48,"anim":"none 0s","trans":"0s","backdrop":"rgba(20, 30, 40, 0.6)","radius":"2px","border":"2px solid"}
+1024-light-no-preference: {"box":"224,101 576x567","hScroll":false,"overflowX":false,"btns":[{"t":"","h":48,"top":493,"w":44},{"t":"Gerekçeyle bitir","h":56,"top":589,"w":411},{"t":"Vazgeç","h":56,"top":589,"w":109}],"fieldLeftDiff":[0,0],"eyeOk":true,"focusInside":true,"tokens":1,"bg":"rgb(247, 249, 250)","minContrast":6.48,"anim":"none 0s","trans":"0s","backdrop":"rgba(20, 30, 40, 0.6)","radius":"2px","border":"2px solid"}
+1440-light-no-preference: {"box":"432,167 576x567","hScroll":false,"overflowX":false,"btns":[{"t":"","h":48,"top":559,"w":44},{"t":"Gerekçeyle bitir","h":56,"top":655,"w":411},{"t":"Vazgeç","h":56,"top":655,"w":109}],"fieldLeftDiff":[0,0],"eyeOk":true,"focusInside":true,"tokens":1,"bg":"rgb(247, 249, 250)","minContrast":6.48,"anim":"none 0s","trans":"0s","backdrop":"rgba(20, 30, 40, 0.6)","radius":"2px","border":"2px solid"}
+360-dark-no-preference: {"box":"19,30 322x699","hScroll":false,"overflowX":false,"btns":[{"t":"","h":48,"top":527,"w":44},{"t":"Gerekçeyle bitir","h":56,"top":623,"w":286},{"t":"Vazgeç","h":56,"top":691,"w":286}],"fieldLeftDiff":[0,0],"eyeOk":true,"focusInside":true,"tokens":1,"bg":"rgb(23, 30, 37)","minContrast":6.54,"anim":"none 0s","trans":"0s","backdrop":"rgba(228, 234, 239, 0.6)","radius":"2px","border":"2px solid"}
+768-dark-no-preference: {"box":"96,229 576x567","hScroll":false,"overflowX":false,"btns":[{"t":"","h":48,"top":621,"w":44},{"t":"Gerekçeyle bitir","h":56,"top":717,"w":411},{"t":"Vazgeç","h":56,"top":717,"w":109}],"fieldLeftDiff":[0,0],"eyeOk":true,"focusInside":true,"tokens":1,"bg":"rgb(23, 30, 37)","minContrast":6.54,"anim":"none 0s","trans":"0s","backdrop":"rgba(228, 234, 239, 0.6)","radius":"2px","border":"2px solid"}
+1024-dark-no-preference: {"box":"224,101 576x567","hScroll":false,"overflowX":false,"btns":[{"t":"","h":48,"top":493,"w":44},{"t":"Gerekçeyle bitir","h":56,"top":589,"w":411},{"t":"Vazgeç","h":56,"top":589,"w":109}],"fieldLeftDiff":[0,0],"eyeOk":true,"focusInside":true,"tokens":1,"bg":"rgb(23, 30, 37)","minContrast":6.54,"anim":"none 0s","trans":"0s","backdrop":"rgba(228, 234, 239, 0.6)","radius":"2px","border":"2px solid"}
+1440-dark-reduce: {"box":"432,167 576x567","hScroll":false,"overflowX":false,"btns":[{"t":"","h":48,"top":559,"w":44},{"t":"Gerekçeyle bitir","h":56,"top":655,"w":411},{"t":"Vazgeç","h":56,"top":655,"w":109}],"fieldLeftDiff":[0,0],"eyeOk":true,"focusInside":true,"tokens":1,"bg":"rgb(23, 30, 37)","minContrast":6.54,"anim":"none 1e-05s","trans":"1e-05s","backdrop":"rgba(228, 234, 239, 0.6)","radius":"2px","border":"2px solid"}
+320-light-reduce: {"box":"19,26 282x589","hScroll":false,"overflowX":false,"btns":[{"t":"","h":48,"top":542,"w":44},{"t":"Gerekçeyle bitir","h":56,"top":638,"w":246},{"t":"Vazgeç","h":56,"top":706,"w":246}],"fieldLeftDiff":[0,0],"eyeOk":true,"focusInside":true,"tokens":1,"bg":"rgb(247, 249, 250)","minContrast":6.48,"anim":"none 1e-05s","trans":"1e-05s","backdrop":"rgba(20, 30, 40, 0.6)","radius":"2px","border":"2px solid"}
+7 başarı: {"url":"/records/run/11","dialogOpen":"yok","gerekce":false,"sureAlti":false}
+POST istekleri: /records/finish-step/55 CommandId=a971194c-3e70-4aac-b19a-92ee002b265e&Pin=*&T=* || /records/finish-step/55 CommandId=a971194c-3e70-4aac-b19a-92ee002b265e&BelowMinimumReason=QA+gerek%C3%A7e+denemesi&Pin=*&T=* || /records/finish-step/55 CommandId=a971194c-3e70-4aac-b19a-92ee002b265e&Pin=*&T=* || /records/finish-step/55 CommandId=59e46599-a89a-41d1-b008-7b4c119faa61&Pin=*&T=* || /records/finish-step/55 CommandId=0cda6dbd-e356-4ae5-a43e-6bac2134c1e6&Pin=*&T=* || /records/finish-step/55 CommandId=abc83a13-136e-4362-9a3f-a0b2845070fd&Pin=*&T=* || /records/finish-step/55 CommandId=36fd2486-3702-4bcf-ab8a-7e53ee302e2f&Pin=*&T=* || /records/finish-step/55 CommandId=cb130eed-6df5-48a2-bec4-1023536fdb42&Pin=*&T=* || /records/finish-step/55 CommandId=3f6c9aea-0585-4c94-ac9c-37a11907c76e&Pin=*&T=* || /records/finish-step/55 CommandId=83370515-4cd3-4d0e-acc8-722899f35f3a&Pin=*&T=* || /records/finish-step/55 CommandId=9f2fa601-67eb-4c6e-9961-ecf9714003fc&Pin=*&T=* || /records/finish-step/55 CommandId=8ded3df5-6428-41a1-b94e-50735e3aa0f3&Pin=*&T=* || /records/finish-step/55 CommandId=8ded3df5-6428-41a1-b94e-50735e3aa0f3&BelowMinimumReason=%C3%96n+temizlik+vardiya+ba%C5%9F%C4%B1nda+yap%C4%B1ld%C4%B1.&Pin=*&T=*
+konsol: []
+DB: olay 10 -> 12 (yalnız başarıda StepFinished + PhaseCompleted), adım ret boyunca 2 (Devam ediyor), faz 4 "Tamamlandı - süre altında", gerekçe kayıtlı. Adım 7 "gerekce false": faz 1 paneli kapanan <details> içinde (innerText), sunucu HTML'inde gerekçe var.
+
+== Tab döngüsü (tab360, kayıt 12): dialog dışındaki sayfa öğesine odak gitmez; BODY durağı tarayıcı arayüzü
+skip link: {"inDialog":false,"parentInert":false,"dialogParent":"MAIN.page ","skipParent":"BODY","topLayer":["DIALOG#"]}
+Tab 1: INPUT[pin-finish-below] dialog içinde=true
+Tab 2: BUTTON[] dialog içinde=true
+Tab 3: BUTTON[Gerekçeyle bitir] dialog içinde=true
+Tab 4: A[Vazgeç] dialog içinde=true
+Tab 5: BODY dialog içinde=false
+Tab 6: DIALOG[Faz süre altında k] dialog içinde=true
+Tab 7: TEXTAREA[BelowMinimumReason] dialog içinde=true
+Tab 8: INPUT[pin-finish-below] dialog içinde=true
+Tab 9: BUTTON[] dialog içinde=true
+Tab 10: BUTTON[Gerekçeyle bitir] dialog içinde=true
+Tab 11: A[Vazgeç] dialog içinde=true
+Tab 12: BODY dialog içinde=false
+Tab 13: DIALOG[Faz süre altında k] dialog içinde=true
+Tab 14: TEXTAREA[BelowMinimumReason] dialog içinde=true
+dış öğeye focus(): false
+
+== K21 medya (k21.tmpl.js, KSA v2, adım 1 fotoğraf ve video)
+360 hazır adım: {"desc":true,"thumbs":["photo /media/1 216x216 ad=Fotoğraf önizle: ornek.jpg","video /media/2 216x216 ad=Video önizle: ornek.mp4"],"imgs":["alt= w=96 h=96"],"hScroll":false}
+  medya 1: {"open":true,"url":"/records/run/13","img":{"src":"/media/1","loaded":true,"nw":3840},"video":null,"hScroll":false}
+  Esc sonrası açık mı: false
+  medya 2: {"open":true,"url":"/records/run/13","img":null,"video":{"src":"/media/2","ready":4,"dur":5.971667},"hScroll":false}
+  Esc sonrası açık mı: false
+1440 hazır adım: {"desc":true,"thumbs":["photo /media/1 139x139 ad=Fotoğraf önizle: ornek.jpg","video /media/2 139x139 ad=Video önizle: ornek.mp4"],"imgs":["alt= w=96 h=96"],"hScroll":false}
+  medya 1: {"open":true,"url":"/records/run/13","img":{"src":"/media/1","loaded":true,"nw":3840},"video":null,"hScroll":false}
+  Esc sonrası açık mı: false
+  medya 2: {"open":true,"url":"/records/run/13","img":null,"video":{"src":"/media/2","ready":4,"dur":5.971667},"hScroll":false}
+  Esc sonrası açık mı: false
+medya yanıtları: 200 text/javascript /js/MediaViewer.js | 200 image/jpeg /media/1 | 206 video/mp4 /media/2
+konsol: []
+
+== Faz 3 düzenleyici gerilemesi (ed.tmpl.js): medya yükleme, adım kaydetme JS ile, yayınlama (KSA v2)
+taslak: /procedure-versions/edit/5
+yükle ornek.jpg: Medya eklendi.
+yükle ornek.mp4: Medya eklendi.
+adım kaydet: Adım güncellendi. | sayfa yenilendi mi (navigasyon): 0
+yayın PIN maxlength: 4
+yayın PIN "12ab3" yazımı -> ###
+yayınla: /cleaning-types/details/4 | Kısa planlı temizlik / Bağlı Bağlantı yok
+konsol m1: []
+
+== Faz 4 JS gerilemesi: yeni kayıt (CascadeSelect, TypePicker, LotPicker, CommandForm) kayıt 14 oluştu; Run malzeme (f4js2)
+Run malzeme satırları: Yüzey dezenfektanı MLZ001 Lot L2027-001, SKT 31.03
+F4-A2 Run lot sonuçları: Yüzey dezenfektanı (MLZ001)Lot L2027-002 | istek: /records/lots?q=L2027&recordId=14
+CommandForm ret (yanlış PIN): url /records/run/14 | {"summary":"İşlem yapılmadı PIN hatalı.","focusSummary":true,"pinVal":""}
+  ret sonrası seçili lot satırı korunmuş: 1
+CommandForm başarı: url /records/run/14 | malzeme: Yüzey dezenfektanı MLZ001 Lot L2027-001, | Yüzey dezenfektanı MLZ001 Lot L2027-002,
+konsol: []
+RID=14
+
+== JS kapalı görevli ekleme ve PendingParticipant (nojs5, kayıt 18 adım 98)
+JS kapalı: ParticipantPicker alanı görünür mü: none
+arama adresi: /records/run/18?stepId=98&people=Operat%C3%B6r+1
+radyo listesi (11): 13: QA Operatör 10 2010 | 14: QA Operatör 11 2011 | 15: QA Operatör 12 2012 Kendi açık kaydı var, yine de eklenebilir. | 16: QA Operatör 13 2013 Kendi açık kaydı var, yine de eklenebilir. | 17: QA Operatör 14 2014 Kendi açık kaydı var, yine de eklenebilir. | 18: QA Operatör 15 2015 Kendi açık kaydı var, yine de eklenebilir. | 19: QA Operatör 16 2016 Kendi açık kaydı var, yine de eklenebilir. | 20: QA Operatör 17 2017 | 21: QA Operatör 18 2018 Kendi açık kaydı var, yine de eklenebilir. | 22: QA Operatör 19 2019 | 3: Test Operatör 1 2001
+yanlış PIN: adres /records/add-participant/98 | {"err":"İşlem yapılmadı PIN hatalı.","checked":"14","pin":"","panelOpen":true,"pinErr":"PIN hatalı."}
+doğru PIN: adres /records/run/18 | görevliler: QA Operatör 22 2022 , sahip | QA Operatör 11 2011
+hScroll: false
+
+== ParticipantPicker dört durum, K-41 uyarısı, CommandForm başlat reddi ve başarı, LiveTimer (pp, kayıt 18)
+JS açık başlangıç: {"status":"","results":[],"hidden":false,"chosen":null,"warn":false,"nojsVisible":"none"}
+seçimsiz gönder: {"url":"/records/run/18","focus":"step-99-search","status":"Bir kişi seçin.","results":[],"hidden":false,"chosen":null,"warn":false,"nojsVisible":"none"}
+yükleniyor: Kişiler aranıyor…
+dolu: {"status":"7 kişi bulundu.","results":["QA Operatör 20 Sicil 2020","[pasif] QA Operatör 22 Sicil 2022, eklenemez: Adımda zaten görevli","QA Operatör 23 Sicil 2023","QA Operatör 24 Sicil 2024","QA Operatör 25 Sicil 2025","[pasif] QA Operatör 26 Sicil 2026, eklenemez: Molada","Test Operatör 2 Sicil 2002"],"hidden":false,"chosen":null,"warn":false,"nojsVisible":"none"}
+boş: Aramaya uyan kişi yok.
+hata: Kişiler alınamadı. Bağlantıyı kontrol edip yeniden arayın.
+seçim (op4, kendi kaydı Devam ediyor): {"status":"QA Operatör 4 seçildi.","results":[],"hidden":true,"chosen":"Seçilen kişi: QA Operatör 4, sicil 2004","warn":true,"nojsVisible":"none"}
+ekle: url /records/run/18 | görevliler  | 
+başlat yanlış PIN: {"url":"/records/run/18","summary":"İşlem yapılmadı PIN hatalı.","focus":false,"pin":"","pinErr":"PIN hatalı."}
+başlat doğru PIN: url /records/run/18 | sayaçlar ["true:1sn","true:1sn"] -> 2,2 sn sonra ["true:3sn","true:3sn"]
+yenileme sonrası sunucu değeri: ["3:3sn","3:3sn"]
+konsol: ["Failed to load resource: net::ERR_FAILED"]
+(konsoldaki ERR_FAILED, hata durumunu üretmek için QA'nın kestiği istektir)
+
+== K25 PIN alanı: yazım ve yapıştırma (k25dev: ayar 6, 5503; k25prod: ayar 4, 5501)
+/records/run/2 #pin-start-7 maxlength=6 | "12a3b45678" yazımı -> 123456 (6) | "98-76 54321x" yapıştırma -> 987654 (6) 
+/records/run/2 #pin-add-person-7 maxlength=6 | "12a3b45678" yazımı -> 123456 (6) | "98-76 54321x" yapıştırma -> 987654 (6) 
+/account/first-login #NewPin maxlength=6 | "12a3b45678" yazımı -> 123456 (6) | "98-76 54321x" yapıştırma -> 987654 (6) 6 hane göstergesi, dolu 6
+/account/first-login #ConfirmPin maxlength=6 | "12a3b45678" yazımı -> 123456 (6) | "98-76 54321x" yapıştırma -> 987654 (6) 6 hane göstergesi, dolu 6
+/records/run/3 #pin-finish-11 maxlength=4 | "12a3b45678" yazımı -> 1234 (4) | "98-76 54321x" yapıştırma -> 9876 (4) 
+/records/run/3 #pin-add-person-12 maxlength=4 | "12a3b45678" yazımı -> 1234 (4) | "98-76 54321x" yapıştırma -> 9876 (4) 
+/users/deactivate/6 input[data-pin-input] YOK
+/account/security #NewPin YOK
+/account/security #CurrentPin YOK
+/account/security input[data-pin-input] maxlength=4 | "12a3b45678" yazımı -> 1234 (4) | "98-76 54321x" yapıştırma -> 9876 (4) 
+/breaks/current #pin-end-break maxlength=4 | "12a3b45678" yazımı -> 1234 (4) | "98-76 54321x" yapıştırma -> 9876 (4) 
+/records/create #pin-new maxlength=4 | "12a3b45678" yazımı -> 1234 (4) | "98-76 54321x" yapıştırma -> 9876 (4) 

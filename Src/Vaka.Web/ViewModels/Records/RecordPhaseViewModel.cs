@@ -16,5 +16,19 @@ public sealed class RecordPhaseViewModel
 
     public string StatusLabel { get; set; } = string.Empty;
 
+    /// <summary>Faz tamamlanınca saklanan değerler; sürerken boştur.</summary>
+    public int? GrossSeconds { get; set; }
+
+    public int? BreakSeconds { get; set; }
+
+    public int? NetSeconds { get; set; }
+
+    /// <summary>Devam eden fazda sunucunun hesapladığı güncel net süre; <c>LiveTimer.js</c> bundan ilerler, kendi hesabı yoktur (SH-14).</summary>
+    public int? LiveNetSeconds { get; set; }
+
+    public bool BelowMinimum { get; set; }
+
+    public string? BelowMinimumReason { get; set; }
+
     public RecordStepViewModel[] Steps { get; set; } = [];
 }

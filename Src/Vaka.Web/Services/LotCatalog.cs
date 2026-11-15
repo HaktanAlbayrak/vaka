@@ -19,9 +19,20 @@ public sealed class LotCatalog : ILotCatalog
         _clock = clock;
     }
 
-    public async Task<LotSearchResult> FindAsync(string? query, int? includeLotId, CancellationToken cancellationToken)
+    public async Task<LotSearchResult> FindAsync(string? query, int? includeLotId, int? excludeRecordId, CancellationToken cancellationToken)
     {
         var lots = _db.MaterialLots.AsNoTracking().Where(lot => lot.Material.IsActive);
+        var attachedLotIds = new List<int>();
+        if (excludeRecordId is { } recordId)
+        {
+            attachedLotIds = await _db.RecordMaterials
+                .AsNoTracking()
+                .Where(material => material.CleaningRecordId == recordId && material.RemovedAtUtc == null)
+                .Select(material => material.MaterialLotId)
+                .ToListAsync(cancellationToken);
+            lots = lots.Where(lot => !attachedLotIds.Contains(lot.Id));
+        }
+
         var term = query?.Trim();
         if (!string.IsNullOrEmpty(term))
         {
@@ -33,7 +44,7 @@ public sealed class LotCatalog : ILotCatalog
         var truncated = rows.Count > PageSize;
         var result = Map(rows.Take(PageSize)).ToList();
 
-        if (includeLotId is { } extra && result.All(lot => lot.Id != extra))
+        if (includeLotId is { } extra && result.All(lot => lot.Id != extra) && !attachedLotIds.Contains(extra))
         {
             result.AddRange(await GetAsync([extra], cancellationToken));
         }

@@ -37,7 +37,8 @@
                     {
                         <input type="hidden" name="FacilityId" value="@Model.FacilityId" />
                     }
-                    <select id="FacilityId" name="FacilityId" class="input" required disabled="@(Model.CodeLocked || isRetired)" data-required-message="Tesis seçin."
+                    <div class="select-wrap">
+                        <select id="FacilityId" name="FacilityId" class="input" required disabled="@(Model.CodeLocked || isRetired)" data-required-message="Tesis seçin."
                             data-cascade-url="/machines/lines" data-cascade-target="LineId" data-cascade-status="line-status"
                             aria-describedby="@(facilityError is null ? null : "FacilityId-error")" aria-invalid="@(facilityError is null ? null : "true")">
                         <option value="">Tesis seçin</option>
@@ -46,6 +47,8 @@
                             <option value="@facility.Id" selected="@(facility.Id == Model.FacilityId)">@facility.Label</option>
                         }
                     </select>
+                        <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </div>
                     @if (facilityError is not null)
                     {
                         <p id="FacilityId-error" class="field-error">
@@ -61,7 +64,8 @@
                     {
                         <input type="hidden" name="LineId" value="@Model.LineId" />
                     }
-                    <select id="LineId" name="LineId" class="input" required disabled="@(Model.CodeLocked || isRetired)" data-required-message="Hat seçin."
+                    <div class="select-wrap">
+                        <select id="LineId" name="LineId" class="input" required disabled="@(Model.CodeLocked || isRetired)" data-required-message="Hat seçin."
                             aria-describedby="@(lineError is null ? "line-status" : "line-status LineId-error")" aria-invalid="@(lineError is null ? null : "true")">
                         <option value="">Hat seçin</option>
                         @foreach (var line in Model.Lines)
@@ -69,6 +73,8 @@
                             <option value="@line.Id" selected="@(line.Id == Model.LineId)">@line.Label</option>
                         }
                     </select>
+                        <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </div>
                     <p id="line-status" class="field-hint" role="status">@(Model.CodeLocked && Model.RetiredAtLocal is null ? "Hat değiştirilemez." : "")</p>
                     @if (lineError is not null)
                     {

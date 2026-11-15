@@ -178,7 +178,15 @@
     @apply inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-ui border-2 border-transparent text-ink transition-colors duration-150 hover:border-line-strong hover:bg-sunken;
   }
   .field-reveal {
-    @apply absolute bottom-[2px] right-[2px] top-[2px] h-auto w-11;
+    @apply absolute bottom-[2px] right-[2px] top-[2px] h-auto w-11 border-transparent bg-transparent text-muted hover:border-transparent hover:bg-sunken hover:text-ink;
+    border-radius: max(0px, calc(var(--radius-ui) - 2px));
+  }
+  .field-reveal[aria-pressed="true"],
+  .field-reveal:focus-visible {
+    @apply bg-sunken text-ink;
+  }
+  .field-reveal:focus-visible {
+    outline-offset: -3px;
   }
   .conn-chip {
     @apply inline-flex h-11 shrink-0 items-center gap-2 rounded-ui border-2 border-line px-2 text-sm font-semibold sm:px-3;
@@ -478,6 +486,12 @@
   .step-action {
     @apply col-span-2 grid min-w-0 grid-cols-[repeat(auto-fit,minmax(min(100%,14rem),1fr))] items-end gap-3 border-t-2 border-line pt-3 md:col-start-2 md:col-span-1;
   }
+  .run-action {
+    @apply col-span-2 grid min-w-0 gap-3 border-t-2 border-line pt-3 md:col-span-1 md:col-start-2 md:max-w-md;
+  }
+  .run-action .btn {
+    @apply w-full min-w-0 whitespace-nowrap;
+  }
   .step-action .btn {
     @apply w-full min-w-0 whitespace-nowrap;
   }
@@ -504,8 +518,23 @@
   .input[type="time"] {
     height: 3rem;
   }
+  .select-wrap {
+    @apply relative;
+  }
   select.input {
-    @apply pr-9;
+    @apply h-12 cursor-pointer appearance-none truncate pr-11;
+  }
+  select.input option {
+    @apply bg-surface text-ink;
+  }
+  select.input:disabled {
+    @apply cursor-not-allowed border-dashed bg-sunken text-muted opacity-70;
+  }
+  .select-arrow {
+    @apply pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-ink;
+  }
+  .select-wrap:has(select:disabled) .select-arrow {
+    @apply text-muted opacity-70;
   }
   .choice {
     @apply flex min-h-14 cursor-pointer items-start gap-3 rounded-ui border-2 border-line-strong bg-surface p-3 transition-colors duration-150 hover:bg-sunken;
@@ -676,6 +705,11 @@
     max-height: 92dvh;
     overscroll-behavior: contain;
   }
+  .finish-dialog {
+    @apply m-auto w-[min(96vw,36rem)] overflow-y-auto rounded-card border-2 border-line-strong bg-surface p-0 text-ink;
+    max-height: 92dvh;
+    overscroll-behavior: contain;
+  }
   .media-stage {
     @apply flex items-center justify-center bg-sunken p-2;
     max-height: calc(92dvh - 4rem);
@@ -799,6 +833,8 @@
 }
 
 html:not([data-js]) [data-lot-js],
-html[data-js] [data-lot-nojs] {
+html:not([data-js]) [data-people-js],
+html[data-js] [data-lot-nojs],
+html[data-js] [data-people-nojs] {
   display: none;
 }
