@@ -1,0 +1,244 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Dashboard
+@inject IDurationFormatter DurationFormatter
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Ana sayfa";
+    ViewData["Lead"] = "Sahadaki temizlik kayıtlarının bugünkü durumu.";
+    ViewData["NavKey"] = "home";
+
+    var weekTotal = Model.Last7Days.Sum(day => day.PlannedCount + day.EmergencyCount);
+    var weekChart = (
+        "week-chart", "Açılan kayıt",
+        "Planlı=chart-1;Acil=chart-2",
+        Model.Last7Days.Select(day => (day.DateLabel, "", (double)day.PlannedCount, "chart-1", (double)day.EmergencyCount, "chart-2", -1.0, (day.PlannedCount + day.EmergencyCount).ToString(), day.EmergencyCount > 0 ? day.EmergencyCount + " acil" : "", "")).ToArray(),
+        "");
+}
+
+@section Actions {
+    <a class="btn btn-secondary" href="/records">
+        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#list-checks" /></svg>
+        Tüm kayıtlar
+    </a>
+}
+
+<section class="panel panel-tag mb-5" aria-label="Özet">
+    <dl class="grid grid-cols-2 md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_minmax(0,1fr)]">
+        <div class="col-span-2 p-4 md:col-span-1 md:p-5">
+            <dt class="text-sm font-bold uppercase tracking-wide text-muted">Devam eden kayıt</dt>
+            <dd class="mono mt-1 font-display text-6xl font-extrabold leading-none md:text-7xl">@Model.InProgressCount</dd>
+        </div>
+        <div class="border-t-2 border-line p-4 md:border-l-2 md:border-t-0 md:p-5">
+            <dt class="text-sm font-bold uppercase tracking-wide text-muted">Açıldı</dt>
+            <dd class="mono mt-1 text-3xl font-bold leading-none">@Model.OpenCount</dd>
+            <dd class="mt-1.5 text-sm text-muted">İlk adım bekliyor</dd>
+        </div>
+        <div class="border-l-2 border-t-2 border-line p-4 md:p-5 md:border-t-0">
+            <dt class="text-sm font-bold uppercase tracking-wide text-muted">Bugün tamamlanan</dt>
+            <dd class="mono mt-1 text-3xl font-bold leading-none">@Model.CompletedTodayCount</dd>
+            <dd class="mt-1.5 text-sm text-muted">Türkiye saatiyle bugün</dd>
+        </div>
+    </dl>
+</section>
+
+<div class="grid items-start gap-5 2xl:grid-cols-[minmax(0,1fr)_24rem]">
+    <section class="panel min-w-0 2xl:order-2" aria-labelledby="week-title">
+        <div class="panel-head"><h2 id="week-title" class="panel-title">Son 7 gün</h2></div>
+        <div class="space-y-4 p-4 md:p-5">
+            @if (weekTotal == 0)
+            {
+                <p class="text-muted">Son 7 günde açılan kayıt yok.</p>
+            }
+            <partial name="_BarChart" model="weekChart" />
+            <table class="data-table">
+                <caption class="sr-only">Son 7 günde açılan planlı ve acil kayıt sayıları</caption>
+                <thead>
+                    <tr>
+                        <th scope="col" class="!static">Gün</th>
+                        <th scope="col" class="!static text-right">Planlı</th>
+                        <th scope="col" class="!static text-right">Acil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var day in Model.Last7Days)
+                    {
+                        <tr>
+                            <td class="!h-auto"><time datetime="@day.Date.ToString("yyyy-MM-dd")">@day.DateLabel</time></td>
+                            <td class="num !h-auto">@day.PlannedCount</td>
+                            <td class="num !h-auto">@day.EmergencyCount</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="min-w-0 space-y-5 2xl:order-1">
+        <section class="panel" aria-labelledby="active-title">
+            <div class="panel-head">
+                <h2 id="active-title" class="panel-title">Şu an sahada</h2>
+                <p class="text-sm text-muted"><span class="mono font-bold">@Model.ActiveRecords.Length</span> açık kayıt, en eski açılış önce</p>
+            </div>
+            @if (Model.ActiveRecords.Length == 0)
+            {
+                <div class="p-4 md:p-5">
+                    <partial name="_State" model='("empty", "factory", "Şu an açık kayıt yok", "Operatörler temizlik kaydı açtıkça Açıldı ve Devam ediyor durumundaki kayıtlar burada listelenir.", "Tüm kayıtlar", "/records")' />
+                </div>
+            }
+            else
+            {
+                <table class="data-table table-stack">
+                    <caption class="sr-only">Açıldı ve Devam ediyor durumundaki kayıtlar</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Kayıt no</th>
+                            <th scope="col">Makine</th>
+                            <th scope="col">Sahip</th>
+                            <th scope="col">Şu anki adım</th>
+                            <th scope="col">Açılış</th>
+                            <th scope="col">Durum</th>
+                            <th scope="col">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.ActiveRecords)
+                        {
+                            <tr>
+                                <td data-label="" class="stack-lead"><span class="record-no text-sm xl:whitespace-nowrap">@item.RecordNo</span></td>
+                                <td data-label="Makine" class="stack-wide break-words font-semibold xl:max-w-xs">@item.MachineLabel</td>
+                                <td data-label="Sahip" class="break-words">@item.OwnerName</td>
+                                <td data-label="Şu anki adım" class="break-words">
+                                    @if (!string.IsNullOrEmpty(item.CurrentStepTitle))
+                                    {
+                                        @item.CurrentStepTitle
+                                    }
+                                    else
+                                    {
+                                        <span aria-label="Adım başlamadı">-</span>
+                                    }
+                                </td>
+                                <td data-label="Açılış"><partial name="_Moment" model='(item.OpenedAtLocal, DateTime.MinValue)' /></td>
+                                <td data-label="Durum" class="stack-badge">
+                                    <div class="flex flex-wrap items-center gap-2 max-xl:justify-end">
+                                        @if (item.Kind == CleaningTypeKind.Emergency)
+                                        {
+                                            <partial name="_Badge" model='"CleaningTypeKind." + item.Kind' />
+                                        }
+                                        <partial name="_Badge" model='"RecordStatus." + item.Status' />
+                                    </div>
+                                    @if (item.LockExpiresAtLocal is { } lockEnd)
+                                    {
+                                        <p class="mt-1 text-xs text-muted">Kilit bitişi <time class="mono" datetime="@lockEnd.ToString("yyyy-MM-dd'T'HH:mm")">@lockEnd.ToString("HH:mm")</time></p>
+                                    }
+                                </td>
+                                <td data-label="İşlem" class="cell-action">
+                                    <a class="btn btn-secondary" href="@item.Url" data-busy-link aria-label="@item.RecordNo kaydının ayrıntısı">
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#file-text" /></svg>
+                                        Ayrıntı
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </section>
+
+        <section class="panel" aria-labelledby="below-title">
+            <div class="panel-head">
+                <h2 id="below-title" class="panel-title">Süre altında tamamlanan fazlar</h2>
+                <p class="text-sm text-muted">En yeni önce, en çok 10 satır</p>
+            </div>
+            @if (Model.BelowMinimum.Length == 0)
+            {
+                <p class="p-4 text-muted md:p-5">Süre altında tamamlanan faz yok.</p>
+            }
+            else
+            {
+                <table class="data-table table-stack">
+                    <caption class="sr-only">Asgari süresinin altında tamamlanan fazlar ve gerekçeleri</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Kayıt no</th>
+                            <th scope="col">Faz ve makine</th>
+                            <th scope="col" class="text-right">Net süre</th>
+                            <th scope="col" class="text-right">Asgari süre</th>
+                            <th scope="col">Gerekçe</th>
+                            <th scope="col">Tamamlanma</th>
+                            <th scope="col">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.BelowMinimum)
+                        {
+                            <tr>
+                                <td data-label="" class="stack-lead"><span class="record-no text-sm xl:whitespace-nowrap">@item.RecordNo</span></td>
+                                <td data-label="Faz ve makine" class="stack-wide break-words xl:max-w-xs">
+                                    <span class="font-semibold">@item.PhaseTitle</span>
+                                    <span class="mt-0.5 block text-sm text-muted">@item.MachineLabel</span>
+                                </td>
+                                <td data-label="Net süre" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(item.NetSeconds)" /></td>
+                                <td data-label="Asgari süre" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(item.MinDurationSeconds)" /></td>
+                                <td data-label="Gerekçe" class="stack-wide break-words xl:max-w-xs">@(string.IsNullOrWhiteSpace(item.Reason) ? "Gerekçe yazılmadı." : item.Reason)</td>
+                                <td data-label="Tamamlanma"><partial name="_Moment" model='(item.CompletedAtLocal, DateTime.MinValue)' /></td>
+                                <td data-label="İşlem" class="cell-action">
+                                    <a class="btn btn-secondary" href="@item.Url" data-busy-link aria-label="@item.RecordNo kaydının ayrıntısı">
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#file-text" /></svg>
+                                        Ayrıntı
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </section>
+
+        <section class="panel" aria-labelledby="done-title">
+            <div class="panel-head">
+                <h2 id="done-title" class="panel-title">Son tamamlananlar</h2>
+                <p class="text-sm text-muted">En yeni önce, en çok 10 satır</p>
+            </div>
+            @if (Model.RecentCompleted.Length == 0)
+            {
+                <p class="p-4 text-muted md:p-5">Henüz tamamlanan kayıt yok.</p>
+            }
+            else
+            {
+                <table class="data-table table-stack">
+                    <caption class="sr-only">Son tamamlanan kayıtlar, net süre ve efor</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Kayıt no</th>
+                            <th scope="col">Tür</th>
+                            <th scope="col">Makine</th>
+                            <th scope="col">Tamamlanma</th>
+                            <th scope="col" class="text-right">Net süre</th>
+                            <th scope="col" class="text-right">Efor</th>
+                            <th scope="col">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.RecentCompleted)
+                        {
+                            <tr>
+                                <td data-label="" class="stack-lead"><span class="record-no text-sm xl:whitespace-nowrap">@item.RecordNo</span></td>
+                                <td data-label="Tür" class="stack-badge"><partial name="_Badge" model='"CleaningTypeKind." + item.Kind' /></td>
+                                <td data-label="Makine" class="stack-wide break-words font-semibold xl:max-w-xs">@item.MachineLabel</td>
+                                <td data-label="Tamamlanma"><partial name="_Moment" model='(item.CompletedAtLocal, DateTime.MinValue)' /></td>
+                                <td data-label="Net süre" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(item.NetSeconds)" /></td>
+                                <td data-label="Efor" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(item.EffortSeconds)" /></td>
+                                <td data-label="İşlem" class="cell-action">
+                                    <a class="btn btn-secondary" href="@item.Url" data-busy-link aria-label="@item.RecordNo kaydının ayrıntısı">
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#file-text" /></svg>
+                                        Ayrıntı
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </section>
+    </div>
+</div>

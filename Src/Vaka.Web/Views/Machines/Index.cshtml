@@ -107,13 +107,13 @@
                     {
                         var retired = item.RetiredAtLocal is not null;
                         <tr>
-                            <td data-label="Kod"><span class="record-no text-sm">@item.Code</span></td>
-                            <td data-label="Ad" class="xl:max-w-xs break-words font-semibold stack-wide stack-lead">@item.Name</td>
+                            <td data-label="Kod" class="stack-lead"><span class="record-no text-sm">@item.Code</span></td>
+                            <td data-label="Ad" class="xl:max-w-xs break-words font-semibold stack-wide">@item.Name</td>
                             <td data-label="Tesis ve hat" class="break-words">
                                 <span class="block font-semibold">@item.FacilityName</span>
                                 <span class="block text-muted">@item.LineName</span>
                             </td>
-                            <td data-label="Durum">
+                            <td data-label="Durum" class="stack-badge">
                                 <div class="space-y-1">
                                     <partial name="_Badge" model='retired ? "machine.retired" : item.IsActive ? "def.active" : "def.inactive"' />
                                     @if (retired)
@@ -122,7 +122,7 @@
                                     }
                                 </div>
                             </td>
-                            <td data-label="İşlem" class="cell-action max-md:col-span-2 md:max-xl:col-span-3">
+                            <td data-label="İşlem" class="cell-action">
                                 <div class="action-row">
                                     @if (retired)
                                     {

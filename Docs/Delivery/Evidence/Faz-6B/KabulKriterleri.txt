@@ -1,0 +1,187 @@
+Faz 6B kabul kriterleri ham çıktıları. Ortam: .qa/f6b2, Release, Production, port 5711, süreçte üretilen rastgele olay anahtarı.
+
+## K1 kök yönlendirme ve rol matrisi (k1.py)
+K1 kök yönlendirme
+m1 | GET / | 302 | /dashboard
+au | GET / | 302 | /dashboard
+op | GET / | 302 | /my-work
+om | GET / | 302 | /my-work
+sa | GET / | 302 | /users
+oturumsuz GET / | 302 | http://127.0.0.1:5711/account/login?ReturnUrl=%2F
+Yetki matrisi
+GET /dashboard | oturumsuz 302 http://127.0.0.1:5711/account/login?ReturnUrl=%2Fdashboard | au 200  | m1 200  | op 302>403(h1=Yetkiniz yok) | om 200  | sa 302>403(h1=Yetkiniz yok)
+GET /records/create | oturumsuz 302 http://127.0.0.1:5711/account/login?ReturnUrl=%2Frecords%2Fcreate | au 302>403(h1=Yetkiniz yok) | m1 302>403(h1=Yetkiniz yok) | op 200  | om 200  | sa 302>403(h1=Yetkiniz yok)
+GET /reports/durations | oturumsuz 302 http://127.0.0.1:5711/account/login?ReturnUrl=%2Freports%2Fdurations | au 200  | m1 200  | op 302>403(h1=Yetkiniz yok) | om 200  | sa 302>403(h1=Yetkiniz yok)
+GET /reports/materials | oturumsuz 302 http://127.0.0.1:5711/account/login?ReturnUrl=%2Freports%2Fmaterials | au 200  | m1 200  | op 302>403(h1=Yetkiniz yok) | om 200  | sa 302>403(h1=Yetkiniz yok)
+POST /records/create belirteçli | au | 302 | /account/access-denied?ReturnUrl=%2Frecords%2Fcreate
+POST /records/create belirteçli | m1 | 302 | /account/access-denied?ReturnUrl=%2Frecords%2Fcreate
+POST /records/create belirteçli | sa | 302 | /account/access-denied?ReturnUrl=%2Frecords%2Fcreate
+POST /records/create belirteçsiz op | 400 | 
+POST /records/create oturumsuz | 302 | http://127.0.0.1:5711/account/login?ReturnUrl=%2Frecords%2Fcreate
+
+## K2 menü bağlantıları, K3 Denetçi panosu (k2.py)
+m1 | /dashboard | 200 | ray: Ana sayfa->/dashboard [current], Kayıtlar->/records | alt çubuk: Ana sayfa->/dashboard [current], Kayıtlar->/records | çekmece: Ana sayfa->/dashboard [current], Kayıtlar->/records
+m1 | /records | 200 | ray: Ana sayfa->/dashboard, Kayıtlar->/records [current] | alt çubuk: Ana sayfa->/dashboard, Kayıtlar->/records [current] | çekmece: Ana sayfa->/dashboard, Kayıtlar->/records [current]
+au | /dashboard | 200 | ray: Ana sayfa->/dashboard [current], Kayıtlar->/records | alt çubuk: Ana sayfa->/dashboard [current], Kayıtlar->/records | çekmece: Ana sayfa->/dashboard [current], Kayıtlar->/records
+au | /records | 200 | ray: Ana sayfa->/dashboard, Kayıtlar->/records [current] | alt çubuk: Ana sayfa->/dashboard, Kayıtlar->/records [current] | çekmece: Ana sayfa->/dashboard, Kayıtlar->/records [current]
+om | /dashboard | 200 | ray: Kayıtlar->/records | alt çubuk:  | çekmece: Kayıtlar->/records
+om | /records | 200 | ray: Kayıtlar->/records [current] | alt çubuk:  | çekmece: Kayıtlar->/records [current]
+K3 | m1 | main form | 0 | main button | [] | bağlantılar | ['/records', '/records/details/2', '/records/details/3', '/records/details/4', '/records/details/5', '/records/details/6']
+K3 | au | main form | 0 | main button | [] | bağlantılar | ['/records', '/records/details/2', '/records/details/3', '/records/details/4', '/records/details/5', '/records/details/6']
+
+## K4/K6 pano sayıları ve son 7 gün, Türkiye günü 15.11 (k4.py, UTC 20:52)
+once | UTC | 20:52:45 | Türkiye günü | 2026-11-15 | ekran [devam, açıldı, bugün tamamlanan] | ['2', '5', '4'] | DB | [2, 5, 4]
+once | Şu an sahada | [('T1-H1-M01-P2026-5', ['Devam ediyor']), ('T1-H1-M02-P2026-1', ['Açıldı']), ('T1-H2-M01-P2026-2', ['Açıldı']), ('T1-H1-M03-P2026-1', ['Açıldı']), ('T1-H1-M04-P2026-1', ['Açıldı']), ('T2-H1-M01-P2026-1', ['Açıldı']), ('T1-H2-M05-A2026-1', ['Acil', 'Devam ediyor'])]
+once | DB aktif (en eski önce) | [('T1-H1-M01-P2026-5', 'Planlı', 2), ('T1-H1-M02-P2026-1', 'Planlı', 1), ('T1-H2-M01-P2026-2', 'Planlı', 1), ('T1-H1-M03-P2026-1', 'Planlı', 1), ('T1-H1-M04-P2026-1', 'Planlı', 1), ('T2-H1-M01-P2026-1', 'Planlı', 1), ('T1-H2-M05-A2026-1', 'Acil', 2)]
+once | Son 7 gün ekran | [['9 Kas Pzt', '0', '0'], ['10 Kas Sal', '0', '0'], ['11 Kas Çar', '0', '0'], ['12 Kas Per', '0', '0'], ['13 Kas Cum', '0', '0'], ['14 Kas Cmt', '0', '0'], ['15 Kas Paz', '11', '1']]
+once | Son 7 gün DB (Türkiye günü, açılış) | [['2026-11-09', 0, 0], ['2026-11-10', 0, 0], ['2026-11-11', 0, 0], ['2026-11-12', 0, 0], ['2026-11-13', 0, 0], ['2026-11-14', 0, 0], ['2026-11-15', 11, 1]]
+once | eşleşme | [True, True, True, True, True, True, True] | satır | 7
+once | grafik satırları | ['9 Kas Pzt 0', '10 Kas Sal 0', '11 Kas Çar 0', '12 Kas Per 0', '13 Kas Cum 0', '14 Kas Cmt 0', '15 Kas Paz 12 1 acil']
+
+## K4/K6 aynı ölçüm Türkiye gece yarısından sonra (UTC 21:00:10)
+sonra | UTC | 21:00:10 | Türkiye günü | 2026-11-16 | ekran [devam, açıldı, bugün tamamlanan] | ['2', '5', '0'] | DB | [2, 5, 0]
+sonra | Şu an sahada | [('T1-H1-M01-P2026-5', ['Devam ediyor']), ('T1-H1-M02-P2026-1', ['Açıldı']), ('T1-H2-M01-P2026-2', ['Açıldı']), ('T1-H1-M03-P2026-1', ['Açıldı']), ('T1-H1-M04-P2026-1', ['Açıldı']), ('T2-H1-M01-P2026-1', ['Açıldı']), ('T1-H2-M05-A2026-1', ['Acil', 'Devam ediyor'])]
+sonra | DB aktif (en eski önce) | [('T1-H1-M01-P2026-5', 'Planlı', 2), ('T1-H1-M02-P2026-1', 'Planlı', 1), ('T1-H2-M01-P2026-2', 'Planlı', 1), ('T1-H1-M03-P2026-1', 'Planlı', 1), ('T1-H1-M04-P2026-1', 'Planlı', 1), ('T2-H1-M01-P2026-1', 'Planlı', 1), ('T1-H2-M05-A2026-1', 'Acil', 2)]
+sonra | Son 7 gün ekran | [['10 Kas Sal', '0', '0'], ['11 Kas Çar', '0', '0'], ['12 Kas Per', '0', '0'], ['13 Kas Cum', '0', '0'], ['14 Kas Cmt', '0', '0'], ['15 Kas Paz', '11', '1'], ['16 Kas Pzt', '0', '0']]
+sonra | Son 7 gün DB (Türkiye günü, açılış) | [['2026-11-10', 0, 0], ['2026-11-11', 0, 0], ['2026-11-12', 0, 0], ['2026-11-13', 0, 0], ['2026-11-14', 0, 0], ['2026-11-15', 11, 1], ['2026-11-16', 0, 0]]
+sonra | eşleşme | [True, True, True, True, True, True, True] | satır | 7
+sonra | grafik satırları | ['10 Kas Sal 0', '11 Kas Çar 0', '12 Kas Per 0', '13 Kas Cum 0', '14 Kas Cmt 0', '15 Kas Paz 12 1 acil', '16 Kas Pzt 0']
+
+## K4 kayıtlar tamamlandıktan sonra (UTC 21:01)
+son | UTC | 21:01:26 | Türkiye günü | 2026-11-16 | ekran [devam, açıldı, bugün tamamlanan] | ['1', '0', '9'] | DB | [1, 0, 9]
+son | Şu an sahada | [('T1-H1-M01-P2026-5', ['Devam ediyor'])]
+son | DB aktif (en eski önce) | [('T1-H1-M01-P2026-5', 'Planlı', 2)]
+son | Son 7 gün ekran | [['10 Kas Sal', '0', '0'], ['11 Kas Çar', '0', '0'], ['12 Kas Per', '0', '0'], ['13 Kas Cum', '0', '0'], ['14 Kas Cmt', '0', '0'], ['15 Kas Paz', '11', '1'], ['16 Kas Pzt', '3', '0']]
+son | Son 7 gün DB (Türkiye günü, açılış) | [['2026-11-10', 0, 0], ['2026-11-11', 0, 0], ['2026-11-12', 0, 0], ['2026-11-13', 0, 0], ['2026-11-14', 0, 0], ['2026-11-15', 11, 1], ['2026-11-16', 3, 0]]
+son | eşleşme | [True, True, True, True, True, True, True] | satır | 7
+son | grafik satırları | ['10 Kas Sal 0', '11 Kas Çar 0', '12 Kas Per 0', '13 Kas Cum 0', '14 Kas Cmt 0', '15 Kas Paz 12 1 acil', '16 Kas Pzt 3']
+
+## K5 süre altı ve son tamamlananlar (k5.py)
+Süre altı satır | 10 | DB toplam süre altı faz (Tamamlandı kayıtlarda) | 24
+ekran süre altı | [('T1-H1-M03-P2026-2', 'QA teslim testi: kısa deneme adımı.', '/records/details/15'), ('T1-H1-M03-P2026-2', 'QA teslim testi: kısa deneme adımı.', '/records/details/15'), ('T1-H1-M03-P2026-2', 'QA teslim testi: kısa deneme adımı.', '/records/details/15'), ('T1-H2-M01-P2026-3', 'QA teslim testi: kısa deneme adımı.', '/records/details/14'), ('T1-H2-M01-P2026-3', 'QA teslim testi: kısa deneme adımı.', '/records/details/14'), ('T1-H1-M02-P2026-2', 'QA teslim testi: kısa deneme adımı.', '/records/details/13'), ('T1-H1-M02-P2026-2', 'QA teslim testi: kısa deneme adımı.', '/records/details/13'), ('T2-H1-M01-P2026-1', 'QA teslim testi: kısa deneme adımı.', '/records/details/11'), ('T2-H1-M01-P2026-1', 'QA teslim testi: kısa deneme adımı.', '/records/details/11'), ('T1-H1-M04-P2026-1', 'QA teslim testi: kısa deneme adımı.', '/records/details/10')]
+DB süre altı (en yeni önce, 10) | [('T1-H1-M03-P2026-2', 'QA teslim testi: kısa deneme adımı.', '/records/details/15'), ('T1-H1-M03-P2026-2', 'QA teslim testi: kısa deneme adımı.', '/records/details/15'), ('T1-H1-M03-P2026-2', 'QA teslim testi: kısa deneme adımı.', '/records/details/15'), ('T1-H2-M01-P2026-3', 'QA teslim testi: kısa deneme adımı.', '/records/details/14'), ('T1-H2-M01-P2026-3', 'QA teslim testi: kısa deneme adımı.', '/records/details/14'), ('T1-H1-M02-P2026-2', 'QA teslim testi: kısa deneme adımı.', '/records/details/13'), ('T1-H1-M02-P2026-2', 'QA teslim testi: kısa deneme adımı.', '/records/details/13'), ('T2-H1-M01-P2026-1', 'QA teslim testi: kısa deneme adımı.', '/records/details/11'), ('T2-H1-M01-P2026-1', 'QA teslim testi: kısa deneme adımı.', '/records/details/11'), ('T1-H1-M04-P2026-1', 'QA teslim testi: kısa deneme adımı.', '/records/details/10')]
+eşleşme (kayıt no, gerekçe, bağlantı) | [True, True, True, True, True, True, True, True, True, True]
+Son tamamlanan satır | 10 | DB Tamamlandı kayıt | 13
+ekran son tamamlanan | [('T1-H1-M03-P2026-2', '/records/details/15'), ('T1-H2-M01-P2026-3', '/records/details/14'), ('T1-H1-M02-P2026-2', '/records/details/13'), ('T1-H2-M05-A2026-1', '/records/details/12'), ('T2-H1-M01-P2026-1', '/records/details/11'), ('T1-H1-M04-P2026-1', '/records/details/10'), ('T1-H1-M03-P2026-1', '/records/details/9'), ('T1-H2-M01-P2026-2', '/records/details/8'), ('T1-H1-M02-P2026-1', '/records/details/7'), ('T1-H2-M01-P2026-1', '/records/details/3')]
+DB son tamamlanan | [('T1-H1-M03-P2026-2', '/records/details/15'), ('T1-H2-M01-P2026-3', '/records/details/14'), ('T1-H1-M02-P2026-2', '/records/details/13'), ('T1-H2-M05-A2026-1', '/records/details/12'), ('T2-H1-M01-P2026-1', '/records/details/11'), ('T1-H1-M04-P2026-1', '/records/details/10'), ('T1-H1-M03-P2026-1', '/records/details/9'), ('T1-H2-M01-P2026-2', '/records/details/8'), ('T1-H1-M02-P2026-1', '/records/details/7'), ('T1-H2-M01-P2026-1', '/records/details/3')]
+eşleşme | True
+bağlantı HTTP kodları | [200]
+
+## K7/K8 grafik ve tablo değerleri, boş süzgeç (k7.py)
+HTTP | 200 | figure | 3 | svg (çubuk, aria-hidden) | [7, 3, 5] | script etiketi main içinde | 0
+GRAFİK | Kayıt sayısı | ['Açıldı 5', 'Devam ediyor 2', 'Beklemede 0', 'Tamamlandı 4', 'Zaman aşımı 1', 'İptal edildi 0', 'Yarıda kapatıldı 0']
+GRAFİK | Ortalama süre Net Mola | ['T1-H1-M01 - Karıştırıcı Kısa planlı temizlik Net 1 dk 57 sn Mola 0 sn', 'T1-H1-M01 - Karıştırıcı Planlı temizlik Net 2 dk 46 sn Mola 0 sn', 'T1-H2-M01 - Dolum makinesi Kısa planlı temizlik Net 1 dk 28 sn Mola 40 dk']
+GRAFİK | Ortalama net süre Ortalama net Ortalaması asgarinin altında Asgari süre | ['Kısa planlı temizlik, versiyon 1 Faz 1, Hazırlık 38 sn asgari 1 dk Ortalama asgarinin altında', 'Kısa planlı temizlik, versiyon 1 Faz 2, Temizlik ve kontrol 1 dk 9 sn asgari 1 dk', 'Planlı temizlik, versiyon 1 Faz 1, Hazırlık 1 dk 27 sn asgari 5 dk Ortalama asgarinin altında', 'Planlı temizlik, versiyon 1 Faz 2, Temizlik 32 sn asgari 15 dk Ortalama asgarinin altında', 'Planlı temizlik, versiyon 1 Faz 3, Kontrol 14 sn asgari 5 dk Ortalama asgarinin altında']
+TABLO | Makine ve temizlik tipi bazında ortalama brüt, mola, net süre ve efor | [['T1-H1-M01 - Karıştırıcı Kısa planlı temizlik', '2', '1 dk 57 sn', '0 sn', '1 dk 57 sn', '1 dk 57 sn'], ['T1-H1-M01 - Karıştırıcı Planlı temizlik', '1', '2 dk 46 sn', '0 sn', '2 dk 46 sn', '1 dk 44 sn'], ['T1-H2-M01 - Dolum makinesi Kısa planlı temizlik', '1', '41 dk 28 sn', '40 dk', '1 dk 28 sn', '1 dk 28 sn']]
+TABLO | Tip, versiyon ve faz bazında ortalama net süre ve süre altı sayısı | [['Kısa planlı temizlik, versiyon 1 Faz 1, Hazırlık', '1 dk', '3', '38 sn', '2 kayıt'], ['Kısa planlı temizlik, versiyon 1 Faz 2, Temizlik ve kontrol', '1 dk', '3', '1 dk 9 sn', '0'], ['Planlı temizlik, versiyon 1 Faz 1, Hazırlık', '5 dk', '1', '1 dk 27 sn', '1 kayıt'], ['Planlı temizlik, versiyon 1 Faz 2, Temizlik', '15 dk', '1', '32 sn', '1 kayıt'], ['Planlı temizlik, versiyon 1 Faz 3, Kontrol', '5 dk', '1', '14 sn', '1 kayıt']]
+TABLO | Ortalama süresi en uzun adımlar | [['Makineyi durdur ve enerjiyi kes Planlı temizlik, versiyon 1', 'Hazırlık', '1', '57 sn', '57 sn'], ['Yüzeyi sil Kısa planlı temizlik, versiyon 1', 'Temizlik ve kontrol', '3', '34 sn', '36 sn'], ['Alanı kontrol et ve teslim et Kısa planlı temizlik, versiyon 1', 'Temizlik ve kontrol', '3', '34 sn', '36 sn'], ['Makineyi durdur Kısa planlı temizlik, versiyon 1', 'Hazırlık', '3', '21 sn', '34 sn'], ['Alanı hazırla Kısa planlı temizlik, versiyon 1', 'Hazırlık', '3', '16 sn', '34 sn'], ['Ürün kalıntısını boşalt Planlı temizlik, versiyon 1', 'Hazırlık', '1', '16 sn', '16 sn']]
+DURUM LİSTESİ | Açıldı 5 Devam ediyor 2 Beklemede 0 Tamamlandı 4 Zaman aşımı 1 İptal edildi 0 Yarıda kapatıldı 0
+faz grafiği: marker çizgisi | 5 | desenli çubuk | 4 | metin işareti | 0 | satır | 11
+BOŞ | /reports/durations?from=2030-01-01&to=2030-01-31 | HTTP | 200 | figure | 1 | tablo | 0 | durum kutusu | ['Filtreye uyan tamamlanmış kayıt yok Tarih aralığını genişletin ya da süzgeçleri ']
+BOŞ | /reports/durations?Filter.From=2030-01-01&Filter.To=2030-01-31 | HTTP | 200 | figure | 1 | tablo | 0 | durum kutusu | ['Filtreye uyan tamamlanmış kayıt yok Tarih aralığını genişletin ya da süzgeçleri ']
+BOŞ | /reports/durations?kind=2&facilityId=2 | HTTP | 200 | figure | 1 | tablo | 0 | durum kutusu | ['Filtreye uyan tamamlanmış kayıt yok Tarih aralığını genişletin ya da süzgeçleri ']
+
+## K17a biçim ve uzunluk reddi (k17a.py)
+'T1-IE-2026-5' | HTTP | 200 |  | WorkOrderNo hatası: | Bu biçim sistemin atadığı numaraya ayrılmıştır. Alanı boş bırakın ya da dış iş emri numarasını girin. | diğer hatalar: | {} | kayıt | 6 | -> | 6 | olay | 63 | -> | 63 | sayaç | 0 | -> | 0 | korunan | {'CommandId': True, 'WorkOrderNo': 'T1-IE-2026-5', 'Note': True, 'Facility': '1', 'Machine': '2', 'LockMinutes': True, 'PinBoş': True}
+'xx-ie-2026-0005' | HTTP | 200 |  | WorkOrderNo hatası: | Bu biçim sistemin atadığı numaraya ayrılmıştır. Alanı boş bırakın ya da dış iş emri numarasını girin. | diğer hatalar: | {} | kayıt | 6 | -> | 6 | olay | 63 | -> | 63 | sayaç | 0 | -> | 0 | korunan | {'CommandId': True, 'WorkOrderNo': 'xx-ie-2026-0005', 'Note': True, 'Facility': '1', 'Machine': '2', 'LockMinutes': True, 'PinBoş': True}
+'QQQQQQQQQQQQQQQQQQQQQQQ | HTTP | 200 |  | WorkOrderNo hatası: | İş emri numarası en çok 64 karakter olabilir. | diğer hatalar: | {} | kayıt | 6 | -> | 6 | olay | 63 | -> | 63 | sayaç | 0 | -> | 0 | korunan | {'CommandId': True, 'WorkOrderNo': 'QQQQQQQQQQQQQQQQQQQQ', 'Note': True, 'Facility': '1', 'Machine': '2', 'LockMinutes': True, 'PinBoş': True}
+'  T1-IE-2026-1  ' | HTTP | 200 |  | WorkOrderNo hatası: | Bu biçim sistemin atadığı numaraya ayrılmıştır. Alanı boş bırakın ya da dış iş emri numarasını girin. | diğer hatalar: | {} | kayıt | 6 | -> | 6 | olay | 63 | -> | 63 | sayaç | 0 | -> | 0 | korunan | {'CommandId': True, 'WorkOrderNo': '  T1-IE-2026-1  ', 'Note': True, 'Facility': '1', 'Machine': '2', 'LockMinutes': True, 'PinBoş': True}
+
+## K16/K17/G9 numara sırası (k16.py)
+başlangıç sayaçları | [] | kayıt | 6
+a | op3 | makine | 2 | girilen | '' | HTTP | 302 | /records/run/7 |  | saklanan | [('T1-IE-2026-1', 'T1-H1-M02-P2026-1')] | sayaçlar | [('WorkOrder:1', 2026, 1)]
+a G9 aynı CommandId ikinci gönderim | HTTP | 302 | /records/run/7 | kayıt | 6 | -> | 7 | olay | 63 | -> | 64 | ProcessedCommands | 48 | -> | 49 | sayaç | [('WorkOrder:1', 2026, 1)]
+b | op4 | makine | 3 | girilen | '' | HTTP | 302 | /records/run/8 |  | saklanan | [('T1-IE-2026-2', 'T1-H2-M01-P2026-2')] | sayaçlar | [('WorkOrder:1', 2026, 2)]
+c | op5 | makine | 6 | girilen | 'ERP-778' | HTTP | 302 | /records/run/9 |  | saklanan | [('ERP-778', 'T1-H1-M03-P2026-1')] | sayaçlar | [('WorkOrder:1', 2026, 2)]
+d | op6 | makine | 7 | girilen | '   ' | HTTP | 302 | /records/run/10 |  | saklanan | [('T1-IE-2026-3', 'T1-H1-M04-P2026-1')] | sayaçlar | [('WorkOrder:1', 2026, 3)]
+e | op7 | makine | 5 | girilen | '' | HTTP | 302 | /records/run/11 |  | saklanan | [('T2-IE-2026-1', 'T2-H1-M01-P2026-1')] | sayaçlar | [('WorkOrder:1', 2026, 3), ('WorkOrder:2', 2026, 1)]
+kayıtlar | {'a': 7, 'b': 8, 'c': 9, 'd': 10, 'e': 11}
+
+## K16 görünürlük, olay, arama, bütünlük (k16b.py)
+a | kayıt | 7 | iş emri | 'T1-IE-2026-1' | detayda | True | yürütmede | True | açılış olayı | RecordOpened | olaydaki değer | 'T1-IE-2026-1' | arama sonucu kayıtlar | ['7'] | bütünlük | Doğrulandı | HTTP | 200 | 200 | 200 | 200
+b | kayıt | 8 | iş emri | 'T1-IE-2026-2' | detayda | True | yürütmede | True | açılış olayı | RecordOpened | olaydaki değer | 'T1-IE-2026-2' | arama sonucu kayıtlar | ['8'] | bütünlük | Doğrulandı | HTTP | 200 | 200 | 200 | 200
+c | kayıt | 9 | iş emri | 'ERP-778' | detayda | True | yürütmede | True | açılış olayı | RecordOpened | olaydaki değer | 'ERP-778' | arama sonucu kayıtlar | ['9'] | bütünlük | Doğrulandı | HTTP | 200 | 200 | 200 | 200
+d | kayıt | 10 | iş emri | 'T1-IE-2026-3' | detayda | True | yürütmede | True | açılış olayı | RecordOpened | olaydaki değer | 'T1-IE-2026-3' | arama sonucu kayıtlar | ['10'] | bütünlük | Doğrulandı | HTTP | 200 | 200 | 200 | 200
+e | kayıt | 11 | iş emri | 'T2-IE-2026-1' | detayda | True | yürütmede | True | açılış olayı | RecordOpened | olaydaki değer | 'T2-IE-2026-1' | arama sonucu kayıtlar | ['11'] | bütünlük | Doğrulandı | HTTP | 200 | 200 | 200 | 200
+yürütme metninde bağlam | ı Tip Kısa planlı temizlik, versiyon 2 Sahip QA Operatör 3 Açılış 23:51 İş emri T1-IE-2026-1 Saha defteri Atan
+detay metninde bağlam | Prosedür versiyonu Versiyon 2 Versiyon içeriğini aç İş emri T1-IE-2026-1 Saha defteri Atan
+
+## K16 devam sırası ve 64 karakter sınırı (s4.py)
+f | op3 | girilen uzunluk | 0 | HTTP | 302 | /records/run/13 |  | [('T1-IE-2026-4',)] | [('WorkOrder:1', 4), ('WorkOrder:2', 1)]
+g | op4 | girilen uzunluk | 0 | HTTP | 302 | /records/run/14 |  | [('T1-IE-2026-5',)] | [('WorkOrder:1', 5), ('WorkOrder:2', 1)]
+h | op9 | girilen uzunluk | 64 | HTTP | 302 | /records/run/15 |  | [('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD',)] | [('WorkOrder:1', 5), ('WorkOrder:2', 1)]
+
+## K18 sorguları (base.db = App_Data kopyası, qa.db = test sonrası)
+Faz öncesi kayıtlar (base.db): [(1, '12131'), (2, '1001'), (3, 'IE-2026-0815'), (4, 'IE-2026-0816'), (5, 'IE-2026-0817'), (6, '11312')]
+
+Aynı kayıtlar (qa.db):         [(1, '12131'), (2, '1001'), (3, 'IE-2026-0815'), (4, 'IE-2026-0816'), (5, 'IE-2026-0817'), (6, '11312')]
+
+Acil kayıtlar iş emri: [(12, 'T1-H2-M05-A2026-1', None)]
+
+Sistem numaralı kayıtlar: [(7, 'T1-IE-2026-1'), (8, 'T1-IE-2026-2'), (10, 'T1-IE-2026-3'), (11, 'T2-IE-2026-1'), (13, 'T1-IE-2026-4'), (14, 'T1-IE-2026-5')]
+
+Yinelenen sistem iş emri sorgusu: []
+
+Yinelenen (tüm değerler, büyük küçük harf duyarsız): []
+
+Sayaçlar: [('WorkOrder:1', 2026, 5), ('WorkOrder:2', 2026, 1)]
+
+Migration geçmişi aynı: True
+
+Toplam kayıt: 16
+
+## K12 yazdırma (media print, koyu tema seçili) ve K24 JS kapalı #menu
+/records/details/3@360 [{"thead": "static/37", "trDisplay": "table-row", "trBorderRadius": "0px", "tdBefore": "none", "bodyBg": "rgb(255, 255, 255)"}, {"thead": "static/37", "trDisplay": "table-row", "trBorderRadius": "0px", "tdBefore": "none", "bodyBg": "rgb(255, 255, 255)"}]
+/records/details/1@360 [{"thead": "static/37", "trDisplay": "table-row", "trBorderRadius": "0px", "tdBefore": "none", "bodyBg": "rgb(255, 255, 255)"}, {"thead": "static/37", "trDisplay": "table-row", "trBorderRadius": "0px", "tdBefore": "none", "bodyBg": "rgb(255, 255, 255)"}]
+/records/details/7@360 [{"thead": "static/37", "trDisplay": "table-row", "trBorderRadius": "0px", "tdBefore": "none", "bodyBg": "rgb(255, 255, 255)"}]
+/records/details/3@1024 [{"thead": "static/37", "trDisplay": "table-row", "trBorderRadius": "0px", "tdBefore": "none", "bodyBg": "rgb(255, 255, 255)"}, {"thead": "static/37", "trDisplay": "table-row", "trBorderRadius": "0px", "tdBefore": "none", "bodyBg": "rgb(255, 255, 255)"}]
+/records/details/1@1024 [{"thead": "static/37", "trDisplay": "table-row", "trBorderRadius": "0px", "tdBefore": "none", "bodyBg": "rgb(255, 255, 255)"}, {"thead": "static/37", "trDisplay": "table-row", "trBorderRadius": "0px", "tdBefore": "none", "bodyBg": "rgb(255, 255, 255)"}]
+/records/details/7@1024 [{"thead": "static/37", "trDisplay": "table-row", "trBorderRadius": "0px", "tdBefore": "none", "bodyBg": "rgb(255, 255, 255)"}]
+jsOffMenu {"before": "hidden", "after": {"vis": "visible", "x": 0, "hash": "#menu"}}
+jsOffClose {"vis": "hidden", "hash": "#main"}
+
+
+# Tur 2 (2026-11-16), .qa/f6b3, port 5721, temiz App_Data kopyası
+
+## K7/K8 ve B3 (k7.py)
+HTTP | 200 | figure | 3 | svg (çubuk, aria-hidden) | [7, 3, 5] | script etiketi main içinde | 0
+GRAFİK | Kayıt sayısı | ['Açıldı 2', 'Devam ediyor 2', 'Beklemede 0', 'Tamamlandı 4', 'Zaman aşımı 1', 'İptal edildi 0', 'Yarıda kapatıldı 0']
+GRAFİK | Ortalama süre Net Mola | ['T1-H1-M01 - Karıştırıcı Kısa planlı temizlik Net 1 dk 57 sn Mola 0 sn', 'T1-H1-M01 - Karıştırıcı Planlı temizlik Net 2 dk 46 sn Mola 0 sn', 'T1-H2-M01 - Dolum makinesi Kısa planlı temizlik Net 1 dk 28 sn Mola 40 dk']
+GRAFİK | Ortalama net süre Ortalama net Ortalaması asgarinin altında Asgari süre | ['Kısa planlı temizlik, versiyon 1 Faz 1, Hazırlık 38 sn asgari 1 dk Ortalama asgarinin altında', 'Kısa planlı temizlik, versiyon 1 Faz 2, Temizlik ve kontrol 1 dk 9 sn asgari 1 dk', 'Planlı temizlik, versiyon 1 Faz 1, Hazırlık 1 dk 27 sn asgari 5 dk Ortalama asgarinin altında', 'Planlı temizlik, versiyon 1 Faz 2, Temizlik 32 sn asgari 15 dk Ortalama asgarinin altında', 'Planlı temizlik, versiyon 1 Faz 3, Kontrol 14 sn asgari 5 dk Ortalama asgarinin altında']
+TABLO | Makine ve temizlik tipi bazında ortalama brüt, mola, net süre ve efor | [['T1-H1-M01 - Karıştırıcı Kısa planlı temizlik', '2', '1 dk 57 sn', '0 sn', '1 dk 57 sn', '1 dk 57 sn'], ['T1-H1-M01 - Karıştırıcı Planlı temizlik', '1', '2 dk 46 sn', '0 sn', '2 dk 46 sn', '1 dk 44 sn'], ['T1-H2-M01 - Dolum makinesi Kısa planlı temizlik', '1', '41 dk 28 sn', '40 dk', '1 dk 28 sn', '1 dk 28 sn']]
+TABLO | Tip, versiyon ve faz bazında ortalama net süre ve süre altı sayısı | [['Kısa planlı temizlik, versiyon 1 Faz 1, Hazırlık', '1 dk', '3', '38 sn', '2 kayıt'], ['Kısa planlı temizlik, versiyon 1 Faz 2, Temizlik ve kontrol', '1 dk', '3', '1 dk 9 sn', '0'], ['Planlı temizlik, versiyon 1 Faz 1, Hazırlık', '5 dk', '1', '1 dk 27 sn', '1 kayıt'], ['Planlı temizlik, versiyon 1 Faz 2, Temizlik', '15 dk', '1', '32 sn', '1 kayıt'], ['Planlı temizlik, versiyon 1 Faz 3, Kontrol', '5 dk', '1', '14 sn', '1 kayıt']]
+TABLO | Ortalama süresi en uzun adımlar | [['Makineyi durdur ve enerjiyi kes Planlı temizlik, versiyon 1', 'Hazırlık', '1', '57 sn', '57 sn'], ['Yüzeyi sil Kısa planlı temizlik, versiyon 1', 'Temizlik ve kontrol', '3', '34 sn', '36 sn'], ['Alanı kontrol et ve teslim et Kısa planlı temizlik, versiyon 1', 'Temizlik ve kontrol', '3', '34 sn', '36 sn'], ['Makineyi durdur Kısa planlı temizlik, versiyon 1', 'Hazırlık', '3', '21 sn', '34 sn'], ['Alanı hazırla Kısa planlı temizlik, versiyon 1', 'Hazırlık', '3', '16 sn', '34 sn'], ['Ürün kalıntısını boşalt Planlı temizlik, versiyon 1', 'Hazırlık', '1', '16 sn', '16 sn']]
+DURUM LİSTESİ | Açıldı 2 Devam ediyor 2 Beklemede 0 Tamamlandı 4 Zaman aşımı 1 İptal edildi 0 Yarıda kapatıldı 0
+faz grafiği: marker çizgisi | 5 | desenli çubuk | 5 | metin işareti | 0 | satır | 11
+BOŞ | /reports/durations?from=2030-01-01&to=2030-01-31 | HTTP | 200 | figure | 0 | tablo | 0 | durum kutusu | ['Filtreye uyan tamamlanmış kayıt yok Tarih aralığını genişletin ya da süzgeçleri ']
+BOŞ | /reports/durations?Filter.From=2030-01-01&Filter.To=2030-01-31 | HTTP | 200 | figure | 0 | tablo | 0 | durum kutusu | ['Filtreye uyan tamamlanmış kayıt yok Tarih aralığını genişletin ya da süzgeçleri ']
+BOŞ | /reports/durations?kind=2&facilityId=2 | HTTP | 200 | figure | 0 | tablo | 0 | durum kutusu | ['Filtreye uyan tamamlanmış kayıt yok Tarih aralığını genişletin ya da süzgeçleri ']
+
+## B5 menüler ve / yönlendirmeleri (b5.py); om = 4001 Operatör+Yönetici, oa = 4002 Operatör+Denetçi, * = aria-current
+om | GET / | 302 | /my-work
+om | /dashboard | 200 | RAY: | ['İşlerim->/my-work', 'Yeni kayıt->/records/create', 'Pano->/dashboard *', 'Makine panosu->/machine-board', 'Kayıtlar->/records', 'Süre ve efor->/reports/durations', 'Malzeme izlenebilirliğ->/reports/materials', 'Tesisler->/facilities', 'Makineler->/machines', 'Vardiyalar->/shifts', 'Malzemeler->/materials', 'Temizlik tipleri->/cleaning-types', 'Kullanıcılar->/users', 'Parola ve PIN->/account/security']
+om | /dashboard | ÇEKMECE: | ['->#main', '->#main', 'İşlerim->/my-work', 'Yeni kayıt->/records/create', 'Pano->/dashboard *', 'Makine panosu->/machine-board', 'Kayıtlar->/records', 'Süre ve efor->/reports/durations', 'Malzeme izlenebilirliğ->/reports/materials', 'Tesisler->/facilities', 'Makineler->/machines', 'Vardiyalar->/shifts', 'Malzemeler->/materials', 'Temizlik tipleri->/cleaning-types', 'Kullanıcılar->/users', 'Parola ve PIN->/account/security']
+om | /dashboard | ALT ÇUBUK: | ['İşlerim->/my-work', 'Yeni kayıt->/records/create', 'Makine panosu->/machine-board', 'Menü->#menu']
+oa | GET / | 302 | /my-work
+oa | /dashboard | 200 | RAY: | ['İşlerim->/my-work', 'Yeni kayıt->/records/create', 'Pano->/dashboard *', 'Makine panosu->/machine-board', 'Kayıtlar->/records', 'Süre ve efor->/reports/durations', 'Malzeme izlenebilirliğ->/reports/materials', 'Parola ve PIN->/account/security']
+oa | /dashboard | ÇEKMECE: | ['->#main', '->#main', 'İşlerim->/my-work', 'Yeni kayıt->/records/create', 'Pano->/dashboard *', 'Makine panosu->/machine-board', 'Kayıtlar->/records', 'Süre ve efor->/reports/durations', 'Malzeme izlenebilirliğ->/reports/materials', 'Parola ve PIN->/account/security']
+oa | /dashboard | ALT ÇUBUK: | ['İşlerim->/my-work', 'Yeni kayıt->/records/create', 'Makine panosu->/machine-board', 'Menü->#menu']
+m1 | GET / | 302 | /dashboard
+m1 | /dashboard | 200 | RAY: | ['Ana sayfa->/dashboard *', 'Kayıtlar->/records', 'Makine panosu->/machine-board', 'Süre ve efor->/reports/durations', 'Malzeme izlenebilirliğ->/reports/materials', 'Tesisler->/facilities', 'Makineler->/machines', 'Vardiyalar->/shifts', 'Malzemeler->/materials', 'Temizlik tipleri->/cleaning-types', 'Kullanıcılar->/users', 'Parola ve PIN->/account/security']
+m1 | /dashboard | ÇEKMECE: | ['->#main', '->#main', 'Ana sayfa->/dashboard *', 'Kayıtlar->/records', 'Makine panosu->/machine-board', 'Süre ve efor->/reports/durations', 'Malzeme izlenebilirliğ->/reports/materials', 'Tesisler->/facilities', 'Makineler->/machines', 'Vardiyalar->/shifts', 'Malzemeler->/materials', 'Temizlik tipleri->/cleaning-types', 'Kullanıcılar->/users', 'Parola ve PIN->/account/security']
+m1 | /dashboard | ALT ÇUBUK: | ['Ana sayfa->/dashboard *', 'Kayıtlar->/records', 'Makine panosu->/machine-board', 'Menü->#menu']
+au | GET / | 302 | /dashboard
+au | /dashboard | 200 | RAY: | ['Ana sayfa->/dashboard *', 'Kayıtlar->/records', 'Makine panosu->/machine-board', 'Süre ve efor->/reports/durations', 'Malzeme izlenebilirliğ->/reports/materials', 'Parola ve PIN->/account/security']
+au | /dashboard | ÇEKMECE: | ['->#main', '->#main', 'Ana sayfa->/dashboard *', 'Kayıtlar->/records', 'Makine panosu->/machine-board', 'Süre ve efor->/reports/durations', 'Malzeme izlenebilirliğ->/reports/materials', 'Parola ve PIN->/account/security']
+au | /dashboard | ALT ÇUBUK: | ['Ana sayfa->/dashboard *', 'Kayıtlar->/records', 'Makine panosu->/machine-board', 'Menü->#menu']
+op | GET / | 302 | /my-work
+op | /my-work | 200 | RAY: | ['İşlerim->/my-work *', 'Yeni kayıt->/records/create', 'Makine panosu->/machine-board', 'Kayıtlar->/records', 'Parola ve PIN->/account/security']
+op | /my-work | ÇEKMECE: | ['->#main', '->#main', 'İşlerim->/my-work *', 'Yeni kayıt->/records/create', 'Makine panosu->/machine-board', 'Kayıtlar->/records', 'Parola ve PIN->/account/security']
+op | /my-work | ALT ÇUBUK: | ['İşlerim->/my-work *', 'Yeni kayıt->/records/create', 'Makine panosu->/machine-board', 'Menü->#menu']
+sa | GET / | 302 | /users
+sa | /users | 200 | RAY: | ['Kullanıcılar->/users *', 'Parola ve PIN->/account/security']
+sa | /users | ÇEKMECE: | ['->#main', '->#main', 'Kullanıcılar->/users *', 'Parola ve PIN->/account/security']
+sa | /users | ALT ÇUBUK: | ['Kullanıcılar->/users *', 'Parola ve PIN->/account/security', 'Menü->#menu']
+
+## K24 JS kapalı #menu
+[{"before": "hidden", "after": {"vis": "visible", "x": 0, "hash": "#menu"}}, {"vis": "hidden", "hash": "#main"}]

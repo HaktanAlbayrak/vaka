@@ -1,0 +1,177 @@
+Ön tur bulguları B1-B3 yeniden doğrulama (teslim testi, .qa/f6b2). Karşıtlık oranları: çubuk dolgusu / boş iz (track) ve panel zemini.
+
+## B1 grafik dolgu renkleri ve karşıtlık (chart.tmpl.js)
+/reports/durations 360-light [Kayıt sayısı] satır 7 sorun [] metin en düşük 15.96 çubuklar {"fill-chart-3": "track 4.26 / zemin 5.08", "track-vs-zemin": "1.19"}
+/reports/durations 360-light [Ortalama süre] satır 3 sorun [] metin en düşük 5.97 çubuklar {"fill-chart-1": "track 6.00 / zemin 6.59", "track-vs-zemin": "1.10", "fill-chart-3": "track 4.26 / zemin 4.68"}
+/reports/durations 360-light [Ortalama net süre] satır 5 sorun [] metin en düşük 5.71 çubuklar {"fill-chart-1": "track 6.00 / zemin 6.59", "url(#phase-chart-hatch)": "desen", "marker": "track 13.38 / bar 2.23", "track-vs-zemin": "1.10"}
+/dashboard 360-light [Açılan kayıt] satır 7 sorun [] metin en düşük 6.48 çubuklar {"fill-chart-1": "track 6.00 / zemin 7.16", "track-vs-zemin": "1.19", "fill-chart-2": "track 2.94 / zemin 3.51"}
+/reports/durations 768-light [Kayıt sayısı] satır 7 sorun [] metin en düşük 15.96 çubuklar {"fill-chart-3": "track 4.26 / zemin 5.08", "track-vs-zemin": "1.19"}
+/reports/durations 768-light [Ortalama süre] satır 3 sorun [] metin en düşük 5.97 çubuklar {"fill-chart-1": "track 6.00 / zemin 6.59", "track-vs-zemin": "1.10", "fill-chart-3": "track 4.26 / zemin 4.68"}
+/reports/durations 768-light [Ortalama net süre] satır 5 sorun [] metin en düşük 5.71 çubuklar {"fill-chart-1": "track 6.00 / zemin 6.59", "url(#phase-chart-hatch)": "desen", "marker": "track 13.38 / bar 2.23", "track-vs-zemin": "1.10"}
+/dashboard 768-light [Açılan kayıt] satır 7 sorun [] metin en düşük 6.48 çubuklar {"fill-chart-1": "track 6.00 / zemin 7.16", "track-vs-zemin": "1.19", "fill-chart-2": "track 2.94 / zemin 3.51"}
+/reports/durations 1024-light [Kayıt sayısı] satır 7 sorun [] metin en düşük 15.96 çubuklar {"fill-chart-3": "track 4.26 / zemin 5.08", "track-vs-zemin": "1.19"}
+/reports/durations 1024-light [Ortalama süre] satır 3 sorun [] metin en düşük 5.97 çubuklar {"fill-chart-1": "track 6.00 / zemin 6.59", "track-vs-zemin": "1.10", "fill-chart-3": "track 4.26 / zemin 4.68"}
+/reports/durations 1024-light [Ortalama net süre] satır 5 sorun [] metin en düşük 5.71 çubuklar {"fill-chart-1": "track 6.00 / zemin 6.59", "url(#phase-chart-hatch)": "desen", "marker": "track 13.38 / bar 2.23", "track-vs-zemin": "1.10"}
+/dashboard 1024-light [Açılan kayıt] satır 7 sorun [] metin en düşük 6.48 çubuklar {"fill-chart-1": "track 6.00 / zemin 7.16", "track-vs-zemin": "1.19", "fill-chart-2": "track 2.94 / zemin 3.51"}
+/reports/durations 1440-light [Kayıt sayısı] satır 7 sorun [] metin en düşük 15.96 çubuklar {"fill-chart-3": "track 4.26 / zemin 5.08", "track-vs-zemin": "1.19"}
+/reports/durations 1440-light [Ortalama süre] satır 3 sorun [] metin en düşük 6.48 çubuklar {"fill-chart-1": "track 6.00 / zemin 7.16", "track-vs-zemin": "1.19", "fill-chart-3": "track 4.26 / zemin 5.08"}
+/reports/durations 1440-light [Ortalama net süre] satır 5 sorun [] metin en düşük 6.21 çubuklar {"fill-chart-1": "track 6.00 / zemin 7.16", "url(#phase-chart-hatch)": "desen", "marker": "track 13.38 / bar 2.23", "track-vs-zemin": "1.19"}
+/dashboard 1440-light [Açılan kayıt] satır 7 sorun [] metin en düşük 6.48 çubuklar {"fill-chart-1": "track 6.00 / zemin 7.16", "track-vs-zemin": "1.19", "fill-chart-2": "track 2.94 / zemin 3.51"}
+/reports/durations 360-dark [Kayıt sayısı] satır 7 sorun [] metin en düşük 13.86 çubuklar {"fill-chart-3": "track 5.81 / zemin 6.54", "track-vs-zemin": "1.13"}
+/reports/durations 360-dark [Ortalama süre] satır 3 sorun [] metin en düşük 7.20 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.74", "track-vs-zemin": "1.24", "fill-chart-3": "track 5.81 / zemin 7.20"}
+/reports/durations 360-dark [Ortalama net süre] satır 5 sorun [] metin en düşük 7.20 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.74", "url(#phase-chart-hatch)": "desen", "marker": "track 12.31 / bar 1.97", "track-vs-zemin": "1.24"}
+/dashboard 360-dark [Açılan kayıt] satır 7 sorun [] metin en düşük 6.54 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.03", "track-vs-zemin": "1.13", "fill-chart-2": "track 7.10 / zemin 7.99"}
+/reports/durations 768-dark [Kayıt sayısı] satır 7 sorun [] metin en düşük 13.86 çubuklar {"fill-chart-3": "track 5.81 / zemin 6.54", "track-vs-zemin": "1.13"}
+/reports/durations 768-dark [Ortalama süre] satır 3 sorun [] metin en düşük 7.20 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.74", "track-vs-zemin": "1.24", "fill-chart-3": "track 5.81 / zemin 7.20"}
+/reports/durations 768-dark [Ortalama net süre] satır 5 sorun [] metin en düşük 7.20 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.74", "url(#phase-chart-hatch)": "desen", "marker": "track 12.31 / bar 1.97", "track-vs-zemin": "1.24"}
+/dashboard 768-dark [Açılan kayıt] satır 7 sorun [] metin en düşük 6.54 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.03", "track-vs-zemin": "1.13", "fill-chart-2": "track 7.10 / zemin 7.99"}
+/reports/durations 1024-dark [Kayıt sayısı] satır 7 sorun [] metin en düşük 13.86 çubuklar {"fill-chart-3": "track 5.81 / zemin 6.54", "track-vs-zemin": "1.13"}
+/reports/durations 1024-dark [Ortalama süre] satır 3 sorun [] metin en düşük 7.20 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.74", "track-vs-zemin": "1.24", "fill-chart-3": "track 5.81 / zemin 7.20"}
+/reports/durations 1024-dark [Ortalama net süre] satır 5 sorun [] metin en düşük 7.20 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.74", "url(#phase-chart-hatch)": "desen", "marker": "track 12.31 / bar 1.97", "track-vs-zemin": "1.24"}
+/dashboard 1024-dark [Açılan kayıt] satır 7 sorun [] metin en düşük 6.54 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.03", "track-vs-zemin": "1.13", "fill-chart-2": "track 7.10 / zemin 7.99"}
+/reports/durations 1440-dark [Kayıt sayısı] satır 7 sorun [] metin en düşük 13.86 çubuklar {"fill-chart-3": "track 5.81 / zemin 6.54", "track-vs-zemin": "1.13"}
+/reports/durations 1440-dark [Ortalama süre] satır 3 sorun [] metin en düşük 6.54 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.03", "track-vs-zemin": "1.13", "fill-chart-3": "track 5.81 / zemin 6.54"}
+/reports/durations 1440-dark [Ortalama net süre] satır 5 sorun [] metin en düşük 6.54 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.03", "url(#phase-chart-hatch)": "desen", "marker": "track 12.31 / bar 1.97", "track-vs-zemin": "1.13"}
+/dashboard 1440-dark [Açılan kayıt] satır 7 sorun [] metin en düşük 6.54 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.03", "track-vs-zemin": "1.13", "fill-chart-2": "track 7.10 / zemin 7.99"}
+
+## B2 kart ayağı (b23.tmpl.js): 48 hücre, 384 kart ayağı, kusurlu []
+
+## B3 reduced-motion çekmece odağı (b23.tmpl.js), açıldıktan 60 ms sonra
+{"w": 360, "h": 640, "motion": "reduce", "afterOpen60ms": {"active": "İçeriğe geç\n\n    \n  ", "inDrawer": false, "panelX": 0}, "afterEsc": {"active": "Menü", "vis": "hidden"}}
+{"w": 360, "h": 640, "motion": "no-preference", "afterOpen60ms": {"active": "Menüyü kapat", "inDrawer": true, "panelX": -56}, "afterEsc": {"active": "Menü", "vis": "hidden"}}
+{"w": 768, "h": 600, "motion": "reduce", "afterOpen60ms": {"active": "İçeriğe geç\n\n    \n  ", "inDrawer": false, "panelX": 0}, "afterEsc": {"active": "Menü", "vis": "hidden"}}
+{"w": 768, "h": 600, "motion": "no-preference", "afterOpen60ms": {"active": "Menüyü kapat", "inDrawer": true, "panelX": -72}, "afterEsc": {"active": "Menü", "vis": "hidden"}}
+
+## B3 kök neden ölçümü (b3x.tmpl.js, 360x640, reduce): tıklama anında
+{
+ "sync": {
+  "drawer": "visible",
+  "drawerTransition": "none",
+  "brandVis": "hidden",
+  "brandTransition": "all 1e-05s",
+  "closeVis": "hidden",
+  "active": "BODY"
+ },
+ "after50": {
+  "closeVis": "visible",
+  "focusOk": true
+ }
+}
+
+
+# Tur 2 (2026-11-16), .qa/f6b3, port 5721, temiz App_Data kopyası
+
+## B1 pano "Şu an sahada" rozet sağ kenarı (rz.tmpl.js), @R = rozet sağ kenarı - kart sağ iç kenarı
+360 T1-H1-M01-P2026-5 td[200-330] innerR 330 Devam ediyor@R0 | Devam ediyor
+360 T1-H2-M05-A2026-1 td[126-330] innerR 330 Acil@R-138, Devam ediyor@R0 | Acil Devam ediyor
+360 T1-H1-M02-P2026-1 td[242-330] innerR 330 Açıldı@R0 | Açıldı Kilit bitişi 02:16
+360 T1-H2-M01-P2026-2 td[242-330] innerR 330 Açıldı@R0 | Açıldı Kilit bitişi 02:16
+768 T1-H1-M01-P2026-5 td[596-726] innerR 726 Devam ediyor@R0 | Devam ediyor
+768 T1-H2-M05-A2026-1 td[522-726] innerR 726 Acil@R-138, Devam ediyor@R0 | Acil Devam ediyor
+768 T1-H1-M02-P2026-1 td[638-726] innerR 726 Açıldı@R0 | Açıldı Kilit bitişi 02:16
+768 T1-H2-M01-P2026-2 td[638-726] innerR 726 Açıldı@R0 | Açıldı Kilit bitişi 02:16
+1024 T1-H1-M01-P2026-5 td[852-982] innerR 982 Devam ediyor@R0 | Devam ediyor
+1024 T1-H2-M05-A2026-1 td[778-982] innerR 982 Acil@R-138, Devam ediyor@R0 | Acil Devam ediyor
+1024 T1-H1-M02-P2026-1 td[894-982] innerR 982 Açıldı@R0 | Açıldı Kilit bitişi 02:16
+1024 T1-H2-M01-P2026-2 td[894-982] innerR 982 Açıldı@R0 | Açıldı Kilit bitişi 02:16
+
+## B1 kilit bitişi konumu (ev1.tmpl.js)
+{
+ "light": [
+  "T1-H1-M01-P2026-5 rozetAlt=-187",
+  "T1-H2-M05-A2026-1 rozetAlt=150",
+  "T1-H1-M02-P2026-1 rozetAlt=471 kilitÜst=479 kilitSağ=330 rozetSağ=330",
+  "T1-H2-M01-P2026-2 rozetAlt=796 kilitÜst=804 kilitSağ=330 rozetSağ=330"
+ ],
+ "dark": [
+  "T1-H1-M01-P2026-5 rozetAlt=-187",
+  "T1-H2-M05-A2026-1 rozetAlt=150",
+  "T1-H1-M02-P2026-1 rozetAlt=471 kilitÜst=479 kilitSağ=330 rozetSağ=330",
+  "T1-H2-M01-P2026-2 rozetAlt=796 kilitÜst=804 kilitSağ=330 rozetSağ=330"
+ ]
+}
+
+## B2 reduced-motion çekmece odağı (b23.tmpl.js), açıldıktan 60 ms sonra
+{"w": 360, "h": 640, "motion": "reduce", "afterOpen60ms": {"active": "Menüyü kapat", "inDrawer": true, "panelX": 0}, "afterEsc": {"active": "Menü", "vis": "hidden"}}
+{"w": 360, "h": 640, "motion": "no-preference", "afterOpen60ms": {"active": "Menüyü kapat", "inDrawer": true, "panelX": -85}, "afterEsc": {"active": "Menü", "vis": "hidden"}}
+{"w": 768, "h": 600, "motion": "reduce", "afterOpen60ms": {"active": "Menüyü kapat", "inDrawer": true, "panelX": 0}, "afterEsc": {"active": "Menü", "vis": "hidden"}}
+{"w": 768, "h": 600, "motion": "no-preference", "afterOpen60ms": {"active": "Menüyü kapat", "inDrawer": true, "panelX": -82}, "afterEsc": {"active": "Menü", "vis": "hidden"}}
+
+## B2 tıklama anı (b3x.tmpl.js)
+{
+ "sync": {
+  "drawer": "visible",
+  "drawerTransition": "none",
+  "brandVis": "visible",
+  "brandTransition": "none 0s",
+  "closeVis": "visible",
+  "active": "A"
+ },
+ "after50": {
+  "closeVis": "visible",
+  "focusOk": true
+ }
+}
+
+## Kart ayağı gerilemesi: 48 hücre, 342 ayak, kusurlu []
+
+## B4 lejant ve B6 Acil rozeti (ev2.tmpl.js)
+{
+ "legend-light": [
+  "rect:rgb(33, 82, 160)",
+  "rect:rgb(33, 82, 160)+rect:url(#phase-chart-hatch)",
+  "line:rgb(0, 0, 0)"
+ ],
+ "acil-light": {
+  "color": "rgb(170, 32, 22)",
+  "bg": "rgb(249, 224, 220)",
+  "border": "rgb(170, 32, 22)",
+  "vis": true
+ },
+ "legend-dark": [
+  "rect:rgb(122, 170, 235)",
+  "rect:rgb(122, 170, 235)+rect:url(#phase-chart-hatch)",
+  "line:rgb(0, 0, 0)"
+ ],
+ "acil-dark": {
+  "color": "rgb(246, 130, 116)",
+  "bg": "rgb(62, 28, 26)",
+  "border": "rgb(246, 130, 116)",
+  "vis": true
+ },
+ "console": []
+}
+
+## B6 grafik dolgu karşıtlığı (chart.tmpl.js)
+/reports/durations 360-light [Kayıt sayısı] sorun [] metin en düşük 15.96 çubuklar {"fill-chart-3": "track 4.26 / zemin 5.08", "track-vs-zemin": "1.19"}
+/reports/durations 360-light [Ortalama süre] sorun [] metin en düşük 5.97 çubuklar {"fill-chart-1": "track 6.00 / zemin 6.59", "track-vs-zemin": "1.10", "fill-chart-3": "track 4.26 / zemin 4.68"}
+/reports/durations 360-light [Ortalama net süre] sorun [] metin en düşük 5.71 çubuklar {"fill-chart-1": "track 6.00 / zemin 6.59", "url(#phase-chart-hatch)": "desen", "marker": "track 13.38 / bar 2.23", "track-vs-zemin": "1.10"}
+/dashboard 360-light [Açılan kayıt] sorun [] metin en düşük 6.48 çubuklar {"fill-chart-1": "track 6.00 / zemin 7.16", "track-vs-zemin": "1.19", "fill-chart-2": "track 3.61 / zemin 4.31"}
+/reports/durations 768-light [Kayıt sayısı] sorun [] metin en düşük 15.96 çubuklar {"fill-chart-3": "track 4.26 / zemin 5.08", "track-vs-zemin": "1.19"}
+/reports/durations 768-light [Ortalama süre] sorun [] metin en düşük 5.97 çubuklar {"fill-chart-1": "track 6.00 / zemin 6.59", "track-vs-zemin": "1.10", "fill-chart-3": "track 4.26 / zemin 4.68"}
+/reports/durations 768-light [Ortalama net süre] sorun [] metin en düşük 5.71 çubuklar {"fill-chart-1": "track 6.00 / zemin 6.59", "url(#phase-chart-hatch)": "desen", "marker": "track 13.38 / bar 2.23", "track-vs-zemin": "1.10"}
+/dashboard 768-light [Açılan kayıt] sorun [] metin en düşük 6.48 çubuklar {"fill-chart-1": "track 6.00 / zemin 7.16", "track-vs-zemin": "1.19", "fill-chart-2": "track 3.61 / zemin 4.31"}
+/reports/durations 1024-light [Kayıt sayısı] sorun [] metin en düşük 15.96 çubuklar {"fill-chart-3": "track 4.26 / zemin 5.08", "track-vs-zemin": "1.19"}
+/reports/durations 1024-light [Ortalama süre] sorun [] metin en düşük 5.97 çubuklar {"fill-chart-1": "track 6.00 / zemin 6.59", "track-vs-zemin": "1.10", "fill-chart-3": "track 4.26 / zemin 4.68"}
+/reports/durations 1024-light [Ortalama net süre] sorun [] metin en düşük 5.71 çubuklar {"fill-chart-1": "track 6.00 / zemin 6.59", "url(#phase-chart-hatch)": "desen", "marker": "track 13.38 / bar 2.23", "track-vs-zemin": "1.10"}
+/dashboard 1024-light [Açılan kayıt] sorun [] metin en düşük 6.48 çubuklar {"fill-chart-1": "track 6.00 / zemin 7.16", "track-vs-zemin": "1.19", "fill-chart-2": "track 3.61 / zemin 4.31"}
+/reports/durations 1440-light [Kayıt sayısı] sorun [] metin en düşük 15.96 çubuklar {"fill-chart-3": "track 4.26 / zemin 5.08", "track-vs-zemin": "1.19"}
+/reports/durations 1440-light [Ortalama süre] sorun [] metin en düşük 6.48 çubuklar {"fill-chart-1": "track 6.00 / zemin 7.16", "track-vs-zemin": "1.19", "fill-chart-3": "track 4.26 / zemin 5.08"}
+/reports/durations 1440-light [Ortalama net süre] sorun [] metin en düşük 6.21 çubuklar {"fill-chart-1": "track 6.00 / zemin 7.16", "url(#phase-chart-hatch)": "desen", "marker": "track 13.38 / bar 2.23", "track-vs-zemin": "1.19"}
+/dashboard 1440-light [Açılan kayıt] sorun [] metin en düşük 6.48 çubuklar {"fill-chart-1": "track 6.00 / zemin 7.16", "track-vs-zemin": "1.19", "fill-chart-2": "track 3.61 / zemin 4.31"}
+/reports/durations 360-dark [Kayıt sayısı] sorun [] metin en düşük 13.86 çubuklar {"fill-chart-3": "track 5.81 / zemin 6.54", "track-vs-zemin": "1.13"}
+/reports/durations 360-dark [Ortalama süre] sorun [] metin en düşük 7.20 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.74", "track-vs-zemin": "1.24", "fill-chart-3": "track 5.81 / zemin 7.20"}
+/reports/durations 360-dark [Ortalama net süre] sorun [] metin en düşük 7.20 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.74", "url(#phase-chart-hatch)": "desen", "marker": "track 12.31 / bar 1.97", "track-vs-zemin": "1.24"}
+/dashboard 360-dark [Açılan kayıt] sorun [] metin en düşük 6.54 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.03", "track-vs-zemin": "1.13", "fill-chart-2": "track 7.10 / zemin 7.99"}
+/reports/durations 768-dark [Kayıt sayısı] sorun [] metin en düşük 13.86 çubuklar {"fill-chart-3": "track 5.81 / zemin 6.54", "track-vs-zemin": "1.13"}
+/reports/durations 768-dark [Ortalama süre] sorun [] metin en düşük 7.20 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.74", "track-vs-zemin": "1.24", "fill-chart-3": "track 5.81 / zemin 7.20"}
+/reports/durations 768-dark [Ortalama net süre] sorun [] metin en düşük 7.20 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.74", "url(#phase-chart-hatch)": "desen", "marker": "track 12.31 / bar 1.97", "track-vs-zemin": "1.24"}
+/dashboard 768-dark [Açılan kayıt] sorun [] metin en düşük 6.54 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.03", "track-vs-zemin": "1.13", "fill-chart-2": "track 7.10 / zemin 7.99"}
+/reports/durations 1024-dark [Kayıt sayısı] sorun [] metin en düşük 13.86 çubuklar {"fill-chart-3": "track 5.81 / zemin 6.54", "track-vs-zemin": "1.13"}
+/reports/durations 1024-dark [Ortalama süre] sorun [] metin en düşük 7.20 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.74", "track-vs-zemin": "1.24", "fill-chart-3": "track 5.81 / zemin 7.20"}
+/reports/durations 1024-dark [Ortalama net süre] sorun [] metin en düşük 7.20 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.74", "url(#phase-chart-hatch)": "desen", "marker": "track 12.31 / bar 1.97", "track-vs-zemin": "1.24"}
+/dashboard 1024-dark [Açılan kayıt] sorun [] metin en düşük 6.54 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.03", "track-vs-zemin": "1.13", "fill-chart-2": "track 7.10 / zemin 7.99"}
+/reports/durations 1440-dark [Kayıt sayısı] sorun [] metin en düşük 13.86 çubuklar {"fill-chart-3": "track 5.81 / zemin 6.54", "track-vs-zemin": "1.13"}
+/reports/durations 1440-dark [Ortalama süre] sorun [] metin en düşük 6.54 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.03", "track-vs-zemin": "1.13", "fill-chart-3": "track 5.81 / zemin 6.54"}
+/reports/durations 1440-dark [Ortalama net süre] sorun [] metin en düşük 6.54 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.03", "url(#phase-chart-hatch)": "desen", "marker": "track 12.31 / bar 1.97", "track-vs-zemin": "1.13"}
+/dashboard 1440-dark [Açılan kayıt] sorun [] metin en düşük 6.54 çubuklar {"fill-chart-1": "track 6.24 / zemin 7.03", "track-vs-zemin": "1.13", "fill-chart-2": "track 7.10 / zemin 7.99"}

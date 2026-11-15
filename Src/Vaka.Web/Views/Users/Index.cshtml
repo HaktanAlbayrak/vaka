@@ -101,8 +101,8 @@
                     @foreach (var item in Model.Items)
                     {
                         <tr>
-                            <td data-label="Sicil no"><span class="record-no text-sm">@item.RegistryNo</span></td>
-                            <td data-label="Ad soyad" class="xl:max-w-xs break-words font-semibold stack-wide stack-lead">@item.FullName</td>
+                            <td data-label="Sicil no" class="stack-lead"><span class="record-no text-sm">@item.RegistryNo</span></td>
+                            <td data-label="Ad soyad" class="xl:max-w-xs break-words font-semibold stack-wide">@item.FullName</td>
                             <td data-label="Roller">
                                 <ul class="flex flex-wrap gap-1.5">
                                     @foreach (var role in item.Roles)
@@ -111,8 +111,8 @@
                                     }
                                 </ul>
                             </td>
-                            <td data-label="Durum">
-                                <div class="flex flex-wrap items-center gap-2">
+                            <td data-label="Durum" class="stack-badge">
+                                <div class="flex flex-wrap items-center justify-end gap-2">
                                     <partial name="_Badge" model='item.IsActive ? "user.active" : "user.inactive"' />
                                     @if (item.IsPinLocked)
                                     {
@@ -124,7 +124,7 @@
                                     }
                                 </div>
                             </td>
-                            <td data-label="İşlem" class="cell-action max-md:col-span-2 md:max-xl:col-span-3">
+                            <td data-label="İşlem" class="cell-action">
                                 @if (item.CanManage)
                                 {
                                     <a class="btn btn-secondary" href="/users/edit/@item.Id" aria-label="@item.FullName hesabını düzenle">

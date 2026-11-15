@@ -166,24 +166,29 @@
                     @foreach (var item in Model.Items)
                     {
                         <tr>
-                            <td data-label=""><span class="record-no text-sm xl:whitespace-nowrap">@item.RecordNo</span>@if (!string.IsNullOrEmpty(item.FieldBookRef)){<span class="mono mt-0.5 block text-xs text-muted">@item.FieldBookRef</span>}</td>
-                            <td data-label="Makine ve yer" class="stack-wide stack-lead xl:max-w-md break-words">
+                            <td data-label="" class="stack-lead"><span class="record-no text-sm xl:whitespace-nowrap">@item.RecordNo</span>@if (!string.IsNullOrEmpty(item.FieldBookRef)){<span class="mono mt-0.5 block text-xs text-muted">@item.FieldBookRef</span>}</td>
+                            <td data-label="Makine ve yer" class="stack-wide xl:max-w-md break-words">
                                 <span class="font-semibold">@item.MachineLabel</span>
                                 <span class="mt-0.5 block text-sm text-muted">@item.FacilityName, @item.LineName. @item.CleaningTypeName, versiyon @item.VersionNo</span>
+                                @if (item.HasBelowMinimum || item.HasExpiredMaterial)
+                                {
+                                    <span class="mt-2 flex flex-wrap items-center gap-2">
+                                        @if (item.HasBelowMinimum)
+                                        {
+                                            <span class="chip"><svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>Süre altı faz</span>
+                                        }
+                                        @if (item.HasExpiredMaterial)
+                                        {
+                                            <span class="chip"><svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#timer-off" /></svg>SKT geçmiş malzeme</span>
+                                        }
+                                    </span>
+                                }
                             </td>
                             <td data-label="Sahip" class="xl:max-w-[12rem] break-words">@item.OwnerName</td>
-                            <td data-label="Durum" class="md:max-xl:col-span-2">
-                                <div class="flex flex-wrap items-center gap-2">
+                            <td data-label="Durum" class="stack-badge">
+                                <div class="flex flex-wrap items-center justify-end gap-2">
                                     <partial name="_Badge" model='"CleaningTypeKind." + item.Kind' />
                                     <partial name="_Badge" model='"RecordStatus." + item.Status' />
-                                    @if (item.HasBelowMinimum)
-                                    {
-                                        <span class="chip"><svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>Süre altı faz</span>
-                                    }
-                                    @if (item.HasExpiredMaterial)
-                                    {
-                                        <span class="chip"><svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#timer-off" /></svg>SKT geçmiş malzeme</span>
-                                    }
                                 </div>
                             </td>
                             <td data-label="Açılış"><partial name="_Moment" model='(item.OpenedAtLocal, DateTime.MinValue)' /></td>
@@ -197,7 +202,7 @@
                                     <span aria-label="Net süre yok">-</span>
                                 }
                             </td>
-                            <td data-label="İşlem" class="cell-action md:max-xl:col-span-4">
+                            <td data-label="İşlem" class="cell-action">
                                 <a class="btn btn-secondary" href="@item.Url" data-busy-link aria-label="@item.RecordNo kaydının ayrıntısı">
                                     <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#file-text" /></svg>
                                     Ayrıntı

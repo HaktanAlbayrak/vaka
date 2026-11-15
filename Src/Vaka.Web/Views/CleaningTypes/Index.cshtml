@@ -80,10 +80,10 @@
                     @foreach (var item in Model.Items)
                     {
                         <tr>
-                            <td data-label="Kod"><span class="record-no text-sm">@item.Code</span></td>
-                            <td data-label="Ad" class="xl:max-w-xs break-words font-semibold stack-wide stack-lead">@item.Name</td>
+                            <td data-label="Kod" class="stack-lead"><span class="record-no text-sm">@item.Code</span></td>
+                            <td data-label="Ad" class="xl:max-w-xs break-words font-semibold stack-wide">@item.Name</td>
                             <td data-label="Tür"><partial name="_LabelBadge" model='(item.KindLabel, item.Kind == CleaningTypeKind.Planned ? "kind.planned" : "kind.emergency")' /></td>
-                            <td data-label="Versiyon" class="md:max-xl:col-span-2">
+                            <td data-label="Versiyon">
                                 <div class="space-y-1">
                                     @if (item.CurrentVersionNo is not null)
                                     {
@@ -109,8 +109,8 @@
                                     <span class="text-muted">Eşleme yok</span>
                                 }
                             </td>
-                            <td data-label="Durum"><partial name="_LabelBadge" model='(item.IsActive ? "Aktif" : "Pasif", item.IsActive ? "type.active" : "type.inactive")' /></td>
-                            <td data-label="İşlem" class="cell-action max-md:col-span-2 md:max-xl:col-span-4">
+                            <td data-label="Durum" class="stack-badge"><partial name="_LabelBadge" model='(item.IsActive ? "Aktif" : "Pasif", item.IsActive ? "type.active" : "type.inactive")' /></td>
+                            <td data-label="İşlem" class="cell-action">
                                 <div class="action-row">
                                     <a class="btn btn-secondary" href="/cleaning-types/details/@item.Id" aria-label="@item.Name tipinin detayını aç">
                                         <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#list" /></svg>

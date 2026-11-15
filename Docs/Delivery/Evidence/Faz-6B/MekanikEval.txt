@@ -1,0 +1,250 @@
+UiDelivery §3 mekanik eval ve G11 imzaları (m.tmpl.js). Hücre = sayfa x genişlik x tema/hareket.
+
+[t1] hücre 247, kategoriler: {'overflowing(yalnız sr-only thead TR/TH)': 43, 'smallTargets(label içinde onay/radyo):showInactive': 39, 'smallTargets(label içinde onay/radyo):showRetired': 13}
+  sayfalar: /cleaning-types, /cleaning-types/details/1, /dashboard, /facilities, /facilities/details/1, /machines, /materials, /materials/details/1, /records, /records/details/1, /records/details/12, /records/details/3, /records/integrity/3, /records/integrity/7, /reports/durations, /reports/materials?mode=Lot&MaterialLotId=2, /reports/materials?mode=Machine&MachineId=1, /shifts, /users
+  hücreler: 1024x768-dark, 1024x768-light, 1440x900-dark, 1440x900-light, 1920x1080-light, 320x640-light, 360x800-dark, 360x800-light, 640x400-light, 768x1024-dark, 768x1024-light
+
+[t2] hücre 42, kategoriler: {'overflowing(yalnız sr-only thead TR/TH)': 2, 'smallTargets(label içinde onay/radyo):CleaningTypeId': 6}
+  sayfalar: /account/security, /emergencies/create, /machine-board, /my-work, /records, /records/create, /records/run/6
+  hücreler: 1024x768-light, 1440x900-dark, 1440x900-light, 360x800-dark, 360x800-light, 768x1024-light
+
+[t3] hücre 18, kategoriler: {'overflowing(yalnız sr-only thead TR/TH)': 2, 'smallTargets(label içinde onay/radyo):SelectedRoles': 6}
+  sayfalar: /account/security, /users, /users/create
+  hücreler: 1024x768-light, 1440x900-dark, 1440x900-light, 360x800-dark, 360x800-light, 768x1024-light
+
+[t4] hücre 66, kategoriler: {'smallTargets(label içinde onay/radyo):IsActive': 12, 'HTTP 404 /shifts/create': 6, 'konsol /shifts/create': 6, 'smallTargets(label içinde onay/radyo):Kind': 6, 'smallTargets(label içinde onay/radyo):SelectedRoles': 6}
+  sayfalar: /account/security, /cleaning-types/create, /facilities/create, /machine-board, /machines/create, /materials/create, /records?query=zzzz, /reports/durations?from=2030-01-01&to=2030-01-31, /reports/materials, /shifts/create, /users/create
+  hücreler: 1024x768-light, 1440x900-dark, 1440x900-light, 360x800-dark, 360x800-light, 768x1024-light
+
+G11 imzaları (t1, açık tema 360/768/1024; koyu, 320 ve 640 aynı)
+/dashboard [Şu an sahada]
+   360 (2 sütun): Baş[Kayıt no|Durum(alt satır)] Gövde[Makine:tam@1 Sahip:1@2 Şu anki adım:1@2 Açılış:1@3] Ayak[İşlem(1)]  SORUN ['rozet sağ -95.6']
+   768 (3 sütun): Baş[Kayıt no|Durum] Gövde[Makine:tam@1 Sahip:1@2 Şu anki adım:1@2 Açılış:1@2] Ayak[İşlem(1)]  SORUN ['rozet sağ -95.6']
+   1024 (3 sütun): Baş[Kayıt no|Durum] Gövde[Makine:tam@1 Sahip:1@2 Şu anki adım:1@2 Açılış:1@2] Ayak[İşlem(1)]  SORUN ['rozet sağ -95.6']
+/dashboard [Süre altında tamamlanan fazlar]
+   360 (2 sütun): Baş[Kayıt no|-] Gövde[Faz ve makine:tam@1 Gerekçe:tam@2 Net süre:1@3 Asgari süre:1@3 Tamamlanma:1@4] Ayak[İşlem(1)]
+   768 (3 sütun): Baş[Kayıt no|-] Gövde[Faz ve makine:tam@1 Gerekçe:tam@2 Net süre:1@3 Asgari süre:1@3 Tamamlanma:1@3] Ayak[İşlem(1)]
+   1024 (3 sütun): Baş[Kayıt no|-] Gövde[Faz ve makine:tam@1 Gerekçe:tam@2 Net süre:1@3 Asgari süre:1@3 Tamamlanma:1@3] Ayak[İşlem(1)]
+/dashboard [Son tamamlananlar]
+   360 (2 sütun): Baş[Kayıt no|Tür] Gövde[Makine:tam@1 Tamamlanma:1@2 Net süre:1@2 Efor:1@3] Ayak[İşlem(1)]
+   768 (3 sütun): Baş[Kayıt no|Tür] Gövde[Makine:tam@1 Tamamlanma:1@2 Net süre:1@2 Efor:1@2] Ayak[İşlem(1)]
+   1024 (3 sütun): Baş[Kayıt no|Tür] Gövde[Makine:tam@1 Tamamlanma:1@2 Net süre:1@2 Efor:1@2] Ayak[İşlem(1)]
+/users [Kullanıcılar, toplam 14 kayıt, say]
+   360 (2 sütun): Baş[Sicil no|Durum] Gövde[Ad soyad:tam@1 Roller:1@2] Ayak[İşlem(1)]
+   768 (3 sütun): Baş[Sicil no|Durum] Gövde[Ad soyad:tam@1 Roller:1@2] Ayak[İşlem(1)]
+   1024 (3 sütun): Baş[Sicil no|Durum] Gövde[Ad soyad:tam@1 Roller:1@2] Ayak[İşlem(1)]
+/facilities [Tesisler, 2 kayıt]
+   360 (2 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Hat:1@2 Vardiya:1@2] Ayak[İşlem(2)]
+   768 (3 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Hat:1@2 Vardiya:1@2] Ayak[İşlem(2)]
+   1024 (3 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Hat:1@2 Vardiya:1@2] Ayak[İşlem(2)]
+/facilities/details/1 [Hatlar]
+   360 (2 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Makine:1@2] Ayak[İşlem(1)]
+   768 (3 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Makine:1@2] Ayak[İşlem(1)]
+   1024 (2 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Makine:1@2] Ayak[İşlem(1)]
+/machines [Makineler, toplam 7 kayıt, sayfa 1]
+   360 (2 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Tesis ve hat:1@2] Ayak[İşlem(2)]
+   768 (3 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Tesis ve hat:1@2] Ayak[İşlem(2)]
+   1024 (3 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Tesis ve hat:1@2] Ayak[İşlem(2)]
+/shifts [Ana tesis vardiyaları, 3 kayıt]
+   360 (2 sütun): Baş[Ad|Durum] Gövde[Başlangıç:1@1 Bitiş:1@1] Ayak[İşlem(1)]
+   768 (3 sütun): Baş[Ad|Durum] Gövde[Başlangıç:1@1 Bitiş:1@1] Ayak[İşlem(1)]
+   1024 (3 sütun): Baş[Ad|Durum] Gövde[Başlangıç:1@1 Bitiş:1@1] Ayak[İşlem(1)]
+/materials [Malzemeler, toplam 2 kayıt, sayfa ]
+   360 (2 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Lotlar:1@2] Ayak[İşlem(2)]
+   768 (3 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Lotlar:1@2] Ayak[İşlem(2)]
+   1024 (3 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Lotlar:1@2] Ayak[İşlem(2)]
+/materials/details/1 [Lotlar]
+   360 (2 sütun): Baş[Lot no|Durum] Gövde[Son kullanma tarihi:1@1] Ayak[İşlem(1)]
+   768 (3 sütun): Baş[Lot no|Durum] Gövde[Son kullanma tarihi:1@1] Ayak[İşlem(1)]
+   1024 (2 sütun): Baş[Lot no|Durum] Gövde[Son kullanma tarihi:1@1] Ayak[İşlem(1)]
+/cleaning-types [Temizlik tipleri, 4 kayıt]
+   360 (2 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Tür:1@2 Versiyon:1@2 Makine:1@3] Ayak[İşlem(2)]
+   768 (3 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Tür:1@2 Versiyon:1@2 Makine:1@2] Ayak[İşlem(2)]
+   1024 (3 sütun): Baş[Kod|Durum] Gövde[Ad:tam@1 Tür:1@2 Versiyon:1@2 Makine:1@2] Ayak[İşlem(2)]
+/cleaning-types/details/1 [Prosedür versiyonları]
+   360 (2 sütun): Baş[Versiyon|Durum] Gövde[Yayın:tam@1 Doküman no:1@2] Ayak[İşlem(1)]
+   768 (3 sütun): Baş[Versiyon|Durum] Gövde[Yayın:tam@1 Doküman no:1@2] Ayak[İşlem(1)]
+   1024 (2 sütun): Baş[Versiyon|Durum] Gövde[Yayın:tam@1 Doküman no:1@2] Ayak[İşlem(1)]
+/records [Temizlik kayıtları, toplam 12 kayı]
+   360 (2 sütun): Baş[Kayıt no|Durum(alt satır)] Gövde[Makine ve yer:tam@1 Sahip:1@2 Açılış:1@2 Net süre:1@3] Ayak[İşlem(1)]
+   768 (3 sütun): Baş[Kayıt no|Durum] Gövde[Makine ve yer:tam@1 Sahip:1@2 Açılış:1@2 Net süre:1@2] Ayak[İşlem(1)]
+   1024 (3 sütun): Baş[Kayıt no|Durum] Gövde[Makine ve yer:tam@1 Sahip:1@2 Açılış:1@2 Net süre:1@2] Ayak[İşlem(1)]
+/records/details/3 [Kayıt molaları, 1 mola]
+   360 (2 sütun): Baş[Mola|-] Gövde[Başlangıç:1@1 Bitiş:1@1 Süre:1@2 Kapanış:1@2] Ayak[yok]
+   768 (3 sütun): Baş[Mola|-] Gövde[Başlangıç:1@1 Bitiş:1@1 Süre:1@1 Kapanış:1@2] Ayak[yok]
+   1024 (3 sütun): Baş[Mola|-] Gövde[Başlangıç:1@1 Bitiş:1@1 Süre:1@1 Kapanış:1@2] Ayak[yok]
+/records/details/3 [Kaydın olay günlüğü, 14 olay, sunu]
+   360 (2 sütun): Baş[Olay|-] Gövde[Özet:tam@1 Sıra:1@2 Zaman:1@2 Yapan:1@3] Ayak[yok]
+   768 (3 sütun): Baş[Olay|-] Gövde[Özet:tam@1 Sıra:1@2 Zaman:1@2 Yapan:1@2] Ayak[yok]
+   1024 (3 sütun): Baş[Olay|-] Gövde[Özet:tam@1 Sıra:1@2 Zaman:1@2 Yapan:1@2] Ayak[yok]
+/records/details/1 [Kayıtta kullanılan malzemeler, 4 s]
+   360 (2 sütun): Baş[Malzeme|-] Gövde[Lot no:1@1 SKT:1@1 Giren:1@2 Giriş zamanı:1@2] Ayak[yok]
+   768 (3 sütun): Baş[Malzeme|-] Gövde[Lot no:1@1 SKT:1@1 Giren:1@1 Giriş zamanı:1@2] Ayak[yok]
+   1024 (3 sütun): Baş[Malzeme|-] Gövde[Lot no:1@1 SKT:1@1 Giren:1@1 Giriş zamanı:1@2] Ayak[yok]
+/records/details/1 [Kaydın olay günlüğü, 2 olay, sunuc]
+   360 (2 sütun): Baş[Olay|-] Gövde[Özet:tam@1 Sıra:1@2 Zaman:1@2 Yapan:1@3] Ayak[yok]
+   768 (3 sütun): Baş[Olay|-] Gövde[Özet:tam@1 Sıra:1@2 Zaman:1@2 Yapan:1@2] Ayak[yok]
+   1024 (3 sütun): Baş[Olay|-] Gövde[Özet:tam@1 Sıra:1@2 Zaman:1@2 Yapan:1@2] Ayak[yok]
+/records/details/12 [Kaydın olay günlüğü, 2 olay, sunuc]
+   360 (2 sütun): Baş[Olay|-] Gövde[Özet:tam@1 Sıra:1@2 Zaman:1@2 Yapan:1@3] Ayak[yok]
+   768 (3 sütun): Baş[Olay|-] Gövde[Özet:tam@1 Sıra:1@2 Zaman:1@2 Yapan:1@2] Ayak[yok]
+   1024 (3 sütun): Baş[Olay|-] Gövde[Özet:tam@1 Sıra:1@2 Zaman:1@2 Yapan:1@2] Ayak[yok]
+/records/integrity/3 [Olay zinciri doğrulaması, 14 olay]
+   360 (2 sütun): Baş[Olay|Durum(alt satır)] Gövde[Sıra:1@1 Zaman:1@1 Özet kodu:1@2] Ayak[yok]
+   768 (3 sütun): Baş[Olay|Durum] Gövde[Sıra:1@1 Zaman:1@1 Özet kodu:1@1] Ayak[yok]
+   1024 (3 sütun): Baş[Olay|Durum] Gövde[Sıra:1@1 Zaman:1@1 Özet kodu:1@1] Ayak[yok]
+/records/integrity/7 [Olay zinciri doğrulaması, 1 olay]
+   360 (2 sütun): Baş[Olay|Durum] Gövde[Sıra:1@1 Zaman:1@1 Özet kodu:1@2] Ayak[yok]
+   768 (3 sütun): Baş[Olay|Durum] Gövde[Sıra:1@1 Zaman:1@1 Özet kodu:1@1] Ayak[yok]
+   1024 (3 sütun): Baş[Olay|Durum] Gövde[Sıra:1@1 Zaman:1@1 Özet kodu:1@1] Ayak[yok]
+/reports/durations [Makine bazında ortalama]
+   360 (2 sütun): Baş[Makine ve tip|-] Gövde[Kayıt:1@1 Brüt:1@1 Mola:1@2 Net:1@2 Efor:1@3] Ayak[yok]
+   768 (3 sütun): Baş[Makine ve tip|-] Gövde[Kayıt:1@1 Brüt:1@1 Mola:1@1 Net:1@2 Efor:1@2] Ayak[yok]
+   1024 (3 sütun): Baş[Makine ve tip|-] Gövde[Kayıt:1@1 Brüt:1@1 Mola:1@1 Net:1@2 Efor:1@2] Ayak[yok]
+/reports/durations [Faz bazında ortalama net süre]
+   360 (2 sütun): Baş[Tip, versiyon ve faz|-] Gövde[Asgari süre:1@1 Kayıt:1@1 Ort. net:1@2 Süre altı:1@2] Ayak[yok]
+   768 (3 sütun): Baş[Tip, versiyon ve faz|-] Gövde[Asgari süre:1@1 Kayıt:1@1 Ort. net:1@1 Süre altı:1@2] Ayak[yok]
+   1024 (3 sütun): Baş[Tip, versiyon ve faz|-] Gövde[Asgari süre:1@1 Kayıt:1@1 Ort. net:1@1 Süre altı:1@2] Ayak[yok]
+/reports/durations [En uzun süren adımlar]
+   360 (2 sütun): Baş[Adım ve tip|-] Gövde[Faz:1@1 Kayıt:1@1 Ort. süre:1@2 En uzun:1@2] Ayak[yok]
+   768 (3 sütun): Baş[Adım ve tip|-] Gövde[Faz:1@1 Kayıt:1@1 Ort. süre:1@1 En uzun:1@2] Ayak[yok]
+   1024 (3 sütun): Baş[Adım ve tip|-] Gövde[Faz:1@1 Kayıt:1@1 Ort. süre:1@1 En uzun:1@2] Ayak[yok]
+/reports/materials?mode=Lot&MaterialLotId=2 [MLZ001 - Yüzey dezenfektanı, lot L]
+   360 (2 sütun): Baş[Kayıt no|Durum] Gövde[Makine:tam@1 Açılış:1@2] Ayak[İşlem(1)]
+   768 (3 sütun): Baş[Kayıt no|Durum] Gövde[Makine:tam@1 Açılış:1@2] Ayak[İşlem(1)]
+   1024 (3 sütun): Baş[Kayıt no|Durum] Gövde[Makine:tam@1 Açılış:1@2] Ayak[İşlem(1)]
+/reports/materials?mode=Machine&MachineId=1 [T1-H1-M01 - Karıştırıcı]
+   360 (2 sütun): Baş[Malzeme|-] Gövde[Giriş:1@1 Kayıt no:1@1 Lot no:1@2 SKT:1@2] Ayak[İşlem(1)]
+   768 (3 sütun): Baş[Malzeme|-] Gövde[Giriş:1@1 Kayıt no:1@1 Lot no:1@1 SKT:1@2] Ayak[İşlem(1)]
+   1024 (3 sütun): Baş[Malzeme|-] Gövde[Giriş:1@1 Kayıt no:1@1 Lot no:1@1 SKT:1@2] Ayak[İşlem(1)]
+
+1280 ve üstü tablo kipi (t1, 1440 açık)
+   /dashboard [Son 7 gün] table minH=45 köşe=10px overflow=visible
+   /dashboard [Şu an sahada] table minH=69 köşe=10px overflow=clip
+   /dashboard [Süre altında tamamlanan fazlar] table minH=69 köşe=10px overflow=clip
+   /dashboard [Son tamamlananlar] table minH=69 köşe=10px overflow=clip
+   /users [Kullanıcılar, toplam 14 kayıt,] table minH=56 köşe=10px overflow=clip
+   /facilities [Tesisler, 2 kayıt] table minH=69 köşe=10px overflow=clip
+   /facilities/details/1 [Hatlar] table minH=69 köşe=10px overflow=clip
+   /machines [Makineler, toplam 7 kayıt, say] table minH=69 köşe=10px overflow=clip
+   /shifts [Ana tesis vardiyaları, 3 kayıt] table minH=69 köşe=10px overflow=clip
+   /materials [Malzemeler, toplam 2 kayıt, sa] table minH=69 köşe=10px overflow=clip
+   /materials/details/1 [Lotlar] table minH=69 köşe=10px overflow=clip
+   /cleaning-types [Temizlik tipleri, 4 kayıt] table minH=69 köşe=10px overflow=clip
+   /cleaning-types/details/1 [Prosedür versiyonları] table minH=69 köşe=10px overflow=clip
+   /records [Temizlik kayıtları, toplam 12 ] table minH=87 köşe=10px overflow=clip
+   /records/details/3 [Kayıt molaları, 1 mola] table minH=73 köşe=10px overflow=clip
+   /records/details/3 [Kaydın olay günlüğü, 14 olay, ] table minH=56 köşe=10px overflow=clip
+   /records/details/1 [Kayıtta kullanılan malzemeler,] table minH=56 köşe=10px overflow=clip
+   /records/details/1 [Kaydın olay günlüğü, 2 olay, s] table minH=56 köşe=10px overflow=clip
+   /records/details/12 [Kaydın olay günlüğü, 2 olay, s] table minH=56 köşe=10px overflow=clip
+   /records/integrity/3 [Olay zinciri doğrulaması, 14 o] table minH=67 köşe=10px overflow=clip
+   /records/integrity/7 [Olay zinciri doğrulaması, 1 ol] table minH=56 köşe=10px overflow=clip
+   /reports/durations [Makine bazında ortalama] table minH=67 köşe=10px overflow=clip
+   /reports/durations [Faz bazında ortalama net süre] table minH=67 köşe=10px overflow=clip
+   /reports/durations [En uzun süren adımlar] table minH=67 köşe=10px overflow=clip
+   /reports/materials?mode=Lot&MaterialLotId=2 [MLZ001 - Yüzey dezenfektanı, l] table minH=69 köşe=10px overflow=clip
+   /reports/materials?mode=Machine&MachineId=1 [T1-H1-M01 - Karıştırıcı] table minH=69 köşe=10px overflow=clip
+   /dashboard [Son 7 gün] table minH=45 köşe=10px overflow=visible
+   /dashboard [Şu an sahada] table minH=69 köşe=10px overflow=clip
+   /dashboard [Süre altında tamamlanan fazlar] table minH=69 köşe=10px overflow=clip
+   /dashboard [Son tamamlananlar] table minH=69 köşe=10px overflow=clip
+   /users [Kullanıcılar, toplam 14 kayıt,] table minH=56 köşe=10px overflow=clip
+   /facilities [Tesisler, 2 kayıt] table minH=69 köşe=10px overflow=clip
+   /facilities/details/1 [Hatlar] table minH=69 köşe=10px overflow=clip
+   /machines [Makineler, toplam 7 kayıt, say] table minH=69 köşe=10px overflow=clip
+   /shifts [Ana tesis vardiyaları, 3 kayıt] table minH=69 köşe=10px overflow=clip
+   /materials [Malzemeler, toplam 2 kayıt, sa] table minH=69 köşe=10px overflow=clip
+   /materials/details/1 [Lotlar] table minH=69 köşe=10px overflow=clip
+   /cleaning-types [Temizlik tipleri, 4 kayıt] table minH=69 köşe=10px overflow=clip
+   /cleaning-types/details/1 [Prosedür versiyonları] table minH=69 köşe=10px overflow=clip
+   /records [Temizlik kayıtları, toplam 12 ] table minH=87 köşe=10px overflow=clip
+   /records/details/3 [Kayıt molaları, 1 mola] table minH=73 köşe=10px overflow=clip
+   /records/details/3 [Kaydın olay günlüğü, 14 olay, ] table minH=56 köşe=10px overflow=clip
+   /records/details/1 [Kayıtta kullanılan malzemeler,] table minH=56 köşe=10px overflow=clip
+   /records/details/1 [Kaydın olay günlüğü, 2 olay, s] table minH=56 köşe=10px overflow=clip
+   /records/details/12 [Kaydın olay günlüğü, 2 olay, s] table minH=56 köşe=10px overflow=clip
+   /records/integrity/3 [Olay zinciri doğrulaması, 14 o] table minH=67 köşe=10px overflow=clip
+   /records/integrity/7 [Olay zinciri doğrulaması, 1 ol] table minH=56 köşe=10px overflow=clip
+   /reports/durations [Makine bazında ortalama] table minH=67 köşe=10px overflow=clip
+   /reports/durations [Faz bazında ortalama net süre] table minH=67 köşe=10px overflow=clip
+   /reports/durations [En uzun süren adımlar] table minH=67 köşe=10px overflow=clip
+   /reports/materials?mode=Lot&MaterialLotId=2 [MLZ001 - Yüzey dezenfektanı, l] table minH=69 köşe=10px overflow=clip
+   /reports/materials?mode=Machine&MachineId=1 [T1-H1-M01 - Karıştırıcı] table minH=69 köşe=10px overflow=clip
+
+PL-83 Son 7 gün tablosu: satır 45 px (360/768/1024/1440), Gün sola, Planlı ve Acil sağa hizalı mono; 360 px tablo taşması ve kaydırması yok.
+
+1920 ve reduced-motion (w19.tmpl.js): {  "/dashboard": {   "page": 1600,   "anims": 0,   "bodyFont": "16px"  },  "/reports/durations": {   "page": 1600,   "anims": 0,   "bodyFont": "16px"  },  "/records": {   "page": 1600,   "anims": 0,   "bodyFont": "16px"  },  "/users": {   "page": 1600,   "anims": 0,   "bodyFont": "16px"  },  "mobileBody": "16px" }
+
+G12 form ve panel hizası (g12.tmpl.js, an12.py). [f] eski PL-55 son satır doldurma ölçümüdür; PL-77 son satırda boşluğa izin verdiği için sayılmadı:
+===== fo 18
+  kontrol sayıları {'a+': 48, 'b+': 7, 'c+': 132, 'd+': 72, 'e+': 7} kusurlu hücre 0
+===== fm 30
+   /dashboard 360x800-light 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: satır 5 sağ kenar 158 px kısa
+      [f] satır kartı tablosu 10 satır KUSUR kart 1: satır 5 sağ kenar 158 px kısa | kart 2: satır 5 sağ kenar 158 px kısa | kart 3: satır 5 sağ kenar 158 px kısa (+7)
+      [f] satır kartı tablosu 10 satır KUSUR kart 1: satır 4 sağ kenar 158 px kısa | kart 2: satır 4 sağ kenar 158 px kısa | kart 3: satır 4 sağ kenar 158 px kısa (+7)
+   /reports/durations 360x800-light 
+      [f] satır kartı tablosu 8 satır KUSUR kart 1: satır 4 sağ kenar 158 px kısa | kart 2: satır 4 sağ kenar 158 px kısa | kart 3: satır 4 sağ kenar 158 px kısa (+5)
+   /records 360x800-light 
+      [f] satır kartı tablosu 15 satır KUSUR kart 1: satır 5 sağ kenar 158 px kısa | kart 2: satır 5 sağ kenar 158 px kısa | kart 3: satır 5 sağ kenar 158 px kısa (+12)
+   /reports/durations 768x1024-light 
+      [f] satır kartı tablosu 8 satır KUSUR kart 1: satır 3 sağ kenar 233.3 px kısa | kart 2: satır 3 sağ kenar 233.3 px kısa | kart 3: satır 3 sağ kenar 233.3 px kısa (+5)
+      [f] satır kartı tablosu 8 satır KUSUR kart 1: satır 3 sağ kenar 466.7 px kısa | kart 2: satır 3 sağ kenar 466.7 px kısa | kart 3: satır 3 sağ kenar 466.7 px kısa (+5)
+      [f] satır kartı tablosu 10 satır KUSUR kart 1: satır 3 sağ kenar 466.7 px kısa | kart 2: satır 3 sağ kenar 466.7 px kısa | kart 3: satır 3 sağ kenar 466.7 px kısa (+7)
+   /reports/durations 1024x768-light 
+      [f] satır kartı tablosu 8 satır KUSUR kart 1: satır 3 sağ kenar 236 px kısa | kart 2: satır 3 sağ kenar 236 px kısa | kart 3: satır 3 sağ kenar 236 px kısa (+5)
+      [f] satır kartı tablosu 8 satır KUSUR kart 1: satır 3 sağ kenar 472 px kısa | kart 2: satır 3 sağ kenar 472 px kısa | kart 3: satır 3 sağ kenar 472 px kısa (+5)
+      [f] satır kartı tablosu 10 satır KUSUR kart 1: satır 3 sağ kenar 472 px kısa | kart 2: satır 3 sağ kenar 472 px kısa | kart 3: satır 3 sağ kenar 472 px kısa (+7)
+   /dashboard 360x800-dark 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: satır 5 sağ kenar 158 px kısa
+      [f] satır kartı tablosu 10 satır KUSUR kart 1: satır 5 sağ kenar 158 px kısa | kart 2: satır 5 sağ kenar 158 px kısa | kart 3: satır 5 sağ kenar 158 px kısa (+7)
+      [f] satır kartı tablosu 10 satır KUSUR kart 1: satır 4 sağ kenar 158 px kısa | kart 2: satır 4 sağ kenar 158 px kısa | kart 3: satır 4 sağ kenar 158 px kısa (+7)
+   /reports/durations 360x800-dark 
+      [f] satır kartı tablosu 8 satır KUSUR kart 1: satır 4 sağ kenar 158 px kısa | kart 2: satır 4 sağ kenar 158 px kısa | kart 3: satır 4 sağ kenar 158 px kısa (+5)
+   /records 360x800-dark 
+      [f] satır kartı tablosu 15 satır KUSUR kart 1: satır 5 sağ kenar 158 px kısa | kart 2: satır 5 sağ kenar 158 px kısa | kart 3: satır 5 sağ kenar 158 px kısa (+12)
+  kontrol sayıları {'a+': 6, 'b+': 52, 'c+': 132, 'd+': 78, 'e+': 22, 'f+': 12, 'f-': 16} kusurlu hücre 8
+
+
+# Tur 2 (2026-11-16), .qa/f6b3, port 5721, temiz App_Data kopyası
+[t1] hücre 209, kart kusuru 0, kategoriler {'overflowing(yalnız sr-only thead TR/TH)': 42, 'smallTargets(label içinde onay/radyo)': 44}
+  sayfalar: /cleaning-types, /cleaning-types/details/1, /dashboard, /facilities, /facilities/details/1, /machines, /materials, /materials/details/1, /records, /records/details/1, /records/details/3, /records/details/7, /records/integrity/3, /reports/durations, /reports/durations?from=2030-01-01&to=2030-01-31, /reports/materials?mode=Lot&MaterialLotId=2, /reports/materials?mode=Machine&MachineId=1, /shifts, /users
+  hücreler: 1024x768-dark, 1024x768-light, 1440x900-dark, 1440x900-light, 1920x1080-light, 320x640-light, 360x800-dark, 360x800-light, 768x1024-dark, 768x1024-light
+[t2] hücre 9, kart kusuru 0, kategoriler temiz
+  sayfalar: /my-work, /records/create, /records/run/6
+  hücreler: 1024x768-light, 1440x900-dark, 360x800-light
+[t3] hücre 4, kart kusuru 0, kategoriler {'overflowing(yalnız sr-only thead TR/TH)': 1}
+  sayfalar: /dashboard, /my-work
+  hücreler: 1440x900-light, 360x800-light
+G11 imza kümesi tur 1 ile aynı (360/768/1024 açık); 1280 üstü tablo kipi kusur 0.
+
+G12 (g12.tmpl.js, an12.py):
+===== fo 12
+  kontrol sayıları {'a+': 6, 'b+': 4, 'c+': 54, 'd+': 42, 'e+': 4} kusurlu hücre 0
+===== fm 24
+   /dashboard 360x800-light 
+      [f] satır kartı tablosu 4 satır KUSUR kart 1: satır 5 sağ kenar 158 px kısa | kart 2: satır 5 sağ kenar 158 px kısa | kart 3: satır 4 sağ kenar 158 px kısa (+1)
+      [f] satır kartı tablosu 5 satır KUSUR kart 1: satır 5 sağ kenar 158 px kısa | kart 2: satır 5 sağ kenar 158 px kısa | kart 3: satır 5 sağ kenar 158 px kısa (+2)
+      [f] satır kartı tablosu 4 satır KUSUR kart 1: satır 4 sağ kenar 158 px kısa | kart 2: satır 4 sağ kenar 158 px kısa | kart 3: satır 4 sağ kenar 158 px kısa (+1)
+   /reports/durations 360x800-light 
+      [f] satır kartı tablosu 3 satır KUSUR kart 1: satır 4 sağ kenar 158 px kısa | kart 2: satır 4 sağ kenar 158 px kısa | kart 3: satır 4 sağ kenar 158 px kısa
+   /records 360x800-light 
+      [f] satır kartı tablosu 9 satır KUSUR kart 1: satır 5 sağ kenar 158 px kısa | kart 2: satır 5 sağ kenar 158 px kısa | kart 3: satır 5 sağ kenar 158 px kısa (+6)
+   /reports/durations 768x1024-light 
+      [f] satır kartı tablosu 3 satır KUSUR kart 1: satır 3 sağ kenar 233.3 px kısa | kart 2: satır 3 sağ kenar 233.3 px kısa | kart 3: satır 3 sağ kenar 233.3 px kısa
+      [f] satır kartı tablosu 5 satır KUSUR kart 1: satır 3 sağ kenar 466.7 px kısa | kart 2: satır 3 sağ kenar 466.7 px kısa | kart 3: satır 3 sağ kenar 466.7 px kısa (+2)
+      [f] satır kartı tablosu 10 satır KUSUR kart 1: satır 3 sağ kenar 466.7 px kısa | kart 2: satır 3 sağ kenar 466.7 px kısa | kart 3: satır 3 sağ kenar 466.7 px kısa (+7)
+   /reports/durations 1024x768-light 
+      [f] satır kartı tablosu 3 satır KUSUR kart 1: satır 3 sağ kenar 236 px kısa | kart 2: satır 3 sağ kenar 236 px kısa | kart 3: satır 3 sağ kenar 236 px kısa
+      [f] satır kartı tablosu 5 satır KUSUR kart 1: satır 3 sağ kenar 472 px kısa | kart 2: satır 3 sağ kenar 472 px kısa | kart 3: satır 3 sağ kenar 472 px kısa (+2)
+      [f] satır kartı tablosu 10 satır KUSUR kart 1: satır 3 sağ kenar 472 px kısa | kart 2: satır 3 sağ kenar 472 px kısa | kart 3: satır 3 sağ kenar 472 px kısa (+7)
+   /dashboard 360x800-dark 
+      [f] satır kartı tablosu 4 satır KUSUR kart 1: satır 5 sağ kenar 158 px kısa | kart 2: satır 5 sağ kenar 158 px kısa | kart 3: satır 4 sağ kenar 158 px kısa (+1)
+      [f] satır kartı tablosu 5 satır KUSUR kart 1: satır 5 sağ kenar 158 px kısa | kart 2: satır 5 sağ kenar 158 px kısa | kart 3: satır 5 sağ kenar 158 px kısa (+2)
+      [f] satır kartı tablosu 4 satır KUSUR kart 1: satır 4 sağ kenar 158 px kısa | kart 2: satır 4 sağ kenar 158 px kısa | kart 3: satır 4 sağ kenar 158 px kısa (+1)
+   /reports/durations 360x800-dark 
+      [f] satır kartı tablosu 3 satır KUSUR kart 1: satır 4 sağ kenar 158 px kısa | kart 2: satır 4 sağ kenar 158 px kısa | kart 3: satır 4 sağ kenar 158 px kısa
+   /records 360x800-dark 
+      [f] satır kartı tablosu 9 satır KUSUR kart 1: satır 5 sağ kenar 158 px kısa | kart 2: satır 5 sağ kenar 158 px kısa | kart 3: satır 5 sağ kenar 158 px kısa (+6)
+  kontrol sayıları {'b+': 48, 'c+': 138, 'd+': 54, 'e+': 18, 'f+': 12, 'f-': 16} kusurlu hücre 8

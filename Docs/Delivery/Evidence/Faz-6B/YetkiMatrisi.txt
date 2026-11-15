@@ -1,0 +1,20 @@
+Yetki matrisi (k1.py). 302>403 = access-denied yönlendirmesi, son sayfa 403 "Yetkiniz yok".
+Roller: m1 Yönetici 1001, au Denetçi 3001, op Operatör 2001, om Operatör+Yönetici 4001, sa Süper admin 0001.
+
+K1 kök yönlendirme
+m1 | GET / | 302 | /dashboard
+au | GET / | 302 | /dashboard
+op | GET / | 302 | /my-work
+om | GET / | 302 | /my-work
+sa | GET / | 302 | /users
+oturumsuz GET / | 302 | http://127.0.0.1:5711/account/login?ReturnUrl=%2F
+Yetki matrisi
+GET /dashboard | oturumsuz 302 http://127.0.0.1:5711/account/login?ReturnUrl=%2Fdashboard | au 200  | m1 200  | op 302>403(h1=Yetkiniz yok) | om 200  | sa 302>403(h1=Yetkiniz yok)
+GET /records/create | oturumsuz 302 http://127.0.0.1:5711/account/login?ReturnUrl=%2Frecords%2Fcreate | au 302>403(h1=Yetkiniz yok) | m1 302>403(h1=Yetkiniz yok) | op 200  | om 200  | sa 302>403(h1=Yetkiniz yok)
+GET /reports/durations | oturumsuz 302 http://127.0.0.1:5711/account/login?ReturnUrl=%2Freports%2Fdurations | au 200  | m1 200  | op 302>403(h1=Yetkiniz yok) | om 200  | sa 302>403(h1=Yetkiniz yok)
+GET /reports/materials | oturumsuz 302 http://127.0.0.1:5711/account/login?ReturnUrl=%2Freports%2Fmaterials | au 200  | m1 200  | op 302>403(h1=Yetkiniz yok) | om 200  | sa 302>403(h1=Yetkiniz yok)
+POST /records/create belirteçli | au | 302 | /account/access-denied?ReturnUrl=%2Frecords%2Fcreate
+POST /records/create belirteçli | m1 | 302 | /account/access-denied?ReturnUrl=%2Frecords%2Fcreate
+POST /records/create belirteçli | sa | 302 | /account/access-denied?ReturnUrl=%2Frecords%2Fcreate
+POST /records/create belirteçsiz op | 400 | 
+POST /records/create oturumsuz | 302 | http://127.0.0.1:5711/account/login?ReturnUrl=%2Frecords%2Fcreate

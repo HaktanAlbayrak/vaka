@@ -10,6 +10,17 @@ export class ShellNav {
     this.background = [...scope.querySelectorAll(".shell, .bottom-bar, .skip-link")];
     this.bindRail();
     this.bindDrawer(scope);
+    this.revealCurrent(scope.querySelector(".rail .rail-nav"));
+  }
+
+  // Etkin menü öğesini menü listesinin görünür alanına getirir; yalnız liste kayar.
+  revealCurrent(nav) {
+    const link = nav?.querySelector("[aria-current=page]");
+    if (!link || nav.clientHeight === 0) return;
+    const box = nav.getBoundingClientRect();
+    const item = link.getBoundingClientRect();
+    if (item.top < box.top) nav.scrollTop -= box.top - item.top + 8;
+    else if (item.bottom > box.bottom) nav.scrollTop += item.bottom - box.bottom + 8;
   }
 
   bindRail() {
@@ -79,7 +90,10 @@ export class ShellNav {
     this.drawer.dataset.open = "true";
     opener.setAttribute("aria-expanded", "true");
     this.background.forEach((element) => element.setAttribute("inert", ""));
-    this.drawer.querySelector(".drawer-panel a[href], .drawer-panel button").focus();
+    this.revealCurrent(this.drawer.querySelector(".rail-nav"));
+    const first = this.drawer.querySelector(".drawer-panel a[href], .drawer-panel button");
+    first.focus();
+    if (!this.drawer.contains(document.activeElement)) requestAnimationFrame(() => first.focus());
   }
 
   close() {

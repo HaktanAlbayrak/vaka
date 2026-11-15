@@ -366,7 +366,7 @@
                         @foreach (var item in Model.Breaks)
                         {
                             <tr>
-                                <td data-label="Mola" class="stack-wide stack-lead xl:max-w-md break-words">
+                                <td data-label="Mola" class="stack-lead xl:max-w-md break-words">
                                     <span class="font-semibold">@item.StartedByName</span>
                                     @if (!string.IsNullOrEmpty(item.DuringStepTitle))
                                     {
@@ -379,8 +379,8 @@
                                 </td>
                                 <td data-label="Başlangıç"><partial name="_Moment" model='(item.StartedAtLocal, reference)' /></td>
                                 <td data-label="Bitiş">@if (item.EndedAtLocal is { } endedAt){<partial name="_Moment" model='(endedAt, reference)' />}else{<span>Açık</span>}</td>
-                                <td data-label="Süre" class="num whitespace-nowrap md:max-xl:col-span-2">@if (item.DurationSeconds is { } breakSeconds){<partial name="_Duration" model="DurationFormatter.Format(breakSeconds)" />}else{<span>-</span>}</td>
-                                <td data-label="Kapanış" class="md:max-xl:col-span-2">
+                                <td data-label="Süre" class="num whitespace-nowrap">@if (item.DurationSeconds is { } breakSeconds){<partial name="_Duration" model="DurationFormatter.Format(breakSeconds)" />}else{<span>-</span>}</td>
+                                <td data-label="Kapanış">
                                     <span class="chip">@item.EndKindLabel</span>
                                     @if (!string.IsNullOrEmpty(item.EndedByName)){<span class="mt-0.5 block text-sm text-muted">@item.EndedByName</span>}
                                 </td>
@@ -416,7 +416,7 @@
                         @foreach (var material in Model.Materials)
                         {
                             <tr>
-                                <td data-label="Malzeme" class="stack-wide stack-lead xl:max-w-md break-words">
+                                <td data-label="Malzeme" class="stack-lead xl:max-w-md break-words">
                                     <span class="font-semibold"><span class="mono">@material.MaterialCode</span> @material.MaterialName</span>
                                     @if (material.ExpiredAtEntry)
                                     {
@@ -431,8 +431,8 @@
                                         <span class="mt-1 block"><partial name="_Badge" model='"lot.expired"' /></span>
                                     }
                                 </td>
-                                <td data-label="Giren" class="break-words md:max-xl:col-span-2">@material.EnteredByName</td>
-                                <td data-label="Giriş zamanı" class="md:max-xl:col-span-2"><partial name="_Moment" model='(material.EnteredAtLocal, reference)' /></td>
+                                <td data-label="Giren" class="break-words">@material.EnteredByName</td>
+                                <td data-label="Giriş zamanı"><partial name="_Moment" model='(material.EnteredAtLocal, reference)' /></td>
                             </tr>
                         }
                     </tbody>
@@ -467,9 +467,9 @@
                             <tr>
                                 <td data-label="Sıra" class="num whitespace-nowrap">@entry.Sequence</td>
                                 <td data-label="Zaman"><time class="mono" datetime="@entry.OccurredAtLocal.ToString("yyyy-MM-dd'T'HH:mm:ss")"><span class="whitespace-nowrap">@entry.OccurredAtLocal.ToString("dd.MM.yyyy")</span> <span class="whitespace-nowrap">@entry.OccurredAtLocal.ToString("HH:mm:ss")</span></time></td>
-                                <td data-label="Yapan" class="break-words md:max-xl:col-span-2">@entry.ActorName</td>
-                                <td data-label="Olay" class="break-words font-semibold md:max-xl:col-span-2">@entry.EventLabel</td>
-                                <td data-label="Özet" class="log-summary stack-wide stack-lead xl:max-w-xl md:max-xl:col-span-2">@entry.Summary</td>
+                                <td data-label="Yapan" class="break-words">@entry.ActorName</td>
+                                <td data-label="" class="stack-lead break-words font-semibold">@entry.EventLabel</td>
+                                <td data-label="Özet" class="log-summary stack-wide xl:max-w-xl">@entry.Summary</td>
                             </tr>
                         }
                     </tbody>

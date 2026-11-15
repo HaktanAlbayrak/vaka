@@ -1,4 +1,5 @@
 import { ThemeToggle } from "./ThemeToggle.js";
+import { Fullscreen } from "./Fullscreen.js";
 import { ShellNav } from "./ShellNav.js";
 import { ConnectionStatus } from "./ConnectionStatus.js";
 import { PinInput } from "./PinInput.js";
@@ -20,6 +21,7 @@ import { PrintButton } from "./PrintButton.js";
 
 document.documentElement.dataset.js = "true";
 new ThemeToggle(document.querySelector("[data-theme-toggle]"));
+new Fullscreen(document.querySelector("[data-fullscreen-toggle]"));
 new ShellNav(document);
 new ConnectionStatus(document.documentElement);
 

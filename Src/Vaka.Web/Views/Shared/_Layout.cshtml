@@ -25,10 +25,15 @@
         }
         else if (User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Auditor))
         {
-            navItems.Add(("", "Ana sayfa", "house", "/", "home"));
+            navItems.Add(("", "Ana sayfa", "house", "/dashboard", "home"));
         }
         var isReader = User.IsInRole(Roles.Operator) || User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Auditor);
-        var readerGroup = User.IsInRole(Roles.Operator) ? "" : "İzleme";
+        var multiRole = User.IsInRole(Roles.Operator) && (User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Auditor));
+        var readerGroup = User.IsInRole(Roles.Operator) && !multiRole ? "" : "İzleme";
+        if (multiRole)
+        {
+            navItems.Add((readerGroup, "Pano", "layout-dashboard", "/dashboard", "home"));
+        }
         if (isReader)
         {
             if (!User.IsInRole(Roles.Operator))
@@ -61,7 +66,7 @@
         navItems.Add(("Hesap", "Parola ve PIN", "key-round", "/account/security", "security"));
     }
 
-    var bottomItems = navItems.Where(item => item.Href is not null).Take(3).ToList();
+    var bottomItems = navItems.Where(item => item.Href is not null && !(item.Key == "home" && item.Label == "Pano")).Take(3).ToList();
     var currentKey = ViewData["NavKey"] as string ?? "";
     var homeHref = "/";
     var statusMessage = ViewData["StatusMessage"] as string;
@@ -109,9 +114,9 @@
                     <partial name="_NavList" model="navItems" />
                 </nav>
                 <div class="rail-foot">
-                    <div class="flex items-center gap-3">
+                    <div class="rail-person">
                         <span class="person-avatar" aria-hidden="true">@initials</span>
-                        <span class="rail-person-text min-w-0">
+                        <span class="rail-person-text">
                             <span class="person-name">@personName</span>
                             <span class="person-meta">Sicil @registryNo</span>
                             <span class="person-meta">@roleLabel</span>
@@ -219,10 +224,10 @@
                         <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#x" /></svg>
                     </a>
                 </div>
-                <nav class="flex-1 px-2 py-3" aria-label="Tüm menü">
+                <nav class="rail-nav" aria-label="Tüm menü">
                     <partial name="_NavList" model="navItems" />
                 </nav>
-                <div class="space-y-3 border-t border-line p-3">
+                <div class="drawer-foot">
                     <div class="flex items-center gap-3">
                         <span class="person-avatar" aria-hidden="true">@initials</span>
                         <span class="min-w-0">

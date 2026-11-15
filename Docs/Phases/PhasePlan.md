@@ -4,6 +4,8 @@
 > Durum: **ONAYLANDI** (2026-11-13, `Decisions.md` O-01). K-38, K-39, K-40, K-47 ve PL-05 kullanıcı yanıtlarıyla işlendi.
 > 2026-11-14: Salı takvimi B (O-03), Faz 6 ve 7 yeniden yapılandı (PL-46), Faz 3 ve 4 açıkları kapandı (PL-47, PL-48, PL-50).
 > 2026-11-15: Doküman Salı öncesi tamamlanır (O-04): yeni Faz 6A, K-39 ve K-10 Faz 7'ye, Ö-01..Ö-05 Salı öncesi (PL-56..PL-59).
+> 2026-11-15 (kullanıcı istekleri): yeni Faz 6B, yönetici ana sayfası, rapor grafikleri, kart listesi deseni, köşe yumuşatma, isteğe bağlı iş emri
+> no (boşsa sistem atar), kabuk düzeltmeleri; G11 kart listesi desenine geçti (PL-75..PL-82). Plan kullanıcı onaylı (O-08).
 > Kimlikler: FR, NFR, BR, SC, SH, SK `Docs/Analysis/Brief.md`; E (ekran) `Docs/Analysis/Requirements.md §4`; K `Docs/Analysis/Kusur.md`; PL `Decisions.md`.
 
 ## Özet
@@ -19,6 +21,7 @@
 | 5 | Adım yürütme, görevli ve mola | Adım başlat/bitir, sahibin eklediği görevliler, iki adım arasında mola, otomatik tamamlanma | Evet | TESLİM ALINDI (tur 1, 2026-11-15) |
 | 6 | Kayıt listesi, detay, bütünlük ve müdahale | 13 soruyu yanıtlayan detay ve yazdırılabilir denetim çıktısı, olay günlüğü, bütünlük, iptal, yarıda kapatma, yöneticinin molayı bitirmesi | Evet | TESLİM ALINDI (tur 2, 2026-11-16) |
 | 6A | Acil müdahale, süre raporu ve malzeme izlenebilirliği | Acil müdahale ekranı ve "Acil" ayrımı, süre ve efor raporu (tablo), lot ve makine bazlı malzeme sorgusu | Evet | TESLİM ALINDI (tur 1, 2026-11-16) |
+| 6B | Yönetici ana sayfası, rapor grafikleri ve arayüz iyileştirmeleri | Yönetici ve Denetçi ana sayfası (pano, kısmi), süre raporunda grafikler, ayırt edilir kart listeleri, yumuşak köşeler, sabit logo ve alt blokla kayan menü, yumuşak menü geçişi, tam ekran düğmesi, isteğe bağlı iş emri no (boşsa sistem atar) | Evet | TESLİM ALINDI (tur 2, 2026-11-16) |
 | 7 | Talep, beklemeye alma ve yönetici panosu (Salı sonrası) | Talepler, Taleplerim, bekleme ve devam, yönetici panosu, adım sürerken mola, görevli PIN onayı | Evet | BEKLİYOR |
 | 8 | Acil müdahale, bildirim ve düzeltme (Salı sonrası) | Acil ve talep bildirimleri, panoda acil, düzeltme formu | Evet | BEKLİYOR |
 | 9 | Raporlar, denetim çıktısı ve sistem ayarları (Salı sonrası) | Rapor grafikleri ve CSV, düzeltmeli denetim çıktısı adresi, Sistem ayarları ekranı, son regresyon | Evet | BEKLİYOR |
@@ -30,7 +33,7 @@ Durum değerleri: BEKLİYOR, GELİŞTİRMEDE, QA'DA, İADE, TESLİM ALINDI. Faz 
 2026-11-14'te B seçildi (çekirdek önce). 2026-11-15'te kullanıcı dokümanın Salı'da tam karşılanmasını istedi (O-04): doküman beklentileri
 Salı öncesine alındı, yer açmak için kullanıcının kendi iki eki (K-39 adım sürerken mola, K-10 görevli PIN onayı) Salı sonrasına kaydı.
 
-- Salı'dan önce sırayla: Faz 3, Faz 4, Faz 5, Faz 6, Faz 6A. Salı'dan sonra: Faz 7, 8, 9.
+- Salı'dan önce sırayla: Faz 3, Faz 4, Faz 5, Faz 6, Faz 6A, Faz 6B (kullanıcı istekleri, PL-75; kesinti ve kapsam düşürme yok). Salı'dan sonra: Faz 7, 8, 9.
 - Kontrol noktaları (PL-59, O-05), bilgi amaçlı: Pazar (2026-11-15) sonu Faz 3; Pazartesi (2026-11-16) öğlen Faz 4; Pazartesi sonu Faz 5;
   Salı sunumdan önce Faz 6 ve Faz 6A. Nokta kaçınca koordinatör durmaz, sıradaki faza geçer.
 - Öncelik (O-05): doküman kalemleri (Faz 3, 4, 5, 6, 6A) kesintisiz önce tamamlanır, Salı'ya yetişmese de; ardından Faz 7, 8, 9 sırayla.
@@ -70,6 +73,10 @@ Salı öncesine alındı, yer açmak için kullanıcının kendi iki eki (K-39 a
 - Faz 6: detayın yazdırma çıktısı denetim çıktısı içeriğini taşır (Faz 9 K6, düzeltmeler hariç). Ekran sayısı değişmedi.
 - Faz 5: adım sürerken mola (K-39) ve görevli PIN onayı (K-10) Faz 7'ye taşındı; mola iki adım arasında kalır.
 - Faz 8 ve 9: taşınan kalemler çıktı; bildirim, düzeltme, grafik, CSV, ayar ekranı ve son regresyon kaldı.
+
+2026-11-15 kullanıcı istekleri (PL-75) Faz 6B'yi ekledi: E-22 panonun bugünkü verilerle çalışan kısmı ve `/` yönlendirmesi Faz 7'den, E-30
+grafikleri Faz 9'dan geldi; kart listesi deseni, köşe, kabuk ve isteğe bağlı iş emri no yeni. Ekran sayısı 3 (E-22 yeni; E-30 ve E-14 değişen), liste
+deseni ve kabuk ortak katmandır.
 
 ---
 
@@ -147,21 +154,24 @@ Her metodun XML `<summary>`'sinde formül ve SH kimliği yazılır; bu, ilgili f
 - [ ] G8 (Faz 4 ve sonrası): `Controllers/` ve `Views/` altında `TimeSpan` aritmetiği, `.Subtract(` ya da `AtUtc` alanları arasında çıkarma yok; süreler yalnız `IDurationCalculator`'dan.
 - [ ] G9 (Faz 4 ve sonrası): Fazın her yeni komutu aynı `CommandId` ile iki kez gönderildiğinde tek etki ve tek olay üretir (BR-33).
 - [ ] G10 (Faz 2 ve sonrası): Yalnız `SuperAdmin` rolüne sahip kullanıcı fazın yeni adreslerinin tümünde (GET ve POST) 403 alır ve menüde bu ekranları görmez; istisna Faz 9'daki `/settings` (BR-34, PL-15).
-- [ ] G11 (Faz 2 ve sonrası, UI fazları): Fazın her yeni liste ekranı 360, 768, 1024 ve 1440 px'te aşağıdaki yerleşim imzasını taşır; qa-tester imzayı
-  Faz 1 `MekanikEval.txt` yöntemiyle `Alan:sütun@satır` biçiminde ölçer ve frontend devir notundaki beklenen imzayla karşılaştırır (PL-28, PL-33).
-  - İşlem hücresi (satırın eylem düğmeleri; PL-55) kart modunda her zaman kartın son hücresidir; düğmeleri yan yana, tek satırda ve hücrenin sağ iç
-    kenarına hizalı dizer; düğmeler hiçbir genişlikte alt alta yığılmaz. Kartın son satırında İşlem'den sonra boş hücre kalmaz.
-  - 768 px altı satır kartı: 2 sütun; varsa tek uzun metin alanı kart başlığından sonraki ilk satırda tam satır; kalan alanlar ikişer yan yana.
-    İşlem, kendinden önceki tek kalan alanın yanında 1 sütun alır yalnız düğmeleri orada tek satıra sığıyorsa; sığmıyorsa kendi satırında 2 sütun
-    alır. Boş yarım hücre yalnız İşlem'den önceki son alan satırında ve yalnız İşlem kendi satırındayken olabilir.
-  - 768-1279 px satır kartı: 4 sütun. İşlem son satırda kalan sütunların tamamını kaplar, en az 2 sütun; önceki satırlarda boş hücre yok.
-    Bunu sağlamak için uzun metin alanı 1 ya da 2 sütun alır; yine sağlanamıyorsa bir alan daha 2 sütun alır (önce metin alanı). İşlem dışında
-    tam satır hücre yok; İşlem'in 4 sütunluk kendi satırı serbesttir.
-  - İmza örneği, `/machines` (alanlar Kod, Ad uzun metin, Tesis ve hat, Durum, İşlem): 768 ve 1024: `Kod:1@1 Ad:2@1 TesisHat:1@1 Durum:1@2 İşlem:3@2`;
-    360, düğmeler yarım hücreye sığmıyorsa: `Ad:2@1 Kod:1@2 TesisHat:1@2 Durum:1@3 İşlem:2@4`. Frontend her ekranın beklenen imzasını devir notunda yazar.
-  - 1280 px ve üstü: tablo, satır en az 56 px.
+- [ ] G11 (Faz 2 ve sonrası, UI fazları; Faz 6B'den itibaren kart listesi deseni, PL-77): Fazın her yeni ve değişen liste ekranı 360, 768, 1024
+  ve 1440 px'te aşağıdaki yerleşimi taşır; qa-tester `getBoundingClientRect` ile ölçer ve frontend devir notundaki beklenen imzayla karşılaştırır
+  (PL-33). Faz 1-6A raporları önceki kuralla (PL-28, PL-55) ölçüldü ve değişmez.
+  - 1279 px ve altı, kart: her satır ayrı karttır. Kartın zemini sayfa zemininden farklı yüzey rengidir, dört kenarı kenarlıklıdır, köşesi
+    `--radius-card`'dır; ardışık iki kart arasında en az 12 px dikey boşluk vardır, kartlar birbirine değmez.
+  - Kart başlığı: ekranın tanıtıcı alanı (kayıt no, kod ya da ad; frontend ekran başına yazar) solda, etiketsiz ve gövde değerlerinden büyük ya da
+    kalın; durum rozeti varsa aynı satırda sağda, sağ kenarı kartın sağ iç kenarında. Tanıtıcı uzunsa kırılır, rozet başlığın içinde alt satıra
+    iner. Başlık gövdeden ince çizgiyle ayrılır. Rozeti olmayan ekranda başlıkta yalnız tanıtıcı alan vardır.
+  - Kart gövdesi: her alanda etiket üstte, değer altta. 768 px altı 2 sütun, 768-1279 px 3 sütun. Varsa tek uzun metin alanı gövdenin ilk
+    satırında tam satır. Boş hücre yalnız gövdenin son satırında olabilir.
+  - Kart ayağı: İşlem hücresi (satırın eylem düğmeleri) kartın en altında ve kart genişliğindedir, üstünde ince çizgi vardır; düğmeler yan yana,
+    tek satırda, sağ iç kenara hizalıdır ve hiçbir genişlikte alt alta yığılmaz. Eylemi olmayan satırda ayak çizilmez.
+  - İstisna (PL-39): ana kolonda rayın yanında duran gömülü tablonun kart gövdesi 1024-1279 px'te 2 sütundur.
+  - 1280 px ve üstü: tablo, satır en az 56 px; tablonun kapsayıcısı `--radius-card` köşelidir, başlık satırının zemini köşeden taşmaz.
+  - İmza biçimi: `Baş[Tanıtıcı|Rozet] Gövde[Alan:sütun@satır ...] Ayak[İşlem]` (eylemsizse `Ayak[yok]`). Örnek `/machines` (Kod tanıtıcı, Ad uzun
+    metin, Tesis ve hat, Durum rozet, İşlem): 360: `Baş[Kod|Durum] Gövde[Ad:2@1 TesisHat:1@2] Ayak[İşlem]`; 768 ve 1024: `Baş[Kod|Durum]
+    Gövde[Ad:3@1 TesisHat:1@2] Ayak[İşlem]`. Frontend her ekranın beklenen imzasını devir notunda yazar.
   - Form ve detay ekranları: lg ve üstünde ana kolon ve bağlam rayı yan yana, lg altında ray ana kolonun altında.
-  - İstisna (PL-39): ana kolonda rayın yanında duran gömülü tablo 1024-1279 px'te 768 px altı kart kuralını izler (2 sütun).
 - [ ] G12 (Faz 3 ve sonrası, UI fazları; PL-54): Fazın yeni ve değişen ekranlarında 360, 768, 1024 ve 1440 px'te, açık ve koyu temada hizalama
   kusuru yoktur. qa-tester `getBoundingClientRect` ile ölçer, 1 px'e kadar fark yuvarlama sayılır:
   - Alana gömülü düğme ya da ikon (PIN göster/gizle, arama ikonu): kutusu alanın kenarlık içi kutusunun içinde kalır, kenarlığa binmez;
@@ -171,14 +181,16 @@ Her metodun XML `<summary>`'sinde formül ve SH kimliği yazılır; bu, ilgili f
   - Panel başlığındaki ve gövdesindeki birinci düzey öğelerin sol kenarı panelin sol iç boşluk çizgisindedir; tam genişlik öğelerin sağ kenarı
     sağ iç boşluk çizgisindedir.
   - Kart ya da panel içindeki düğme satırında düğmelerin yüksekliği ve dikey merkezi aynıdır.
-  - Satır kartında (360, 768, 1024): İşlem hücresindeki düğmelerin üst kenarı aynıdır (tek satır), en sağdaki düğmenin sağ kenarı hücrenin sağ
-    iç kenarındadır; kartın her satırında hücre sağ kenarlarının en büyüğü kartın sağ iç kenarındadır (son satırda boşluk yok) (PL-55).
+  - Kart listesinde (360, 768, 1024; PL-77): ayaktaki düğmelerin üst kenarı aynıdır (tek satır), en sağdaki düğmenin sağ kenarı kartın sağ iç
+    kenarındadır; başlıktaki tanıtıcının sol kenarı ile gövdenin ilk sütununun sol kenarı aynıdır; başlıktaki rozetin sağ kenarı kartın sağ iç
+    kenarındadır. Faz 1-6A raporlarındaki ölçüm PL-55 haliyle yapıldı.
   Sonuç her ekran ve genişlik için `Ekran@genişlik: kusur 0` ya da kusurlu öğe ve px farkıyla yazılır. G12 kusuru ORTA'dır (aynı fazda kapanır).
 
 **UI fazlarında yerleşim (PL-33)**
 
 - frontend-engineer tarayıcıda ölçmediği yerleşim için devir notunda "DNA ile aynı" yazmaz. Her yeni liste ekranı için G11 imzasını genişlik başına
-  "beklenen" olarak yazar (ör. 360: `Ad:2@1 Kod:1@2 Durum:1@2 İşlem:1@3`) ve hangi alanın uzun metin alanı olduğunu belirtir.
+  "beklenen" olarak yazar (ör. 360: `Baş[Kod|Durum] Gövde[Ad:2@1 TesisHat:1@2] Ayak[İşlem]`) ve hangi alanın tanıtıcı, hangisinin uzun metin
+  alanı olduğunu belirtir.
 - Ekran G11 kalıbına uymayan bir yerleşim gerektiriyorsa frontend bunu devir notunda gerekçesiyle yazar; kabul analist kararıdır (`Decisions.md`).
 - Analist iade ederken düzeltme maddesini ve qa-tester'ın yeniden denetim şartını aynı imzayla yazar. Yerleşim iadesinde yeniden denetim
   ekranın dört genişlikteki imzasının tamamını kapsar, yalnız kalan hücreyi değil.
@@ -1007,6 +1019,157 @@ tamamlanmış kayıtlar bulunması (PL-65). Faz kapısı ve teslim raporu yoktur
 
 ---
 
+## Faz 6B: Yönetici ana sayfası, rapor grafikleri ve arayüz iyileştirmeleri (Salı öncesi)
+
+**Amaç:** Kullanıcının 2026-11-15 istekleri (PL-75): Yönetici ve Denetçi'nin gerçek bir ana sayfası olması, süre raporunun grafikle okunması,
+dar ekranda liste satırlarının birbirinden ayrılması, köşelerin yumuşaması, iş emri numarasının sistemce atanması, kabukta sabit logo ve alt blokla
+kayan menü, menünün yumuşak geçişle açılıp kapanması ve tam ekran düğmesi.
+
+**Başlama şartı:** Faz 6A ve D-1 commit'leri atıldı (karşılandı). Faz 6B QA'sı kullanıcının `App_Data/vaka.db`'sinde değil QA kopyasında
+çalışır; Sunum hazırlığı kayıtları korunur. Bu faz migration üretmez.
+
+**İsteklerin karşılığı**
+
+| # | Kullanıcının sözü | Tür | Karar |
+|---|---|---|---|
+| 1 | "yönetici de anasayfaya gidemiyorum" | Hata (plan boşluğu) | PL-76. Kök neden: `HomeController.Index` Yönetici ve Denetçi'yi `/records`'a yönlendirir (PL-46, pano Faz 7'ye kadar yok). Menüdeki ve alt çubuktaki "Ana sayfa" (`_Layout.cshtml`, `href="/"`, anahtar `home`) bu yüzden Kayıtlar'ı açar; "Ana sayfa" hiçbir zaman etkin görünmez, "Kayıtlar" etkin olur, iki bağlantı aynı sayfaya gider. 403 ya da route hatası yok. Sahibi BE (yönlendirme, pano sorgusu) ve FE (pano görünümü, menü). Çözüm: E-22 Yönetici panosu kısmi olarak bu faza gelir, `/` Yönetici ve Denetçi'yi `/dashboard`'a yönlendirir |
+| 2 | "yönetici rapor ekranlarına chart eklenebilir" | Kapsam ekleme | PL-78. Grafikler Razor partial'larında sunucuda çizilen satır içi SVG; kütüphane ve JS yok. Süre raporuna üç grafik, panoya bir grafik; malzeme izlenebilirliğine grafik yok |
+| 3 | "tablolar responsive görünümde çok ayırt edilemiyor" | Kural değişikliği | PL-77. Satırlar ayrı kart olur (kart başlığı, gövde, ayak); G11 yeniden yazıldı, tüm liste ekranlarına uygulanır |
+| 4 | "proje geneli kenar yumuşatmalar" | DNA değişikliği | PL-79. `--radius-ui` ve `--radius-card` büyür, değerleri frontend gerekçesiyle `Dna.md`'ye yazar; gölge yok kuralı sürer |
+| 5 | "operatör talep açarken talep numarası girmesin otomatik atansın" | Kapsam değişikliği | PL-80. Talep ekranı henüz yok (Faz 7) ve taleplerde numara alanı planlanmadı; operatörün elle girdiği tek numara Yeni kayıt formundaki "İş emri no"dur. Kullanıcı yanıtı (O-08): alan formda kalır ve isteğe bağlı olur; planlı kayıtta boş bırakılırsa sistem `<TesisKodu>-IE-<Yıl>-<Sıra>` atar, doluysa girilen dış numara saklanır. Şema değişikliği yok |
+| 6 | "sidebarda bu kısım sabit kalsın aynı şekilde logo da" | Hata | PL-81. Kök neden: `.rail` kaydırmayı kenar çubuğunun tamamına veriyor (`overflow-y-auto` aside üzerinde); logo ve alt blok menüyle birlikte kayıyor. Çekmecede `.drawer-panel` aynı. Sahibi FE |
+| 7 | "header'a tam ekran yapma butonu ekle" | Kapsam ekleme | PL-82. Fullscreen API; destek yoksa düğme görünmez |
+| 8 | "sidebar kapanırken hafif geçişli olsun" | Kapsam ekleme | PL-81. Daraltma ve çekmece geçişli; ilk yüklemede ve `prefers-reduced-motion`'da geçiş yok. DNA MOTION satırı güncellenir |
+
+**Kapsam**
+
+| # | Tür | İş kalemi | Sahibi |
+|---|---|---|---|
+| 1 | BE | Ana sayfa yönlendirmesi: `HomeController.Index` Yönetici ya da Denetçi rolü olan ve Operatör rolü olmayan kullanıcıyı `/dashboard`'a yönlendirir (Faz 7 K22 öne alındı). Operatör (çoklu rolde de) `/my-work`'e, yalnız Süper admin `/users`'a yönlenmeye devam eder | backend-engineer |
+| 2 | BE | `DashboardController.Index` (`ManagerOrAuditor`) ve pano sorgu servisi: özet sayıları, aktif kayıtlar, süre altında tamamlanan fazlar, son tamamlanan kayıtlar, son 7 gün açılan kayıt sayıları (planlı ve acil ayrı). Süreler kayıt ve fazda saklı saniye değerlerinden; yeni süre formülü yok. "Bugün" ve "son 7 gün" Türkiye takvim günüdür, bugün dahil 7 gün, kaydı olmayan gün 0 satırıyla gelir; tarih süzgeci süre hesabı değildir. Bekleme, talep, SH-16 ve acil bölümü Faz 7 ve 8'de eklenir | backend-engineer |
+| 3 | BE | İsteğe bağlı iş emri no (PL-80): `RecordOpenValidator`'dan planlı kayıttaki zorunluluk kalkar, 64 karakter sınırı kalır. Planlı kayıtta değer boşsa `RecordOpener` numarayı aynı transaction'da `NumberSequence` ile üretir (kapsam `WorkOrder:<TesisId>`, yıl açılış anının Türkiye yılı); biçim `RecordNumbers`'ta XML yorumlu metotla `<TesisKodu>-IE-<Yıl>-<Sıra>`, sıfır dolgusu yok; değer doluysa girilen değer saklanır ve sayaç ilerlemez. Elle girilen değer trim'lenir, yalnız boşluksa boş sayılır; sistem biçimine uyan değer (büyük küçük harf duyarsız `^.+-IE-[0-9]{4}-[0-9]+$`) `WorkOrderNo` alan hatasıyla reddedilir: "Bu biçim sistemin atadığı numaraya ayrılmıştır. Alanı boş bırakın ya da dış iş emri numarasını girin." Böylece elle girilen değer sistem numarasıyla hiçbir zaman aynı olamaz; sayaç elle girilen değerlere bakmaz. `RecordCreateViewModel.WorkOrderNo` ve `IRecordOpener` isteğindeki alan kalır. Açılış olayı saklanan değeri bugünkü gibi taşır. Acil açılış değişmez. Mevcut kayıtların değerleri değişmez ve yeniden doğrulanmaz | backend-engineer |
+| 4 | DB | Yok. `CleaningRecords.WorkOrderNo` kolonu var (Faz 4, boş olabilir, 64 karakter); `NumberSequence` satırları uygulamanın çalışma verisidir. Sistem numaralarının tekilliği sayaç ve transaction ile, elle girilenle çakışmama biçim reddiyle sağlanır; elle girilen dış numaralar birbirini tekrar edebilir (bugünkü gibi). `WorkOrderNo`'ya unique index mevcut tabloya kısıt eklemek olduğu için ALTER sınıfıdır ve elle girilmiş eski değerlerde çakışabilir, istenmez. İhtiyaç çıkarsa backend `Docs/Db/` talebi açar, kullanıcı onayı olmadan uygulanmaz | - |
+| 5 | FE | Kart listesi deseni (PL-77, yeni G11): `Styles/app.css` `.table-stack` kart moduna başlık, gövde, ayak yapısı ve kartlar arası boşluk; her liste ve gömülü tablo görünümünde tanıtıcı ve rozet hücresinin işaretlenmesi. Kapsadığı görünümler: `Users/Index`, `Facilities/Index`, `Facilities/Details`, `Machines/Index`, `Shifts/Index`, `Materials/Index`, `Materials/Details`, `CleaningTypes/Index`, `CleaningTypes/Details`, `Records/Index`, `Records/Details`, `Records/Integrity`, `Reports/Durations`, `Reports/Materials` ve yeni `Dashboard/Index`. Yazdırma katmanı tablo olarak kalır | frontend-engineer |
+| 6 | FE | Köşe yumuşatma (PL-79): `--radius-ui` ve `--radius-card` yeni değerleri, gerekirse rozet ve çip için ayrı token; düğme, alan, select, panel, kart, rozet, çip, dialog, çekmece, menü bağlantısı, odak halkası, tablo kapsayıcısı tokenlerden okur. `Dna.md` köşe ölçeği satırı, gerekçe ve kaçınılanlar satırı güncellenir; gölge yok, tam yuvarlak yalnız avatar ve nokta göstergelerinde | frontend-engineer |
+| 7 | FE | Kabuk (PL-81): kenar çubuğunda logo bloğu üstte, kişi ve "Daralt" bloğu altta sabit, yalnız menü listesi kayar; çekmecede başlık (logo, kapat) ve alt blok (kişi, "Kullanıcı değiştir") sabit, yalnız menü kayar; sayfa açılışında etkin menü öğesi görünür alana getirilir. Daraltma ve genişletmede kenar çubuğu ve içerik kolonu geçişle, çekmece kayarak ve perde solarak açılıp kapanır; kayıtlı daraltma durumunda ilk yüklemede geçiş oynamaz; `prefers-reduced-motion: reduce`'da geçiş yok. `Dna.md` MOTION satırı güncellenir | frontend-engineer |
+| 8 | FE | Tam ekran düğmesi (PL-82): `_TopbarTools.cshtml`'de tema düğmesinin yanında `icon-btn`, yeni `wwwroot/js/Fullscreen.js` (`App.js` içinden). Sunucu düğmeyi `hidden` çizer, JS `document.fullscreenEnabled` doğruysa açar. Tıklama `document.documentElement.requestFullscreen()` ya da `document.exitFullscreen()`; simge, `aria-label` ve `aria-pressed` `fullscreenchange` olayından güncellenir (Esc ile çıkış dahil); istek reddedilirse durum değişmez, konsola hata düşmez | frontend-engineer |
+| 9 | FE | Grafikler (PL-78): `Views/Shared/` altında sunucuda SVG çizen partial'lar (mevcut `_BarChart.cshtml` yeniden kullanılır ya da genelleştirilir). E-30'da üç grafik (aşağıda), E-22'de son 7 gün grafiği. Her grafik `<figure>` ve `<figcaption>` içinde, SVG `aria-hidden="true"`, aynı veri yanındaki tablodadır; renkler DNA grafik tokenlerinden (en çok 3), değerler metinle de yazılır; veri yoksa grafik yerine boş durum metni | frontend-engineer |
+| 10 | FE | E-22 Yönetici panosu (kısmi): `Views/Dashboard/Index.cshtml`, DNA pano iskeleti (tek özet şeridi: bir büyük iki küçük sayı; geniş kolon ve dar ray; dört eşit KPI kartı yok). Menüde Yönetici ve Denetçi için "Ana sayfa" `/dashboard`'a gider, panoda etkin görünür; "Kayıtlar" ayrı kalır. Alt çubukta aynı | frontend-engineer |
+| 11 | FE | E-14 Yeni kayıt: "İş emri no" alanı kalır, zorunlu işareti ve istemci zorunluluk denetimi kalkar; etiket ya da yardım metni isteğe bağlı olduğunu ve boş bırakılırsa kayıt açılınca sistemin atayacağını söyler; alan hatası (biçim reddi, uzunluk) D-1 hata yerinde görünür | frontend-engineer |
+
+**E-30 grafikleri (PL-78)**
+
+| Grafik | Veri (mevcut ViewModel alanı) | Biçim |
+|---|---|---|
+| Makine bazında ortalama süre | `ByMachine[]`: `AvgNetSeconds`, `AvgBreakSeconds`, toplam etiketi `AvgGrossSeconds` | Satır başına yatay yığılmış çubuk (net ve mola iki renk), etiket makine ve tip, sağda brüt süre metni |
+| Faz bazında ortalama net ve minimum | `ByPhase[]`: `AvgNetSeconds`, `MinDurationSeconds?`, `BelowMinimumCount` | Faz başına yatay çubuk, minimum dikey işaret çizgisiyle; ortalaması minimumun altındaki faz renk dışında desen ya da metinle de ayrılır; satır etiketi tip, versiyon, faz sırası ve başlığı |
+| Durum dağılımı | `StatusCounts[]`: `StatusLabel`, `Count` | Durum başına yatay çubuk, tek nötr renk, sayı metni |
+
+Çubuk uzunluğu görünümde `değer / en büyük değer` oranıdır; bu çizim ölçeğidir, süre hesabı değildir (G8 kapsamı dışında). Süre metinleri mevcut
+süre biçimleyicisinden gelir. Malzeme izlenebilirliğine grafik eklenmez: tekil kayıt izleme sorgusudur, toplanacak değer yoktur.
+
+**Paralel:** Evet. Gerekçe: şema değişikliği yok; route, rol ve ViewModel aşağıda; dosyalar ayrık. `RecordCreateViewModel`
+değişmez (alan kalır, yalnız zorunluluğu kalkar); ortak derleme noktası yoktur. Grafik verisi E-30'da mevcut ViewModel'den gelir, backend işi yoktur.
+
+**Sözleşme**
+
+| Route | Action | Rol | ViewModel (alanlar) | Görünüm |
+|---|---|---|---|---|
+| GET `/` | `HomeController.Index` | Any | Yönlendirme: Operatör `/my-work`; Yönetici ya da Denetçi (Operatör değilse) `/dashboard`; yalnız Süper admin `/users` | - |
+| GET `/dashboard` | `DashboardController.Index` | ManagerOrAuditor | `DashboardViewModel { OpenCount, InProgressCount, CompletedTodayCount, ActiveRecords[] { RecordId, RecordNo, Kind, KindLabel, Status, StatusLabel, MachineLabel, OwnerName, OpenedAtLocal, LockExpiresAtLocal?, CurrentStepTitle?, Url }, BelowMinimum[] { RecordId, RecordNo, MachineLabel, PhaseTitle, NetSeconds, MinDurationSeconds, Reason, CompletedAtLocal, Url }, RecentCompleted[] { RecordId, RecordNo, Kind, KindLabel, MachineLabel, CompletedAtLocal, NetSeconds, EffortSeconds, Url }, Last7Days[] { Date, DateLabel, PlannedCount, EmergencyCount } }` | `Views/Dashboard/Index.cshtml` |
+| GET, POST `/records/create` | `RecordsController.Create` | Operator | `RecordCreateViewModel` alanları değişmez; `WorkOrderNo` isteğe bağlı (boş ya da en çok 64 karakter, sistem biçimine uymayan) | `Views/Records/Create.cshtml` |
+| GET `/reports/durations` | `ReportsController.Durations` | ManagerOrAuditor | Değişmez (grafik mevcut alanlardan) | `Views/Reports/Durations.cshtml` |
+
+Sözleşme ekleri:
+
+- Ad alanı `Vaka.Web.ViewModels.Dashboard`; alt tipler `DashboardActiveRecordViewModel`, `DashboardBelowMinimumViewModel`,
+  `DashboardCompletedViewModel`, `DashboardDayCountViewModel`. `Kind` Faz 3 `CleaningTypeKind`, `Status` Faz 4 `RecordStatus`; rozet eşlemesi
+  frontend'de tek yerde (PL-62). `Date` `DateOnly`, `DateLabel` Türkçe kısa gün ve tarih metni backend'den.
+- `ActiveRecords`: durum Açıldı ve Devam ediyor, en eski açılış önce. `BelowMinimum` ve `RecentCompleted` en yeni önce, en çok 10 satır.
+  `Url` kayıt detayına gider. `Last7Days` her zaman 7 satır, en eski gün önce.
+- Faz 7 bu ViewModel'e `NeedsAttention[]`, `OnHold[]`, `PendingRequests[]`, Faz 8 `Emergencies[]` ekler; alan adları Faz 7 ve 8 sözleşmesindeki gibi.
+- Sistem iş emri no biçimi: `<TesisKodu>-IE-<Yıl>-<Sıra>`, sıra tesis ve yıl başına 1'den artar (saha referansı BR-09 düzeni); yalnız boş
+  bırakılan planlı kayıtta üretilir. Elle girilen değerde biçim reddi BE 3'tedir.
+- Ortak kriterler G5a, G5b, G8, G9, G10, G11, G12 bu fazın yeni ve değişen ekranlarına uygulanır.
+
+**Dosya sınırı:** backend `Controllers/HomeController.cs`, `Controllers/DashboardController.cs`, pano servisi, `ViewModels/Dashboard/**`,
+`Services/RecordOpener.cs`, `Services/RecordOpenValidator.cs`, `Services/IRecordOpener.cs`, `Services/RecordOpenPlan.cs`, `Services/RecordCreateForm.cs`,
+`Services/RecordNumbers.cs`, `ViewModels/Records/RecordCreateViewModel.cs`, `Program.cs` (servis kaydı). Frontend `Views/Dashboard/**`,
+`Views/Shared/**` (kabuk, menü, `_TopbarTools`, grafik partial'ları), `Views/Records/Create.cshtml`, kalem 5'teki liste görünümleri (yalnız tablo
+işaretlemesi), `Views/Reports/Durations.cshtml`, `Styles/**`, `tailwind.config.js`, `wwwroot/js/**`, `Docs/Design/Dna.md`.
+
+**Tasarım girdisi (frontend-engineer için)**
+
+| Konu | Girdi |
+|---|---|
+| Köşe | Kullanıcı "kenar yumuşatma" istedi; onaylı kimlik (O-02) keskin 2 px'ti. Hedef: yumuşak ama belge ciddiyetini koruyan köşe; kalın kenarlık ve gölgesizlik sürer. Kart ve panel köşesi kontrol köşesinden büyük, iç içe öğede iç köşe dış köşeden büyük değil. Değer ve gerekçe `Dna.md`'de |
+| Kart listesi | Kullanıcı dar ekranda satırları ayırt edemiyor; mevcut kartlar aynı zeminde yalnız alt çizgiyle ayrılıyor. Ayrım boşluk, yüzey rengi, dört kenar kenarlık ve başlık şeridiyle gelir; zebra yok kuralı masaüstü tablo içindir |
+| Hareket | Menü geçişi kısa ve sakin; süs hareketi yok. DNA MOTION değeri ve gerekçesi güncellenir |
+| Grafik | Etiketli yatay çubuklar (DNA kaçınılanlar: dört KPI kartı ve altında iki grafik yok); en çok 3 renk; değer metni her çubukta |
+| Kısıt | 360 px'te yatay kaydırma yok (G4); dokunma hedefi 44 px; durumlar renk dışında da ayrılır (NFR-05); açık ve koyu tema |
+
+**Kabul kriterleri**
+
+Ana sayfa (madde 1)
+
+- [ ] K1: Yönetici (`1001`) ve Denetçi `/` adresinde `/dashboard`'a yönlenir; Operatör `/my-work`'e, Operatör ve Yönetici rolü birlikte olan kullanıcı `/my-work`'e, yalnız Süper admin `/users`'a yönlenir.
+- [ ] K2: Yönetici ve Denetçi menüsünde ve lg altı alt çubukta "Ana sayfa" `/dashboard`'u açar ve orada `aria-current="page"` taşır; "Kayıtlar" `/records`'u açar; iki bağlantı aynı sayfaya gitmez.
+- [ ] K3: `/dashboard` Operatör'de ve yalnız Süper admin rolünde 403 döner (G10); Denetçi panoda yazma düğmesi görmez (SC-24).
+- [ ] K4: Panodaki açık, devam eden ve bugün tamamlanan sayıları QA kopyasındaki veritabanı sorgusuyla aynıdır; "bugün" Türkiye günüdür. Aktif kayıtlar listesinde acil kayıt metinli "Acil" etiketi taşır.
+- [ ] K5: Süre altında tamamlanan fazlar listesi gerekçeyi gösterir; son tamamlananlar ve süre altı listeleri en çok 10 satırdır, her satır kayıt detayına gider.
+- [ ] K6: Son 7 gün grafiği ve tablosu bugün dahil 7 günü gösterir, kaydı olmayan gün 0'dır; planlı ve acil sayıları veritabanındaki açılış tarihlerine göre sayımla aynıdır.
+
+Grafikler (madde 2)
+
+- [ ] K7: `/reports/durations`'ta makine, faz ve durum grafikleri görünür; her grafiğin değerleri aynı sayfadaki tablodaki değerlerle aynıdır (QA en az iki satırı karşılaştırır); grafik sunucudan gelen HTML'de SVG olarak vardır, JS kapalıyken de çizilir.
+- [ ] K8: Faz grafiğinde minimum işareti görünür; ortalaması minimumun altındaki faz renk dışında desen ya da metinle de ayrılır (NFR-05). Süzgeç sonucu boşken grafik yerine boş durum metni görünür, konsol hatası yok.
+- [ ] K9: Grafikler açık ve koyu temada okunur, metin kontrastı AA; 360 px'te grafik yatay kaydırma üretmez; projede grafik kütüphanesi bağımlılığı yoktur (`package.json` ve `wwwroot/lib` değişmez, yalnız partial'lar).
+
+Kart listesi (madde 3)
+
+- [ ] K10: Kalem 5'teki her liste ve gömülü tablo 360, 768 ve 1024 px'te yeni G11 imzasını taşır (frontend beklenen imzaları devir notunda yazar), 1440 px'te tablodur; G12 kart maddesi kusursuz.
+- [ ] K11: 360 ve 768 px'te ardışık iki kart arasında en az 12 px boşluk ölçülür, kartın dört kenarında kenarlık vardır ve kart zemininin rengi sayfa zemininden farklıdır (hesaplanan stil).
+- [ ] K12: Yazdırma önizlemesinde (`/records/details/{id}`) tablolar tablo olarak çıkar, kart görünümü yok.
+
+Köşe (madde 4)
+
+- [ ] K13: Düğme, alan, select, panel, kart, rozet, dialog ve çekmecenin hesaplanan `border-radius` değeri `Dna.md`'deki token değeriyle aynıdır; `Views/**` ve `Styles/**` içinde token dışı sabit köşe değeri (`rounded-[`, px'li `border-radius`) 0 eşleşme, `rounded-full` yalnız avatar ve nokta göstergelerinde.
+- [ ] K14: `Dna.md` köşe ölçeği satırı yeni değerleri ve gerekçeyi taşır; DNA kartı ve kaçınılanlar ile çelişki yok; açık ve koyu temada kart içindeki öğenin köşesi kartın köşesinden taşmaz.
+
+İş emri no (madde 5)
+
+- [ ] K15: Operatör `/records/create` formunda "İş emri no" alanı vardır, zorunlu işareti ve `required` özniteliği yoktur; alanın isteğe bağlı olduğu ve boş bırakılırsa sistemin atayacağı yazılıdır.
+- [ ] K16: QA kopyasında aynı tesiste iş emri no boş bırakılarak art arda açılan iki planlı kayıtta iş emri no `<TesisKodu>-IE-<Yıl>-<n>` ve `...-<n+1>`'dir; başka tesiste sıra ayrı başlar. Kayıt detayında, yürütme başlığında ve açılış olayında aynı değer görünür; `/records` araması bu değerle kaydı bulur; bütünlük "Doğrulandı".
+- [ ] K17: İş emri no `ERP-778` yazılarak açılan planlı kayıtta değer aynen saklanır ve detayda görünür; bu açılış sayacı ilerletmez (sonraki boş açılış sıradaki numarayı alır). Yalnız boşluk girilen değer boş sayılır ve sistem numarası atanır. Aynı `CommandId` ile iki kez gönderim tek kayıt ve tek numara üretir (G9).
+- [ ] K17a: Sistem biçimine uyan elle değer (`T1-IE-2026-5`, `xx-ie-2026-0005`) alan altında nedeniyle reddedilir, kayıt açılmaz, olay üretmez, girilen diğer alanlar ve `CommandId` korunur; 64 karakteri aşan değer de alan hatasıyla reddedilir.
+- [ ] K18: Acil kayıt açılışı değişmez; faz öncesi kayıtların iş emri değerleri değişmez. `Data/Migrations/` altında yeni dosya yok; QA kopyasında sistem numaralı kayıtlarda yinelenen iş emri no sorgusu 0 satır döner.
+
+Kabuk ve tam ekran (madde 6, 7, 8)
+
+- [ ] K19: 1440x600 ve 1024x600'de, açık ve daraltılmış kenar çubuğunda, en uzun menüye sahip Yönetici hesabıyla: logo bloğu ve alt blok (avatar, ad, sicil, rol, "Kullanıcı değiştir", "Daralt") görünür alanda kalır; menü listesi kaydırılınca bu iki bloğun `getBoundingClientRect` değerleri değişmez, yalnız menü listesinin `scrollTop`'u değişir; menü sonuna kadar kaydırılınca son öğe görünür.
+- [ ] K20: 768x600 ve 360x640'ta çekmece açıkken başlık (logo, kapat) ve alt blok (kişi, "Kullanıcı değiştir") görünür kalır, yalnız menü listesi kayar; çekmece içinde kaydırma sayfayı kaydırmaz.
+- [ ] K21: Menüdeki en alttaki ekran açıldığında (ör. 1440x600'de "Parola ve PIN") etkin öğe sayfa yüklenince menü listesinin görünür alanındadır.
+- [ ] K22: "Daralt" ve "Genişlet"te kenar çubuğu genişliği geçişle değişir: tıklamadan yaklaşık 50 ms sonra genişlik iki uç değerin arasındadır, 400 ms sonra uç değerdedir; geçiş boyunca belge yatay kaydırma üretmez, menü etiketleri ikinci satıra kırılmaz ve kenar çubuğu sınırından taşmaz; `aria-expanded` güncellenir.
+- [ ] K23: Kayıtlı daraltma durumuyla sayfa yeniden yüklendiğinde kenar çubuğu ilk boyamada daraltılmış genişliktedir, geçiş oynamaz (yükleme sırasında `transitionrun` olayı yok).
+- [ ] K24: lg altında çekmece kayarak açılır ve kapanır, perde solar; kapandıktan sonra çekmece içindeki öğeler odak almaz; Esc ve perde tıklaması kapatır; JS kapalıyken çekmece `#menu` ile açılır (geçişsiz olabilir).
+- [ ] K25: `prefers-reduced-motion: reduce` ile daraltma ve çekmece geçişsiz çalışır (tıklamadan 50 ms sonra uç değer).
+- [ ] K26: Fullscreen API destekli tarayıcıda (Chromium) üst barda tam ekran düğmesi 768, 1024 ve 1440 px'te görünür, hedefi en az 44 px; tıklayınca `document.fullscreenElement` dolar, `aria-pressed="true"` ve çıkış etiketi ve simgesi görünür; yeniden tıklama ya da Esc ile çıkışta `aria-pressed="false"` ve giriş etiketi döner.
+- [ ] K27: `document.fullscreenEnabled` false olduğunda (QA tarayıcıda API'yi kapatarak dener) ve JS kapalıyken düğme görünmez; 360 px'te üst bar yatay taşma üretmez (düğme yer yoksa 768 altında gizlenebilir, frontend devir notunda yazar).
+- [ ] K28: Sayfa geçişinden sonra düğme durumu gerçek durumla aynıdır; tam ekran isteği reddedildiğinde düğme durumu değişmez ve konsolda hata yok.
+
+Gerileme
+
+- [ ] K29: Faz 1-6A ekranları yeni desen ve köşelerle 360, 768, 1024, 1440 px'te açık ve koyu temada konsol 0 hata; `UiDelivery.md §4` sıfır ihlal; PIN alanı, select ve form hata yerleri (D-1) bozulmaz.
+
+**Kapsam dışı:** Pano bölümlerinden bekleme, talepler, müdahale bekleyenler (SH-16) Faz 7'de, acil bölümü Faz 8'de; CSV Faz 9'da; talep numarası
+(talep yapısı Faz 7'de; taleplerde ayrı numara alanı planlanmadı, gösterim kayıt no ile); acil kayıtta iş emri no; sayfa geçişinde tam ekranın
+korunması (çok sayfalı uygulamada tarayıcı her sayfa yüklemesinde tam ekrandan çıkar; F11 tarayıcı tam ekranı geçişlerde korunur).
+
+**Sonuç (2026-11-16):** TESLİM ALINDI (tur 2). Tur 1 İADE (B1, B2, B3 ORTA; B4, B6 DÜŞÜK ertelenmedi; B5 kararı PL-84), tur 2 44/44.
+Açık kalemler A1 (eval yanlış pozitifi) ve A2 (`/shifts/create` tesis parametresiz 404, Faz 2) devreder. Rapor: `Docs/Delivery/Faz-6B-Teslim.md`.
+
+---
+
 ## Faz 7: Talep, beklemeye alma ve yönetici panosu (Salı sonrası)
 
 **Amaç:** Sahibin yöneticiye gerekçeli talep açması, yöneticinin talepleri karara bağlaması, kaydın beklemeye alınıp devam ettirilmesi ve
@@ -1021,8 +1184,8 @@ Takvim: Salı (2026-11-17) sonrası (O-03, PL-46).
 | 2 | BE | Talep servisi: SK-5, BR-41; türler kayıt durumuna göre (Açıldı: İptal; Devam ediyor: üçü; Beklemede: İptal ve Yarıda kapatma; Brief §6.1); geri çekme; onay işlemi Faz 6 müdahale servisini aynı transaction'da çağırır, koşul sağlanmazsa talep Bekliyor kalır; ilk karar geçerli (K-40); ret gerekçesi zorunlu; kayıt başka yoldan kapanınca talep Geçersiz (BR-42) | backend-engineer |
 | 3 | BE | Müdahale servisine ek: beklemeye alma (BR-43); Beklemede kayıtta iptal ve yarıda kapatma, açık bekleme müdahale anında kapanır; doğrudan müdahalede bekleyen talep Geçersiz (BR-42); sahip beklemedeki kaydı PIN'le devam ettirir (BR-44) | backend-engineer |
 | 4 | BE | `IDurationCalculator`: SH-05, SH-10, SH-16; SH-06, SH-11, SH-14 bekleme terimiyle güncellenir, yorumlar aynı commit'te; açık iş genişlemesi: bekleyen talep ve Beklemede kayıt pasifleştirmeyi, Beklemede kayıt makine kaldırmayı engeller | backend-engineer |
-| 5 | BE | Pano sorgusu; SH-16 (başladığı vardiya bitmiş açık adım ve açık mola, Faz 4 vardiya bulucusuyla); ana sayfa Yönetici ve Denetçi'yi `/records` yerine `/dashboard`'a yönlendirir | backend-engineer |
-| 6 | FE | E-22 Yönetici panosu, E-23 Talep formu (yürütme ekranı ve detayda sahibe), E-24 Taleplerim, E-25 Talepler ve karar formu; E-26'ya beklemeye alma türü; detayda talepler ve beklemeler; panoda Beklemede ve bekleyen talepler; İşlerim'de beklemedeki kayıtlar ve "Devam et"; makine panosunda Beklemede | frontend-engineer |
+| 5 | BE | Pano sorgusuna ek (pano ve `/` yönlendirmesi Faz 6B'de geldi, PL-76): SH-16 (başladığı vardiya bitmiş açık adım ve açık mola, Faz 4 vardiya bulucusuyla), Beklemede kayıtlar, bekleyen talepler | backend-engineer |
+| 6 | FE | E-22 Yönetici panosuna müdahale bekleyenler, Beklemede ve bekleyen talepler bölümleri (pano Faz 6B'de), E-23 Talep formu (yürütme ekranı ve detayda sahibe), E-24 Taleplerim, E-25 Talepler ve karar formu; E-26'ya beklemeye alma türü; detayda talepler ve beklemeler; panoda Beklemede ve bekleyen talepler; İşlerim'de beklemedeki kayıtlar ve "Devam et"; makine panosunda Beklemede | frontend-engineer |
 | 7 | BE | Faz 5'ten ertelenen (PL-57): mola servisi adım sürerken molaya izin verir (K-39, BR-38 tam hali; devam eden adım molaya bağlanır, mola açıkken adım bitirilemez, BR-40 sonrası adım "Devam ediyor" sürer, SH-17 değer üretir); görevli eklemede eklenen kişinin PIN'i aynı istekte doğrulanır, hatalı deneme onun sayacına yazılır, PIN'i kilitli kişi eklenemez (K-10, SK-4, BR-53); Faz 6 müdahalesinde adım içi açık molanın süresi düşülür | backend-engineer |
 | 8 | FE | Faz 5'ten ertelenen: mola düğmesi adım sürerken de; açık mola bandında ve mola ekranında sürdüğü adım; görevli panelinde katılım PIN'i; detayda adım molası satırı | frontend-engineer |
 | 9 | BE | Kalıcı oturum iptali (Faz 6 A1, PL-71, PL-72): yeniden başlatmadan sonra da çıkış yapılmış çerezin reddi için kullanıcı satırında oturum sürümü. ALTER sınıfıdır; dbadmin talebi kullanıcı onayı olmadan uygulanmaz, onay gelmezse Faz 6'nın bellek içi çözümü sürer | backend-engineer talebi, dbadmin |
@@ -1040,7 +1203,7 @@ Takvim: Salı (2026-11-17) sonrası (O-03, PL-46).
 | GET `/requests/decide/{id}`; POST `/requests/approve/{id}`, `/requests/reject/{id}` | `RequestsController.Decide`, `.Approve`, `.Reject` | Manager | `RequestDecisionViewModel { CommandId, RequestId, RecordId, RecordNo, TypeLabel, Reason, RequestedByName, RequestedAtLocal, RecordStatusLabel, DecisionNote, Pin, BlockReason? }` | `Views/Requests/Decide.cshtml` |
 | GET, POST `/interventions/create?recordId=&type=` | `InterventionsController.Create` | Manager | Faz 6 sözleşmesine ek: `Type = Hold`, `PendingRequest? { Id, TypeLabel, RequestedAtLocal }`. `AllowedTypes`: Devam ediyor kayıtta İptal, Yarıda kapatma, Beklemeye alma; Beklemede kayıtta İptal ve Yarıda kapatma | `Views/Interventions/Create.cshtml` |
 | POST `/records/resume/{id}` | `RecordsController.Resume` | Operator | `{ CommandId, Pin }` | - |
-| GET `/dashboard` | `DashboardController.Index` | ManagerOrAuditor | `DashboardViewModel { ActiveRecords[] { RecordId, RecordNo, MachineLabel, StatusLabel, OwnerName, OpenedAtLocal, LockExpiresAtLocal?, CurrentStepTitle? }, NeedsAttention[] { KindLabel, RecordId, RecordNo, MachineLabel, PersonName, StartedAtLocal, ShiftName }, BelowMinimum[] { RecordId, RecordNo, PhaseTitle, NetSeconds, MinDurationSeconds, Reason, CompletedAtLocal }, RecentCompleted[] { RecordId, RecordNo, MachineLabel, CompletedAtLocal, NetSeconds, EffortSeconds }, OpenCount, InProgressCount, CompletedTodayCount, OnHold[] { RecordId, RecordNo, MachineLabel, OwnerName, HeldAtLocal }, PendingRequests[] { RequestId, RecordNo, TypeLabel, RequestedByName, RequestedAtLocal }, Emergencies[] (Faz 8) }` | `Views/Dashboard/Index.cshtml` |
+| GET `/dashboard` | `DashboardController.Index` | ManagerOrAuditor | Faz 6B'de kuruldu (PL-76); bu fazda eklenen alanlar `NeedsAttention[]`, `OnHold[]`, `PendingRequests[]`. Hedef hal: `DashboardViewModel { ActiveRecords[] { RecordId, RecordNo, MachineLabel, StatusLabel, OwnerName, OpenedAtLocal, LockExpiresAtLocal?, CurrentStepTitle? }, NeedsAttention[] { KindLabel, RecordId, RecordNo, MachineLabel, PersonName, StartedAtLocal, ShiftName }, BelowMinimum[] { RecordId, RecordNo, PhaseTitle, NetSeconds, MinDurationSeconds, Reason, CompletedAtLocal }, RecentCompleted[] { RecordId, RecordNo, MachineLabel, CompletedAtLocal, NetSeconds, EffortSeconds }, OpenCount, InProgressCount, CompletedTodayCount, OnHold[] { RecordId, RecordNo, MachineLabel, OwnerName, HeldAtLocal }, PendingRequests[] { RequestId, RecordNo, TypeLabel, RequestedByName, RequestedAtLocal }, Emergencies[] (Faz 8) }` | `Views/Dashboard/Index.cshtml` |
 | Mevcut ekranlara ek alanlar | `Run`, `Details`, `MyWork`, `MachineBoard` | - | Run: `CanRequest, PendingRequest?, CanResume, Holds[]`; Details: `Requests[] { TypeLabel, Reason, StatusLabel, RequestedByName, RequestedAtLocal, DecidedByName?, DecisionNote? }, Holds[] { StartedAtLocal, EndedAtLocal?, DurationSeconds?, StartedByName, EndedByName? }`; MyWork: `HeldRecords[] { Id, RecordNo, MachineLabel, HeldAtLocal, CanResume }`; MachineBoard: `State = OnHold` | mevcut görünümler |
 | POST `/records/add-participant/{stepId}` ve Run | `RecordsController.AddParticipant`, `.Run` | Operator | Faz 5 sözleşmesine ek: `ParticipantPin`; `Participants[].ConfirmedAtLocal?`; `DuringStepTitle` dolar; `CanStartBreak` adım sürerken de true olabilir | mevcut görünümler |
 
@@ -1065,11 +1228,11 @@ backend `Controllers/RequestsController.cs`, `Controllers/DashboardController.cs
 - [ ] K14: Bekleyen talebi ya da Beklemede kaydı olan kullanıcı pasifleştirilemez; Beklemede kaydı olan makine kullanımdan kaldırılamaz (BR-35, BR-36).
 - [ ] K16: Olay günlüğünde talep açma, geri çekme, onay, ret, geçersizlik, beklemeye alma ve devam olayları yapan ve zamanla yer alır (BR-30).
 - [ ] K17: SH-05 ve SH-10 yeni, SH-06, SH-11 ve SH-14 güncellenmiş formülleriyle XML yorumundadır.
-- [ ] K18 (eski Faz 6 K8, pano kısmı): `/dashboard` Yönetici ve Denetçi'de açılır, Operatör'de 403; Denetçi panoda yazma düğmesi görmez (SC-24).
+- K18 (Faz 6B'ye taşındı, PL-76; Faz 6B K3): `/dashboard` Yönetici ve Denetçi'de açılır, Operatör'de 403; Denetçi panoda yazma düğmesi görmez (SC-24). Bu fazda gerileme olarak yeniden denetlenir.
 - [ ] K19 (eski Faz 6 K9): Başladığı vardiya bitmiş açık adım ve açık mola panoda "Müdahale bekleyenler"de kişi, kayıt no, başlangıç ve vardiya adıyla görünür; vardiyası sürenler görünmez (SH-16).
-- [ ] K20 (eski Faz 6 K10): Süre altında tamamlanan fazlar panoda gerekçesiyle listelenir.
+- K20 (Faz 6B'ye taşındı, PL-76; Faz 6B K5): Süre altında tamamlanan fazlar panoda gerekçesiyle listelenir.
 - [ ] K21 (eski Faz 6 K12): `SH-16` formülü `IDurationCalculator`'da XML yorumunda.
-- [ ] K22: Yönetici ve Denetçi `/` adresinde `/dashboard`'a yönlenir.
+- K22 (Faz 6B'ye taşındı, PL-76; Faz 6B K1): Yönetici ve Denetçi `/` adresinde `/dashboard`'a yönlenir.
 - [ ] K23: Beklemede kayıt doğrudan müdahaleyle iptal edilir ya da yarıda kapatılır; açık bekleme müdahale anında kapanır, makine Boş olur.
 - [ ] K24 (eski Faz 5 K3): Sahip görevli ekler, eklenen kişi kendi PIN'ini girer ve görevli olur; olay ekleyeni ve onaylayanı taşır; yanlış katılım PIN'inde kişi eklenmez ve hatalı deneme o kişinin sayacına yazılır (SC-32).
 - [ ] K25 (eski Faz 5 K4 kısmı): PIN'i kilitli kişi görevli eklenemez, nedeni yazılır (BR-53).
@@ -1148,7 +1311,7 @@ backend `Controllers/EmergenciesController.cs`, `Controllers/NotificationsContro
 çıktısı ve sistem ayarlarının ekrandan değiştirilmesi (K-47).
 Takvim: Salı sonrası (O-03). Faz 6A'ya taşınanlar (PL-56): süre raporu ve malzeme izlenebilirliğinin sorgu ve tabloları (kalem 2, kalem 3'ün
 sorgu kısmı, E-30 tablosu, E-31), SH-15, K1-K5 ve K10. Denetim çıktısının içeriği Faz 6 detayının yazdırma çıktısındadır (Faz 6 K14). Bu fazda
-kalan: E-30 SVG grafiği (K9), CSV dışa aktarımları (K7), düzeltmeleri de içeren ayrı `/records/audit/{id}` adresi (K6, K8), bekleme ve düzeltme
+kalan: CSV dışa aktarımları (K7), düzeltmeleri de içeren ayrı `/records/audit/{id}` adresi (K6, K8), bekleme ve düzeltme
 kolonlarının raporlara eklenmesi, Sistem ayarları (K12-K15), son regresyon (K11).
 
 **Kapsam**
@@ -1159,7 +1322,7 @@ kolonlarının raporlara eklenmesi, Sistem ayarları (K12-K15), son regresyon (K
 | 2 | BE | Süre raporu sorgusu: makine ve faz bazında ortalama brüt, mola, bekleme, net, efor; yalnız Tamamlandı kayıtlar, faz ortalaması versiyon içinde (SH-15); durum sayıları ayrı; süre altı sayısı; en uzun adımlar (FR-40); tür filtresi | backend-engineer |
 | 3 | BE | Lot izlenebilirliği: lotla ve makineyle sorgu (FR-37); denetim çıktısı sorgusu; CSV (UTF-8 BOM, `;` ayırıcı); `IDurationCalculator` SH-15 | backend-engineer |
 | 4 | BE | Ayar servisi yazma: değer pozitif tam sayı; `<AzamiKilitSüresi>` aktif planlı tiplerin varsayılan kilit süresinin altına inemez, engelleyen tipler listelenir; her değişiklik aynı transaction'da geçmişe yazılır; PIN ister; etkiler PL-18 (açık kayıtların kilit bitişi değişmez, mevcut PIN'ler geçerli); `<PinUzunluğu>` küçültülemez, yalnız aynı kalır ya da artar (PL-66) | backend-engineer |
-| 5 | FE | E-30 Süre ve efor raporu (SVG grafik ve aynı verinin tablosu), E-31 Malzeme izlenebilirliği, E-32 Denetim çıktısı (yazdırma CSS'i, kabuksuz); detay ve listeye denetim çıktısı ve CSV bağlantıları; E-33 Sistem ayarları (birimli alanlar, PIN, engelleyen tipler, değişiklik geçmişi); menüde Yönetici ve Süper admin için Sistem ayarları | frontend-engineer |
+| 5 | FE | E-30 Süre ve efor raporu (grafikler Faz 6B'de, PL-78; bu fazda bekleme kolonu ve CSV bağlantısı), E-31 Malzeme izlenebilirliği, E-32 Denetim çıktısı (yazdırma CSS'i, kabuksuz); detay ve listeye denetim çıktısı ve CSV bağlantıları; E-33 Sistem ayarları (birimli alanlar, PIN, engelleyen tipler, değişiklik geçmişi); menüde Yönetici ve Süper admin için Sistem ayarları | frontend-engineer |
 
 **Paralel:** Evet. Gerekçe: raporlar salt okuma; ayar tablosu Faz 1'den beri var, yeni tablo yok; sözleşme aşağıda.
 
@@ -1175,7 +1338,7 @@ kolonlarının raporlara eklenmesi, Sistem ayarları (K12-K15), son regresyon (K
 | GET `/records/audit-csv/{id}`, `/records/export-csv` | `RecordsController.AuditCsv`, `.ExportCsv` | ManagerOrAuditor | CSV; liste dışa aktarımı `RecordListViewModel.Filter` ile | - |
 | GET, POST `/settings` | `SettingsController.Index`, `.Update` | ManagerOrSuperAdmin | `SystemSettingsViewModel { SessionTimeoutMinutes, PinLength, PinMaxAttempts, MaxPhotoSizeMb, MaxVideoSizeMb, MaxLockMinutes, Pin, BlockingTypes[] { Id, Name, DefaultLockMinutes }, History[] { SettingLabel, OldValue, NewValue, ChangedByName, ChangedAtLocal }, StatusMessage }` | `Views/Settings/Index.cshtml` |
 
-**Dosya sınırı:** frontend `Views/Reports/**`, `Views/Records/Audit.cshtml`, `Views/Settings/**`, menü, `Styles/` yazdırma katmanı, `wwwroot/js/SvgChart.js`; backend
+**Dosya sınırı:** frontend `Views/Reports/**`, `Views/Records/Audit.cshtml`, `Views/Settings/**`, menü, `Styles/` yazdırma katmanı; backend
 `Controllers/ReportsController.cs`, `Controllers/SettingsController.cs`, `RecordsController` denetim action'ları, rapor, CSV ve ayar servisleri, `DurationCalculator`, `ViewModels/Reports/**`, `ViewModels/Settings/**`.
 
 **Kabul kriterleri**
@@ -1188,7 +1351,7 @@ kolonlarının raporlara eklenmesi, Sistem ayarları (K12-K15), son regresyon (K
 - [ ] K6: Denetim çıktısı 13 soruyu, olay günlüğünü, bütünlük sonucunu, versiyonu, düzeltmeleri, SKT işaretlerini ve süre altı gerekçelerini içerir; yazdırma önizlemesinde menü ve üst bar görünmez (SC-14, FR-35).
 - [ ] K7: CSV dosyaları Excel'de Türkçe karakterler bozulmadan ve kolonlara ayrılmış açılır.
 - [ ] K8: Operatör `/reports/*` ve `/records/audit/*` için 403 alır; Denetçi açar (BR-34, SC-24).
-- [ ] K9: Her grafiğin aynı veriyi gösteren tablosu vardır; grafik gerçek veriden SVG ile çizilir (NFR-05).
+- K9 (Faz 6B'ye taşındı, PL-78; Faz 6B K7-K9): Her grafiğin aynı veriyi gösteren tablosu vardır; grafik gerçek veriden SVG ile çizilir (NFR-05). Bekleme kolonu eklenince makine grafiğine bekleme dilimi eklenir.
 - K10 (Faz 6A'ya taşındı, PL-56): SH-15 formülü `IDurationCalculator`'da XML yorumunda.
 - [ ] K11: Son regresyon: Brief §8'deki SC-01..SC-38'in her biri raporda geçti ya da kaldı olarak işaretlenir.
 - [ ] K12: Yönetici ve Süper admin `/settings`'te bir değeri PIN'le değiştirir; yanlış PIN'de değer değişmez; geçmişte eski değer, yeni değer, yapan ve zaman görünür. Operatör ve Denetçi `/settings` GET ve POST'ta 403 alır (FR-55).

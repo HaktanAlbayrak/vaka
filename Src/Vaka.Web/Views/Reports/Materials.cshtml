@@ -178,11 +178,11 @@ else
                         @foreach (var usage in Model.LotUsages)
                         {
                             <tr>
-                                <td data-label=""><span class="record-no text-sm xl:whitespace-nowrap">@usage.RecordNo</span></td>
-                                <td data-label="Makine" class="stack-wide stack-lead break-words font-semibold">@usage.MachineLabel</td>
+                                <td data-label="" class="stack-lead"><span class="record-no text-sm xl:whitespace-nowrap">@usage.RecordNo</span></td>
+                                <td data-label="Makine" class="stack-wide break-words font-semibold">@usage.MachineLabel</td>
                                 <td data-label="Açılış"><partial name="_Moment" model='(usage.OpenedAtLocal, DateTime.MinValue)' /></td>
-                                <td data-label="Durum" class="md:max-xl:col-span-2">
-                                    <div class="flex flex-wrap items-center gap-2">
+                                <td data-label="Durum" class="stack-badge">
+                                    <div class="flex flex-wrap items-center justify-end gap-2">
                                         <partial name="_Badge" model='"record|" + usage.StatusLabel' />
                                         @if (usage.ExpiredAtEntry)
                                         {
@@ -190,7 +190,7 @@ else
                                         }
                                     </div>
                                 </td>
-                                <td data-label="İşlem" class="cell-action md:max-xl:col-span-2">
+                                <td data-label="İşlem" class="cell-action">
                                     <a class="btn btn-secondary" href="@usage.Url" data-busy-link aria-label="@usage.RecordNo kaydının ayrıntısı">
                                         <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#file-text" /></svg>
                                         Ayrıntı
@@ -233,7 +233,7 @@ else
                         {
                             <tr>
                                 <td data-label=""><partial name="_Moment" model='(item.EnteredAtLocal, DateTime.MinValue)' /></td>
-                                <td data-label="Malzeme" class="stack-wide stack-lead break-words">
+                                <td data-label="Malzeme" class="stack-lead break-words">
                                     <span class="font-semibold">@item.MaterialName</span>
                                     <span class="mono mt-0.5 block text-xs text-muted">@item.MaterialCode</span>
                                 </td>
@@ -246,7 +246,7 @@ else
                                         <span class="mt-1 block"><partial name="_Badge" model='"lot.expired"' /></span>
                                     }
                                 </td>
-                                <td data-label="İşlem" class="cell-action max-xl:col-span-2">
+                                <td data-label="İşlem" class="cell-action">
                                     <a class="btn btn-secondary" href="@item.Url" data-busy-link aria-label="@item.RecordNo kaydının ayrıntısı">
                                         <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#file-text" /></svg>
                                         Ayrıntı

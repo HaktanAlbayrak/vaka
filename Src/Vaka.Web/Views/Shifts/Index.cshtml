@@ -72,7 +72,7 @@ else
                         @foreach (var item in Model.Items)
                         {
                             <tr>
-                                <td data-label="Ad" class="xl:max-w-xs break-words font-semibold stack-wide stack-lead">@item.Name</td>
+                                <td data-label="Ad" class="xl:max-w-xs break-words font-semibold stack-lead">@item.Name</td>
                                 <td data-label="Başlangıç"><span class="mono text-base font-bold">@item.StartTime.ToString("HH:mm")</span></td>
                                 <td data-label="Bitiş">
                                     <div class="flex flex-wrap items-center gap-2">
@@ -83,8 +83,8 @@ else
                                         }
                                     </div>
                                 </td>
-                                <td data-label="Durum"><partial name="_Badge" model='item.IsActive ? "def.active" : "def.inactive"' /></td>
-                                <td data-label="İşlem" class="cell-action md:max-xl:col-span-3">
+                                <td data-label="Durum" class="stack-badge"><partial name="_Badge" model='item.IsActive ? "def.active" : "def.inactive"' /></td>
+                                <td data-label="İşlem" class="cell-action">
                                     <a class="btn btn-secondary" href="/shifts/edit/@item.Id" aria-label="@item.Name vardiyasını düzenle">
                                         <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
                                         Düzenle

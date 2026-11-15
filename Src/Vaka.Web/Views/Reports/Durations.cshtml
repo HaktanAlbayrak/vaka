@@ -14,6 +14,32 @@
     var hasFilter = filter.From is not null || filter.To is not null || filter.FacilityId is not null || filter.LineId is not null
         || filter.MachineId is not null || filter.CleaningTypeId is not null || filter.Kind is not null;
     var hasData = Model.ByMachine.Length > 0 || Model.ByPhase.Length > 0 || Model.LongestSteps.Length > 0;
+
+    string Text(int seconds) => string.Join(" ", DurationFormatter.Format(seconds).Select(part => part.Value + " " + part.Unit));
+
+    var statusChart = (
+        "status-chart", "Kayıt sayısı",
+        "",
+        Model.StatusCounts.Select(item => (item.StatusLabel, "", (double)item.Count, "chart-3", 0.0, "chart-3", -1.0, item.Count.ToString(), "", "")).ToArray(),
+        "");
+    var machineChart = (
+        "machine-chart", "Ortalama süre",
+        "Net=chart-1;Mola=chart-3",
+        Model.ByMachine.Select(row => (row.MachineLabel, row.CleaningTypeName, (double)row.AvgNetSeconds, "chart-1", (double)row.AvgBreakSeconds, "chart-3", -1.0, "Net " + Text(row.AvgNetSeconds), "Mola " + Text(row.AvgBreakSeconds), "")).ToArray(),
+        "");
+    var phaseChart = (
+        "phase-chart", "Ortalama net süre",
+        "Ortalama net=chart-1;Ortalaması asgarinin altında=chart-1-hatch",
+        Model.ByPhase.Select(row =>
+        {
+            var below = row.MinDurationSeconds is { } min && row.AvgNetSeconds < min;
+            var flag = below ? "Ortalama asgarinin altında" : row.BelowMinimumCount > 0 ? row.BelowMinimumCount + " kayıt süre altı" : "";
+            return (row.CleaningTypeName + ", versiyon " + row.VersionNo, "Faz " + row.PhaseOrderNo + ", " + row.PhaseTitle,
+                (double)row.AvgNetSeconds, below ? "chart-1-hatch" : "chart-1", 0.0, "chart-1",
+                row.MinDurationSeconds is { } minimum ? (double)minimum : -1.0,
+                Text(row.AvgNetSeconds), row.MinDurationSeconds is { } shown ? "asgari " + Text(shown) : "asgari yok", flag);
+        }).ToArray(),
+        "Asgari süre");
 }
 
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
@@ -117,12 +143,13 @@
 <div data-loading-target class="space-y-5">
     <section class="panel" aria-labelledby="status-title">
         <div class="panel-head"><h2 id="status-title" class="panel-title">Kayıt durumları</h2></div>
-        @if (Model.StatusCounts.Length == 0)
+        @if (Model.StatusCounts.All(item => item.Count == 0))
         {
             <p class="p-4 text-muted md:p-5">Seçilen aralıkta kayıt yok.</p>
         }
         else
         {
+            <div class="border-b-2 border-line p-4 md:p-5"><partial name="_BarChart" model="statusChart" /></div>
             <dl class="kv grid-cols-2 p-4 md:grid-cols-4 md:p-5 xl:grid-cols-6">
                 @foreach (var item in Model.StatusCounts)
                 {
@@ -147,6 +174,7 @@
     {
         <section class="panel" aria-labelledby="machine-title">
             <div class="panel-head"><h2 id="machine-title" class="panel-title">Makine bazında ortalama</h2></div>
+            <div class="border-b-2 border-line p-4 md:p-5 max-xl:border-b-0 max-xl:px-0"><partial name="_BarChart" model="machineChart" /></div>
             <table class="data-table table-stack">
                 <caption class="sr-only">Makine ve temizlik tipi bazında ortalama brüt, mola, net süre ve efor</caption>
                 <thead>
@@ -163,7 +191,7 @@
                     @foreach (var row in Model.ByMachine)
                     {
                         <tr>
-                            <td data-label="" class="stack-wide stack-lead break-words">
+                            <td data-label="" class="stack-lead break-words">
                                 <span class="font-semibold">@row.MachineLabel</span>
                                 <span class="mt-0.5 block text-sm text-muted">@row.CleaningTypeName</span>
                             </td>
@@ -171,7 +199,7 @@
                             <td data-label="Brüt" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(row.AvgGrossSeconds)" /></td>
                             <td data-label="Mola" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(row.AvgBreakSeconds)" /></td>
                             <td data-label="Net" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(row.AvgNetSeconds)" /></td>
-                            <td data-label="Efor" class="num whitespace-nowrap max-xl:col-span-2"><partial name="_Duration" model="DurationFormatter.Format(row.AvgEffortSeconds)" /></td>
+                            <td data-label="Efor" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(row.AvgEffortSeconds)" /></td>
                         </tr>
                     }
                 </tbody>
@@ -183,6 +211,7 @@
                 <h2 id="phase-title" class="panel-title">Faz bazında ortalama net süre</h2>
                 <p class="text-sm text-muted">Ortalama versiyon içinde alınır, her versiyon ayrı satırdır.</p>
             </div>
+            <div class="border-b-2 border-line p-4 md:p-5 max-xl:border-b-0 max-xl:px-0"><partial name="_BarChart" model="phaseChart" /></div>
             <table class="data-table table-stack">
                 <caption class="sr-only">Tip, versiyon ve faz bazında ortalama net süre ve süre altı sayısı</caption>
                 <thead>
@@ -198,7 +227,7 @@
                     @foreach (var row in Model.ByPhase)
                     {
                         <tr>
-                            <td data-label="" class="stack-wide stack-lead break-words">
+                            <td data-label="" class="stack-lead break-words">
                                 <span class="font-semibold">@row.CleaningTypeName, versiyon @row.VersionNo</span>
                                 <span class="mt-0.5 block text-sm text-muted">Faz @row.PhaseOrderNo, @row.PhaseTitle</span>
                             </td>
@@ -213,8 +242,8 @@
                                 }
                             </td>
                             <td data-label="Kayıt" class="num whitespace-nowrap">@row.RecordCount</td>
-                            <td data-label="Ort. net" class="num whitespace-nowrap md:max-xl:col-span-2"><partial name="_Duration" model="DurationFormatter.Format(row.AvgNetSeconds)" /></td>
-                            <td data-label="Süre altı" class="num whitespace-nowrap md:max-xl:col-span-2">
+                            <td data-label="Ort. net" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(row.AvgNetSeconds)" /></td>
+                            <td data-label="Süre altı" class="num whitespace-nowrap">
                                 @if (row.BelowMinimumCount > 0)
                                 {
                                     <span class="chip"><svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>@row.BelowMinimumCount kayıt</span>
@@ -253,14 +282,14 @@
                         @foreach (var row in Model.LongestSteps)
                         {
                             <tr>
-                                <td data-label="" class="stack-wide stack-lead break-words">
+                                <td data-label="" class="stack-lead break-words">
                                     <span class="font-semibold">@row.StepTitle</span>
                                     <span class="mt-0.5 block text-sm text-muted">@row.CleaningTypeName, versiyon @row.VersionNo</span>
                                 </td>
                                 <td data-label="Faz" class="break-words">@row.PhaseTitle</td>
                                 <td data-label="Kayıt" class="num whitespace-nowrap">@row.RecordCount</td>
-                                <td data-label="Ort. süre" class="num whitespace-nowrap md:max-xl:col-span-2"><partial name="_Duration" model="DurationFormatter.Format(row.AvgDurationSeconds)" /></td>
-                                <td data-label="En uzun" class="num whitespace-nowrap md:max-xl:col-span-2"><partial name="_Duration" model="DurationFormatter.Format(row.MaxDurationSeconds)" /></td>
+                                <td data-label="Ort. süre" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(row.AvgDurationSeconds)" /></td>
+                                <td data-label="En uzun" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(row.MaxDurationSeconds)" /></td>
                             </tr>
                         }
                     </tbody>

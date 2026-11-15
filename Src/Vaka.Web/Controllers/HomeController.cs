@@ -18,7 +18,7 @@ public sealed class HomeController : Controller
 
         if (User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Auditor))
         {
-            return RedirectToAction("Index", "Records");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         var roles = User.GetRoles();

@@ -77,8 +77,8 @@
                     @foreach (var item in Model.Items)
                     {
                         <tr>
-                            <td data-label="Kod"><span class="record-no text-sm">@item.Code</span></td>
-                            <td data-label="Ad" class="xl:max-w-xs break-words font-semibold stack-wide stack-lead">@item.Name</td>
+                            <td data-label="Kod" class="stack-lead"><span class="record-no text-sm">@item.Code</span></td>
+                            <td data-label="Ad" class="xl:max-w-xs break-words font-semibold stack-wide">@item.Name</td>
                             <td data-label="Lotlar">
                                 <div class="flex flex-wrap items-center gap-2">
                                     <span class="mono">@item.LotCount lot</span>
@@ -89,8 +89,8 @@
                                     }
                                 </div>
                             </td>
-                            <td data-label="Durum"><partial name="_Badge" model='item.IsActive ? "def.active" : "def.inactive"' /></td>
-                            <td data-label="İşlem" class="cell-action max-md:col-span-2 md:max-xl:col-span-3">
+                            <td data-label="Durum" class="stack-badge"><partial name="_Badge" model='item.IsActive ? "def.active" : "def.inactive"' /></td>
+                            <td data-label="İşlem" class="cell-action">
                                 <div class="action-row">
                                     <a class="btn btn-secondary" href="/materials/details/@item.Id" aria-label="@item.Name lotlarını göster">
                                         <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#list" /></svg>

@@ -102,7 +102,7 @@ Route'lar taslaktır; kesin liste ve ViewModel alanları PhasePlan sözleşmeler
 | E-11 | Prosedür taslağı düzenleyici | `/procedure-versions/edit/{id}` | Manager | FR-04..FR-07 | 3 |
 | E-12 | Versiyon görüntüleme | `/procedure-versions/details/{id}` | ManagerOrAuditor | FR-09 | 3 |
 | E-13 | İşlerim | `/my-work` | Operator | FR-26, FR-45 | 4 |
-| E-14 | Yeni kayıt | `/records/create` | Operator | FR-10, FR-11, FR-50, FR-53 | 4 |
+| E-14 | Yeni kayıt | `/records/create` | Operator | FR-10, FR-11, FR-50, FR-53 | 4; 6B (iş emri no isteğe bağlı, boşsa sistem atar; PL-80) |
 | E-15 | Yürütme ekranı | `/records/run/{id}` | Operator | FR-16..FR-23, FR-42 | 4 (Açıldı hali), 5 (tam) |
 | E-16 | Makine durum panosu | `/machine-board` | RecordReaders | FR-41 | 4 |
 | E-17 | Görevli paneli ve katılım onayı (E-15 içinde) | `/records/add-participant/{stepId}` | Operator | FR-17, FR-48 | 5 (ekleme), 7 (katılım onayı, PL-57) |
@@ -110,7 +110,7 @@ Route'lar taslaktır; kesin liste ve ViewModel alanları PhasePlan sözleşmeler
 | E-19 | Kayıtlar | `/records` | RecordReaders | FR-38 | 6 |
 | E-20 | Kayıt detayı | `/records/details/{id}` | RecordReaders | FR-31, FR-34 | 6 |
 | E-21 | Bütünlük doğrulama | `/records/integrity/{id}` | ManagerOrAuditor | FR-32 | 6 |
-| E-22 | Yönetici panosu | `/dashboard` | ManagerOrAuditor | İÖ-07 | 7 (PL-46) |
+| E-22 | Yönetici panosu | `/dashboard` | ManagerOrAuditor | İÖ-07 | 6B (özet, aktif, süre altı, son tamamlanan, son 7 gün; PL-76), 7 (SH-16, bekleme, talepler), 8 (acil) |
 | E-23 | Talep formu (E-15 ve E-20 içinde) | `/requests/create` | Operator | FR-43 | 7 |
 | E-24 | Taleplerim | `/requests/mine` | Operator | FR-43 | 7 |
 | E-25 | Talepler ve karar | `/requests`, `/requests/decide/{id}` | Manager (Auditor salt okunur liste) | FR-44 | 7 |
@@ -118,13 +118,13 @@ Route'lar taslaktır; kesin liste ve ViewModel alanları PhasePlan sözleşmeler
 | E-27 | Acil müdahale | `/emergencies/create` | Operator | FR-51 | 6A (PL-56) |
 | E-28 | Bildirimler | `/notifications` | Manager | FR-52 | 8 |
 | E-29 | Düzeltme | `/corrections/create` | Manager | BR-29 | 8 |
-| E-30 | Süre ve efor raporu | `/reports/durations` | ManagerOrAuditor | FR-21, FR-36, FR-40 | 6A (tablo), 9 (grafik, CSV); PL-56 |
+| E-30 | Süre ve efor raporu | `/reports/durations` | ManagerOrAuditor | FR-21, FR-36, FR-40 | 6A (tablo), 6B (grafik, PL-78), 9 (CSV); PL-56 |
 | E-31 | Malzeme izlenebilirliği | `/reports/materials` | ManagerOrAuditor | FR-37 | 6A (sorgu), 9 (CSV); PL-56 |
 | E-32 | Denetim çıktısı | `/records/audit/{id}` | ManagerOrAuditor | FR-35 | 6 (detayın yazdırma çıktısı), 9 (ayrı adres, düzeltmeler, CSV); PL-56 |
 | E-33 | Sistem ayarları ve değişiklik geçmişi | `/settings` | ManagerOrSuperAdmin | FR-55 | 9 |
 
 Sistem sayfaları: 403 (`/account/access-denied`), hata sayfası, ana sayfa `/` (rolüne göre İşlerim, Yönetici panosu ya da Kullanıcılar'a yönlenir;
-Yönetici ve Denetçi Faz 6'dan Faz 7'ye kadar Kayıtlar'a, PL-46).
+Yönetici ve Denetçi Faz 6 ve 6A'da Kayıtlar'a (PL-46), Faz 6B'den itibaren Yönetici panosuna (PL-76)).
 
 Salı (2026-11-17) takvimi: Faz 3, 4, 5, 6 ve 6A Salı'dan önce, Faz 7, 8 ve 9 sonra (O-03, O-04); ekran envanteri ve rol matrisi değişmedi.
 
@@ -147,7 +147,7 @@ Alan listesi Brief §7.g'deki taslaktır; tablo ve kolon adları dbadmin'in kara
 | RecordMaterial | Lot, açılış anı malzeme ve lot değerleri, SKT geçmiş işareti ve gerekçesi | İlk adımdan sonra değişmez (BR-47) | 4 |
 | CleaningEvent | Olay günlüğü: sıra, tür, değerler, yapan, sunucu zamanı, önceki özet, özet | Yalnız eklenir (BR-31, tetikleyici); özet zinciri (BR-32) | 4 |
 | İşlenmiş komut | Komut kimliği ve ilk sonuç | Aynı komut ikinci etki üretmez (BR-33) | 4 |
-| NumberSequence | Kayıt no ve saha referansı sayaçları | Makine-yıl ve tesis-yıl kapsamı (BR-08, BR-09) | 4 |
+| NumberSequence | Kayıt no, saha referansı ve iş emri no sayaçları | Makine-yıl ve tesis-yıl kapsamı (BR-08, BR-09); iş emri no tesis-yıl (PL-80, Faz 6B, şema değişmez) | 4 |
 | RecordBreak | Mola: başlatan, başladığı anda devam eden adım (boş olabilir), zamanlar, kapanış türü, gerekçe | Kayıtta ve kişide tek açık mola (BR-40) | 5 |
 | RecordRequest | Talep: tür, gerekçe, durum, karar veren, karar notu | Kayıtta tek bekleyen talep (BR-41) | 7 |
 | RecordHold | Bekleme aralıkları | Kayıtta tek açık bekleme | 7 |

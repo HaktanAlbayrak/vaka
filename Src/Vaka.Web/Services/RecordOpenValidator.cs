@@ -30,13 +30,13 @@ public sealed class RecordOpenValidator : IRecordOpenValidator
         var type = machine is null ? null : await CheckTypeAsync(request, machine.Id, errors, cancellationToken);
 
         var workOrder = request.WorkOrderNo?.Trim() ?? string.Empty;
-        if (workOrder.Length == 0)
-        {
-            errors.Add(new FieldError("WorkOrderNo", "İş emri numarasını girin."));
-        }
-        else if (workOrder.Length > WorkOrderMaxLength)
+        if (workOrder.Length > WorkOrderMaxLength)
         {
             errors.Add(new FieldError("WorkOrderNo", $"İş emri numarası en çok {WorkOrderMaxLength} karakter olabilir."));
+        }
+        else if (RecordNumbers.LooksLikeSystemWorkOrder(workOrder))
+        {
+            errors.Add(new FieldError("WorkOrderNo", "Bu biçim sistemin atadığı numaraya ayrılmıştır. Alanı boş bırakın ya da dış iş emri numarasını girin."));
         }
 
         var note = request.Note?.Trim();

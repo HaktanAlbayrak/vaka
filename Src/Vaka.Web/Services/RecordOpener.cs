@@ -125,6 +125,9 @@ public sealed class RecordOpener : IRecordOpener
         var lockExpiresAt = _calculator.CalculateLockExpiry(now, plan.LockMinutes, shift);
         var year = _clock.Today().Year;
         var sequence = await _numbers.NextAsync(RecordNumbers.RecordScope(machine.Id), year, cancellationToken);
+        var workOrderNo = plan.WorkOrderNo.Length > 0
+            ? plan.WorkOrderNo
+            : RecordNumbers.FormatWorkOrder(machine.FacilityCode, year, await _numbers.NextAsync(RecordNumbers.WorkOrderScope(machine.FacilityId), year, cancellationToken));
 
         var record = new CleaningRecord
         {
@@ -133,7 +136,7 @@ public sealed class RecordOpener : IRecordOpener
             Status = RecordStatus.Opened,
             ProcedureVersionId = plan.VersionId,
             OwnerUserId = ownerUserId,
-            WorkOrderNo = plan.WorkOrderNo,
+            WorkOrderNo = workOrderNo,
             Note = string.IsNullOrEmpty(plan.Note) ? null : plan.Note,
             LockMinutes = plan.LockMinutes,
             LockExpiresAtUtc = lockExpiresAt.UtcDateTime,
@@ -181,7 +184,7 @@ public sealed class RecordOpener : IRecordOpener
                     plan.VersionNo,
                     plan.LockMinutes,
                     LockExpiresAtUtc = record.LockExpiresAtUtc,
-                    plan.WorkOrderNo,
+                    WorkOrderNo = workOrderNo,
                     MaterialLotIds = plan.Lots.Select(lot => lot.LotId),
                     MaterialLots = plan.Lots.Select(lot => new { lot.LotId, lot.LotNo, ExpiredAtEntry = lot.IsExpired, lot.ExpiredReason })
                 },

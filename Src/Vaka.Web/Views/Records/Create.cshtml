@@ -157,7 +157,7 @@
 
             <div class="space-y-5 border-t-2 border-line pt-6">
                 <h3 class="text-lg font-bold">İş bilgisi</h3>
-                <partial name="_Field" model='("WorkOrderNo", "İş emri no", Model.WorkOrderNo, "text", "off", "Planlı temizlikte iş emri numarası zorunludur.", true, false)' />
+                <partial name="_Field" model='("WorkOrderNo", "İş emri no (isteğe bağlı)", Model.WorkOrderNo, "text", "off", "Dış sistemden bir iş emri numaranız varsa yazın. Boş bırakırsanız kayıt açılınca sistem numara atar.", false, false)' />
                 <div class="field" data-field>
                     <label class="field-label" for="Note">Açıklama</label>
                     <textarea id="Note" name="Note" class="input" rows="3" autocomplete="off">@Model.Note</textarea>

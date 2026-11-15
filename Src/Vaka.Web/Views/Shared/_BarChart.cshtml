@@ -1,27 +1,87 @@
-@using ChartRow = (string Label, int Planned, int Emergency)
-@model (string Caption, ChartRow[] Rows)
+@using System.Globalization
+@* Sunucuda çizilen yatay çubuk grafiği (PL-78). Çubuk uzunluğu değer / en büyük değer oranıdır. Her satırda en çok iki dilim vardır; ikinci dilim 0 olabilir. Marker < 0 işaret yok demektir. Ton "chart-1", "chart-2", "chart-3" ya da sonuna "-hatch" eklenmiş desenli biçimdir. Lejant "Ad=ton;Ad=ton" biçimindedir. *@
+@using ChartRow = (string Label, string Sub, double First, string FirstTone, double Second, string SecondTone, double Marker, string Value, string ValueSub, string Flag)
+@model (string Id, string Title, string Legend, ChartRow[] Rows, string MarkerLegend)
 @{
-    var maxTotal = Model.Rows.Max(row => row.Planned + row.Emergency);
+    var invariant = CultureInfo.InvariantCulture;
+    var scale = Model.Rows.Max(row => Math.Max(row.First + row.Second, row.Marker));
+    var legend = Model.Legend.Split(';', StringSplitOptions.RemoveEmptyEntries).Select(item => item.Split('=')).ToArray();
+    if (scale <= 0)
+    {
+        scale = 1;
+    }
+    string Percent(double value) => (value * 100.0 / scale).ToString("0.##", invariant) + "%";
+    string FillClass(string tone) => tone.Replace("-hatch", "") switch
+    {
+        "chart-1" => "fill-chart-1",
+        "chart-2" => "fill-chart-2",
+        "chart-3" => "fill-chart-3",
+        _ => "fill-sunken"
+    };
 }
-<figure>
+<figure class="min-w-0">
     <figcaption class="mb-3 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm">
-        <span class="font-semibold">@Model.Caption</span>
-        <span class="inline-flex items-center gap-1.5"><svg width="12" height="12" aria-hidden="true"><rect width="12" height="12" class="fill-chart-1" /></svg>Planlı</span>
-        <span class="inline-flex items-center gap-1.5"><svg width="12" height="12" aria-hidden="true"><rect width="12" height="12" class="fill-chart-2" /></svg>Acil</span>
+        <span class="font-semibold">@Model.Title</span>
+        @foreach (var item in legend)
+        {
+            <span class="inline-flex items-center gap-1.5">
+                <svg width="12" height="12" aria-hidden="true"><rect width="12" height="12" class="@FillClass(item[1])" />@if (item[1].EndsWith("-hatch", StringComparison.Ordinal)){<rect width="12" height="12" fill="url(#@(Model.Id)-hatch)" />}</svg>@item[0]
+            </span>
+        }
+        @if (Model.MarkerLegend.Length > 0)
+        {
+            <span class="inline-flex items-center gap-1.5">
+                <svg width="12" height="12" aria-hidden="true"><line x1="6" x2="6" y1="0" y2="12" stroke-width="3" class="stroke-ink" /></svg>@Model.MarkerLegend
+            </span>
+        }
     </figcaption>
-    <ul class="grid grid-cols-[4.25rem_minmax(0,1fr)_auto] gap-x-3 gap-y-1.5">
+    <svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <pattern id="@(Model.Id)-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <rect width="2.5" height="6" class="fill-surface" />
+            </pattern>
+        </defs>
+    </svg>
+    <ul class="space-y-3">
         @foreach (var row in Model.Rows)
         {
-            var plannedWidth = row.Planned * 100.0 / maxTotal;
-            var emergencyWidth = row.Emergency * 100.0 / maxTotal;
-            <li class="col-span-3 grid grid-cols-subgrid items-center text-sm">
-                <span class="font-semibold">@row.Label</span>
-                <svg viewBox="0 0 100 12" preserveAspectRatio="none" class="h-5 w-full" aria-hidden="true">
-                    <rect x="0" y="0" width="100" height="12" class="fill-sunken" />
-                    <rect x="0" y="0" width="@plannedWidth.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)" height="12" class="fill-chart-1" />
-                    <rect x="@plannedWidth.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)" y="0" width="@emergencyWidth.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)" height="12" class="fill-chart-2" />
+            <li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1.5 text-sm md:grid-cols-[minmax(0,13rem)_minmax(0,1fr)_minmax(7rem,auto)]">
+                <span class="min-w-0 break-words">
+                    <span class="block font-semibold">@row.Label</span>
+                    @if (row.Sub.Length > 0)
+                    {
+                        <span class="block text-muted">@row.Sub</span>
+                    }
+                </span>
+                <svg class="col-span-2 row-start-2 h-5 w-full md:col-span-1 md:col-start-2 md:row-start-1" aria-hidden="true" focusable="false">
+                    <rect x="0" y="0" width="100%" height="100%" class="fill-sunken" />
+                    <rect x="0" y="0" width="@Percent(row.First)" height="100%" class="@FillClass(row.FirstTone)" />
+                    @if (row.FirstTone.EndsWith("-hatch", StringComparison.Ordinal))
+                    {
+                        <rect x="0" y="0" width="@Percent(row.First)" height="100%" fill="url(#@(Model.Id)-hatch)" />
+                    }
+                    @if (row.Second > 0)
+                    {
+                        <rect x="@Percent(row.First)" y="0" width="@Percent(row.Second)" height="100%" class="@FillClass(row.SecondTone)" />
+                    }
+                    @if (row.Marker >= 0)
+                    {
+                        <line x1="@Percent(row.Marker)" x2="@Percent(row.Marker)" y1="0" y2="100%" stroke-width="3" class="stroke-ink" />
+                    }
                 </svg>
-                <span class="mono whitespace-nowrap text-right font-bold">@(row.Planned + row.Emergency)<span class="font-normal text-muted"> (@row.Emergency acil)</span></span>
+                <span class="col-start-2 row-start-1 min-w-0 text-right md:col-start-3">
+                    <span class="mono block whitespace-nowrap font-bold">@row.Value</span>
+                    @if (row.ValueSub.Length > 0)
+                    {
+                        <span class="mono block whitespace-nowrap text-xs text-muted">@row.ValueSub</span>
+                    }
+                    @if (row.Flag.Length > 0)
+                    {
+                        <span class="mt-0.5 inline-flex items-center justify-end gap-1 text-xs font-bold text-warn">
+                            <svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>@row.Flag
+                        </span>
+                    }
+                </span>
             </li>
         }
     </ul>

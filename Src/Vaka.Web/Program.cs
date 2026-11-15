@@ -99,6 +99,7 @@ builder.Services.AddScoped<IStepLocator, StepLocator>();
 builder.Services.AddScoped<IStepStarter, StepStarter>();
 builder.Services.AddScoped<IStepFinisher, StepFinisher>();
 builder.Services.AddScoped<IMyWorkReader, MyWorkReader>();
+builder.Services.AddScoped<IDashboardReader, DashboardReader>();
 builder.Services.AddScoped<IMachineBoardReader, MachineBoardReader>();
 builder.Services.AddScoped<IRecordListReader, RecordListReader>();
 builder.Services.AddScoped<IRecordStateAudit, RecordStateAudit>();
