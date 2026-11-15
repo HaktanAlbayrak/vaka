@@ -108,6 +108,18 @@ builder.Services.AddScoped<IRecordPhaseReader, RecordPhaseReader>();
 builder.Services.AddScoped<IRecordDetailReader, RecordDetailReader>();
 builder.Services.AddScoped<IInterventionForms, InterventionForms>();
 builder.Services.AddScoped<IInterventionService, InterventionService>();
+builder.Services.AddScoped<IRecordBlockFinder, RecordBlockFinder>();
+builder.Services.AddScoped<IRecordPhaseBuilder, RecordPhaseBuilder>();
+builder.Services.AddScoped<IRecordLotChecker, RecordLotChecker>();
+builder.Services.AddScoped<IRecordMachineChecker, RecordMachineChecker>();
+builder.Services.AddScoped<IMaterialEntryResolver, MaterialEntryResolver>();
+builder.Services.AddScoped<IStepStartApplier, StepStartApplier>();
+builder.Services.AddScoped<IEmergencyOpenValidator, EmergencyOpenValidator>();
+builder.Services.AddScoped<IEmergencyOpener, EmergencyOpener>();
+builder.Services.AddScoped<IEmergencyForm, EmergencyForm>();
+builder.Services.AddScoped<IReportOptions, ReportOptions>();
+builder.Services.AddScoped<IDurationReportReader, DurationReportReader>();
+builder.Services.AddScoped<IMaterialTraceReader, MaterialTraceReader>();
 
 var app = builder.Build();
 

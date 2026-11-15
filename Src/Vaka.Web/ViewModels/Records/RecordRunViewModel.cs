@@ -38,6 +38,9 @@ public sealed class RecordRunViewModel
 
     public string Note { get; set; } = string.Empty;
 
+    /// <summary>Yalnız acil kayıtta dolu; yürütme başlığında görünür.</summary>
+    public string? EmergencyDescription { get; set; }
+
     public bool MaterialRequired { get; set; }
 
     public bool IsOwner { get; set; }

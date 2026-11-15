@@ -1,0 +1,76 @@
+Faz 6A mekanik eval (UiDelivery §3) ve G11 imzaları, teslim testi (build2). Hücreler: 360/768/1024/1440 açık ve koyu, 1920 açık, 360 açık ve 1440 koyu reduced-motion, 320x640 ve 640x400 (%200 zoom karşılığı).
+Beklenen: h1 1, skip true, imgNoAlt/imgNoSize/inputNoLabel/iconBtnNoName 0, emdash false, hScroll false, overflowing 0, smallTargets 0 (label.choice içindeki 20x20 radyo/onay kutusu hariç), extScripts [], font Hanken Grotesk + Archivo yüklü, üst bar <= 72, konsol 0, G5a belirteçsiz POST formu 0.
+
+===== t-op 52
+  sınıflar {'temiz': 52} G12 kontrol {'a': 39, 'c': 273, 'd': 156, 'b': 21, 'e': 21} POST form 195 kontrast>= 5.43 topbar<= 64
+===== t-opjs 39
+  sınıflar {'temiz': 39} G12 kontrol {'a': 39, 'c': 325, 'd': 156, 'b': 48, 'e': 21} POST form 156 kontrast>= 5.71 topbar<= 64
+===== t-op10 52
+  KALDI /records/details/12 640x400-dark  ['G12[f] satır kartı tablosu 1 satır KUSUR kart 1: satır 1 sağ kenar 132 px kısa', 'G12[f] satır kartı tablosu 3 satır KUSUR kart 1: satır 1 sağ kenar 4 px kısa | kart 2: satır 1 sağ kenar 4 px kısa | kart 3: satır 1 sağ kenar 4 px kısa']
+  sınıflar {'temiz': 51, 'G12[f]': 1} G12 kontrol {'d': 312, 'a': 65, 'c': 156, 'e': 20, 'f': 18, 'b': 7} POST form 221 kontrast>= 5.28 topbar<= 64
+===== t-op3 52
+  KALDI /records?kind=2 640x400-dark  ['G12[f] satır kartı tablosu 2 satır KUSUR kart 1: satır 1 sağ kenar 132 px kısa; satır 2 sağ kenar 90 px kısa | kart 2: satır 1 sağ kenar 132 px kısa; satır 2 sağ kenar 90 px kısa']
+  KALDI /records?mineOnly=false 640x400-dark  ['G12[f] satır kartı tablosu 18 satır KUSUR kart 1: satır 1 sağ kenar 132 px kısa; satır 2 sağ kenar 90 px kısa | kart 2: satır 1 sağ kenar 132 px kısa; satır 2 sağ kenar 90 px kısa | kart 3: satır 1 sağ kenar 132 px kısa; satır ']
+  KALDI /records/details/3 640x400-dark  ['G12[f] satır kartı tablosu 5 satır KUSUR kart 1: satır 1 sağ kenar 4 px kısa | kart 2: satır 1 sağ kenar 4 px kısa | kart 3: satır 1 sağ kenar 4 px kısa (+2)']
+  sınıflar {'temiz': 49, 'G12[f]': 3} G12 kontrol {'b': 88, 'c': 234, 'e': 37, 'f': 27, 'd': 221} POST form 156 kontrast>= 5.28 topbar<= 64
+===== t-m1 234
+  KALDI /records?kind=2 640x400-dark  ['G12[f] satır kartı tablosu 12 satır KUSUR kart 1: satır 1 sağ kenar 132 px kısa; satır 2 sağ kenar 90 px kısa | kart 2: satır 1 sağ kenar 132 px kısa; satır 2 sağ kenar 90 px kısa | kart 3: satır 1 sağ kenar 132 px kısa; satır ']
+  KALDI /records/details/11 640x400-dark  ['G12[f] satır kartı tablosu 2 satır KUSUR kart 1: satır 1 sağ kenar 132 px kısa | kart 2: satır 1 sağ kenar 132 px kısa', 'G12[f] satır kartı tablosu 7 satır KUSUR kart 1: satır 1 sağ kenar 4 px kısa | kart 2: satır 1 sağ kenar 4 px kısa | kart 3: satır 1 sağ kenar 4
+  KALDI /records/details/8 640x400-dark  ['G12[f] satır kartı tablosu 1 satır KUSUR kart 1: satır 1 sağ kenar 132 px kısa', 'G12[f] satır kartı tablosu 4 satır KUSUR kart 1: satır 1 sağ kenar 4 px kısa | kart 2: satır 1 sağ kenar 4 px kısa | kart 3: satır 1 sağ kenar 4 px kısa (+1)']
+  sınıflar {'temiz': 231, 'G12[f]': 3} G12 kontrol {'b': 348, 'c': 1040, 'd': 624, 'e': 233, 'f': 162} POST form 702 kontrast>= 5.28 topbar<= 64
+===== t-au 39
+  sınıflar {'temiz': 39} G12 kontrol {'b': 59, 'c': 182, 'd': 91, 'e': 39, 'f': 45} POST form 117 kontrast>= 5.28 topbar<= 64
+===== t-regm 120
+  KALDI /users 360x800-light  ['G11 boşluk 3(ARA)']
+  KALDI /machines 360x800-light  ['small:showRetired 20x20', 'G11 boşluk 3(ARA)', 'G11 boşluk 3(ARA)']
+  KALDI /materials 360x800-light  ['small:showInactive 20x20', 'G11 boşluk 3(ARA)']
+  KALDI /cleaning-types 360x800-light  ['small:showInactive 20x20', 'G11 boşluk 4(ARA)']
+  KALDI /cleaning-types/details/2 360x800-light  ['G11 boşluk 3(ARA)']
+  KALDI /interventions/create?recordId=12 360x800-light  ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=12 768x1024-light  ['small:Type 20x20;Type 20x20']
+  KALDI /cleaning-types/details/2 1024x768-light  ['G11 boşluk 3(ARA)']
+  KALDI /interventions/create?recordId=12 1024x768-light  ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=12 1440x900-light  ['small:Type 20x20;Type 20x20']
+  KALDI /users 360x800-dark  ['G11 boşluk 3(ARA)']
+  KALDI /machines 360x800-dark  ['small:showRetired 20x20', 'G11 boşluk 3(ARA)', 'G11 boşluk 3(ARA)']
+  KALDI /materials 360x800-dark  ['small:showInactive 20x20', 'G11 boşluk 3(ARA)']
+  KALDI /cleaning-types 360x800-dark  ['small:showInactive 20x20', 'G11 boşluk 4(ARA)']
+  KALDI /cleaning-types/details/2 360x800-dark  ['G11 boşluk 3(ARA)']
+  KALDI /interventions/create?recordId=12 360x800-dark  ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=12 768x1024-dark  ['small:Type 20x20;Type 20x20']
+  KALDI /cleaning-types/details/2 1024x768-dark  ['G11 boşluk 3(ARA)']
+  KALDI /interventions/create?recordId=12 1024x768-dark  ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=12 1440x900-dark  ['small:Type 20x20;Type 20x20']
+  sınıflar {'G11': 6, 'G11+small': 6, 'small': 34, 'temiz': 74} G12 kontrol {'b': 92, 'c': 168, 'e': 82, 'f': 78, 'd': 224, 'a': 8} POST form 376 kontrast>= 5.28 topbar<= 64
+===== t-regop 40
+  sınıflar {'temiz': 40} G12 kontrol {'a': 8, 'c': 152, 'd': 136, 'b': 44, 'e': 30, 'f': 18} POST form 128 kontrast>= 5.28 topbar<= 64
+
+Not: t-regm KALDI satırları yalnız 20x20 onay kutusu/radyo ve G11 izinli yarım hücre (İşlem kendi satırında); g11.py ile 88/88 beklenen imza.
+640x400 G12[f] satırları B3 (Faz 6 ekranları, G12 genişlikleri dışında).
+
+G11 rapor tabloları (frontend devir notundaki beklenen imza):
+sig /reports/durations?kind=2 360x800-light 0 card r5 first=(boş):2@1 Kayıt:1@2 Brüt:1@2 Mola:1@3 Net:1@3 Efor:2@4 LONG=(boş):2@1 Kayıt:1@2 Brüt:1@2 Mola:1@3 Net:1@3 Efor:2@4
+sig /reports/durations?kind=2 360x800-light 1 card r2 first=(boş):2@1 Asgari süre:1@2 Kayıt:1@2 Ort. net:1@3 Süre altı:1@3
+sig /reports/durations?kind=2 360x800-light 2 card r3 first=(boş):2@1 Faz:1@2 Kayıt:1@2 Ort. süre:1@3 En uzun:1@3 LONG=(boş):2@1 Faz:1@2 Kayıt:1@2 Ort. süre:1@3 En uzun:1@3
+sig /reports/materials?mode=Lot&MaterialLotId=1 360x800-light 0 card r2 first=Makine:2@1 (boş):1@2 Açılış:1@2 Durum:1@3 İşlem:1@3 LONG=Makine:2@1 (boş):1@2 Açılış:1@2 Durum:1@3 İşlem:1@3
+sig /reports/materials?mode=Machine&MachineId=10 360x800-light 0 card r2 first=Malzeme:2@1 (boş):1@2 Kayıt no:1@2 Lot no:1@3 SKT:1@3 İşlem:2@4
+sig /records?kind=2 360x800-light 0 card r12 first=Makine ve yer:2@1 (boş):1@2 Sahip:1@2 Durum:1@3 Açılış:1@3 Net süre:1@4 İşlem:1@4 LONG=Makine ve yer:2@1 (boş):1@2 Sahip:1@2 Durum:1@3 Açılış:1@3 Net süre:1@4 İşlem:1@4
+sig /reports/durations?kind=2 768x1024-light 0 card r5 first=(boş):2@1 Kayıt:1@1 Brüt:1@1 Mola:1@2 Net:1@2 Efor:2@2 LONG=(boş):2@1 Kayıt:1@1 Brüt:1@1 Mola:1@2 Net:1@2 Efor:2@2
+sig /reports/durations?kind=2 768x1024-light 1 card r2 first=(boş):2@1 Asgari süre:1@1 Kayıt:1@1 Ort. net:2@2 Süre altı:2@2
+sig /reports/durations?kind=2 768x1024-light 2 card r3 first=(boş):2@1 Faz:1@1 Kayıt:1@1 Ort. süre:2@2 En uzun:2@2 LONG=(boş):2@1 Faz:1@1 Kayıt:1@1 Ort. süre:2@2 En uzun:2@2
+sig /reports/materials?mode=Lot&MaterialLotId=1 768x1024-light 0 card r2 first=(boş):1@1 Makine:2@1 Açılış:1@1 Durum:2@2 İşlem:2@2 LONG=(boş):1@1 Makine:2@1 Açılış:1@1 Durum:2@2 İşlem:2@2
+sig /reports/materials?mode=Machine&MachineId=10 768x1024-light 0 card r2 first=(boş):1@1 Malzeme:2@1 Kayıt no:1@1 Lot no:1@2 SKT:1@2 İşlem:2@2
+sig /records?kind=2 768x1024-light 0 card r12 first=(boş):1@1 Makine ve yer:2@1 Sahip:1@1 Durum:2@2 Açılış:1@2 Net süre:1@2 İşlem:4@3 LONG=(boş):1@1 Makine ve yer:2@1 Sahip:1@1 Durum:2@2 Açılış:1@2 Net süre:1@2 İşlem:4@3
+sig /reports/durations?kind=2 1024x768-light 0 card r5 first=(boş):2@1 Kayıt:1@1 Brüt:1@1 Mola:1@2 Net:1@2 Efor:2@2 LONG=(boş):2@1 Kayıt:1@1 Brüt:1@1 Mola:1@2 Net:1@2 Efor:2@2
+sig /reports/durations?kind=2 1024x768-light 1 card r2 first=(boş):2@1 Asgari süre:1@1 Kayıt:1@1 Ort. net:2@2 Süre altı:2@2
+sig /reports/durations?kind=2 1024x768-light 2 card r3 first=(boş):2@1 Faz:1@1 Kayıt:1@1 Ort. süre:2@2 En uzun:2@2 LONG=(boş):2@1 Faz:1@1 Kayıt:1@1 Ort. süre:2@2 En uzun:2@2
+sig /reports/materials?mode=Lot&MaterialLotId=1 1024x768-light 0 card r2 first=(boş):1@1 Makine:2@1 Açılış:1@1 Durum:2@2 İşlem:2@2 LONG=(boş):1@1 Makine:2@1 Açılış:1@1 Durum:2@2 İşlem:2@2
+sig /reports/materials?mode=Machine&MachineId=10 1024x768-light 0 card r2 first=(boş):1@1 Malzeme:2@1 Kayıt no:1@1 Lot no:1@2 SKT:1@2 İşlem:2@2
+sig /records?kind=2 1024x768-light 0 card r12 first=(boş):1@1 Makine ve yer:2@1 Sahip:1@1 Durum:2@2 Açılış:1@2 Net süre:1@2 İşlem:4@3 LONG=(boş):1@1 Makine ve yer:2@1 Sahip:1@1 Durum:2@2 Açılış:1@2 Net süre:1@2 İşlem:4@3
+sig /reports/durations?kind=2 1440x900-light 0 table r5 first=(boş):1@1 Kayıt:1@1 Brüt:1@1 Mola:1@1 Net:1@1 Efor:1@1 LONG=(boş):1@1 Kayıt:1@1 Brüt:1@1 Mola:1@1 Net:1@1 Efor:1@1 minRowH=67
+sig /reports/durations?kind=2 1440x900-light 1 table r2 first=(boş):1@1 Asgari süre:1@1 Kayıt:1@1 Ort. net:1@1 Süre altı:1@1 minRowH=67
+sig /reports/durations?kind=2 1440x900-light 2 table r3 first=(boş):1@1 Faz:1@1 Kayıt:1@1 Ort. süre:1@1 En uzun:1@1 LONG=(boş):1@1 Faz:1@1 Kayıt:1@1 Ort. süre:1@1 En uzun:1@1 minRowH=67
+sig /reports/materials?mode=Lot&MaterialLotId=1 1440x900-light 0 table r2 first=(boş):1@1 Makine:1@1 Açılış:1@1 Durum:1@1 İşlem:1@1 LONG=(boş):1@1 Makine:1@1 Açılış:1@1 Durum:1@1 İşlem:1@1 minRowH=89
+sig /reports/materials?mode=Machine&MachineId=10 1440x900-light 0 table r2 first=(boş):1@1 Malzeme:1@1 Kayıt no:1@1 Lot no:1@1 SKT:1@1 İşlem:1@1 minRowH=69
+sig /records?kind=2 1440x900-light 0 table r12 first=(boş):1@1 Makine ve yer:1@1 Sahip:1@1 Durum:1@1 Açılış:1@1 Net süre:1@1 İşlem:1@1 LONG=(boş):1@1 Makine ve yer:1@1 Sahip:1@1 Durum:1@1 Açılış:1@1 Net süre:1@1 İşlem:1@1 minRowH=87
+G11: aynı 127 farklı 0

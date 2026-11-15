@@ -78,7 +78,7 @@
                     <div><dt>Sahip</dt><dd>@Model.OwnerName</dd></div>
                     <div><dt>Açılış</dt><dd><partial name="_Moment" model='(Model.OpenedAtLocal, Model.OpenedAtLocal)' /></dd></div>
                     <div><dt>İş emri</dt><dd class="mono">@Model.WorkOrderNo</dd></div>
-                    <div><dt>Saha defteri</dt><dd class="mono whitespace-nowrap">@(string.IsNullOrEmpty(Model.FieldBookRef) ? "Atanmadı" : Model.FieldBookRef)</dd></div>
+                    <div><dt>Saha defteri</dt><dd class="mono whitespace-nowrap">@(!string.IsNullOrEmpty(Model.FieldBookRef) ? Model.FieldBookRef : Model.Kind == CleaningTypeKind.Emergency ? "Yok" : "Atanmadı")</dd></div>
                     @if (!string.IsNullOrEmpty(Model.FirstStepStartedByName))
                     {
                         <div><dt>İlk adımı başlatan</dt><dd>@Model.FirstStepStartedByName</dd></div>
@@ -86,6 +86,10 @@
                     @if (!string.IsNullOrWhiteSpace(Model.Note))
                     {
                         <div class="col-span-2"><dt>Açıklama</dt><dd class="font-normal">@Model.Note</dd></div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.EmergencyDescription))
+                    {
+                        <div class="col-span-2"><dt>Acil durum açıklaması</dt><dd class="font-normal break-words">@Model.EmergencyDescription</dd></div>
                     }
                 </dl>
             </div>

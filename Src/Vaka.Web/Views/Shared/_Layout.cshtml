@@ -41,6 +41,11 @@
                 navItems.Add((readerGroup, "Kayıtlar", "list-checks", "/records", "records"));
             }
         }
+        if (User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Auditor))
+        {
+            navItems.Add(("Raporlar", "Süre ve efor", "chart-column", "/reports/durations", "report-durations"));
+            navItems.Add(("Raporlar", "Malzeme izlenebilirliği", "route", "/reports/materials", "report-materials"));
+        }
         if (User.IsInRole(Roles.Manager))
         {
             navItems.Add(("Tanımlar", "Tesisler", "building-2", "/facilities", "facilities"));

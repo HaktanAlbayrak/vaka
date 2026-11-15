@@ -49,7 +49,7 @@ public sealed class MyWorkReader : IMyWorkReader
 
         if (row is null)
         {
-            return new MyWorkViewModel { CanOpenRecord = true, AssignedSteps = assigned, OpenBreak = breakModel };
+            return new MyWorkViewModel { CanOpenRecord = true, CanOpenEmergency = true, AssignedSteps = assigned, OpenBreak = breakModel };
         }
 
         var url = RecordLinks.Run(row.Id);

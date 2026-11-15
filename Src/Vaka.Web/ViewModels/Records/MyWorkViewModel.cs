@@ -14,4 +14,6 @@ public sealed class MyWorkViewModel
     public AssignedStepViewModel[] AssignedSteps { get; set; } = [];
 
     public MyWorkBreakViewModel? OpenBreak { get; set; }
+
+    public bool CanOpenEmergency { get; set; }
 }

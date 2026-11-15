@@ -1,0 +1,33 @@
+Faz 6A yetki matrisi ve geçersiz süzgeç davranışı (t3.py). Kolonlar: oturumsuz, Operatör (2001), Yönetici (1001), Denetçi (3001), Süper admin (0001). 302>403 = access-denied yönlendirmesi ve 403 sayfası.
+
+SÜRE ?from=2026-11-16&to=2026-11-15 200 | Rapor hazırlanamadı Bitiş tarihi başlangıç tarihinden önce olamaz. | tablo 0 | süzgeç korunan from ['2026-11-16']
+SÜRE ?from=abc 200 | Rapor hazırlanamadı Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | tablo 0 | süzgeç korunan from ['']
+SÜRE ?kind=9 200 | Rapor hazırlanamadı Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | tablo 0 | süzgeç korunan from ['']
+SÜRE ?kind=abc 200 | Rapor hazırlanamadı Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | tablo 0 | süzgeç korunan from ['']
+SÜRE ?facilityId=99 200 | Rapor hazırlanamadı Seçilen tesis bulunamadı. | tablo 0 | süzgeç korunan from ['']
+SÜRE ?facilityId=2&lineId=1 200 | Rapor hazırlanamadı Seçilen hat bulunamadı ya da tesise ait değil. | tablo 0 | süzgeç korunan from ['']
+SÜRE ?facilityId=1&lineId=1&machineId=3 200 | Rapor hazırlanamadı Seçilen makine bulunamadı ya da hatta ait değil. | tablo 0 | süzgeç korunan from ['']
+SÜRE ?machineId=999 200 | Rapor hazırlanamadı Seçilen makine bulunamadı ya da hatta ait değil. | tablo 0 | süzgeç korunan from ['']
+SÜRE ?cleaningTypeId=999 200 | Rapor hazırlanamadı Seçilen temizlik tipi bulunamadı. | tablo 0 | süzgeç korunan from ['']
+SÜRE ?lineId=abc 200 | Rapor hazırlanamadı Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | tablo 0 | süzgeç korunan from ['']
+SÜRE ?to=2026-13-45 200 | Rapor hazırlanamadı Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | tablo 0 | süzgeç korunan from ['']
+MLZ ?mode=Lot&MaterialLotId=999 200 | Rapor hazırlanamadı Seçilen lot bulunamadı. | tablo 0
+MLZ ?mode=Machine&MachineId=999 200 | Rapor hazırlanamadı Seçilen makine bulunamadı ya da hatta ait değil. | tablo 0
+MLZ ?mode=Foo 200 | Rapor hazırlanamadı Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | tablo 0
+MLZ ?mode=3 200 | Rapor hazırlanamadı Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | tablo 0
+MLZ ?mode=Lot&MaterialLotId=3&from=2026-11-16&to=2026-11-15 200 | Rapor hazırlanamadı Bitiş tarihi başlangıç tarihinden önce olamaz. | tablo 0
+MLZ ?mode=Machine&MachineId=1&from=xyz 200 | Rapor hazırlanamadı Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | tablo 0
+MLZ ?mode=Lot&MaterialLotId=abc 200 | Rapor hazırlanamadı Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | tablo 0
+GET /emergencies/create oturumsuz 302 /account/login?ReturnUrl=%2Femergencies% | Operatör 200 | Yönetici 302 /account/access-denied?ReturnUrl=%2Femer | Denetçi 302 /account/access-denied?ReturnUrl=%2Femer | Süper admin 302 /account/access-denied?ReturnUrl=%2Femer
+GET /emergencies/machines?lineId=1 oturumsuz 302 /account/login?ReturnUrl=%2Femergencies% | Operatör 200 | Yönetici 302 /account/access-denied?ReturnUrl=%2Femer | Denetçi 302 /account/access-denied?ReturnUrl=%2Femer | Süper admin 302 /account/access-denied?ReturnUrl=%2Femer
+GET /reports/durations oturumsuz 302 /account/login?ReturnUrl=%2Freports%2Fdu | Operatör 302 /account/access-denied?ReturnUrl=%2Frepo | Yönetici 200 | Denetçi 200 | Süper admin 302 /account/access-denied?ReturnUrl=%2Frepo
+GET /reports/materials oturumsuz 302 /account/login?ReturnUrl=%2Freports%2Fma | Operatör 302 /account/access-denied?ReturnUrl=%2Frepo | Yönetici 200 | Denetçi 200 | Süper admin 302 /account/access-denied?ReturnUrl=%2Frepo
+GET /reports/materials?mode=Machine&MachineId=1 oturumsuz 302 /account/login?ReturnUrl=%2Freports%2Fma | Operatör 302 /account/access-denied?ReturnUrl=%2Frepo | Yönetici 200 | Denetçi 200 | Süper admin 302 /account/access-denied?ReturnUrl=%2Frepo
+GET takip oturumsuz 302 /account/login?ReturnUrl=%2Fre | Operatör 302>403 | Yönetici 200  | Denetçi 200  | Süper admin 302>403
+GET takip oturumsuz 302 /account/login?ReturnUrl=%2Fem | Operatör 200  | Yönetici 302>403 | Denetçi 302>403 | Süper admin 302>403
+POST oturumsuz 302 /account/login?ReturnUrl=%2Femergencies%
+POST Operatör belirteçli 200  | belirteçsiz 400  | kayıt +0
+POST Yönetici belirteçli 302 /account/access-denied?ReturnUrl=%2Femer | belirteçsiz 302 /account/access-denied?ReturnUrl=%2Femer | kayıt +0
+POST Denetçi belirteçli 302 /account/access-denied?ReturnUrl=%2Femer | belirteçsiz 302 /account/access-denied?ReturnUrl=%2Femer | kayıt +0
+POST Süper admin belirteçli 302 /account/access-denied?ReturnUrl=%2Femer | belirteçsiz 302 /account/access-denied?ReturnUrl=%2Femer | kayıt +0
+PIN sayaçları [('2001', 2)]

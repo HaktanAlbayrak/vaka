@@ -81,7 +81,7 @@
                         <div><dt>Doküman no</dt><dd class="mono break-all">@header.DocumentRef</dd></div>
                     }
                     <div><dt>İş emri</dt><dd class="mono">@(string.IsNullOrEmpty(header.WorkOrderNo) ? "-" : header.WorkOrderNo)</dd></div>
-                    <div><dt>Saha defteri</dt><dd class="mono whitespace-nowrap">@(string.IsNullOrEmpty(header.FieldBookRef) ? "Atanmadı" : header.FieldBookRef)</dd></div>
+                    <div><dt>Saha defteri</dt><dd class="mono whitespace-nowrap">@(!string.IsNullOrEmpty(header.FieldBookRef) ? header.FieldBookRef : header.Kind == CleaningTypeKind.Emergency ? "Yok" : "Atanmadı")</dd></div>
                     @if (!string.IsNullOrWhiteSpace(header.Note))
                     {
                         <div class="col-span-2 md:col-span-3"><dt>Açıklama</dt><dd class="font-normal">@header.Note</dd></div>

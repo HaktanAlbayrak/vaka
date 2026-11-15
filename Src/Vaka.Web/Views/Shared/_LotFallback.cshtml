@@ -2,6 +2,7 @@
 @model (string Mode, string? LotQuery, LotOptionViewModel[] Lots, bool Truncated, int? PendingLotId, string? PendingReason)
 @{
     var isMulti = Model.Mode == "multi";
+    var refreshAction = ViewData["LotRefreshAction"] as string ?? "/records/create?refresh=true";
 }
 <div class="space-y-3" data-lot-nojs>
     @if (isMulti)
@@ -38,7 +39,7 @@
                                 <partial name="_Badge" model='"lot.expired"' />
                             }
                         </div>
-                        <button type="submit" class="btn btn-secondary" name="AddMaterialLotId" value="@lot.Id" formaction="/records/create?refresh=true" formnovalidate
+                        <button type="submit" class="btn btn-secondary" name="AddMaterialLotId" value="@lot.Id" formaction="@refreshAction" formnovalidate
                                 aria-label="@lot.MaterialName lot @lot.LotNo ekle">
                             <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#plus" /></svg>
                             Ekle

@@ -11,11 +11,9 @@ public sealed class StepStarter : IStepStarter
     private readonly IRecordTimeouts _timeouts;
     private readonly IBreakReader _breaks;
     private readonly IPinService _pins;
-    private readonly INumberSequences _numbers;
-    private readonly ICleaningEventWriter _events;
+    private readonly IStepStartApplier _applier;
     private readonly IProcessedCommands _commands;
     private readonly IDurationCalculator _calculator;
-    private readonly ITurkeyClock _clock;
     private readonly TimeProvider _time;
 
     public StepStarter(
@@ -24,11 +22,9 @@ public sealed class StepStarter : IStepStarter
         IRecordTimeouts timeouts,
         IBreakReader breaks,
         IPinService pins,
-        INumberSequences numbers,
-        ICleaningEventWriter events,
+        IStepStartApplier applier,
         IProcessedCommands commands,
         IDurationCalculator calculator,
-        ITurkeyClock clock,
         TimeProvider time)
     {
         _db = db;
@@ -36,11 +32,9 @@ public sealed class StepStarter : IStepStarter
         _timeouts = timeouts;
         _breaks = breaks;
         _pins = pins;
-        _numbers = numbers;
-        _events = events;
+        _applier = applier;
         _commands = commands;
         _calculator = calculator;
-        _clock = clock;
         _time = time;
     }
 
@@ -79,7 +73,7 @@ public sealed class StepStarter : IStepStarter
             var isFirst = ordered[0].Id == stepId;
             var failure = await CheckOrderAsync(record, ordered, step, actorUserId, token)
                 ?? await CheckMaterialsAsync(record, isFirst, token)
-                ?? await CheckParticipantsAsync(step, token);
+                ?? await _applier.CheckParticipantsAsync(step, token);
             if (failure is not null)
             {
                 return failure;
@@ -155,85 +149,14 @@ public sealed class StepStarter : IStepStarter
         return Reject("Bu temizlik tipi malzeme ister. İlk adımdan önce kayda en az bir malzeme ekleyin.");
     }
 
-    private async Task<CommandResult?> CheckParticipantsAsync(RecordStep step, CancellationToken cancellationToken)
-    {
-        var ids = step.Participants.Select(item => item.UserId).ToArray();
-        if (ids.Length == 0)
-        {
-            return Reject("Adımda görevli yok. Başlatmadan önce görevli ekleyin.");
-        }
-
-        var inactive = await _db.Users.AsNoTracking().Where(user => ids.Contains(user.Id) && !user.IsActive).Select(user => user.FullName).FirstOrDefaultAsync(cancellationToken);
-        if (inactive is not null)
-        {
-            return Reject($"{inactive} pasif. Görevli listesinden çıkarın.");
-        }
-
-        var busy = await _db.StepParticipants.AsNoTracking()
-            .Where(item => ids.Contains(item.UserId) && item.IsWorking)
-            .Select(item => new { item.User.FullName, item.Step.Phase.Record.RecordNo })
-            .FirstOrDefaultAsync(cancellationToken);
-        if (busy is not null)
-        {
-            return Reject($"{busy.FullName} başka kayıtta devam eden adımda: {busy.RecordNo}.");
-        }
-
-        var onBreak = await _db.RecordBreaks.AsNoTracking()
-            .Where(item => item.EndedAtUtc == null && ids.Contains(item.StartedByUserId))
-            .Select(item => item.StartedBy.FullName)
-            .FirstOrDefaultAsync(cancellationToken);
-        return onBreak is null ? null : Reject($"{onBreak} molada.");
-    }
-
     private async Task<CommandResult> ApplyAsync(CleaningRecord record, RecordStep step, bool isFirst, int actorUserId, Guid commandId, CancellationToken cancellationToken)
     {
         var now = _time.GetUtcNow().UtcDateTime;
-        if (isFirst)
+        if (await _applier.ApplyAsync(record, step, isFirst, actorUserId, commandId, now, cancellationToken) is { } conflict)
         {
-            if (record.Kind == CleaningTypeKind.Planned)
-            {
-                var facility = await _db.Machines.AsNoTracking()
-                    .Where(machine => machine.Id == record.MachineId)
-                    .Select(machine => machine.Line.FacilityId)
-                    .FirstAsync(cancellationToken);
-                var year = _clock.Today().Year;
-                var sequence = await _numbers.NextAsync(RecordNumbers.FieldBookScope(facility), year, cancellationToken);
-                record.FieldBookRef = RecordNumbers.FormatFieldBook(record.FacilityCodeSnapshot, year, sequence);
-            }
-
-            record.Status = RecordStatus.InProgress;
-            record.StartedAtUtc = now;
-            record.Version++;
+            return conflict;
         }
 
-        step.Status = StepStatus.InProgress;
-        step.StartedAtUtc = now;
-        step.StartedByUserId = actorUserId;
-        step.Phase.Status = PhaseStatus.InProgress;
-        foreach (var participant in step.Participants)
-        {
-            participant.IsWorking = true;
-        }
-
-        try
-        {
-            await _db.SaveChangesAsync(cancellationToken);
-        }
-        catch (DbUpdateException exception) when (ConstraintViolations.IsUniqueViolation(exception, "StepParticipants.UserId"))
-        {
-            _db.ChangeTracker.Clear();
-            return Reject("Görevlilerden biri başka bir adımda çalışıyor. Birkaç saniye sonra yeniden deneyin.");
-        }
-
-        var payload = new
-        {
-            StepId = step.Id,
-            Title = step.ProcedureStep.Title,
-            FirstStep = isFirst,
-            record.FieldBookRef,
-            ParticipantUserIds = step.Participants.Select(item => item.UserId).ToArray()
-        };
-        await _events.AppendAsync(new EventDraft(record.Id, EventTypes.StepStarted, payload, actorUserId, commandId, now), cancellationToken);
         _commands.Remember(commandId, nameof(StartAsync), actorUserId, record.Id, now);
         await _db.SaveChangesAsync(cancellationToken);
         return CommandResult.Success(record.Id);

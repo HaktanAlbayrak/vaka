@@ -1,0 +1,55 @@
+Faz 6A yerleşim ön turu ve ÖT-1 yeniden ölçümü (qa-tester, 2026-11-15)
+
+Ön tur 1: Release .qa/f6a/build, port 5621 Production, kopya DB + DemoData + s0-s4 uygulama akışı verisi.
+Ölçüm: UiDelivery §3 mekanik eval, G12 getBoundingClientRect, G11 imza, G5a; 360/768/1024/1440 açık ve koyu.
+
+===== op 32
+  sınıflar {'temiz': 32} G12 kontrol {'a': 24, 'c': 168, 'd': 96, 'b': 12, 'e': 12} POST form 120 kontrast>= 5.43 topbar<= 64
+===== opclient 16
+  sınıflar {'G12[a]': 16} G12 kontrol {'a': 16, 'c': 128, 'd': 64, 'b': 10, 'e': 10} POST form 64 kontrast>= 5.71 topbar<= 64
+===== opjs 24
+  sınıflar {'temiz': 24} G12 kontrol {'a': 24, 'c': 200, 'd': 96, 'b': 30, 'e': 12} POST form 96 kontrast>= 5.71 topbar<= 64
+===== op10 32
+  sınıflar {'temiz': 32} G12 kontrol {'d': 176, 'a': 32, 'c': 88, 'e': 12, 'f': 12, 'b': 4} POST form 128 kontrast>= 5.28 topbar<= 64
+===== op3 32
+  sınıflar {'temiz': 32} G12 kontrol {'b': 60, 'c': 144, 'e': 24, 'f': 18, 'd': 136} POST form 96 kontrast>= 5.28 topbar<= 64
+===== m1 144
+  sınıflar {'temiz': 144} G12 kontrol {'b': 236, 'c': 640, 'd': 384, 'e': 144, 'f': 108} POST form 432 kontrast>= 5.28 topbar<= 64
+===== au 24
+  sınıflar {'temiz': 24} G12 kontrol {'b': 40, 'c': 112, 'd': 56, 'e': 24, 'f': 30} POST form 72 kontrast>= 5.28 topbar<= 64
+===== trunc 16
+  sınıflar {'temiz': 16} G12 kontrol {'c': 64, 'd': 24, 'e': 16, 'f': 6, 'b': 24} POST form 48 kontrast>= 5.28 topbar<= 64
+===== truncop 8
+  sınıflar {'temiz': 8} G12 kontrol {'a': 8, 'c': 64, 'd': 32, 'b': 10, 'e': 4} POST form 32 kontrast>= 5.71 topbar<= 64
+===== regm 120
+  sınıflar {'G11': 6, 'G11+small': 6, 'small': 34, 'temiz': 74} G12 kontrol {'b': 92, 'c': 168, 'e': 82, 'f': 78, 'd': 224, 'a': 8} POST form 376 kontrast>= 5.28 topbar<= 64
+===== regop 40
+  sınıflar {'temiz': 40} G12 kontrol {'a': 8, 'c': 152, 'd': 136, 'b': 44, 'e': 30, 'f': 18} POST form 128 kontrast>= 5.28 topbar<= 64
+===== regsa 24
+  sınıflar {'G11': 4, 'small': 8, 'temiz': 12} G12 kontrol {'b': 36, 'c': 64, 'e': 22, 'f': 12, 'a': 8, 'd': 16} POST form 80 kontrast>= 5.28 topbar<= 64
+===== clop10 2
+  sınıflar {'G12[a]': 2} G12 kontrol {'a': 6, 'c': 8, 'd': 8} POST form 12 kontrast>= 5.43 topbar<= 64
+===== clm1 2
+  sınıflar {'G12[a]+small': 2} G12 kontrol {'a': 2, 'c': 6, 'd': 8, 'b': 1, 'e': 1} POST form 8 kontrast>= 5.44 topbar<= 64
+===== clnone 2
+  sınıflar {'temiz': 2} G12 kontrol {'a': 2, 'c': 4, 'd': 4} POST form 2 kontrast>= 5.95 topbar<= 64
+G11: aynı 112 farklı 0
+
+ÖT-1 (ORTA, frontend): istemci tarafı boş PIN gönderiminde göz düğmesi 44x68, alan 52 px; alt taşma 20 px, merkez farkı 10 px. 16/16 hücre (E-27 ve /records/create), ayrıca Run adım bitirme ve /interventions/create. Görüntü: OnTur-PinGoz-Once.png
+
+Düzeltme (frontend): _PinInput.cshtml:17 data-field; FormValidation.js:39 closest("[data-field], .field").
+
+Yeniden ölçüm: Release .qa/f6a/build2, yeni kopya DB, port 5621. Boş gönderim; 8 hücre (4 genişlik x açık/koyu).
+===== pinop 16
+  sınıflar {'temiz': 16} G12 kontrol {'a': 16, 'c': 128, 'd': 64, 'b': 10, 'e': 10} POST form 64 kontrast>= 5.71 topbar<= 64
+===== pinop10 8
+  sınıflar {'temiz': 8} G12 kontrol {'a': 24, 'c': 32, 'd': 32} POST form 48 kontrast>= 5.43 topbar<= 64
+===== pinm1 96
+  sınıflar {'small': 64, 'temiz': 32} G12 kontrol {'a': 40, 'c': 1040, 'd': 384, 'b': 128, 'e': 62} POST form 1488 kontrast>= 5.43 topbar<= 64
+===== pinnone 8
+  sınıflar {'temiz': 8} G12 kontrol {'a': 8, 'c': 16, 'd': 16} POST form 8 kontrast>= 5.95 topbar<= 64
+istemci hata satırları {'hata satırı': 328} alan sarmalayıcısı içinde ya da alanın üstünde/kaymış 0
+göz düğmeleri: {'göz 44x48, alan yüksekliği 52, kusur yok': 72, 'göz 44x44, alan yüksekliği 48, kusur yok': 16}
+sayfa başına en çok istemci hata satırı: {'/emergencies/create#err-client': 6, '/records/create#err-client': 6, '/records/run/12#err-client': 1, '/interventions/create?recordId=12#err-client': 3, '/procedure-versions/edit/7#err-client': 1, '/users/deactivate/8#err-client': 1, '/users/create#err-client': 3, '/facilities/create#err-client': 2, '/machines/create#err-client': 4, '/shifts/create?facilityId=1#err-client': 3, '/materials/create#err-client': 2, '/material-lots/create?materialId=1#err-client': 2, '/cleaning-types/create#err-client': 3, '/lines/create?facilityId=1#err-client': 2, '/procedure-versions/edit/7#add-phase': 0, '/account/login#err-client': 2}
+Not: /cleaning-types/create 'Kind-error' satırı (Faz 3, önceden var): hata ilk radyo etiketinin içinde ('Planlı Tür seçin.'); düzeltmeden önce ve sonra aynı kod yolu (data-field ya da .field atası yok). Bulgu B2.
+small: işaretli hücreler label.choice içindeki 20x20 onay kutusu ve radyolar (önceki fazlarda kabul).

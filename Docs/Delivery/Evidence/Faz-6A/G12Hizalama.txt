@@ -1,0 +1,18 @@
+Faz 6A G12 hizalama (getBoundingClientRect, 1 px tolerans), teslim testi build2.
+Kontroller: a gömülü düğme, b aynı satır kontrol, c etiket/alan/yardım sol kenar, d panel iç boşluk, e düğme satırı, f satır kartı (PL-55).
+
+t-op: sınıflar {'temiz': 52} G12 kontrol {'a': 39, 'c': 273, 'd': 156, 'b': 21, 'e': 21} POST form 195 
+t-opjs: sınıflar {'temiz': 39} G12 kontrol {'a': 39, 'c': 325, 'd': 156, 'b': 48, 'e': 21} POST form 156 
+t-op10: sınıflar {'temiz': 51, 'G12[f]': 1} G12 kontrol {'d': 312, 'a': 65, 'c': 156, 'e': 20, 'f': 18, 'b': 7} POST form 221 
+t-op3: sınıflar {'temiz': 49, 'G12[f]': 3} G12 kontrol {'b': 88, 'c': 234, 'e': 37, 'f': 27, 'd': 221} POST form 156 
+t-m1: sınıflar {'temiz': 231, 'G12[f]': 3} G12 kontrol {'b': 348, 'c': 1040, 'd': 624, 'e': 233, 'f': 162} POST form 702 
+t-au: sınıflar {'temiz': 39} G12 kontrol {'b': 59, 'c': 182, 'd': 91, 'e': 39, 'f': 45} POST form 117 
+pinop: sınıflar {'temiz': 16} G12 kontrol {'a': 16, 'c': 128, 'd': 64, 'b': 10, 'e': 10} POST form 64 
+pinop10: sınıflar {'temiz': 8} G12 kontrol {'a': 24, 'c': 32, 'd': 32} POST form 48 
+pinm1: sınıflar {'small': 64, 'temiz': 32} G12 kontrol {'a': 40, 'c': 1040, 'd': 384, 'b': 128, 'e': 62} POST form 1488 
+pinnone: sınıflar {'temiz': 8} G12 kontrol {'a': 8, 'c': 16, 'd': 16} POST form 8 
+t-regm: sınıflar {'G11': 6, 'G11+small': 6, 'small': 34, 'temiz': 74} G12 kontrol {'b': 92, 'c': 168, 'e': 82, 'f': 78, 'd': 224, 'a': 8} POST form 376 
+t-regop: sınıflar {'temiz': 40} G12 kontrol {'a': 8, 'c': 152, 'd': 136, 'b': 44, 'e': 30, 'f': 18} POST form 128 
+
+Ekran@genişlik (360/768/1024/1440, açık ve koyu): /my-work, /emergencies/create (GET, çağlayan, sunucu reddi, istemci boş gönderim, JS kapalı yenileme ve lot ekleme), /records/run/12, /records/details/{3,8,11,12}, /records?kind=2, /reports/durations (5 durum), /reports/materials (10 durum): kusur 0.
+640x400: /records?kind=2, /records?mineOnly=false, /records/details/{3,8,11,12} G12[f] (B3).

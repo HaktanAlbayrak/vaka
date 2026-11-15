@@ -14,12 +14,14 @@ public sealed class RecordListReader : IRecordListReader
     private readonly VakaDbContext _db;
     private readonly IRecordTimeouts _timeouts;
     private readonly ITurkeyClock _clock;
+    private readonly IReportOptions _options;
 
-    public RecordListReader(VakaDbContext db, IRecordTimeouts timeouts, ITurkeyClock clock)
+    public RecordListReader(VakaDbContext db, IRecordTimeouts timeouts, ITurkeyClock clock, IReportOptions options)
     {
         _db = db;
         _timeouts = timeouts;
         _clock = clock;
+        _options = options;
     }
 
     public async Task<RecordListViewModel> ListAsync(RecordListQuery query, int viewerUserId, CancellationToken cancellationToken)
@@ -96,9 +98,9 @@ public sealed class RecordListReader : IRecordListReader
                 To = query.To,
                 MineOnly = query.MineOnly
             },
-            Facilities = await ListFacilitiesAsync(cancellationToken),
-            Lines = await ListLinesAsync(query.FacilityId, cancellationToken),
-            Machines = await ListMachinesAsync(query.FacilityId, query.LineId, cancellationToken),
+            Facilities = await _options.ListFacilitiesAsync(cancellationToken),
+            Lines = await _options.ListLinesAsync(query.FacilityId, cancellationToken),
+            Machines = await _options.ListMachinesAsync(query.FacilityId, query.LineId, cancellationToken),
             KindOptions = [.. Enum.GetValues<CleaningTypeKind>().Select(kind => new SelectOptionViewModel { Id = (int)kind, Label = ProcedureLabels.Kind(kind) })],
             StatusOptions = [.. Enum.GetValues<RecordStatus>().Select(status => new SelectOptionViewModel { Id = (int)status, Label = RecordLabels.Status(status) })],
             Page = page,
@@ -165,27 +167,4 @@ public sealed class RecordListReader : IRecordListReader
 
         return records;
     }
-
-    private async Task<SelectOptionViewModel[]> ListFacilitiesAsync(CancellationToken cancellationToken) =>
-        await _db.Facilities
-            .AsNoTracking()
-            .OrderBy(facility => facility.Code)
-            .Select(facility => new SelectOptionViewModel { Id = facility.Id, Label = facility.Code + " - " + facility.Name })
-            .ToArrayAsync(cancellationToken);
-
-    private async Task<SelectOptionViewModel[]> ListLinesAsync(int? facilityId, CancellationToken cancellationToken) =>
-        facilityId is null ? [] : await _db.ProductionLines
-            .AsNoTracking()
-            .Where(line => line.FacilityId == facilityId)
-            .OrderBy(line => line.Facility.Code).ThenBy(line => line.Code)
-            .Select(line => new SelectOptionViewModel { Id = line.Id, Label = line.Code + " - " + line.Name })
-            .ToArrayAsync(cancellationToken);
-
-    private async Task<SelectOptionViewModel[]> ListMachinesAsync(int? facilityId, int? lineId, CancellationToken cancellationToken) =>
-        facilityId is null && lineId is null ? [] : await _db.Machines
-            .AsNoTracking()
-            .Where(machine => (lineId == null || machine.ProductionLineId == lineId) && (facilityId == null || machine.Line.FacilityId == facilityId))
-            .OrderBy(machine => machine.Line.Facility.Code).ThenBy(machine => machine.Line.Code).ThenBy(machine => machine.Code)
-            .Select(machine => new SelectOptionViewModel { Id = machine.Id, Label = machine.Code + " - " + machine.Name })
-            .ToArrayAsync(cancellationToken);
 }

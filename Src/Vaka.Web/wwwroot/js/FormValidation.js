@@ -36,7 +36,7 @@ export class FormValidation {
         error.id = errorId;
         error.className = "field-error";
         error.textContent = field.dataset.requiredMessage || "Bu alanı doldurun.";
-        (field.closest("[data-field]") || field.parentElement).appendChild(error);
+        (field.closest("[data-field], .field") || field.parentElement).appendChild(error);
         field.setAttribute("aria-describedby", `${field.getAttribute("aria-describedby") || ""} ${errorId}`.trim());
       }
     } else {

@@ -67,7 +67,8 @@ public sealed class RecordRunReader : IRecordRunReader
                 record.OpenedAtUtc,
                 record.LockExpiresAtUtc,
                 record.WorkOrderNo,
-                record.Note
+                record.Note,
+                record.EmergencyDescription
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -104,6 +105,7 @@ public sealed class RecordRunReader : IRecordRunReader
             LockExpiresAtLocal = row.Status == RecordStatus.Opened && row.LockExpiresAtUtc is { } expires ? _clock.ToLocal(expires) : null,
             WorkOrderNo = row.WorkOrderNo ?? string.Empty,
             Note = row.Note ?? string.Empty,
+            EmergencyDescription = row.EmergencyDescription,
             MaterialRequired = row.MaterialRequired,
             IsOwner = isOwner,
             CanManageMaterials = canManage,

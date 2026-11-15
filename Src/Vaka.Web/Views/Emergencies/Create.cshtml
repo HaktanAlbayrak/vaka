@@ -1,0 +1,231 @@
+@using Vaka.Web.ViewModels.Emergencies
+@model EmergencyCreateViewModel
+@{
+    ViewData["Title"] = "Acil müdahale";
+    ViewData["Lead"] = "Makineyi ve acil tipi seçin, durumu yazın. Gönderince kayıt açılır ve ilk adım hemen başlar.";
+    ViewData["NavKey"] = "my-work";
+    ViewData["LotRefreshAction"] = "/emergencies/create?refresh=true";
+
+    string? ErrorOf(string key) =>
+        ViewData.ModelState.TryGetValue(key, out var entry) && entry.Errors.Count > 0 ? entry.Errors[0].ErrorMessage : null;
+
+    string TypeMeta(int versionNo, bool materialRequired) =>
+        "Versiyon " + versionNo + " · " + (materialRequired ? "Malzeme gerekli" : "Malzeme gerekmez");
+
+    var facilityError = ErrorOf("FacilityId");
+    var lineError = ErrorOf("LineId");
+    var machineError = ErrorOf("MachineId");
+    var typeError = ErrorOf("CleaningTypeId");
+    var descriptionError = ErrorOf("Description");
+    var busyMachines = Model.Machines.Where(machine => !machine.IsAvailable).ToList();
+}
+
+@if (Model.EmergencyTypes.Length == 0)
+{
+    <partial name="_State" model='("empty", "siren", "Acil tip tanımlı değil", "Yürürlükte versiyonu olan acil temizlik tipi yok. Yöneticinize başvurun.", "İşlerime dön", "/my-work")' />
+}
+else
+{
+<partial name="_FormSummary" model='"Acil kayıt açılamadı"' />
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <form method="post" class="panel min-w-0" action="/emergencies/create" data-validate data-command-form data-unsaved-guard aria-labelledby="emergency-title" asp-antiforgery="true">
+        <div class="panel-head">
+            <h2 id="emergency-title" class="panel-title">Acil müdahale bilgileri</h2>
+            <partial name="_Badge" model='"CleaningTypeKind.Emergency"' />
+        </div>
+        <div class="panel-body space-y-6">
+            <input type="hidden" name="CommandId" value="@Model.CommandId" />
+
+            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+            {
+                <div class="notice notice-danger" role="alert" tabindex="-1" data-form-summary>
+                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#lock" /></svg>
+                    <div class="min-w-0">
+                        <p class="font-semibold">Acil kayıt açılamadı</p>
+                        <p class="mt-0.5 text-sm">@Model.ErrorMessage</p>
+                        @if (!string.IsNullOrEmpty(Model.ErrorUrl))
+                        {
+                            <a class="mt-1 inline-flex min-h-11 items-center font-semibold underline underline-offset-2" href="@Model.ErrorUrl">Kaydı görüntüle</a>
+                        }
+                    </div>
+                </div>
+            }
+
+            <div class="space-y-5">
+                <h3 class="text-lg font-bold">Makine</h3>
+                <div class="field" data-field>
+                    <label class="field-label" for="FacilityId">Tesis</label>
+                    <div class="select-wrap">
+                        <select id="FacilityId" name="FacilityId" class="input" required data-required-message="Tesis seçin."
+                            data-cascade-url="/records/lines" data-cascade-target="LineId" data-cascade-status="line-status"
+                            data-cascade-noun="Hatlar" data-cascade-none="Bu tesiste hat yok."
+                            aria-describedby="@(facilityError is null ? null : "FacilityId-error")" aria-invalid="@(facilityError is null ? null : "true")">
+                            <option value="">Tesis seçin</option>
+                            @foreach (var facility in Model.Facilities)
+                            {
+                                <option value="@facility.Id" selected="@(facility.Id == Model.FacilityId)">@facility.Label</option>
+                            }
+                        </select>
+                        <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </div>
+                    @if (facilityError is not null)
+                    {
+                        <partial name="_FieldError" model='("FacilityId-error", facilityError)' />
+                    }
+                </div>
+
+                <div class="field" data-field>
+                    <label class="field-label" for="LineId">Hat</label>
+                    <div class="select-wrap">
+                        <select id="LineId" name="LineId" class="input" required data-required-message="Hat seçin."
+                            data-cascade-url="/emergencies/machines" data-cascade-param="lineId" data-cascade-target="MachineId" data-cascade-status="machine-status"
+                            data-cascade-noun="Makineler" data-cascade-none="Bu hatta makine yok."
+                            aria-describedby="@(lineError is null ? "line-status" : "line-status LineId-error")" aria-invalid="@(lineError is null ? null : "true")">
+                            <option value="">Hat seçin</option>
+                            @foreach (var line in Model.Lines)
+                            {
+                                <option value="@line.Id" selected="@(line.Id == Model.LineId)">@line.Label</option>
+                            }
+                        </select>
+                        <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </div>
+                    <p id="line-status" class="field-hint" role="status"></p>
+                    @if (lineError is not null)
+                    {
+                        <partial name="_FieldError" model='("LineId-error", lineError)' />
+                    }
+                </div>
+
+                <div class="field" data-field>
+                    <label class="field-label" for="MachineId">Makine</label>
+                    <div class="select-wrap">
+                        <select id="MachineId" name="MachineId" class="input" required data-required-message="Makine seçin."
+                            data-cascade-busy="machine-busy" data-cascade-busy-box="machine-busy-box"
+                            aria-describedby="@(machineError is null ? "machine-status" : "machine-status MachineId-error")" aria-invalid="@(machineError is null ? null : "true")">
+                            <option value="">Makine seçin</option>
+                            @foreach (var machine in Model.Machines)
+                            {
+                                <option value="@machine.Id" disabled="@(!machine.IsAvailable)" selected="@(machine.Id == Model.MachineId)">@(machine.IsAvailable ? machine.Label : machine.Label + " - " + machine.BusyReason)</option>
+                            }
+                        </select>
+                        <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </div>
+                    <p id="machine-status" class="field-hint" role="status"></p>
+                    @if (machineError is not null)
+                    {
+                        <partial name="_FieldError" model='("MachineId-error", machineError)' />
+                    }
+                    <div id="machine-busy-box" class="notice notice-info" hidden="@(busyMachines.Count == 0)">
+                        <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#lock" /></svg>
+                        <div class="min-w-0">
+                            <p class="font-semibold">Şu an seçilemeyen makineler</p>
+                            <ul id="machine-busy" class="mt-1 space-y-1 text-sm">
+                                @foreach (var machine in busyMachines)
+                                {
+                                    <li class="break-words"><span class="font-semibold">@machine.Label:</span> @machine.BusyReason</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div data-cascade-fallback>
+                    <button type="submit" class="btn btn-secondary" name="refresh" value="true" formnovalidate>
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#refresh-cw" /></svg>
+                        Seçimi uygula
+                    </button>
+                    <p class="field-hint mt-1.5">Tesis, hat ya da makineyi değiştirince bu düğmeyle listeleri yenileyin.</p>
+                </div>
+            </div>
+
+            <fieldset class="field space-y-3 border-t-2 border-line pt-6" data-field aria-describedby="@(typeError is null ? null : "CleaningTypeId-error")">
+                <legend class="text-lg font-bold">Acil tip</legend>
+                <p class="field-hint">Planlı temizlikteki makine eşlemesi acilde aranmaz. Tüm acil tipler listelenir.</p>
+                <div class="grid gap-2">
+                    @foreach (var type in Model.EmergencyTypes)
+                    {
+                        <label class="choice">
+                            <input type="radio" name="CleaningTypeId" id="@(type.Id == Model.EmergencyTypes[0].Id ? "CleaningTypeId" : "CleaningTypeId-" + type.Id)" value="@type.Id"
+                                   checked="@(type.Id == Model.CleaningTypeId)" required data-required-message="Acil tipi seçin."
+                                   data-material-required="@(type.MaterialRequired ? "true" : "false")" />
+                            <span class="min-w-0">
+                                <span class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                    <span class="font-bold break-words">@type.Name</span>
+                                    <partial name="_Badge" model='"CleaningTypeKind.Emergency"' />
+                                </span>
+                                <span class="mt-1 block text-sm text-muted">@TypeMeta(type.VersionNo, type.MaterialRequired)</span>
+                            </span>
+                        </label>
+                    }
+                </div>
+                @if (typeError is not null)
+                {
+                    <partial name="_FieldError" model='("CleaningTypeId-error", typeError)' />
+                }
+            </fieldset>
+
+            <div class="space-y-5 border-t-2 border-line pt-6">
+                <h3 class="text-lg font-bold">Durum açıklaması</h3>
+                <div class="field" data-field>
+                    <label class="field-label" for="Description">Ne oldu, neden acil müdahale gerekiyor</label>
+                    <textarea id="Description" name="Description" class="input" rows="4" maxlength="1000" required autocomplete="off"
+                              data-required-message="Acil durumu açıklayın."
+                              aria-describedby="@(descriptionError is null ? "Description-hint" : "Description-hint Description-error")" aria-invalid="@(descriptionError is null ? null : "true")">@Model.Description</textarea>
+                    <p id="Description-hint" class="field-hint">Zorunlu. Kayıtla birlikte yürütme ekranında görünür.</p>
+                    @if (descriptionError is not null)
+                    {
+                        <partial name="_FieldError" model='("Description-error", descriptionError)' />
+                    }
+                </div>
+            </div>
+
+            <div class="space-y-3 border-t-2 border-line pt-6">
+                <h3 class="text-lg font-bold">Malzeme</h3>
+                <p class="text-base">Malzeme gerektiren tipte en az bir lot ekleyin. Gerektirmeyen tipte isteğe bağlıdır.</p>
+                <partial name="_LotPicker" model='("lots", "multi", "Materials[{i}].MaterialLotId", "Materials[{i}].ExpiredReason", false, Model.Materials, "Malzeme adı, kodu ya da lot no yazın. Son kullanma tarihi geçmiş lot gerekçeyle eklenir.")' />
+                <partial name="_LotFallback" model='("multi", Model.LotQuery, Model.AvailableLots, Model.AvailableLotsTruncated, (int?)null, (string?)null)' />
+            </div>
+
+            <div class="space-y-3 border-t-2 border-line pt-6">
+                <h3 class="text-lg font-bold">Onay</h3>
+                <div class="max-w-xs">
+                    <partial name="_PinInput" model='("pin-emergency", "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                </div>
+            </div>
+
+            <div class="space-y-3 border-t-2 border-line pt-5">
+                <div class="notice notice-danger" role="alert" data-command-status hidden>
+                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                    <p class="font-semibold" data-command-message></p>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <button type="submit" class="btn btn-danger btn-lg">
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#siren" /></svg>
+                        Kaydı aç ve başlat
+                    </button>
+                    <a class="btn btn-secondary btn-lg" href="/my-work">Vazgeç</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <aside class="min-w-0 space-y-5" aria-label="Acil kayıt hakkında">
+        <section class="panel" aria-labelledby="after-title">
+            <div class="panel-head"><h2 id="after-title" class="panel-title">Gönderince</h2></div>
+            <ol class="list-inside list-decimal space-y-3 p-4 md:p-5">
+                <li>Acil kayıt açılır ve ilk adım aynı anda başlar.</li>
+                <li>Kayıt numarasında acil türü işareti bulunur. Saha defteri referansı yoktur.</li>
+                <li>Yürütme ekranı açılır, kalan adımları oradan sürdürürsünüz.</li>
+            </ol>
+        </section>
+        <section class="panel" aria-labelledby="rule-title">
+            <div class="panel-head"><h2 id="rule-title" class="panel-title">Aynı kurallar</h2></div>
+            <div class="space-y-3 p-4 md:p-5">
+                <p>Makine başka bir kayıtta kilitliyse ya da açık kaydınız varsa acil kayıt da açılmaz. Acil tipte faz için en az süre yoktur.</p>
+                <a class="btn btn-secondary btn-block" href="/records/create">Planlı kayıt aç</a>
+            </div>
+        </section>
+    </aside>
+</div>
+}

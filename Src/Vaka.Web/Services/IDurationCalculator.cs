@@ -201,4 +201,14 @@ public interface IDurationCalculator
     /// Açık mola: Süre = Sunucu anı - Mola başlangıcı (bitiş yerine sunucu anı verilir); kapanmış mola: Süre = Bitiş - Başlangıç; 0'ın altına inmez
     /// </summary>
     int CalculateBreakSeconds(DateTimeOffset breakStart, DateTimeOffset breakEnd);
+
+    /// <summary>
+    /// Rapor ortalaması, saniye (SH-15, PL-56).
+    /// Ortalama = Σ değer / kayıt sayısı; saniyeye aşağı yuvarlanır (tam bölme); değer yoksa 0
+    /// </summary>
+    /// <remarks>
+    /// Çağıran yalnız Tamamlandı kayıtların değerlerini verir: İptal, Yarıda kapatıldı, Zaman aşımı, Açıldı, Devam ediyor ve Beklemede kayıtlar ortalamaya girmez.
+    /// Faz ve adım ortalamaları aynı tip versiyonunun kayıtları içinde alınır; farklı versiyonlar ayrı satırdır. Toplam long ile alınır, taşma olmaz.
+    /// </remarks>
+    int CalculateAverage(IReadOnlyList<int> values);
 }

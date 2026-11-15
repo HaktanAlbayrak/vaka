@@ -18,7 +18,7 @@
 | 4 | Kayıt açma ve makine kilidi | Yeni kayıt, İşlerim, Açıldı hali, makine panosu, zaman aşımı | Evet | TESLİM ALINDI (tur 2, 2026-11-15) |
 | 5 | Adım yürütme, görevli ve mola | Adım başlat/bitir, sahibin eklediği görevliler, iki adım arasında mola, otomatik tamamlanma | Evet | TESLİM ALINDI (tur 1, 2026-11-15) |
 | 6 | Kayıt listesi, detay, bütünlük ve müdahale | 13 soruyu yanıtlayan detay ve yazdırılabilir denetim çıktısı, olay günlüğü, bütünlük, iptal, yarıda kapatma, yöneticinin molayı bitirmesi | Evet | TESLİM ALINDI (tur 2, 2026-11-16) |
-| 6A | Acil müdahale, süre raporu ve malzeme izlenebilirliği | Acil müdahale ekranı ve "Acil" ayrımı, süre ve efor raporu (tablo), lot ve makine bazlı malzeme sorgusu | Evet | BEKLİYOR |
+| 6A | Acil müdahale, süre raporu ve malzeme izlenebilirliği | Acil müdahale ekranı ve "Acil" ayrımı, süre ve efor raporu (tablo), lot ve makine bazlı malzeme sorgusu | Evet | TESLİM ALINDI (tur 1, 2026-11-16) |
 | 7 | Talep, beklemeye alma ve yönetici panosu (Salı sonrası) | Talepler, Taleplerim, bekleme ve devam, yönetici panosu, adım sürerken mola, görevli PIN onayı | Evet | BEKLİYOR |
 | 8 | Acil müdahale, bildirim ve düzeltme (Salı sonrası) | Acil ve talep bildirimleri, panoda acil, düzeltme formu | Evet | BEKLİYOR |
 | 9 | Raporlar, denetim çıktısı ve sistem ayarları (Salı sonrası) | Rapor grafikleri ve CSV, düzeltmeli denetim çıktısı adresi, Sistem ayarları ekranı, son regresyon | Evet | BEKLİYOR |
@@ -970,31 +970,36 @@ izlenebilirlik servisleri, `Services/DurationCalculator.cs` (SH-15), `ViewModels
 
 **Kapsam dışı:** Acil bildirimi ve panoda acil bölümü (Faz 8), rapor grafiği ve CSV dışa aktarımı (Faz 9), bekleme ortalaması (Faz 7), düzeltilmiş işareti (Faz 8).
 
+**Sonuç (2026-11-16):** TESLİM ALINDI (tur 1). Kabul kriterleri 29/29; ön tur ÖT-1 (boş PIN gönderiminde göz düğmesi taşması, Faz 4-6
+PIN formları dahil) kapandı. Faz 3 ve Faz 6 ekranlarındaki DÜŞÜK B1, B2 D-1 düzeltme işine (PL-74). Rapor: `Docs/Delivery/Faz-6A-Teslim.md`.
+
 ---
 
 ## Sunum hazırlığı (faz değil, Faz 6A'dan sonra, Faz 7'den önce)
 
 **Amaç:** Salı sunumunda ekranlar boş kalmasın ve süre beklemeden anlatılabilsin diye kullanıcının veritabanında uygulama üzerinden gerçek zamanla
-tamamlanmış kayıtlar bulunması (PL-65). Faz kapısı, teslim raporu ve commit yoktur.
+tamamlanmış kayıtlar bulunması (PL-65). Faz kapısı ve teslim raporu yoktur.
 
-**Başlama şartı:** Faz 6A TESLİM ALINDI ve commit'i atıldı.
+**Sıra (PL-74):**
 
-**İş (qa-tester, koordinatör çağırır):**
-
-0. Koordinatör hazırlıktan önce `App_Data/vaka.db`'yi yedekler ve `Data/Seed/DemoData.sql`'i `INSERT OR IGNORE` ile yükler; kullanıcının
-   veritabanında Faz 4 ve 5 demo satırları (`PLN3`, `KSA`) yoktur.
-1. `App_Data/vaka.db` önce `.qa/` altına yedeklenir; işlem yalnız çalışan uygulamanın arayüzünden yapılır.
-2. Yeni hesap açılmaz; kullanıcının veritabanındaki test hesapları kullanılır: `0001` Süper admin, `1001` Test Yönetici, `2001` Test Operatör 1,
-   `2002` Test Operatör 2, `3001` Test Denetçi (ilk giriş tamam). Parola ve PIN yalnız yerel `Docs/Local/TestHesaplari.md`'dedir; plana, senaryoya
-   ve rapora yazılmaz.
-3. Kayıtlar, gerçek zamanla:
-   - `KSA` ile normal biten kayıt (her faz neti en az 60 saniye; iki operatörden biri görevli).
-   - `KSA` ile süre altında, gerekçeyle biten kayıt.
-   - Dokümanın 12 sn / 40 dk örneği (satır 67-71): `KSA` 1. fazın 1. adımı yaklaşık 12 saniyede biter, adımlar arasında 40 dakikalık mola verilir,
-     2. adım başlatılıp bitirilir; faz neti molayı düşer, minimum altında kaldığı için gerekçe istenir.
-4. Sahte veri, doğrudan SQL ve geriye tarihli kayıt yoktur. Bütünlük ihlali gösterimi kullanıcının veritabanında yapılmaz, yalnız ayrı kopyada.
-
-**Çıktı:** kayıt no'ları, her birinin detayında bütünlük rozeti "Doğrulandı"; koordinatör mesajıyla analiste, analist `Docs/Local/SunumSenaryosu.md`'ye işler.
+0. Koordinatör: Faz 6A commit'i ve README. D-1 düzeltme işi (Faz 6A raporu bölüm 10): frontend B1 ve B2'yi düzeltir, qa-tester hedefli ölçer,
+   koordinatör `Workflow.md §4.4` düzeniyle commit'ler. Ardından `App_Data/vaka.db` yedeği ve `Data/Seed/DemoData.sql`'in `INSERT OR IGNORE` ile
+   yüklenmesi; `PLN3` ve `KSA` tip listesinde görünür. Kullanıcının makinesinde user-secrets'ta `EventChain:HmacKey` var, uygulama başlıyor.
+1. qa-tester: `App_Data/vaka.db`'yi `.qa/` altına ayrıca yedekler; uygulamayı kullanıcının veritabanıyla kendi başlattığı süreçte, boş portta
+   açar. Yalnız arayüz; sahte veri, doğrudan SQL ve geriye tarihli kayıt yok. `PLN` tipinde taslak açmaz (sunumdaki canlı v2 yayını için).
+2. Test hesaplarıyla giriş denetimi: `0001`, `1001`, `2001`, `2002`, `3001` (parola ve PIN `Docs/Local/TestHesaplari.md`'de; plana, rapora ve
+   mesaja yazılmaz).
+3. Kayıt A, 12 sn / 40 dk (doküman satır 67-71; en uzun süren olduğu için önce başlar): sahip `2002`, makine `T1-H2-M01`, tip `KSA`. 1. fazın 1.
+   adımı yaklaşık 12 saniyede biter; adımlar arasında `2002` mola başlatır, 40 dakika sonra bitirir; 2. adım kısa sürede bitince faz neti
+   minimumun altında kalır, gerekçe dialogda girilir; 2. faz normal tamamlanır.
+4. Kayıt B, normal biten (A'nın molası sürerken): sahip `2001`, makine `T1-H1-M01`, tip `KSA`; açılışta bir lot (ör. `L2027-001`) eklenir;
+   adımlara `2002` görevli eklenir (A'da açık molası yoksa; varsa görevlisiz); her fazın neti 60 saniyeyi geçer, gerekçe istenmez.
+5. Kayıt C, süre altında gerekçeli: sahip `2001`, B bittikten sonra aynı makinede, tip `KSA`; ilk fazın son adımı 60 saniye dolmadan bitirilir,
+   gerekçe dialogda.
+6. Doğrulama: üç kaydın detayında 13 soru dolu, bütünlük rozeti "Doğrulandı"; süre ve efor raporunda `KSA` satırları; malzeme izlenebilirliğinde
+   `L2027-001` kayıt B'yi gösterir. Uygulama süreci kapatılır.
+7. Çıktı: kayıt no'lar ve her biri için tek satır sonuç koordinatör mesajıyla analiste; analist `Docs/Local/SunumSenaryosu.md` §5'e işler.
+   Bütünlük ihlali gösterimi kullanıcının veritabanında yapılmaz.
 
 ---
 

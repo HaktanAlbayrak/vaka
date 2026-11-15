@@ -174,6 +174,9 @@ public sealed class DurationCalculator : IDurationCalculator
         return Math.Max(0, WholeSeconds(TimeSpan.FromTicks(ticks)));
     }
 
+    public int CalculateAverage(IReadOnlyList<int> values) =>
+        values.Count == 0 ? 0 : (int)(values.Sum(value => (long)value) / values.Count);
+
     public int CalculateBreakSeconds(DateTimeOffset breakStart, DateTimeOffset breakEnd) => Math.Max(0, WholeSeconds(breakEnd - breakStart));
 
     private static int OverlapSeconds(DateTimeOffset from, DateTimeOffset to, IReadOnlyList<BreakSpan> breaks, DateTimeOffset? openBreakEnd) =>

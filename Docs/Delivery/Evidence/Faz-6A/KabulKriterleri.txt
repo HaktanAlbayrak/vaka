@@ -1,0 +1,159 @@
+Faz 6A kabul kriterleri kanıtı (qa-tester, 2026-11-15). Release .qa/f6a/build2, port 5621 Production, .qa/f6a/qa.db (App_Data yedeği + DemoData.sql + uygulama akışıyla kurulan veri).
+Veri kurulumu (uygulama üzerinden): 12 operatör (2003-2014), 5 makine (biri uzun adlı), Yönetici akışıyla malzeme zorunlu acil tip ACL2 v1 (tetikleyici düşürülmedi), ACL v2 yayını, acil kayıtlar e1-e9, planlı KSA kaydı, 47 ek lot.
+
+== K1-K4, G9, eşzamanlılık (t1.py) ==
+K1 radyolar ['2', '5'] adlar ['Acil m&#xFC;dahale', 'Kimyasal d&#xF6;k&#xFC;nt&#xFC; m&#xFC;dahalesi'] meta []
+K1 DB acil+yürürlükte [(2, 'Acil müdahale', 2, 0), (5, 'Kimyasal döküntü müdahalesi', 1, 1)]
+K1 acil tip makine eşlemesi [] makine 10 eşlemesi []
+K1 taslak versiyonlu ACL3 (tip 6 ) listede mi False
+K3 açıklama boş 200  kayıt +0 olay +0 alert= None alan= {'Description': 'Ne olduğunu kısaca yazın.'} korunan {'cid': True, 'desc': None, 'pinEmpty': True} 
+K3 açıklama yalnız boşluk 200  kayıt +0 olay +0 alert= None alan= {'Description': 'Ne olduğunu kısaca yazın.'} korunan {'cid': True, 'desc': None, 'pinEmpty': True} 
+K3 açıklama 1001 200  kayıt +0 olay +0 alert= None alan= {'Description': 'Açıklama en çok 1000 karakter olabilir.'} korunan {'cid': True, 'desc': True, 'pinEmpty': True} 
+K3 malzeme zorunlu tip, malzemesiz 200  kayıt +0 olay +0 alert= None alan= {} korunan {'cid': True, 'desc': False, 'pinEmpty': True} 
+K3 SKT geçmiş lot gerekçesiz 200  kayıt +0 olay +0 alert= None alan= {'Materials[0]-ExpiredReason': 'SKT geçmiş lot için gerekçe girin.'} korunan {'cid': True, 'desc': False, 'pinEmpty': True} 
+K3 olmayan lot 200  kayıt +0 olay +0 alert= None alan= {} korunan {'cid': True, 'desc': True, 'pinEmpty': True} 
+planlı tip kimliği 200  kayıt +0 olay +0 alert= None alan= {'CleaningTypeId': 'Acil tipi seçin.'} korunan {'cid': True, 'desc': False, 'pinEmpty': True} 
+kullanımdan kalkmış makine 4 200  kayıt +0 olay +0 alert= None alan= {'MachineId': 'Makine kullanımda değil.'} korunan {'cid': True, 'desc': False, 'pinEmpty': True} 
+hat-makine uyumsuz 200  kayıt +0 olay +0 alert= None alan= {'LineId': 'Hat seçilen makineye uygun değil ya da aktif değil.'} korunan {'cid': True, 'desc': False, 'pinEmpty': True} 
+yanlış PIN 200  kayıt +0 olay +0 alert= None alan= {'pin-emergency': 'PIN hatalı.'} korunan {'cid': True, 'desc': False, 'pinEmpty': True} (0, 1)
+K4 makine kilitli (devam eden acil, op10) 200  kayıt +0 olay +0 alert= Acil kayıt açılamadı Makinede açık kayıt var. Sahip: QA Operatör 10, durum: devam ediyor, açılış: 15.11.2026 19:15 Kaydı görüntüle alan= {} korunan {'cid': True, 'desc': True, 'pinEmpty': True} 
+   ErrorUrl ['/records/run/12']
+op13 planlı açıldı /records/run/14 ('T1-H1-M02-P2026-3', None, 1)
+K4 makine kilitli (Açıldı planlı, op13) 200  kayıt +0 olay +0 alert= Acil kayıt açılamadı Makinede açık kayıt var. Sahip: QA Operatör 13, durum: açıldı, açılış: 15.11.2026 19:20 Kaydı görüntüle alan= {} korunan {'cid': True, 'desc': False, 'pinEmpty': True} 
+   ErrorUrl ['/records/run/14']
+K4 kişinin aktif kaydı var (op10) 200  kayıt +0 olay +0 alert= Acil kayıt açılamadı Açık kaydınız var: T1-H1-M06-A2026-1 (devam ediyor). Yeni kayıt açmadan önce onu sürdürün. Kaydı görüntüle alan= {} korunan {'cid': True, 'desc': False, 'pinEmpty': True} 
+   ErrorUrl ['/records/run/12']
+op10 GET /emergencies/create 200  form True uyarı ['Şu an seçilemeyen makineler', ''] 
+op10 GET /records/create 200  form True uyarı ['Şu an seçilemeyen makineler', ''] 
+op10 GET /my-work 200  form  uyarı [] 
+op13 s1 (302, '/records/run/14')
+ f1 (302, '/records/run/14')
+ mola 302 /breaks/current
+mola GET (200, '')
+mola POST 302 /breaks/current kayıt +0
+ mola bitir 302
+G9 (302, '/records/run/15') (302, '/records/run/15') kayıt +1 olay +2 ProcessedCommands [('OpenEmergency', 1)]
+eşzamanlı planlı 302 /records/run/16  
+eşzamanlı acil 200  Acil kayıt açılamadı Makinede açık kayıt var. Sahip: Test Operatör 2, durum: açıldı, açılış: 15.11.2026 19:20 Kaydı görüntüle ['Acil kayıt açılamadı', 'Acil kayıt açılamadı']
+ makine 3 açık kayıt [(16, 'T1-H2-M01-P2026-2', 1, 1, 4)] kayıt +1
+eşzamanlı2 op4 302 /records/run/17 
+eşzamanlı2 op3 200  Acil kayıt açılamadı Makinede açık kayıt var. Sahip: QA Operatör 4, durum: devam ediyor, açılış: 15.11.2026 19:20 Kaydı görüntüle
+ makine 8 açık kayıt [(17, 'T1-H1-M05-A2026-2', 2, 2, 7)] kayıt +1
+PIN sayaçları [('2001', 1)]
+
+== K2, K5, K6, bütünlük, mesajlar, makine JSON (t1b.py) ==
+malzemesiz zorunlu 200 ['Kaydı aç ve başlat Vazgeç'] | _FormSummary: Bu acil tip malzeme ister. En az bir malzeme ekleyin.
+olmayan lot 200 ['Kaydı aç ve başlat Vazgeç'] | _FormSummary: Lot seçilemez ya da aynı lot iki kez eklenmiş.
+K2 acil kayıtlar: Id, No, saha ref, açılış==başlangıç==ilk adım, olay1/2, aynı cid ve an
+   3 T1-H1-M01-A2026-3 ref None kilit None iş emri None açıklama 1 eşit True ['RecordOpened', 'StepStarted'] cid eşit True an eşit True True
+   4 T1-H1-M02-A2026-1 ref None kilit None iş emri None açıklama 1 eşit True ['RecordOpened', 'StepStarted'] cid eşit True an eşit True True
+   5 T1-H2-M01-A2026-1 ref None kilit None iş emri None açıklama 1 eşit True ['RecordOpened', 'StepStarted'] cid eşit True an eşit True True
+   6 T1-H1-M01-A2026-4 ref None kilit None iş emri None açıklama 1 eşit True ['RecordOpened', 'StepStarted'] cid eşit True an eşit True True
+   7 T1-H1-M03-A2026-1 ref None kilit None iş emri None açıklama 1 eşit True ['RecordOpened', 'StepStarted'] cid eşit True an eşit True True
+   8 T1-H1-M04-A2026-1 ref None kilit None iş emri None açıklama 1 eşit True ['RecordOpened', 'StepStarted'] cid eşit True an eşit True True
+   9 T1-H1-M05-A2026-1 ref None kilit None iş emri None açıklama 1 eşit True ['RecordOpened', 'StepStarted'] cid eşit True an eşit True True
+   11 T1-H2-M03-A2026-1 ref None kilit None iş emri None açıklama 1 eşit True ['RecordOpened', 'StepStarted'] cid eşit True an eşit True True
+   12 T1-H1-M06-A2026-1 ref None kilit None iş emri None açıklama 1 eşit True ['RecordOpened', 'StepStarted'] cid eşit True an eşit True True
+   13 T1-H1-M01-A2026-5 ref None kilit None iş emri None açıklama 1 eşit True ['RecordOpened', 'StepStarted'] cid eşit True an eşit True True
+   15 T1-H1-M04-A2026-2 ref None kilit None iş emri None açıklama 1 eşit True ['RecordOpened', 'StepStarted'] cid eşit True an eşit True True
+   17 T1-H1-M05-A2026-2 ref None kilit None iş emri None açıklama 1 eşit True ['RecordOpened', 'StepStarted'] cid eşit True an eşit True True
+  RecordOpened yükü (kayıt 5) {"RecordNo":"T1-H2-M01-A2026-1","Kind":"Emergency","MachineId":3,"CleaningTypeId":2,"ProcedureVersionId":2,"VersionNo":1,"Description":"Dolum nozulunda \u00FCr\u00FCn birikmesi, dolum durdu.","MaterialLotIds":[3,1],"MaterialLots":[{"LotId":3,"LotNo":"L2027-002","ExpiredAtEntry":false,"ExpiredReason":null},{"LotId":1,"LotNo":"L2026-001","ExpiredAtEntry":true,"ExpiredReason":"Depoda yeni lot yok, ka
+K2 Run 12: saha ['Saha defteri Yok'] açıklama True ['Şişe yıkama makinesinde deterjan pompası taşırdı, köpük bant']
+planlı Run 14 saha ['Saha defteri T1-SD-2026-3']
+detay 3 200 ['Saha defteri Yok Acil durum açıklamas'] True ['Bütünlük Doğrulandı', 'Bütünlük Doğrulandı'] True
+detay 11 200 ['Saha defteri Yok Acil durum açıklamas'] True ['Bütünlük Doğrulandı', 'Bütünlük Doğrulandı'] True
+detay 13 200 ['Saha defteri Yok Acil durum açıklamas'] True ['Bütünlük Doğrulandı', 'Bütünlük Doğrulandı'] True
+K5 acil fazlar süre altı/gerekçe [(3, 0, None, None), (4, 0, None, None), (5, 0, None, None), (6, 0, None, None), (7, 0, None, None), (11, 0, None, None)]
+K5 StepFinished olaylarında gerekçe ['{"StepId":14,"DurationSeconds":7,"EffortSeconds":7,"BreakSeconds":0,"ParticipantUserIds":[7]}']
+bütünlük 3 200 True False
+bütünlük 4 200 True False
+bütünlük 5 200 True False
+bütünlük 6 200 True False
+bütünlük 7 200 True False
+bütünlük 11 200 True False
+bütünlük 12 200 True False
+bütünlük 13 200 True False
+bütünlük 15 200 True False
+bütünlük 17 200 True False
+K6 liste ?kind=2&mineOnly=false 200 12 12 True Acil rozet sayısı 25
+K6 liste ?kind=1&mineOnly=false 200 5 5 True Acil rozet sayısı 1
+K6 liste ?mineOnly=false 200 17 17 True Acil rozet sayısı 25
+op3 varsayılan kind=2 ['T1-H1-M01-A2026-4', 'T1-H1-M01-A2026-3']
+JSON 200 [{"id":1,"label":"M01 - Kar\u0131\u015Ft\u0131r\u0131c\u0131","isAvailable":true,"busyReason":null},{"id":2,"label":"M02 - Tart\u0131 \u00FCnitesi","isAvailable":false,"busyReason":"Sahip: QA Operat\u00F6r 13, durum: devam ediyor, a\u00E7\u0131l\u0131\u015F: 15.11.2026 19:20"},{"id":6,"label":"M03 - Kurutma t\u00FCneli","isAvailable":true,"busyReason":null},{"id":7,"label":"M04 - Paketleme band\u0131","isAvailable":false,"busyReason":"Sahip: QA Operat\u00F6r 14, durum: devam ediyor, a\u00E7\u0131l\u0131\u015F: 15.11.2026 19:20"},{"id":8,"label":"M05 - Kapak s\u0131kma \u00FCnitesi","isAvailabl
+JSON 999 200 []
+
+== Mola sırasında GET (karşılaştırma) ==
+op13 molada: /my-work 302 /breaks/current; /records/create 200; /emergencies/create 200; POST /emergencies/create 302 /breaks/current, kayıt +0
+
+== K9 iptal kaydı ortalamayı değiştirmez (t9.py) ==
+K9 kayıt 13 /records/run/13 (302, '/records/run/13') 2 [(32, 1, 1, 3, '2026-11-15 16:19:26.8563557', '2026-11-15 16:19:30.1345912', 0, 3, 3, 15, 15, 18), (33, 1, 2, 1, None, None, 0, None, None, None, None, 18)]
+iptal 302 /records/details/13 6
+makine tablosu aynı True faz aynı True adım aynı True
+durum önce {'Açıldı': 0, 'Devam ediyor': 1, 'Beklemede': 0, 'Tamamlandı': 8, 'Zaman aşımı': 1, 'İptal edildi': 1, 'Yarıda kapatıldı': 1} 
+ durum sonra {'Açıldı': 0, 'Devam ediyor': 1, 'Beklemede': 0, 'Tamamlandı': 8, 'Zaman aşımı': 1, 'İptal edildi': 2, 'Yarıda kapatıldı': 1}
+iptal kaydının faz ve adım değerleri DB [(18, 1, 5, None, None, None, 0, None, None)]
+RAPOR iptal sonrası süzgeçsiz durum 200 hata None eşleşme {'machine': True, 'phase': True, 'steps': True, 'status': True} satır 7 7 10
+
+== K12 malzeme izlenebilirliği (t12.py, t12b.py) ==
+LOT 1 200 başlık MLZ001 - Yüzey dezenfektanı, lot L2026-001 satır 2 DB 2 birebir True   
+      ['T1-H2-M01-A2026-1', 'T1-H2-M01 - Dolum makinesi', '15.11.2026 19:14', 'Tamamlandı SKT geçmiş']
+      ['T1-H2-M03-A2026-1', 'T1-H2-M03 - Çift gövdeli vakumlu karıştırma ve homojenizasyon tankı', '15.11.2026 19:14', 'Tamamlandı SKT geçmiş']
+LOT 2 200 başlık MLZ001 - Yüzey dezenfektanı, lot L2027-001 satır 3 DB 3 birebir True   
+      ['T1-H1-M01-P2026-1', 'T1-H1-M01 - Karıştırıcı', '15.11.2026 05:29', 'Zaman aşımı']
+      ['T1-H1-M01-P2026-2', 'T1-H1-M01 - Karıştırıcı', '15.11.2026 16:26', 'Tamamlandı']
+      ['T1-H1-M02-P2026-2', 'T1-H1-M02 - Tartı ünitesi', '15.11.2026 19:14', 'Tamamlandı']
+LOT 3 200 başlık MLZ001 - Yüzey dezenfektanı, lot L2027-002 satır 4 DB 4 birebir True   
+      ['T1-H1-M01-P2026-1', 'T1-H1-M01 - Karıştırıcı', '15.11.2026 05:29', 'Zaman aşımı']
+      ['T1-H1-M01-P2026-2', 'T1-H1-M01 - Karıştırıcı', '15.11.2026 16:26', 'Tamamlandı']
+      ['T1-H2-M01-A2026-1', 'T1-H2-M01 - Dolum makinesi', '15.11.2026 19:14', 'Tamamlandı']
+      ['T1-H2-M03-A2026-1', 'T1-H2-M03 - Çift gövdeli vakumlu karıştırma ve homojenizasyon tankı', '15.11.2026 19:14', 'Tamamlandı']
+LOT 4 200 başlık MLZ002 - Kimyasal temizleyici, lot K2027A satır 3 DB 3 birebir True   
+      ['T1-H1-M01-P2026-1', 'T1-H1-M01 - Karıştırıcı', '15.11.2026 05:29', 'Zaman aşımı']
+      ['T1-H1-M01-A2026-4', 'T1-H1-M01 - Karıştırıcı', '15.11.2026 19:14', 'Tamamlandı']
+      ['T1-H1-M04-A2026-1', 'T1-H1-M04 - Paketleme bandı', '15.11.2026 19:14', 'İptal edildi']
+LOT 5 200 başlık MLZ002 - Kimyasal temizleyici, lot K2026B satır 2 DB 2 birebir True   
+      ['T1-H1-M01-P2026-1', 'T1-H1-M01 - Karıştırıcı', '15.11.2026 05:29', 'Zaman aşımı']
+      ['T1-H1-M06-A2026-1', 'T1-H1-M06 - Şişe yıkama makinesi', '15.11.2026 19:15', 'Devam ediyor']
+LOT 6 200 başlık None satır 0 DB 0 birebir True boş durum class="state-box" data-kind="empty"> Bir lot seçin Lotu bulup seçtiğinizde kulla Rapor hazırlanamadı Seçilen lot bulunamadı.
+MAKİNE 1 200 T1-H1-M01 - Karıştırıcı satır 7 DB 7 birebir True 
+      ['15.11.2026 05:29', 'Yüzey dezenfektanı MLZ001', 'T1-H1-M01-P2026-1', 'L2027-001', '31.03.2027']
+      ['15.11.2026 05:29', 'Yüzey dezenfektanı MLZ001', 'T1-H1-M01-P2026-1', 'L2027-002', '30.09.2027']
+      ['15.11.2026 05:29', 'Kimyasal temizleyici MLZ002', 'T1-H1-M01-P2026-1', 'K2026B', '31.12.2026']
+      ['15.11.2026 05:29', 'Kimyasal temizleyici MLZ002', 'T1-H1-M01-P2026-1', 'K2027A', '31.01.2027']
+      ['15.11.2026 16:26', 'Yüzey dezenfektanı MLZ001', 'T1-H1-M01-P2026-2', 'L2027-001', '31.03.2027']
+      ['15.11.2026 16:26', 'Yüzey dezenfektanı MLZ001', 'T1-H1-M01-P2026-2', 'L2027-002', '30.09.2027']
+      ['15.11.2026 19:14', 'Kimyasal temizleyici MLZ002', 'T1-H1-M01-A2026-4', 'K2027A', '31.01.2027']
+MAKİNE 2 200 T1-H1-M02 - Tartı ünitesi satır 1 DB 1 birebir True 
+      ['15.11.2026 19:14', 'Yüzey dezenfektanı MLZ001', 'T1-H1-M02-P2026-2', 'L2027-001', '31.03.2027']
+MAKİNE 3 200 T1-H2-M01 - Dolum makinesi satır 2 DB 2 birebir True 
+      ['15.11.2026 19:14', 'Yüzey dezenfektanı MLZ001', 'T1-H2-M01-A2026-1', 'L2027-002', '30.09.2027']
+      ['15.11.2026 19:14', 'Yüzey dezenfektanı MLZ001', 'T1-H2-M01-A2026-1', 'L2026-001', '30.06.2026 SKT geçmiş']
+MAKİNE 9 200 T1-H1-M06 - Şişe yıkama makinesi satır 1 DB 1 birebir True 
+      ['15.11.2026 19:15', 'Kimyasal temizleyici MLZ002', 'T1-H1-M06-A2026-1', 'K2026B', '31.12.2026']
+MAKİNE 10 200 T1-H2-M03 - Çift gövdeli vakumlu karıştırma ve homojenizasyon tankı satır 2 DB 2 birebir True 
+      ['15.11.2026 19:14', 'Yüzey dezenfektanı MLZ001', 'T1-H2-M03-A2026-1', 'L2027-002', '30.09.2027']
+      ['15.11.2026 19:14', 'Yüzey dezenfektanı MLZ001', 'T1-H2-M03-A2026-1', 'L2026-001', '30.06.2026 SKT geçmiş']
+MAKİNE 6 200 None satır 0 DB 0 birebir True 
+LOT tarih ?mode=Lot&MaterialLotId=3&from=2026-11-15&to=2026-11-15 200 4 None 
+LOT tarih ?mode=Lot&MaterialLotId=3&to=2026-11-14 200 0 None class="state-box" data-kind="empty"> Bu lot kullanılmamış Seçilen tarih aralığında lotun k
+LOT tarih ?mode=Lot&MaterialLotId=3&from=2026-11-16 200 0 None class="state-box" data-kind="empty"> Bu lot kullanılmamış Seçilen tarih aralığında lotun k
+MAKİNE tarih ?mode=Machine&MachineId=1&from=2026-11-15&to=2026-11-15 200 7 None
+MAKİNE tarih ?mode=Machine&MachineId=1&from=2026-11-16 200 0 None
+MAKİNE tarih ?mode=Machine&MachineId=1&to=2026-11-14 200 0 None
+LotQuery=L2027 seçenekler ['2', '3'] sonuç yok/HasResult false True
+LotQuery=zzz True
+Denetçi lot 3 200 4
+planlı /records/run/18
+çıkar 302 /records/run/18 [(15, 4, 0), (16, 5, 1)]
+?mode=Lot&MaterialLotId=5 kayıt no T1-H1-M01-P2026-6 geçme sayısı 0 []
+?mode=Lot&MaterialLotId=4 kayıt no T1-H1-M01-P2026-6 geçme sayısı 2 []
+?mode=Machine&MachineId=1 kayıt no T1-H1-M01-P2026-6 geçme sayısı 2 []
+
+== Tarih süzgeci, Türkiye tarihi sınırı (t2d.py) ==
+Kopyaya iki satır eklendi: QA-SINIR-1 Tamamlandı, açılış 2026-11-14 22:30 UTC (TR 15.11 01:30, net 30 sn); QA-SINIR-2 İptal, açılış 2026-11-14 20:30 UTC (TR 14.11 23:30). Makine 7.
+?from=2026-11-15&to=2026-11-15 200 makine satırı [['T1-H1-M04 - Paketleme bandı Acil müdahale', '1', '30 sn', '0 sn', '30 sn', '30 sn']] | Tamamlandı 1 İptal 1 None
+?to=2026-11-14 200 makine satırı [] | Tamamlandı 0 İptal 1 None
+?from=2026-11-14&to=2026-11-14 200 makine satırı [] | Tamamlandı 0 İptal 1 None
+?from=2026-11-14 200 makine satırı [['T1-H1-M04 - Paketleme bandı Acil müdahale', '1', '30 sn', '0 sn', '30 sn', '30 sn']] | Tamamlandı 1 İptal 2 None
+
+== Tarayıcı akışı (JS açık, 360 px, op5): bkz. JsDavranis.txt ==

@@ -25,7 +25,7 @@ const icons = [
   "house", "key-round", "user-plus", "pencil", "user-check", "user-x", "rotate-ccw", "save",
   "arrow-left", "building-2", "calendar-days", "moon-star", "power-off", "route",
   "arrow-up", "arrow-down", "trash-2", "upload", "image", "video", "send", "file-text", "list-ordered", "list",
-  "shield-alert", "printer", "history", "octagon-alert",
+  "shield-alert", "printer", "history", "octagon-alert", "siren",
 ];
 
 const symbols = icons.map((name) => {

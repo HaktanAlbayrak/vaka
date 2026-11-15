@@ -14,7 +14,7 @@
     var error = Model.Error ?? (Model.Name is not null && ViewData.ModelState.TryGetValue(Model.Name, out var entry) && entry.Errors.Count > 0 ? entry.Errors[0].ErrorMessage : null);
     var describedBy = error is null ? hintId : hintId + " " + errorId;
 }
-<div class="field" data-pin>
+<div class="field" data-field data-pin>
     <label class="field-label" for="@Model.Id">@Model.Label</label>
     <div class="relative">
         <input id="@Model.Id" name="@Model.Name" class="input pin-input pr-14" type="password" inputmode="numeric" pattern="[0-9]*"

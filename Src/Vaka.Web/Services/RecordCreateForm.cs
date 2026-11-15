@@ -6,12 +6,14 @@ public sealed class RecordCreateForm : IRecordCreateForm
 {
     private readonly IRecordOptions _options;
     private readonly ILotCatalog _lots;
+    private readonly IMaterialEntryResolver _materials;
     private readonly ISystemSettingsReader _settings;
 
-    public RecordCreateForm(IRecordOptions options, ILotCatalog lots, ISystemSettingsReader settings)
+    public RecordCreateForm(IRecordOptions options, ILotCatalog lots, IMaterialEntryResolver materials, ISystemSettingsReader settings)
     {
         _options = options;
         _lots = lots;
+        _materials = materials;
         _settings = settings;
     }
 
@@ -54,45 +56,13 @@ public sealed class RecordCreateForm : IRecordCreateForm
             model.DefaultLockMinutes = type.DefaultLockMinutes;
         }
 
-        model.Materials = await ResolveMaterialsAsync(posted, applyMaterialEdits, cancellationToken);
+        MaterialEdits? edits = applyMaterialEdits && posted is not null
+            ? new MaterialEdits(posted.RemoveMaterialIndex, posted.AddMaterialLotId, posted.AddExpiredReason)
+            : null;
+        model.Materials = await _materials.ResolveAsync(posted?.Materials ?? [], edits, cancellationToken);
         var catalog = await _lots.FindAsync(model.LotQuery, null, null, cancellationToken);
         model.AvailableLots = catalog.Lots;
         model.AvailableLotsTruncated = catalog.Truncated;
         return model;
-    }
-
-    private async Task<MaterialEntryViewModel[]> ResolveMaterialsAsync(RecordCreateViewModel? posted, bool applyMaterialEdits, CancellationToken cancellationToken)
-    {
-        var entries = (posted?.Materials ?? []).Select(item => (item.MaterialLotId, item.ExpiredReason)).ToList();
-        if (applyMaterialEdits && posted is not null)
-        {
-            if (posted.RemoveMaterialIndex is { } index && index >= 0 && index < entries.Count)
-            {
-                entries.RemoveAt(index);
-            }
-
-            if (posted.AddMaterialLotId is { } lotId && entries.All(item => item.MaterialLotId != lotId))
-            {
-                entries.Add((lotId, posted.AddExpiredReason));
-            }
-        }
-
-        var lots = (await _lots.GetAsync(entries.Select(item => item.MaterialLotId).ToArray(), cancellationToken))
-            .ToDictionary(lot => lot.Id);
-
-        return [.. entries.Where(item => lots.ContainsKey(item.MaterialLotId)).Select(item =>
-        {
-            var lot = lots[item.MaterialLotId];
-            return new MaterialEntryViewModel
-            {
-                MaterialLotId = lot.Id,
-                ExpiredReason = item.ExpiredReason,
-                MaterialCode = lot.MaterialCode,
-                MaterialName = lot.MaterialName,
-                LotNo = lot.LotNo,
-                ExpiryDate = lot.ExpiryDate,
-                IsExpired = lot.IsExpired
-            };
-        })];
     }
 }

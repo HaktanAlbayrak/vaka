@@ -1,0 +1,23 @@
+Faz 6A tarayıcı JS davranışı (playwright-cli, Chromium).
+
+== E-27 JS açık uçtan uca, 360 px, op5: çağlayan, LotPicker, SKT geçmiş gerekçe, malzeme zorunlu tip, çift tıklama ==
+opts = [':Makine seçin', '1(dolu):M01 - Karıştırıcı - Sahip: QA Operatör 1', '2(dolu):M02 - Tartı ünitesi - Sahip: QA Operatör', '6:M03 - Kurutma tüneli', '7(dolu):M04 - Paketleme bandı - Sahip: QA Operat', '8(dolu):M05 - Kapak sıkma ünitesi - Sahip: QA Op', '9(dolu):M06 - Şişe yıkama makinesi - Sahip: QA O']
+busyBox = Şu an seçilemeyen makineler M01 - Karıştırıcı: Sahip: QA Operatör 12, durum: açıldı, açılış: 15.11.2026 19:21 M02 - Tartı ünitesi: Sahip: QA Operatör 13, durum: devam ediyor, açılış: 15.11.2026 19:20 
+results = ['Yüzey dezenfektanı (MLZ001) Lot L2026-001 · SKT 30.06.2026 SKT geçmiş']
+selected = ['Materials[0].MaterialLotId=1', 'Materials[0].ExpiredReason=Depoda yeni lot yok,']
+posts = ['/emergencies/create']
+runUrl = /records/run/19
+runText = Yürütme Sıradaki adımı PIN'inizle başlatın ve bitirin. Kayıt bilgisi T1-H1-M03-A2026-2 M03 - Kurutma tüneli Acil Devam ediyor YER T1 - Ana tesis, H1 - Hazırlık hattı TİP Kimyasal döküntü müdahalesi, versiyon 1 SAHİP QA Operatör 5 AÇILIŞ 19:29 İŞ EMRİ SAHA DEFTERİ Yok İLK ADIMI BAŞLATAN QA Operatör 5 ACİL DURUM AÇIKLAMASI JS akışı: kimyasal bidon devrildi, zemin ve makine ayağı ıslak. Fazlar Faz 1 Devam ediyor Döküntü temizliği 0 / 1 adım Net 0sn Mola yok: Mola iki adım arasında verilir Adımlar Faz 1: Döküntü temizliği 1 adım 1.1 Döküntüyü emici malzemeyle topla Devam ediyor Emici granülü dökün
+tabs = ['İçeriğe geç+halka!örtülü', 'A+halka', 'Kullanıcı değiştir+halka', 'BUTTON+halka', 'FacilityId+halka', 'LineId+halka', 'MachineId+halka', 'CleaningTypeId+halka', 'Description+halka', 'lots-search+halka', 'Yüzey dezenfektanı+halka', 'Yüzey dezenfektanı+halka', 'Yüzey dezenfektanı+halka', 'Kimyasal temizleyi+halka']
+log = []
+DB: kayıt sayısı 18 -> 19; kayıt 19 T1-H1-M03-A2026-2, Kind 2, Status 2, versiyon 5 (ACL2); malzeme lot 1 SKT geçmiş + gerekçe; olay 2, CommandId 1 (çift tıklamada tek POST).
+
+== Yükleniyor durumu (form gönderiminde iskelet) ==
+/reports/durations = {'before': {'skeleton': False, 'target': True}, 'after': {'skeleton': True, 'target': False}, 'skeletonText': 'Yükleniyor…'}
+/reports/materials?mode=Machine = {'before': {'skeleton': False, 'target': True}, 'after': {'skeleton': True, 'target': False}, 'skeletonText': 'Yükleniyor…'}
+/reports/materials?mode=Lot&LotQuery=L2027 = {'before': {'skeleton': False, 'target': True}, 'after': {'skeleton': True, 'target': False}, 'skeletonText': 'Yükleniyor…'}
+
+== Klavye turu, 1440 (Yönetici) ==
+/reports/durations = ['İçeriğe geç', 'Ana sayfa', 'Kayıtlar', 'Makine panosu', 'Süre ve efor', 'Malzeme izlenebi', 'Tesisler', 'Makineler', 'Vardiyalar', 'Malzemeler', 'Temizlik tipleri', 'Kullanıcılar', 'Parola ve PIN', 'Kullanıcı değişt', 'Daralt', 'BUTTON', 'from', 'from', 'from', 'from-HALKA YOK', 'to', 'to']
+/reports/materials?mode=Lot&LotQuery=L2027 = ['İçeriğe geç', 'Ana sayfa', 'Kayıtlar', 'Makine panosu', 'Süre ve efor', 'Malzeme izlenebi', 'Tesisler', 'Makineler', 'Vardiyalar', 'Malzemeler', 'Temizlik tipleri', 'Kullanıcılar', 'Parola ve PIN', 'Kullanıcı değişt', 'Daralt', 'BUTTON', 'Lota göre', 'Makineye göre', 'LotQuery', 'Lotları bul', 'MaterialLotId', 'lot-from']
+Not: 'from' dört kez = yerel tarih alanının gün/ay/yıl parçaları ve takvim düğmesi (Chromium yerel denetimi).

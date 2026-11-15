@@ -82,6 +82,22 @@
         </div>
     }
 
+    @if (Model.CanOpenEmergency)
+    {
+        <section class="panel border-danger" aria-labelledby="emergency-title">
+            <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 p-4 md:p-5">
+                <div class="flex min-w-0 items-start gap-3">
+                    <svg class="icon icon-lg mt-0.5 text-danger" aria-hidden="true"><use href="/lib/icons/Icons.svg#siren" /></svg>
+                    <div class="min-w-0">
+                        <h2 id="emergency-title" class="text-lg font-bold">Acil müdahale</h2>
+                        <p class="mt-0.5 text-muted">Planlı iş beklemeden kayıt açar ve ilk adımı başlatır. Durum açıklaması zorunludur.</p>
+                    </div>
+                </div>
+                <a class="btn btn-danger btn-lg max-sm:w-full" href="/emergencies/create" data-busy-link>Acil müdahale aç</a>
+            </div>
+        </section>
+    }
+
     <section aria-labelledby="assigned-title">
         <h2 id="assigned-title" class="mb-3 text-xl font-bold">Görevli olduğum adımlar</h2>
         @if (Model.AssignedSteps.Length == 0)
