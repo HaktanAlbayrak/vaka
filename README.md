@@ -24,7 +24,7 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 | 4 | Kayıt açma ve makine kilidi | Tamamlandı | 2026-11-15 | ecc7474 | [Faz-4-Teslim.md](Docs/Delivery/Faz-4-Teslim.md) |
 | 5 | Adım yürütme ve mola | Tamamlandı | 2026-11-15 | 41379d3 | [Faz-5-Teslim.md](Docs/Delivery/Faz-5-Teslim.md) |
 | 6 | Kayıt listesi, detay ve denetim çıktısı, bütünlük, müdahale | Tamamlandı | 2026-11-16 | 8730e7e | [Faz-6-Teslim.md](Docs/Delivery/Faz-6-Teslim.md) |
-| 6A | Acil müdahale, süre ve efor raporu, malzeme sorgusu | Sırada | | | |
+| 6A | Acil müdahale, süre ve efor raporu, malzeme sorgusu | Tamamlandı | 2026-11-16 | 3198d9e | [Faz-6A-Teslim.md](Docs/Delivery/Faz-6A-Teslim.md) |
 | 7 | Talep, beklemeye alma, yönetici panosu, adım içi mola, görevli PIN onayı | Bekliyor (doküman kalemlerinden sonra) | | | |
 | 8 | Bildirim ve düzeltme | Bekliyor (doküman kalemlerinden sonra) | | | |
 | 9 | Grafik, CSV, sistem ayarları ve son regresyon | Bekliyor (doküman kalemlerinden sonra) | | | |
@@ -33,6 +33,7 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 
 | Tarih | Commit | Değişiklik |
 |---|---|---|
+| 2026-11-16 | 3198d9e | Faz 6A: acil müdahale, süre ve efor raporu, malzeme izlenebilirliği; iş birimi dokümanının kalemleri tamamlandı |
 | 2026-11-16 | 8730e7e | Faz 6: kayıt listesi, 13 soruyu yanıtlayan detay ve denetim çıktısı, bütünlük doğrulaması, yönetici müdahalesi |
 | 2026-11-15 | 41379d3 | Faz 5: adım başlat ve bitir, görevli, adım arası mola, süre ve efor, süre altı gerekçe dialogu, kısa demo tipi |
 | 2026-11-15 | ecc7474 | Faz 4: kayıt açma, otomatik kayıt no, makine kilidi ve zaman aşımı, olay zinciri, İşlerim ve makine panosu |
