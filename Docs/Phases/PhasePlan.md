@@ -17,7 +17,7 @@
 | 3 | Temizlik tipi ve prosedür versiyonu | Tip, makine eşleme, taslak düzenleyici, yayınlama | Evet | TESLİM ALINDI (tur 3, 2026-11-15) |
 | 4 | Kayıt açma ve makine kilidi | Yeni kayıt, İşlerim, Açıldı hali, makine panosu, zaman aşımı | Evet | TESLİM ALINDI (tur 2, 2026-11-15) |
 | 5 | Adım yürütme, görevli ve mola | Adım başlat/bitir, sahibin eklediği görevliler, iki adım arasında mola, otomatik tamamlanma | Evet | TESLİM ALINDI (tur 1, 2026-11-15) |
-| 6 | Kayıt listesi, detay, bütünlük ve müdahale | 13 soruyu yanıtlayan detay ve yazdırılabilir denetim çıktısı, olay günlüğü, bütünlük, iptal, yarıda kapatma, yöneticinin molayı bitirmesi | Evet | BEKLİYOR |
+| 6 | Kayıt listesi, detay, bütünlük ve müdahale | 13 soruyu yanıtlayan detay ve yazdırılabilir denetim çıktısı, olay günlüğü, bütünlük, iptal, yarıda kapatma, yöneticinin molayı bitirmesi | Evet | TESLİM ALINDI (tur 2, 2026-11-16) |
 | 6A | Acil müdahale, süre raporu ve malzeme izlenebilirliği | Acil müdahale ekranı ve "Acil" ayrımı, süre ve efor raporu (tablo), lot ve makine bazlı malzeme sorgusu | Evet | BEKLİYOR |
 | 7 | Talep, beklemeye alma ve yönetici panosu (Salı sonrası) | Talepler, Taleplerim, bekleme ve devam, yönetici panosu, adım sürerken mola, görevli PIN onayı | Evet | BEKLİYOR |
 | 8 | Acil müdahale, bildirim ve düzeltme (Salı sonrası) | Acil ve talep bildirimleri, panoda acil, düzeltme formu | Evet | BEKLİYOR |
@@ -843,7 +843,7 @@ PIN'le iptal etmesi, yarıda kapatması ve açık molayı bitirmesi (O-03, PL-46
 | Route | Action | Rol | ViewModel (alanlar) | Görünüm |
 |---|---|---|---|---|
 | GET `/records` | `RecordsController.Index` | RecordReaders | `RecordListViewModel { Items[] { Id, RecordNo, Kind, KindLabel, StatusLabel, FieldBookRef?, FacilityName, LineName, MachineLabel, CleaningTypeName, VersionNo, OwnerName, OpenedAtLocal, CompletedAtLocal?, NetSeconds?, HasBelowMinimum, HasExpiredMaterial, Url }, Filter { Query, FacilityId?, LineId?, MachineId?, Kind?, Status?, From?, To?, MineOnly }, Facilities[], Lines[], Machines[], Page, PageSize, Total }`. `Query` kayıt no, saha referansı, iş emri ve lot no'da arar | `Views/Records/Index.cshtml` |
-| GET `/records/details/{id}` | `RecordsController.Details` | RecordReaders | `RecordDetailViewModel { Header { RecordNo, Kind, KindLabel, StatusLabel, FieldBookRef?, Facility, Line, Machine, CleaningTypeName, VersionNo, VersionUrl?, WorkOrderNo, Note, EmergencyDescription? }, People { OwnerName, OwnerRegistryNo, FirstStepStartedByName?, Helpers[] }, Times { OpenedAtLocal, StartedAtLocal?, CompletedAtLocal?, ClosedAtLocal?, LockExpiresAtLocal? }, Summary { GrossSeconds?, BreakSeconds?, HoldSeconds?, NetSeconds?, EffortSeconds? }, Phases[] { OrderNo, Title, MinDurationSeconds?, StatusLabel, GrossSeconds?, BreakSeconds?, NetSeconds?, BelowMinimum, BelowMinimumReason, Steps[] { OrderNo, Title, Description, Media[], StatusLabel, StartedAtLocal?, StartedByName?, EndedAtLocal?, EndedByName?, BreakSeconds?, DurationSeconds?, EffortSeconds?, Participants[] { FullName, RegistryNo, AddedByName, ConfirmedAtLocal } } }, Breaks[] { StartedByName, StartedAtLocal, EndedAtLocal?, DurationSeconds?, EndKindLabel, EndedByName?, EndReason, DuringStepTitle? }, Materials[] { MaterialCode, MaterialName, LotNo, ExpiryDate, ExpiredAtEntry, ExpiredReason, EnteredByName, EnteredAtLocal }, Events[] { Sequence, OccurredAtLocal, ActorName, EventLabel, Summary }, Integrity { IsValid, FirstBrokenSequence?, CheckedAtLocal, ReportUrl? }, Closure? { KindLabel, ClosedByName, ClosedAtLocal, Reason }, OpenBreak? { BreakId, StartedByName, StartedAtLocal, DuringStepTitle? }, CanIntervene, InterventionUrl?, CanEndBreak, EndBreakUrl?, RunUrl?, GeneratedAtLocal, GeneratedByName }`. `GeneratedAtLocal` ve `GeneratedByName` yazdırılan çıktıda görünür | `Views/Records/Details.cshtml` |
+| GET `/records/details/{id}` | `RecordsController.Details` | RecordReaders | `RecordDetailViewModel { Header { RecordNo, Kind, KindLabel, StatusLabel, FieldBookRef?, Facility, Line, Machine, CleaningTypeName, VersionNo, VersionUrl?, WorkOrderNo, Note, EmergencyDescription? }, People { OwnerName, OwnerRegistryNo, FirstStepStartedByName?, Helpers[] }, Times { OpenedAtLocal, StartedAtLocal?, CompletedAtLocal?, ClosedAtLocal?, LockExpiresAtLocal? }, Summary { GrossSeconds?, BreakSeconds?, HoldSeconds?, NetSeconds?, EffortSeconds? }, Phases[] { OrderNo, Title, MinDurationSeconds?, StatusLabel, GrossSeconds?, BreakSeconds?, NetSeconds?, BelowMinimum, BelowMinimumReason, Steps[] { OrderNo, Title, Description, Media[], StatusLabel, StartedAtLocal?, StartedByName?, EndedAtLocal?, EndedByName?, BreakSeconds?, DurationSeconds?, EffortSeconds?, Participants[] { FullName, RegistryNo, AddedByName, AddedAtLocal, ConfirmedAtLocal? (yalnız gerçek onay, Faz 7; PL-72) } } }, Breaks[] { StartedByName, StartedAtLocal, EndedAtLocal?, DurationSeconds?, EndKindLabel, EndedByName?, EndReason, DuringStepTitle? }, Materials[] { MaterialCode, MaterialName, LotNo, ExpiryDate, ExpiredAtEntry, ExpiredReason, EnteredByName, EnteredAtLocal }, Events[] { Sequence, OccurredAtLocal, ActorName, EventLabel, Summary }, Integrity { IsValid, FirstBrokenSequence?, CheckedAtLocal, ReportUrl? }, Closure? { KindLabel, ClosedByName, ClosedAtLocal, Reason }, OpenBreak? { BreakId, StartedByName, StartedAtLocal, DuringStepTitle? }, CanIntervene, InterventionUrl?, CanEndBreak, EndBreakUrl?, RunUrl?, GeneratedAtLocal, GeneratedByName }`. `GeneratedAtLocal` ve `GeneratedByName` yazdırılan çıktıda görünür | `Views/Records/Details.cshtml` |
 | GET `/records/integrity/{id}` | `RecordsController.Integrity` | ManagerOrAuditor | `IntegrityReportViewModel { RecordId, RecordNo, IsValid, CheckedAtLocal, Events[] { Sequence, EventLabel, OccurredAtLocal, HashShort, IsValid, Problem? }, StateMismatches[] { Field, StoredValue, EventValue, Sequence } }` | `Views/Records/Integrity.cshtml` |
 | GET, POST `/interventions/create?recordId=&type=` | `InterventionsController.Create` | Manager | `InterventionViewModel { CommandId, RecordId, RecordNo, MachineLabel, OwnerName, RecordStatusLabel, Type?: InterventionType, AllowedTypes[] { Value, Label }, Reason, Pin, InProgressStepTitle?, OpenBreak? { StartedByName, StartedAtLocal }, BlockReason? }`; başarıda `/records/details/{id}` | `Views/Interventions/Create.cshtml` |
 | GET, POST `/interventions/end-break/{breakId}` | `InterventionsController.EndBreak` | Manager | `EndBreakViewModel { CommandId, BreakId, RecordId, RecordNo, StartedByName, StartedAtLocal, DuringStepTitle?, Reason, Pin, BlockReason? }`; başarıda `/records/details/{id}` | `Views/Interventions/EndBreak.cshtml` |
@@ -889,6 +889,10 @@ müdahale servisleri, `ViewModels/Records/**`, `ViewModels/Interventions/**`.
 
 **Kapsam dışı:** Ayrı denetim çıktısı adresi E-32 ve CSV (Faz 9), acil müdahale ve raporlar (Faz 6A), yönetici panosu ve SH-16 (Faz 7), beklemeye alma ve talepler (Faz 7).
 
+**Sonuç (2026-11-16):** TESLİM ALINDI (tur 2; tur 1 İADE B1 ORTA, onaysız görevlide "onay" gösterimi, PL-72). Kabul kriterleri 34/34;
+F5-B1, F5-B2, F5-A1 ve oturum sertleştirmesi kapandı; prototip sayfaları kaldırıldı (PL-10). Açık: kalıcı oturum iptali Faz 7 kalem 9.
+Rapor: `Docs/Delivery/Faz-6-Teslim.md`.
+
 ---
 
 ## Faz 6A: Acil müdahale, süre raporu ve malzeme izlenebilirliği (Salı öncesi)
@@ -921,6 +925,23 @@ route, ViewModel ve rol aşağıda; dosyalar ayrık.
 | GET `/reports/durations` | `ReportsController.Durations` | ManagerOrAuditor | `DurationReportViewModel { Filter { From?, To?, FacilityId?, LineId?, MachineId?, CleaningTypeId?, Kind? }, ByMachine[] { MachineLabel, CleaningTypeName, RecordCount, AvgGrossSeconds, AvgBreakSeconds, AvgNetSeconds, AvgEffortSeconds }, ByPhase[] { CleaningTypeName, VersionNo, PhaseOrderNo, PhaseTitle, MinDurationSeconds?, RecordCount, AvgNetSeconds, BelowMinimumCount }, LongestSteps[] { CleaningTypeName, VersionNo, PhaseTitle, StepTitle, RecordCount, AvgDurationSeconds, MaxDurationSeconds }, StatusCounts[] { StatusLabel, Count }, Facilities[], Lines[], Machines[], CleaningTypes[] }`. `AvgHoldSeconds` Faz 7'de eklenir | `Views/Reports/Durations.cshtml` |
 | GET `/reports/materials` | `ReportsController.Materials` | ManagerOrAuditor | `MaterialTraceViewModel { Mode (Lot, Machine), LotQuery, MaterialLotId?, MachineId?, From?, To?, LotUsages[] { RecordId, RecordNo, MachineLabel, OpenedAtLocal, StatusLabel, ExpiredAtEntry, Url }, MachineMaterials[] { EnteredAtLocal, RecordId, RecordNo, MaterialCode, MaterialName, LotNo, ExpiryDate, ExpiredAtEntry, Url } }`. `IsCorrected` Faz 8'de eklenir | `Views/Reports/Materials.cshtml` |
 | Mevcut ekranlara ek | `MyWork` | Operator | `MyWorkViewModel.CanOpenEmergency` | `Views/MyWork/Index.cshtml` |
+
+Sözleşme ekleri (PL-73, paralel başlangıç için):
+
+- Ad alanları `Vaka.Web.ViewModels.Emergencies` ve `Vaka.Web.ViewModels.Reports`. Seçenek listeleri Faz 2 `SelectOptionViewModel`; makine
+  seçenekleri Faz 4 `MachineOptionViewModel`; lotlar Faz 4 `LotOptionViewModel`. Enum `Services/MaterialTraceMode { Lot = 1, Machine = 2 }`;
+  `Kind` Faz 3 `CleaningTypeKind`, süzgeçte `KindOptions[]`.
+- Acil formu Faz 4 yeni kayıt düzenindedir (PL-62, PL-64): `CommandForm.js`, JS kapalıyken tesis, hat, makine ve lot seçimi `refresh=true`
+  POST'uyla (`AvailableLots`, `LotQuery`, `AddMaterialLotId`, `AddExpiredReason`, `RemoveMaterialIndex`); ret 200 görünüm, girilen alanlar ve
+  `CommandId` korunur. `EmergencyCreateViewModel`'e `LotQuery?`, `AvailableLots[]`, `AvailableLotsTruncated` eklenir. Faz 4 `RecordRunViewModel`'e
+  `EmergencyDescription?` eklenir, acil kayıtta yürütme başlığında görünür.
+- `MaterialTraceViewModel`'e lot modunda `LotOptions[]: LotOptionViewModel` (en çok 50, `LotQuery` ile) ve `Machines[]: SelectOptionViewModel`
+  eklenir; JS kapalıyken lot önce `LotQuery` GET'iyle bulunur, sonra `MaterialLotId` ile sorgulanır.
+- `From?` ve `To?` `DateOnly?`, Türkiye tarihine göre gün dahil; tarih süzgeci süre hesabı değildir, servis sorgusundadır.
+- Menü: Yönetici ve Denetçi'de "Raporlar" grubu (Süre ve efor, Malzeme izlenebilirliği); Operatör'ün İşlerim ekranında "Acil müdahale".
+- DB: yeni tablo yok. Mevcut tablolara index yalnız ölçüm gerektirirse talep edilir; tekil olmayan index de mevcut tabloya eklendiği için O-07
+  düzeninde kullanıcı onayı ister (DbProtocol netleşene kadar). Salı verisi küçük olduğundan index'siz başlanır (K-33).
+- Ortak kriterler G5a, G5b, G8, G9, G11, G12 bu fazın ekranlarına uygulanır.
 
 Raporların süzgeçleri GET sorgu dizesiyle sunucuda çalışır; sayfalama yoktur (ölçek sayıları gelince ölçülür, K-33). `Url` kayıt detayına gider.
 Acil kayıt yürütme ekranında Faz 5 akışıyla sürer; acil tipte faz minimumu yoktur.
@@ -995,6 +1016,7 @@ Takvim: Salı (2026-11-17) sonrası (O-03, PL-46).
 | 6 | FE | E-22 Yönetici panosu, E-23 Talep formu (yürütme ekranı ve detayda sahibe), E-24 Taleplerim, E-25 Talepler ve karar formu; E-26'ya beklemeye alma türü; detayda talepler ve beklemeler; panoda Beklemede ve bekleyen talepler; İşlerim'de beklemedeki kayıtlar ve "Devam et"; makine panosunda Beklemede | frontend-engineer |
 | 7 | BE | Faz 5'ten ertelenen (PL-57): mola servisi adım sürerken molaya izin verir (K-39, BR-38 tam hali; devam eden adım molaya bağlanır, mola açıkken adım bitirilemez, BR-40 sonrası adım "Devam ediyor" sürer, SH-17 değer üretir); görevli eklemede eklenen kişinin PIN'i aynı istekte doğrulanır, hatalı deneme onun sayacına yazılır, PIN'i kilitli kişi eklenemez (K-10, SK-4, BR-53); Faz 6 müdahalesinde adım içi açık molanın süresi düşülür | backend-engineer |
 | 8 | FE | Faz 5'ten ertelenen: mola düğmesi adım sürerken de; açık mola bandında ve mola ekranında sürdüğü adım; görevli panelinde katılım PIN'i; detayda adım molası satırı | frontend-engineer |
+| 9 | BE | Kalıcı oturum iptali (Faz 6 A1, PL-71, PL-72): yeniden başlatmadan sonra da çıkış yapılmış çerezin reddi için kullanıcı satırında oturum sürümü. ALTER sınıfıdır; dbadmin talebi kullanıcı onayı olmadan uygulanmaz, onay gelmezse Faz 6'nın bellek içi çözümü sürer | backend-engineer talebi, dbadmin |
 
 **Paralel:** Evet. Gerekçe: tablolar yeni, mevcut tabloya dokunulmaz (PL-02); route ve ViewModel aşağıda.
 

@@ -17,5 +17,5 @@ public sealed class MachineBoardController : Controller
 
     [HttpGet("~/machine-board")]
     public async Task<IActionResult> Index(int? facilityId, CancellationToken cancellationToken) =>
-        View(await _board.GetAsync(facilityId, User.IsInRole(Roles.Operator), cancellationToken));
+        View(await _board.GetAsync(facilityId, User.GetRoles(), cancellationToken));
 }

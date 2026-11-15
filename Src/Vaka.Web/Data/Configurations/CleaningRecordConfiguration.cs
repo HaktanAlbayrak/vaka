@@ -40,6 +40,8 @@ public class CleaningRecordConfiguration : IEntityTypeConfiguration<CleaningReco
         builder.HasIndex(r => r.ProcedureVersionId);
         builder.HasIndex(r => r.OwnerUserId);
         builder.HasIndex(r => r.ClosedByUserId);
+        builder.HasIndex(r => r.OpenedAtUtc);
+        builder.HasIndex(r => new { r.Status, r.OpenedAtUtc });
         builder.HasIndex(r => r.MachineId, "IX_CleaningRecords_OneActivePerMachine").IsUnique().HasFilter("\"Status\" IN (1, 2, 3)");
         builder.HasIndex(r => r.OwnerUserId, "IX_CleaningRecords_OneActivePerOwner").IsUnique().HasFilter("\"Status\" IN (1, 2)");
 

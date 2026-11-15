@@ -51,6 +51,13 @@ public static class RecordLabels
         _ => throw new ArgumentOutOfRangeException(nameof(kind), kind, "Bilinmeyen mola kapanış türü.")
     };
 
+    public static string Intervention(InterventionType type) => type switch
+    {
+        InterventionType.Cancel => "İptal",
+        InterventionType.Abort => "Yarıda kapatma",
+        _ => throw new ArgumentOutOfRangeException(nameof(type), type, "Bilinmeyen müdahale türü.")
+    };
+
     public static string ActiveRecordSummary(string ownerName, RecordStatus status, DateTime openedAtLocal) =>
         $"Sahip: {ownerName}, durum: {Status(status).ToLower(TurkishCulture)}, açılış: {openedAtLocal.ToString("dd.MM.yyyy HH:mm", TurkishCulture)}";
 

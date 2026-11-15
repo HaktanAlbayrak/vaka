@@ -587,7 +587,7 @@
 
 @if (!isCompleted && Model.Phases.Any(phase => phase.Steps.Any(step => step.CanFinish)))
 {
-    <dialog class="finish-dialog backdrop:bg-ink/60" data-finish-dialog aria-labelledby="finish-dialog-title">
+    <dialog class="finish-dialog backdrop:bg-scrim/70" data-finish-dialog aria-labelledby="finish-dialog-title">
         <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-line px-4 py-3 md:px-5">
             <h2 id="finish-dialog-title" class="panel-title">Faz süre altında kalıyor</h2>
         </div>

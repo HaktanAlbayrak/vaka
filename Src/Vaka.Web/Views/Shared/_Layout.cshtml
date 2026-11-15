@@ -1,22 +1,8 @@
 @{
     var isAuthenticated = User.Identity?.IsAuthenticated == true;
-    var demoRole = ViewData["DemoRole"] as string;
-    var isDemo = !isAuthenticated && demoRole is not null;
     var isFocus = isAuthenticated && ViewData["Focus"] is true;
-    var showRail = isDemo || (isAuthenticated && !isFocus);
-    var showPerson = isDemo || isAuthenticated;
-
-    if (isDemo)
-    {
-        var demoQuery = Context.Request.Query["demo"].ToString();
-        foreach (var candidate in new[] { Roles.Operator, Roles.Manager, Roles.SuperAdmin })
-        {
-            if (string.Equals(demoQuery, candidate, StringComparison.OrdinalIgnoreCase))
-            {
-                demoRole = candidate;
-            }
-        }
-    }
+    var showRail = isAuthenticated && !isFocus;
+    var showPerson = isAuthenticated;
 
     var personName = "";
     var registryNo = "";
@@ -27,59 +13,10 @@
         registryNo = User.FindFirst(VakaClaimTypes.RegistryNo)?.Value ?? "";
         roleLabel = string.Join(", ", new[] { Roles.Operator, Roles.Manager, Roles.Auditor, Roles.SuperAdmin }.Where(User.IsInRole).Select(Roles.Label));
     }
-    else if (isDemo)
-    {
-        personName = demoRole switch
-        {
-            Roles.Manager => "Selin Aksoy",
-            Roles.SuperAdmin => "Hasan Polat",
-            _ => "Murat Çelik"
-        };
-        registryNo = demoRole switch
-        {
-            Roles.Manager => "10246",
-            Roles.SuperAdmin => "10001",
-            _ => "30517"
-        };
-        roleLabel = Roles.Label(demoRole!);
-    }
     var initials = string.Concat(personName.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(part => part[0]));
 
-    var demoSuffix = isDemo ? "?demo=" + demoRole : "";
-    string Href(string path) => path + demoSuffix;
-
     var navItems = new List<(string Group, string Label, string Icon, string? Href, string Key)>();
-    if (isDemo)
-    {
-        if (demoRole == Roles.Operator)
-        {
-            navItems.Add(("", "İşlerim", "layout-list", Href("/prototype/my-work"), "my-work"));
-            navItems.Add(("", "Açık iş", "play", Href("/prototype/run"), "run"));
-            navItems.Add(("", "Yeni kayıt", "file-plus", Href("/prototype/new-record"), "new-record"));
-            navItems.Add(("", "Makine panosu", "factory", null, "machine-board"));
-            navItems.Add(("", "Taleplerim", "inbox", null, "my-requests"));
-        }
-        if (demoRole == Roles.Manager)
-        {
-            navItems.Add(("İzleme", "Pano", "layout-dashboard", Href("/prototype/dashboard"), "dashboard"));
-            navItems.Add(("İzleme", "Kayıtlar", "list-checks", Href("/prototype/records"), "records"));
-            navItems.Add(("İzleme", "Makine panosu", "factory", null, "machine-board"));
-            navItems.Add(("İzleme", "Talepler", "inbox", null, "requests"));
-            navItems.Add(("Tanımlar", "Tesisler", "layers", null, "facilities"));
-            navItems.Add(("Tanımlar", "Makineler", "cog", null, "machines"));
-            navItems.Add(("Tanımlar", "Vardiyalar", "clock", null, "shifts"));
-            navItems.Add(("Tanımlar", "Malzemeler", "package", null, "materials"));
-            navItems.Add(("Tanımlar", "Temizlik tipleri", "clipboard-list", null, "cleaning-types"));
-            navItems.Add(("Yönetim", "Kullanıcılar", "users", null, "users"));
-            navItems.Add(("Yönetim", "Raporlar", "chart-column", null, "reports"));
-        }
-        if (demoRole == Roles.SuperAdmin)
-        {
-            navItems.Add(("", "Kullanıcılar", "users", null, "users"));
-            navItems.Add(("", "Sistem ayarları", "settings", null, "settings"));
-        }
-    }
-    else if (showRail)
+    if (showRail)
     {
         if (User.IsInRole(Roles.Operator))
         {
@@ -90,9 +27,19 @@
         {
             navItems.Add(("", "Ana sayfa", "house", "/", "home"));
         }
-        if (User.IsInRole(Roles.Operator) || User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Auditor))
+        var isReader = User.IsInRole(Roles.Operator) || User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Auditor);
+        var readerGroup = User.IsInRole(Roles.Operator) ? "" : "İzleme";
+        if (isReader)
         {
-            navItems.Add((User.IsInRole(Roles.Operator) ? "" : "İzleme", "Makine panosu", "factory", "/machine-board", "machine-board"));
+            if (!User.IsInRole(Roles.Operator))
+            {
+                navItems.Add((readerGroup, "Kayıtlar", "list-checks", "/records", "records"));
+            }
+            navItems.Add((readerGroup, "Makine panosu", "factory", "/machine-board", "machine-board"));
+            if (User.IsInRole(Roles.Operator))
+            {
+                navItems.Add((readerGroup, "Kayıtlar", "list-checks", "/records", "records"));
+            }
         }
         if (User.IsInRole(Roles.Manager))
         {
@@ -111,14 +58,7 @@
 
     var bottomItems = navItems.Where(item => item.Href is not null).Take(3).ToList();
     var currentKey = ViewData["NavKey"] as string ?? "";
-    var nextRole = demoRole switch
-    {
-        Roles.Operator => Roles.Manager,
-        Roles.Manager => Roles.SuperAdmin,
-        _ => Roles.Operator
-    };
-    string? demoSwitchHref = isDemo ? Context.Request.Path + "?demo=" + nextRole : null;
-    var homeHref = isDemo ? Href("/prototype/my-work") : "/";
+    var homeHref = "/";
     var statusMessage = ViewData["StatusMessage"] as string;
 }
 <!DOCTYPE html>
@@ -172,7 +112,7 @@
                             <span class="person-meta">@roleLabel</span>
                         </span>
                     </div>
-                    <partial name="_SwitchUser" model='("rail", demoSwitchHref)' />
+                    <partial name="_SwitchUser" model='("rail", (string?)null)' />
                     <button type="button" class="btn btn-quiet btn-block" data-rail-toggle aria-expanded="true">
                         <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#panel-left-close" /></svg>
                         <span class="nav-label">Daralt</span>
@@ -205,7 +145,7 @@
                             <span class="person-meta">Sicil @registryNo</span>
                         </span>
                     </div>
-                    <partial name="_SwitchUser" model='(isFocus ? "bar-always" : "bar", demoSwitchHref)' />
+                    <partial name="_SwitchUser" model='(isFocus ? "bar-always" : "bar", (string?)null)' />
                 }
                 else
                 {
@@ -242,11 +182,6 @@
                 </div>
 
                 @RenderBody()
-
-                @if (isDemo)
-                {
-                    <p class="mt-10 text-sm text-muted">Prototip sayfası. Kişiler, kayıt numaraları ve süreler örnektir, gerçek kayıt değildir.</p>
-                }
             </main>
         </div>
     </div>
@@ -291,7 +226,7 @@
                             <span class="person-meta">@roleLabel</span>
                         </span>
                     </div>
-                    <partial name="_SwitchUser" model='("drawer", demoSwitchHref)' />
+                    <partial name="_SwitchUser" model='("drawer", (string?)null)' />
                 </div>
             </div>
         </div>

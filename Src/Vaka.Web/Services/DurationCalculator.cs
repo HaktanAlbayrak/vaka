@@ -170,12 +170,16 @@ public sealed class DurationCalculator : IDurationCalculator
             return 0;
         }
 
-        return Math.Max(0, WholeSeconds(now - start) - OverlapSeconds(start, now, breaks, now));
+        var ticks = (now - start).Ticks - OverlapTicks(start, now, breaks, now);
+        return Math.Max(0, WholeSeconds(TimeSpan.FromTicks(ticks)));
     }
 
     public int CalculateBreakSeconds(DateTimeOffset breakStart, DateTimeOffset breakEnd) => Math.Max(0, WholeSeconds(breakEnd - breakStart));
 
-    private static int OverlapSeconds(DateTimeOffset from, DateTimeOffset to, IReadOnlyList<BreakSpan> breaks, DateTimeOffset? openBreakEnd)
+    private static int OverlapSeconds(DateTimeOffset from, DateTimeOffset to, IReadOnlyList<BreakSpan> breaks, DateTimeOffset? openBreakEnd) =>
+        WholeSeconds(TimeSpan.FromTicks(OverlapTicks(from, to, breaks, openBreakEnd)));
+
+    private static long OverlapTicks(DateTimeOffset from, DateTimeOffset to, IReadOnlyList<BreakSpan> breaks, DateTimeOffset? openBreakEnd)
     {
         var ticks = 0L;
         foreach (var span in breaks)
@@ -193,7 +197,7 @@ public sealed class DurationCalculator : IDurationCalculator
             }
         }
 
-        return WholeSeconds(TimeSpan.FromTicks(ticks));
+        return ticks;
     }
 
     private static int WholeSeconds(TimeSpan span) => (int)Math.Floor(span.TotalSeconds);

@@ -213,12 +213,16 @@ namespace Vaka.Web.Data.Migrations
 
                     b.HasIndex("MachineId");
 
+                    b.HasIndex("OpenedAtUtc");
+
                     b.HasIndex("OwnerUserId");
 
                     b.HasIndex("ProcedureVersionId");
 
                     b.HasIndex("RecordNo")
                         .IsUnique();
+
+                    b.HasIndex("Status", "OpenedAtUtc");
 
                     b.HasIndex(new[] { "MachineId" }, "IX_CleaningRecords_OneActivePerMachine")
                         .IsUnique()

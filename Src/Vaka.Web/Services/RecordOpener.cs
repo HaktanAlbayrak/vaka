@@ -219,7 +219,8 @@ public sealed class RecordOpener : IRecordOpener
                     plan.LockMinutes,
                     LockExpiresAtUtc = record.LockExpiresAtUtc,
                     plan.WorkOrderNo,
-                    MaterialLotIds = plan.Lots.Select(lot => lot.LotId)
+                    MaterialLotIds = plan.Lots.Select(lot => lot.LotId),
+                    MaterialLots = plan.Lots.Select(lot => new { lot.LotId, lot.LotNo, ExpiredAtEntry = lot.IsExpired, lot.ExpiredReason })
                 },
                 ownerUserId,
                 commandId,

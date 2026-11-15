@@ -1,0 +1,482 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Records
+@inject IDurationFormatter DurationFormatter
+@model RecordDetailViewModel
+@{
+    ViewData["Title"] = "Kayıt ayrıntısı";
+    ViewData["Lead"] = "Kaydın soruları, olay günlüğü ve bütünlük sonucu. Süreler net süredir, molalar düşülmüştür.";
+    ViewData["NavKey"] = "records";
+
+    var header = Model.Header;
+    var times = Model.Times;
+    var summary = Model.Summary;
+    var integrity = Model.Integrity;
+    var canIntervene = Model.CanIntervene && Model.InterventionUrl is not null && User.IsInRole(Roles.Manager);
+    var canEndBreak = Model.CanEndBreak && Model.EndBreakUrl is not null && User.IsInRole(Roles.Manager);
+    var integrityKey = integrity.IsValid ? "integrity.ok" : "integrity.broken";
+    var integrityText = integrity.IsValid
+        ? "Kayıt oluştuğundan beri değişmedi. Olay zinciri ve durum alanları olaylarla tutarlı."
+        : "Kayıtta değişiklik saptandı." + (integrity.FirstBrokenSequence is { } broken ? " İlk tutarsız olay sırası: " + broken + "." : "");
+    var reference = DateTime.MinValue;
+    string Stamp(DateTime value) => value.ToString("dd.MM.yyyy HH:mm:ss");
+}
+
+@section Actions {
+    <div class="flex flex-wrap items-center gap-2 print:hidden">
+        <button type="button" class="btn btn-secondary" data-print data-js-only>
+            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#printer" /></svg>
+            Yazdır
+        </button>
+        <a class="btn btn-secondary" href="/records">
+            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-left" /></svg>
+            Kayıtlara dön
+        </a>
+    </div>
+}
+
+<section class="print-only mb-4 border-b-2 border-line-strong pb-3" aria-label="Denetim çıktısı bilgisi">
+    <p class="text-sm font-bold uppercase tracking-wide">Denetim çıktısı</p>
+    <p class="record-no text-2xl">@header.RecordNo</p>
+    <dl class="kv mt-2 grid-cols-2">
+        <div><dt>Oluşturan</dt><dd>@Model.GeneratedByName</dd></div>
+        <div><dt>Oluşturulma</dt><dd class="mono">@Stamp(Model.GeneratedAtLocal)</dd></div>
+        <div><dt>Prosedür versiyonu</dt><dd>Versiyon @header.VersionNo@(string.IsNullOrEmpty(header.DocumentRef) ? "" : ", doküman " + header.DocumentRef)</dd></div>
+        <div><dt>Bütünlük</dt><dd>@(integrity.IsValid ? "Doğrulandı" : "Bütünlük ihlali")</dd></div>
+    </dl>
+</section>
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_24rem] print:block print:space-y-4">
+    <div class="min-w-0 space-y-5">
+        <section class="panel" aria-labelledby="record-title">
+            <div class="panel-body space-y-4">
+                <div class="flex flex-wrap items-start justify-between gap-3">
+                    <div class="min-w-0">
+                        <h2 id="record-title" class="sr-only">Kayıt bilgisi</h2>
+                        <p class="record-no whitespace-nowrap text-xl md:text-2xl">@header.RecordNo</p>
+                        <p class="mt-1 break-words text-lg font-semibold">@header.Machine</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <partial name="_Badge" model='"CleaningTypeKind." + header.Kind' />
+                        <partial name="_Badge" model='"record|" + header.StatusLabel' />
+                        <partial name="_Badge" model="integrityKey" />
+                    </div>
+                </div>
+                <dl class="kv grid-cols-2 md:grid-cols-3">
+                    <div><dt>Tesis</dt><dd>@header.Facility</dd></div>
+                    <div><dt>Hat</dt><dd>@header.Line</dd></div>
+                    <div><dt>Makine</dt><dd>@header.Machine</dd></div>
+                    <div><dt>Temizlik tipi</dt><dd>@header.CleaningTypeName</dd></div>
+                    <div>
+                        <dt>Prosedür versiyonu</dt>
+                        <dd>
+                            Versiyon @header.VersionNo
+                            @if (header.VersionUrl is not null)
+                            {
+                                <a class="btn btn-quiet mt-1 inline-flex min-h-11 items-center text-sm font-semibold print:hidden" href="@header.VersionUrl">Versiyon içeriğini aç</a>
+                            }
+                        </dd>
+                    </div>
+                    @if (!string.IsNullOrEmpty(header.DocumentRef))
+                    {
+                        <div><dt>Doküman no</dt><dd class="mono break-all">@header.DocumentRef</dd></div>
+                    }
+                    <div><dt>İş emri</dt><dd class="mono">@(string.IsNullOrEmpty(header.WorkOrderNo) ? "-" : header.WorkOrderNo)</dd></div>
+                    <div><dt>Saha defteri</dt><dd class="mono whitespace-nowrap">@(string.IsNullOrEmpty(header.FieldBookRef) ? "Atanmadı" : header.FieldBookRef)</dd></div>
+                    @if (!string.IsNullOrWhiteSpace(header.Note))
+                    {
+                        <div class="col-span-2 md:col-span-3"><dt>Açıklama</dt><dd class="font-normal">@header.Note</dd></div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(header.EmergencyDescription))
+                    {
+                        <div class="col-span-2 md:col-span-3"><dt>Acil durum açıklaması</dt><dd class="font-normal">@header.EmergencyDescription</dd></div>
+                    }
+                </dl>
+                @if (canIntervene || Model.RunUrl is not null)
+                {
+                    <div class="flex flex-wrap gap-2 print:hidden">
+                        @if (canIntervene)
+                        {
+                            <a class="btn btn-danger" href="@Model.InterventionUrl">
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#octagon-alert" /></svg>
+                                Müdahale et
+                            </a>
+                        }
+                        @if (Model.RunUrl is not null)
+                        {
+                            <a class="btn btn-secondary" href="@Model.RunUrl">
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#play" /></svg>
+                                Yürütme ekranına git
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        </section>
+
+        @if (Model.Closure is { } closure)
+        {
+            <section class="panel panel-tag border-t-danger" aria-labelledby="closure-title">
+                <div class="panel-head">
+                    <h2 id="closure-title" class="panel-title">Kapanış bilgisi</h2>
+                    <span class="chip">@closure.KindLabel</span>
+                </div>
+                <div class="panel-body">
+                    <dl class="kv grid-cols-2">
+                        <div><dt>Kapatan</dt><dd>@closure.ClosedByName</dd></div>
+                        <div><dt>Kapanış anı</dt><dd><partial name="_Moment" model='(closure.ClosedAtLocal, reference)' /></dd></div>
+                        <div class="col-span-2"><dt>Gerekçe</dt><dd class="font-normal">@(string.IsNullOrWhiteSpace(closure.Reason) ? "Gerekçe yazılmadı." : closure.Reason)</dd></div>
+                    </dl>
+                </div>
+            </section>
+        }
+
+        @if (Model.OpenBreak is { } openBreak)
+        {
+            <section class="panel border-warn" aria-labelledby="open-break-title" role="status">
+                <div class="panel-head border-warn">
+                    <h2 id="open-break-title" class="panel-title">Kayıtta mola açık</h2>
+                    <partial name="_Badge" model='"break.open"' />
+                </div>
+                <div class="panel-body space-y-3">
+                    <dl class="kv grid-cols-2">
+                        <div><dt>Başlatan</dt><dd>@openBreak.StartedByName</dd></div>
+                        <div><dt>Başlangıç</dt><dd><partial name="_Moment" model='(openBreak.StartedAtLocal, reference)' /></dd></div>
+                        @if (!string.IsNullOrEmpty(openBreak.DuringStepTitle))
+                        {
+                            <div class="col-span-2"><dt>Mola anındaki adım</dt><dd>@openBreak.DuringStepTitle</dd></div>
+                        }
+                    </dl>
+                    @if (canEndBreak)
+                    {
+                        <a class="btn btn-secondary print:hidden" href="@Model.EndBreakUrl">
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#coffee" /></svg>
+                            Molayı bitir
+                        </a>
+                    }
+                </div>
+            </section>
+        }
+
+        <section class="panel" aria-labelledby="durations-title">
+            <div class="panel-head">
+                <h2 id="durations-title" class="panel-title">Süreler</h2>
+                <span class="text-sm text-muted">İlk adımın başlangıcından ölçülür</span>
+            </div>
+            <div class="panel-body">
+                <dl class="kv grid-cols-2 md:grid-cols-3">
+                    <div class="col-span-2 md:col-span-1">
+                        <dt>Net süre</dt>
+                        <dd class="text-2xl">@if (summary.NetSeconds is { } net){<partial name="_Duration" model="DurationFormatter.Format(net)" />}else{<span>-</span>}</dd>
+                    </div>
+                    <div><dt>Brüt süre</dt><dd>@if (summary.GrossSeconds is { } gross){<partial name="_Duration" model="DurationFormatter.Format(gross)" />}else{<span>-</span>}</dd></div>
+                    <div><dt>Mola</dt><dd>@if (summary.BreakSeconds is { } breakTotal){<partial name="_Duration" model="DurationFormatter.Format(breakTotal)" />}else{<span>-</span>}</dd></div>
+                    <div><dt>Bekletme</dt><dd>@if (summary.HoldSeconds is { } hold){<partial name="_Duration" model="DurationFormatter.Format(hold)" />}else{<span>-</span>}</dd></div>
+                    <div><dt>Efor (kişi süresi)</dt><dd>@if (summary.EffortSeconds is { } effort){<partial name="_Duration" model="DurationFormatter.Format(effort)" />}else{<span>-</span>}</dd></div>
+                </dl>
+            </div>
+        </section>
+
+        <section aria-labelledby="phases-title">
+            <h2 id="phases-title" class="mb-3 text-xl font-bold">Fazlar ve adımlar</h2>
+            @if (Model.Phases.Length == 0)
+            {
+                <partial name="_State" model='("empty", "list-ordered", "Faz yok", "Kayda bağlı versiyonda faz bulunmuyor.", (string?)null, (string?)null)' />
+            }
+            else
+            {
+                <div class="space-y-5">
+                    @foreach (var phase in Model.Phases)
+                    {
+                        <section class="panel" aria-labelledby="@("phase-" + phase.OrderNo)">
+                            <div class="panel-head">
+                                <h3 id="@("phase-" + phase.OrderNo)" class="panel-title min-w-0 break-words">Faz @phase.OrderNo: @phase.Title</h3>
+                                <partial name="_Badge" model='"phase|" + phase.StatusLabel' />
+                            </div>
+                            <div class="panel-body space-y-4">
+                                <dl class="kv grid-cols-2 md:grid-cols-4">
+                                    <div><dt>Minimum</dt><dd>@if (phase.MinDurationSeconds is { } minimum){<partial name="_Duration" model="DurationFormatter.Format(minimum)" />}else{<span>Yok</span>}</dd></div>
+                                    <div><dt>Brüt</dt><dd>@if (phase.GrossSeconds is { } phaseGross){<partial name="_Duration" model="DurationFormatter.Format(phaseGross)" />}else{<span>-</span>}</dd></div>
+                                    <div><dt>Mola</dt><dd>@if (phase.BreakSeconds is { } phaseBreak){<partial name="_Duration" model="DurationFormatter.Format(phaseBreak)" />}else{<span>-</span>}</dd></div>
+                                    <div><dt>Net</dt><dd>@if (phase.NetSeconds is { } phaseNet){<partial name="_Duration" model="DurationFormatter.Format(phaseNet)" />}else{<span>-</span>}</dd></div>
+                                </dl>
+                                @if (phase.BelowMinimum)
+                                {
+                                    <div class="notice notice-warn">
+                                        <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>
+                                        <div class="min-w-0">
+                                            <p class="font-semibold">Faz minimum sürenin altında tamamlandı</p>
+                                            <p class="mt-0.5 break-words text-sm">Gerekçe: @(string.IsNullOrWhiteSpace(phase.BelowMinimumReason) ? "yazılmadı" : phase.BelowMinimumReason)</p>
+                                        </div>
+                                    </div>
+                                }
+                                <ol class="space-y-3" aria-label="Faz @phase.OrderNo adımları">
+                                    @foreach (var step in phase.Steps)
+                                    {
+                                        <li class="step-card min-w-0 space-y-3 rounded-ui border-2 border-line p-3 md:p-4">
+                                            <div class="flex flex-wrap items-start justify-between gap-2">
+                                                <p class="min-w-0 break-words font-bold"><span class="mono text-muted">@step.OrderNo.</span> @step.Title</p>
+                                                <partial name="_Badge" model='"step|" + step.StatusLabel' />
+                                            </div>
+                                            @if (!string.IsNullOrWhiteSpace(step.Description))
+                                            {
+                                                <p class="break-words text-sm text-muted">@step.Description</p>
+                                            }
+                                            @if (step.Media.Length > 0)
+                                            {
+                                                <div class="print:hidden"><partial name="_MediaList" model="(step.Media, false, 0)" /></div>
+                                                <p class="hidden text-sm print:block">Medya: @step.Media.Length dosya</p>
+                                            }
+                                            <dl class="kv grid-cols-2 2xl:grid-cols-4">
+                                                <div>
+                                                    <dt>Başlangıç</dt>
+                                                    <dd>
+                                                        @if (step.StartedAtLocal is { } started){<partial name="_Moment" model='(started, reference)' />}else{<span>-</span>}
+                                                        @if (!string.IsNullOrEmpty(step.StartedByName)){<span class="block text-sm font-normal text-muted">@step.StartedByName</span>}
+                                                    </dd>
+                                                </div>
+                                                <div>
+                                                    <dt>Bitiş</dt>
+                                                    <dd>
+                                                        @if (step.EndedAtLocal is { } ended){<partial name="_Moment" model='(ended, reference)' />}else{<span>-</span>}
+                                                        @if (!string.IsNullOrEmpty(step.EndedByName)){<span class="block text-sm font-normal text-muted">@step.EndedByName</span>}
+                                                    </dd>
+                                                </div>
+                                                <div><dt>Süre</dt><dd>@if (step.DurationSeconds is { } stepDuration){<partial name="_Duration" model="DurationFormatter.Format(stepDuration)" />}else{<span>-</span>}</dd></div>
+                                                <div><dt>Efor</dt><dd>@if (step.EffortSeconds is { } stepEffort){<partial name="_Duration" model="DurationFormatter.Format(stepEffort)" />}else{<span>-</span>}</dd></div>
+                                                @if (step.BreakSeconds is > 0)
+                                                {
+                                                    <div><dt>Mola</dt><dd><partial name="_Duration" model="DurationFormatter.Format(step.BreakSeconds.Value)" /></dd></div>
+                                                }
+                                            </dl>
+                                            <div>
+                                                <h4 class="text-xs font-bold uppercase tracking-wide text-muted">Görevliler</h4>
+                                                @if (step.Participants.Length == 0)
+                                                {
+                                                    <p class="mt-1 text-sm text-muted">Bu adımda görevli kaydı yok.</p>
+                                                }
+                                                else
+                                                {
+                                                    <ul class="mt-1 divide-y divide-line">
+                                                        @foreach (var person in step.Participants)
+                                                        {
+                                                            <li class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 py-1.5">
+                                                                <span class="min-w-0 break-words font-semibold">@person.FullName <span class="mono text-sm font-normal text-muted">@person.RegistryNo</span></span>
+                                                                <span class="min-w-0 break-words text-sm text-muted">Ekleyen @person.AddedByName, eklendi <partial name="_Moment" model='(person.AddedAtLocal, reference)' />@if (person.ConfirmedAtLocal is { } confirmedAt){<text>, onay </text><partial name="_Moment" model='(confirmedAt, reference)' />}</span>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                }
+                                            </div>
+                                        </li>
+                                    }
+                                </ol>
+                            </div>
+                        </section>
+                    }
+                </div>
+            }
+        </section>
+    </div>
+
+    <aside class="min-w-0 space-y-5" aria-label="Kayıt bağlamı">
+        <section class="panel @(integrity.IsValid ? "" : "border-danger")" aria-labelledby="integrity-title">
+            <div class="panel-head @(integrity.IsValid ? "" : "border-danger")">
+                <h2 id="integrity-title" class="panel-title">Bütünlük</h2>
+                <partial name="_Badge" model="integrityKey" />
+            </div>
+            <div class="panel-body space-y-3">
+                <p class="break-words">@integrityText</p>
+                <p class="text-sm text-muted">Denetlenme: <partial name="_Moment" model='(integrity.CheckedAtLocal, reference)' /></p>
+                @if (integrity.ReportUrl is not null)
+                {
+                    <a class="btn btn-secondary print:hidden" href="@integrity.ReportUrl">
+                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#shield-check" /></svg>
+                        Doğrulama ayrıntısı
+                    </a>
+                }
+            </div>
+        </section>
+
+        <section class="panel" aria-labelledby="people-title">
+            <div class="panel-head"><h2 id="people-title" class="panel-title">Kişiler</h2></div>
+            <div class="panel-body space-y-3">
+                <dl class="kv grid-cols-1">
+                    <div><dt>Kaydı açan (sorumlu)</dt><dd>@Model.People.OwnerName <span class="mono text-sm font-normal text-muted">@Model.People.OwnerRegistryNo</span></dd></div>
+                    <div><dt>İlk adımı başlatan</dt><dd>@(string.IsNullOrEmpty(Model.People.FirstStepStartedByName) ? "Henüz başlatılmadı" : Model.People.FirstStepStartedByName)</dd></div>
+                </dl>
+                <div>
+                    <h3 class="text-xs font-bold uppercase tracking-wide text-muted">Yardımcılar</h3>
+                    @if (Model.People.Helpers.Length == 0)
+                    {
+                        <p class="mt-1 text-sm text-muted">Yardımcı kaydı yok.</p>
+                    }
+                    else
+                    {
+                        <ul class="mt-1 flex flex-wrap gap-1.5">
+                            @foreach (var assistant in Model.People.Helpers)
+                            {
+                                <li class="chip break-words">@assistant.FullName <span class="mono font-normal text-muted">@assistant.RegistryNo</span></li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section class="panel" aria-labelledby="times-title">
+            <div class="panel-head"><h2 id="times-title" class="panel-title">Zamanlar</h2></div>
+            <div class="panel-body">
+                <dl class="kv grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                    <div><dt>Açılış</dt><dd><partial name="_Moment" model='(times.OpenedAtLocal, reference)' /></dd></div>
+                    <div><dt>İlk adım başlangıcı</dt><dd>@if (times.StartedAtLocal is { } startedAt){<partial name="_Moment" model='(startedAt, reference)' />}else{<span>-</span>}</dd></div>
+                    <div><dt>Tamamlanma</dt><dd>@if (times.CompletedAtLocal is { } completedAt){<partial name="_Moment" model='(completedAt, reference)' />}else{<span>-</span>}</dd></div>
+                    <div><dt>Kapanış</dt><dd>@if (times.ClosedAtLocal is { } closedAt){<partial name="_Moment" model='(closedAt, reference)' />}else{<span>-</span>}</dd></div>
+                    @if (times.LockExpiresAtLocal is { } lockAt)
+                    {
+                        <div><dt>Makine kilidi bitişi</dt><dd><partial name="_Moment" model='(lockAt, reference)' /></dd></div>
+                    }
+                </dl>
+            </div>
+        </section>
+    </aside>
+</div>
+
+<div class="mt-8 space-y-8 print:mt-4 print:space-y-4">
+    <section aria-labelledby="breaks-title">
+        <h2 id="breaks-title" class="mb-3 text-xl font-bold">Molalar</h2>
+        @if (Model.Breaks.Length == 0)
+        {
+            <p class="panel panel-body text-muted">Bu kayıtta mola verilmedi.</p>
+        }
+        else
+        {
+            <div class="panel">
+                <table class="data-table table-stack">
+                    <caption class="sr-only">Kayıt molaları, @Model.Breaks.Length mola</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Mola</th>
+                            <th scope="col">Başlangıç</th>
+                            <th scope="col">Bitiş</th>
+                            <th scope="col" class="text-right">Süre</th>
+                            <th scope="col">Kapanış</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Breaks)
+                        {
+                            <tr>
+                                <td data-label="Mola" class="stack-wide stack-lead max-w-md break-words">
+                                    <span class="font-semibold">@item.StartedByName</span>
+                                    @if (!string.IsNullOrEmpty(item.DuringStepTitle))
+                                    {
+                                        <span class="mt-0.5 block text-sm text-muted">Adım: @item.DuringStepTitle</span>
+                                    }
+                                    @if (!string.IsNullOrWhiteSpace(item.EndReason))
+                                    {
+                                        <span class="mt-0.5 block text-sm text-muted">Gerekçe: @item.EndReason</span>
+                                    }
+                                </td>
+                                <td data-label="Başlangıç"><partial name="_Moment" model='(item.StartedAtLocal, reference)' /></td>
+                                <td data-label="Bitiş">@if (item.EndedAtLocal is { } endedAt){<partial name="_Moment" model='(endedAt, reference)' />}else{<span>Açık</span>}</td>
+                                <td data-label="Süre" class="num whitespace-nowrap md:max-xl:col-span-2">@if (item.DurationSeconds is { } breakSeconds){<partial name="_Duration" model="DurationFormatter.Format(breakSeconds)" />}else{<span>-</span>}</td>
+                                <td data-label="Kapanış" class="md:max-xl:col-span-2">
+                                    <span class="chip">@item.EndKindLabel</span>
+                                    @if (!string.IsNullOrEmpty(item.EndedByName)){<span class="mt-0.5 block text-sm text-muted">@item.EndedByName</span>}
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+
+    <section aria-labelledby="materials-title">
+        <h2 id="materials-title" class="mb-3 text-xl font-bold">Malzemeler ve lotlar</h2>
+        @if (Model.Materials.Length == 0)
+        {
+            <p class="panel panel-body text-muted">Bu kayıtta malzeme girilmedi.</p>
+        }
+        else
+        {
+            <div class="panel">
+                <table class="data-table table-stack">
+                    <caption class="sr-only">Kayıtta kullanılan malzemeler, @Model.Materials.Length satır</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Malzeme</th>
+                            <th scope="col">Lot no</th>
+                            <th scope="col">SKT</th>
+                            <th scope="col">Giren</th>
+                            <th scope="col">Giriş zamanı</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var material in Model.Materials)
+                        {
+                            <tr>
+                                <td data-label="Malzeme" class="stack-wide stack-lead max-w-md break-words">
+                                    <span class="font-semibold"><span class="mono">@material.MaterialCode</span> @material.MaterialName</span>
+                                    @if (material.ExpiredAtEntry)
+                                    {
+                                        <span class="mt-0.5 block text-sm text-muted">SKT geçmiş girildi. Gerekçe: @(string.IsNullOrWhiteSpace(material.ExpiredReason) ? "yazılmadı" : material.ExpiredReason)</span>
+                                    }
+                                </td>
+                                <td data-label="Lot no" class="mono break-all">@material.LotNo</td>
+                                <td data-label="SKT">
+                                    <span class="mono whitespace-nowrap">@material.ExpiryDate.ToString("dd.MM.yyyy")</span>
+                                    @if (material.ExpiredAtEntry)
+                                    {
+                                        <span class="mt-1 block"><partial name="_Badge" model='"lot.expired"' /></span>
+                                    }
+                                </td>
+                                <td data-label="Giren" class="break-words md:max-xl:col-span-2">@material.EnteredByName</td>
+                                <td data-label="Giriş zamanı" class="md:max-xl:col-span-2"><partial name="_Moment" model='(material.EnteredAtLocal, reference)' /></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+
+    <section aria-labelledby="events-title">
+        <h2 id="events-title" class="mb-3 text-xl font-bold">Olay günlüğü</h2>
+        @if (Model.Events.Length == 0)
+        {
+            <p class="panel panel-body text-muted">Olay kaydı yok.</p>
+        }
+        else
+        {
+            <div class="panel">
+                <table class="data-table table-stack">
+                    <caption class="sr-only">Kaydın olay günlüğü, @Model.Events.Length olay, sunucu zamanıyla</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-right">Sıra</th>
+                            <th scope="col">Zaman</th>
+                            <th scope="col">Yapan</th>
+                            <th scope="col">Olay</th>
+                            <th scope="col">Özet</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var entry in Model.Events)
+                        {
+                            <tr>
+                                <td data-label="Sıra" class="num whitespace-nowrap">@entry.Sequence</td>
+                                <td data-label="Zaman"><time class="mono" datetime="@entry.OccurredAtLocal.ToString("yyyy-MM-dd'T'HH:mm:ss")"><span class="whitespace-nowrap">@entry.OccurredAtLocal.ToString("dd.MM.yyyy")</span> <span class="whitespace-nowrap">@entry.OccurredAtLocal.ToString("HH:mm:ss")</span></time></td>
+                                <td data-label="Yapan" class="break-words md:max-xl:col-span-2">@entry.ActorName</td>
+                                <td data-label="Olay" class="break-words font-semibold md:max-xl:col-span-2">@entry.EventLabel</td>
+                                <td data-label="Özet" class="log-summary stack-wide stack-lead max-w-xl md:max-xl:col-span-2">@entry.Summary</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+
+    <p class="text-sm text-muted">Bu sayfa <span class="mono">@Stamp(Model.GeneratedAtLocal)</span> anında @Model.GeneratedByName için oluşturuldu.</p>
+</div>

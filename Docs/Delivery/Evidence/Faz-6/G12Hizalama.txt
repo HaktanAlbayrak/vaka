@@ -1,0 +1,78 @@
+Faz 6 teslim testi, 2026-11-15. main çalışma ağacı (HEAD 08a4975). Ön tur 1 Release .qa/f6/build; düzeltme sonrası ön tur 2 ve teslim testi .qa/f6/build2. Port 5601 Production, DB .qa/f6/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5603 Development (.qa/f6/qa-dev.db) ve 5604 Development (K7 bozulmuş kopyaları), user-secrets anahtarı. Saatler: DB UTC, ekran Türkiye (UTC+3). Test PIN ve parolası yazılmadı.
+Ortam notu: Production anahtarı süreç başına üretildiği için 5601 yeniden başlatılınca önceki süreçte yazılmış kayıtların HMAC doğrulaması düşer (kayıt 1-10 "ihlal"). Bütünlük kanıtları yalnız aynı süreçte yazılan kayıtlarla (11 ve sonrası) ve sabit anahtarlı Development kopyalarıyla alındı.
+
+== Ön tur 1 (build). gm/go içindeki [f] satırları ölçüm düzeneği hatası (İşlem hücresi olmayan tablolar); düzeltilmiş şablonla detay sayfaları gd olarak yeniden ölçüldü
+===== gm 112
+   /records/details/3 360x800-light 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 61.1
+      [f] satır kartı tablosu 17 satır KUSUR kart 1: İşlem son satırda değil | kart 2: İşlem son satırda değil | kart 3: İşlem son satırda değil (+14)
+   /records/details/5 360x800-light 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 96.4
+      [f] satır kartı tablosu 4 satır KUSUR kart 1: İşlem son satırda değil | kart 2: İşlem son satırda değil | kart 3: İşlem son satırda değil (+1)
+   /records/details/8 360x800-light 
+      [f] satır kartı tablosu 2 satır KUSUR kart 1: İşlem son satırda değil | kart 2: İşlem son satırda değil
+   /records/details/9 360x800-light 
+      [f] satır kartı tablosu 4 satır KUSUR kart 1: İşlem son satırda değil | kart 2: İşlem son satırda değil | kart 3: İşlem son satırda değil (+1)
+   /records/details/7 360x800-light 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: İşlem son satırda değil
+   /records/details/3 768x1024-light 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 257.1
+   /records/details/5 768x1024-light 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 292.4
+   /records/details/3 1024x768-light 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 261.1
+   /records/details/5 1024x768-light 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 296.4
+   /records/details/3 360x800-dark 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 61.1
+      [f] satır kartı tablosu 17 satır KUSUR kart 1: İşlem son satırda değil | kart 2: İşlem son satırda değil | kart 3: İşlem son satırda değil (+14)
+   /records/details/5 360x800-dark 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 96.4
+      [f] satır kartı tablosu 4 satır KUSUR kart 1: İşlem son satırda değil | kart 2: İşlem son satırda değil | kart 3: İşlem son satırda değil (+1)
+   /records/details/8 360x800-dark 
+      [f] satır kartı tablosu 2 satır KUSUR kart 1: İşlem son satırda değil | kart 2: İşlem son satırda değil
+   /records/details/9 360x800-dark 
+      [f] satır kartı tablosu 4 satır KUSUR kart 1: İşlem son satırda değil | kart 2: İşlem son satırda değil | kart 3: İşlem son satırda değil (+1)
+   /records/details/7 360x800-dark 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: İşlem son satırda değil
+   /records/details/3 768x1024-dark 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 257.1
+   /records/details/5 768x1024-dark 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 292.4
+   /records/details/3 1024x768-dark 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 261.1
+   /records/details/5 1024x768-dark 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 296.4
+  kontrol sayıları {'a+': 24, 'b+': 108, 'c+': 280, 'd+': 728, 'e+': 90, 'f+': 62, 'f-': 22} kusurlu hücre 18
+===== go 16
+   /records/details/3 360x800-light 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 61.1
+      [f] satır kartı tablosu 17 satır KUSUR kart 1: İşlem son satırda değil | kart 2: İşlem son satırda değil | kart 3: İşlem son satırda değil (+14)
+   /records/details/3 768x1024-light 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 257.1
+   /records/details/3 1024x768-light 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 261.1
+   /records/details/3 360x800-dark 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 61.1
+      [f] satır kartı tablosu 17 satır KUSUR kart 1: İşlem son satırda değil | kart 2: İşlem son satırda değil | kart 3: İşlem son satırda değil (+14)
+   /records/details/3 768x1024-dark 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 257.1
+   /records/details/3 1024x768-dark 
+      [f] satır kartı tablosu 1 satır KUSUR kart 1: en sağ düğme hücre iç kenarından 261.1
+  kontrol sayıları {'b+': 30, 'c+': 72, 'd+': 104, 'e+': 16, 'f+': 16, 'f-': 8} kusurlu hücre 6
+===== ge 8
+  kontrol sayıları {'b+': 30, 'c+': 72, 'e+': 8} kusurlu hücre 0
+===== gd 48
+  kontrol sayıları {'d+': 600, 'e+': 40, 'f+': 66} kusurlu hücre 0
+===== grg 88
+  kontrol sayıları {'b+': 56, 'c+': 72, 'd+': 80, 'e+': 60, 'f+': 54} kusurlu hücre 0
+===== gro 24
+  kontrol sayıları {'a+': 64, 'b+': 6, 'c+': 152, 'd+': 96, 'e+': 6} kusurlu hücre 0
+
+== Ön tur 2 (build2)
+===== g2 80
+  kontrol sayıları {'a+': 16, 'b+': 42, 'c+': 112, 'd+': 680, 'e+': 60, 'f+': 78} kusurlu hücre 0
+===== g2o 24
+  kontrol sayıları {'a+': 56, 'b+': 30, 'c+': 152, 'd+': 64, 'e+': 8, 'f+': 6} kusurlu hücre 0
+===== g2x 24
+  kontrol sayıları {'b+': 8, 'c+': 8, 'd+': 40, 'e+': 14, 'f+': 6} kusurlu hücre 0

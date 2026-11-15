@@ -6,10 +6,12 @@ using Vaka.Web.ViewModels.Records;
 
 namespace Vaka.Web.Controllers;
 
-[Authorize(Roles = Roles.Operator)]
+[Authorize(Roles = Roles.RecordReaders)]
 [Route("[controller]/[action]")]
 public sealed class RecordsController : Controller
 {
+    private const int DefaultPageSize = 25;
+
     private readonly IRecordCreateForm _form;
     private readonly IRecordOpener _opener;
     private readonly IRecordOptions _options;
@@ -17,6 +19,9 @@ public sealed class RecordsController : Controller
     private readonly IRecordRunReader _run;
     private readonly IRecordMaterialService _materials;
     private readonly IBreakReader _breaks;
+    private readonly IRecordListReader _list;
+    private readonly IRecordDetailReader _details;
+    private readonly IIntegrityReportReader _integrity;
 
     public RecordsController(
         IRecordCreateForm form,
@@ -25,7 +30,10 @@ public sealed class RecordsController : Controller
         ILotCatalog lots,
         IRecordRunReader run,
         IRecordMaterialService materials,
-        IBreakReader breaks)
+        IBreakReader breaks,
+        IRecordListReader list,
+        IRecordDetailReader details,
+        IIntegrityReportReader integrity)
     {
         _form = form;
         _opener = opener;
@@ -34,13 +42,43 @@ public sealed class RecordsController : Controller
         _run = run;
         _materials = materials;
         _breaks = breaks;
+        _list = list;
+        _details = details;
+        _integrity = integrity;
     }
 
+    // MineOnly gönderilmemişse varsayılan rolden gelir: Operatör kendi kayıtlarını görür, filtre kaldırılınca hepsini (PL-08).
+    [HttpGet("~/records")]
+    public async Task<IActionResult> Index(RecordListFilterViewModel filter, int page = 1, int pageSize = DefaultPageSize, CancellationToken cancellationToken = default)
+    {
+        var mineOnly = HasMineOnly() ? filter.MineOnly : User.IsInRole(Roles.Operator);
+        var query = new RecordListQuery(filter.Query, filter.FacilityId, filter.LineId, filter.MachineId, filter.Kind, filter.Status, filter.From, filter.To, mineOnly, page, pageSize);
+        return View(await _list.ListAsync(query, User.GetUserId(), cancellationToken));
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
+    {
+        var viewer = new RecordViewer(User.GetUserId(), User.Identity?.Name ?? string.Empty, User.GetRoles());
+        var lookup = await _details.GetAsync(id, viewer, cancellationToken);
+        return lookup.Value is { } model ? View(model) : NotFound();
+    }
+
+    [Authorize(Roles = Roles.ManagerOrAuditor)]
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> Integrity(int id, CancellationToken cancellationToken)
+    {
+        var lookup = await _integrity.BuildAsync(id, cancellationToken);
+        return lookup.Value is { } model ? View(model) : NotFound();
+    }
+
+    [Authorize(Roles = Roles.Operator)]
     [HttpGet]
     public async Task<IActionResult> Create(CancellationToken cancellationToken) =>
         View(await _form.BuildAsync(null, false, cancellationToken));
 
     // Ret ve yenileme yanıtları her zaman 200 görünümdür; CommandForm.js yalnız yönlendirmeyi izler.
+    [Authorize(Roles = Roles.Operator)]
     [HttpPost]
     public async Task<IActionResult> Create(RecordCreateViewModel model, bool refresh, CancellationToken cancellationToken)
     {
@@ -74,22 +112,27 @@ public sealed class RecordsController : Controller
         return View(await _form.BuildAsync(model, false, cancellationToken));
     }
 
+    [Authorize(Roles = Roles.Operator)]
     [HttpGet]
     public async Task<IActionResult> Lines(int facilityId, CancellationToken cancellationToken) =>
         Json(await _options.ListLinesAsync(facilityId, cancellationToken));
 
+    [Authorize(Roles = Roles.Operator)]
     [HttpGet]
     public async Task<IActionResult> Machines(int lineId, CancellationToken cancellationToken) =>
         Json(await _options.ListMachinesAsync(lineId, cancellationToken));
 
+    [Authorize(Roles = Roles.Operator)]
     [HttpGet]
     public async Task<IActionResult> CleaningTypes(int machineId, CancellationToken cancellationToken) =>
         Json(await _options.ListCleaningTypesAsync(machineId, cancellationToken));
 
+    [Authorize(Roles = Roles.Operator)]
     [HttpGet]
     public async Task<IActionResult> Lots(string? q, int? recordId, CancellationToken cancellationToken) =>
         Json((await _lots.FindAsync(q, null, recordId, cancellationToken)).Lots);
 
+    [Authorize(Roles = Roles.Operator)]
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Run(int id, string? q, int? stepId, string? people, CancellationToken cancellationToken)
     {
@@ -101,6 +144,7 @@ public sealed class RecordsController : Controller
         return await ShowRunAsync(id, new RunViewOptions(q, null, stepId, people), null, null, null, cancellationToken);
     }
 
+    [Authorize(Roles = Roles.Operator)]
     [HttpPost("{id:int}")]
     public async Task<IActionResult> AddMaterial(int id, AddMaterialViewModel model, CancellationToken cancellationToken)
     {
@@ -114,6 +158,7 @@ public sealed class RecordsController : Controller
         return await FinishAsync(id, result, model.CommandId, pending, cancellationToken);
     }
 
+    [Authorize(Roles = Roles.Operator)]
     [HttpPost("{id:int}")]
     public async Task<IActionResult> RemoveMaterial(int id, RemoveMaterialViewModel model, CancellationToken cancellationToken)
     {
@@ -171,6 +216,9 @@ public sealed class RecordsController : Controller
         model.PendingMaterial = pending;
         return View("Run", model);
     }
+
+    private bool HasMineOnly() =>
+        Request.Query.ContainsKey(nameof(RecordListFilterViewModel.MineOnly)) || Request.Query.ContainsKey("Filter." + nameof(RecordListFilterViewModel.MineOnly));
 
     private static RecordOpenRequest ToRequest(RecordCreateViewModel model) =>
         new(

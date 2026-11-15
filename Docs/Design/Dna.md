@@ -41,6 +41,8 @@ signature: "Kayıt şeridi (faz ve adım şeridi)"
 
 **Yürütme ekranı (Faz 5):** komut formları `.run-action` (PIN alanı üstte, 56 px düğme altta, tek sütun, `md` üstünde en çok 28rem); canlı süre `_LiveTimer` + `LiveTimer.js` (sunucu saniyesinden gösterim ilerletir, hesap yapmaz); görevli seçici `ParticipantPicker.js` (JS kapalıyken `?stepId=&people=` süzgeci ve radyo listesi).
 
+**Kayıt ekranları (Faz 6):** liste ve detay tabloları satır kartına dönüşür (G11 imzası devir notunda); detay ana kolon + bağlam rayı, olay günlüğü, molalar ve malzemeler rayın altında tam genişlikte. Perde tokeni `--scrim` (açık ve koyu temada koyu; dialog ve çekmece). Yazdırma katmanı (`@media print`): menü, üst bar, alt çubuk ve eylemler gizli, tokenler açık temaya sabit, tablolar gerçek tablo, A4 dikey. Bütünlük rozeti `_Badge` içinde (`integrity.*`).
+
 **Kabuk kipleri (Faz 1):** tam (ray, alt çubuk, çekmece), odak (ilk giriş: yalnız üst çubuk, kişi adı, sicil no ve her boyutta "Kullanıcı değiştir"), genel (oturumsuz giriş, 403 ve hata sayfaları: yalnız marka, bağlantı göstergesi ve tema; demo kişi yok).
 
 **Bilinçli olarak kaçınılanlar:**

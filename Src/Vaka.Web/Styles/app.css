@@ -237,7 +237,7 @@
     @apply block;
   }
   .drawer-scrim {
-    @apply absolute inset-0 bg-ink/50;
+    @apply absolute inset-0 bg-scrim/60;
   }
   .drawer-panel {
     @apply absolute inset-y-0 left-0 flex w-[min(88vw,22rem)] flex-col overflow-y-auto overscroll-contain border-r-2 border-line-strong bg-surface;
@@ -837,4 +837,107 @@ html:not([data-js]) [data-people-js],
 html[data-js] [data-lot-nojs],
 html[data-js] [data-people-nojs] {
   display: none;
+}
+
+html:not([data-js]) [data-js-only] {
+  display: none;
+}
+
+.print-only {
+  display: none;
+}
+
+.log-summary {
+  overflow-wrap: anywhere;
+}
+
+/* Yazdırma: denetim çıktısı. Menü, üst bar, alt çubuk ve eylemler gizlenir (Tailwind print:hidden), renk tokenleri açık temaya sabitlenir. */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+  :root:root:root {
+    color-scheme: light;
+    --bg: 255 255 255;
+    --surface: 255 255 255;
+    --sunken: 238 241 243;
+    --line: 190 198 205;
+    --line-strong: 90 102 114;
+    --ink: 20 30 40;
+    --muted: 70 82 94;
+    --accent: 33 82 160;
+    --accent-soft: 232 239 249;
+    --ok: 22 110 66;
+    --ok-soft: 232 244 237;
+    --warn: 146 74 6;
+    --warn-soft: 252 241 223;
+    --danger: 170 32 22;
+    --danger-soft: 251 233 230;
+  }
+  body {
+    font-size: 11pt;
+    background: #fff;
+  }
+  .shell {
+    display: block;
+  }
+  .rail,
+  .topbar,
+  .bottom-bar,
+  .drawer,
+  .conn-banner,
+  .skip-link {
+    display: none !important;
+  }
+  .page {
+    max-width: none;
+    padding: 0;
+  }
+  .print-only {
+    display: block;
+  }
+  .panel,
+  .step-card,
+  .data-table tr {
+    break-inside: avoid;
+  }
+  .data-table th {
+    position: static;
+  }
+  .table-stack thead {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+  }
+  .table-stack tbody tr {
+    display: table-row !important;
+    padding: 0 !important;
+    border-bottom: 0 !important;
+  }
+  .table-stack td {
+    display: table-cell !important;
+    padding: 0.25rem 0.5rem !important;
+    border-bottom: 1px solid rgb(var(--line)) !important;
+    font-size: 9.5pt;
+  }
+  .table-stack td::before {
+    content: none !important;
+  }
+  .table-stack .whitespace-nowrap,
+  .table-stack td {
+    white-space: normal !important;
+  }
+  .table-stack td.num {
+    text-align: right !important;
+  }
+  .table-stack .stack-wide,
+  .table-stack td.cell-action {
+    grid-column: auto !important;
+  }
 }

@@ -1,0 +1,17 @@
+Faz 6 teslim testi, 2026-11-15. main çalışma ağacı (HEAD 08a4975). Ön tur 1 Release .qa/f6/build; düzeltme sonrası ön tur 2 ve teslim testi .qa/f6/build2. Port 5601 Production, DB .qa/f6/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5603 Development (.qa/f6/qa-dev.db) ve 5604 Development (K7 bozulmuş kopyaları), user-secrets anahtarı. Saatler: DB UTC, ekran Türkiye (UTC+3). Test PIN ve parolası yazılmadı.
+Ortam notu: Production anahtarı süreç başına üretildiği için 5601 yeniden başlatılınca önceki süreçte yazılmış kayıtların HMAC doğrulaması düşer (kayıt 1-10 "ihlal"). Bütünlük kanıtları yalnız aynı süreçte yazılan kayıtlarla (11 ve sonrası) ve sabit anahtarlı Development kopyalarıyla alındı.
+
+== Yazdır düğmesi, Yönetici mola bitirme ve iptal formları (CommandForm), istemci doğrulaması, klavye turu (js6)
+Yazdır düğmesi: window.print çağrısı 1
+mola bitirme formu: /interventions/end-break/6 | Molayı bitir
+  yanlış PIN: {"url":"/interventions/end-break/6","err":" Bağlantı yok. Kayıt, onay ve kullanıcı değiştirme yapılamaz. Bağlantı gelince b","reason":"Operatör sahadan ayrıldı.","pin":"","focus":"pin-end-break"}
+  doğru PIN: /records/details/21 | mola satırı: Yönetici bitirdi var
+müdahale formu türler: 1:İptal Kayıt hiç yapılmayacaksa ya da yanlış açıldı
+  boş gönderim (istemci): {"url":"/interventions/create?recordId=22","errors":["Müdahale türünü seçin.","Gerekçeyi yazın.","Bu alanı doldurun."],"focus":"Type"}
+  iptal: /records/details/22 | İptal edildi=true Plan değişti, temizlik ertelendi.=true Test Yönetici=true
+konsol m1: []
+klavye /records: halkasız 0 | İçeriğe geç > Ana sayfa > Kayıtlar > Makine panosu > Tesisler > Makineler > Vardiyalar > Malzemeler > Temizlik tipleri > Kullanıcılar > Parola ve PIN > Kullanıcı değiştir > Daralt > Koyu tema > query > Benim kayıtlarım Tüm > Tüm durumlar Açıldı  > Tüm tesisler T1 - An
+klavye /records/details/11: halkasız 0 | İçeriğe geç > Ana sayfa > Kayıtlar > Makine panosu > Tesisler > Makineler > Vardiyalar > Malzemeler > Temizlik tipleri > Kullanıcılar > Parola ve PIN > Kullanıcı değiştir > Daralt > Koyu tema > Yazdır > Kayıtlara dön > Versiyon içeriğini a > Fotoğraf önizle: orn
+klavye /records/integrity/11: halkasız 0 | İçeriğe geç > Ana sayfa > Kayıtlar > Makine panosu > Parola ve PIN > Kullanıcı değiştir > Daralt > Koyu tema > Kayıt ayrıntısına dö > BODY > İçeriğe geç > Ana sayfa > Kayıtlar > Makine panosu > Parola ve PIN > Kullanıcı değiştir > Daralt > Koyu tema
+klavye /interventions/create?recordId=20: halkasız 0 | İçeriğe geç > Ana sayfa > Kayıtlar > Makine panosu > Tesisler > Makineler > Vardiyalar > Malzemeler > Temizlik tipleri > Kullanıcılar > Parola ve PIN > Kullanıcı değiştir > Daralt > Koyu tema > Type > Reason > Pin > PIN'i göster
+("yanlış PIN" satırındaki err metni kabuktaki çevrimdışı şeridinin gizli metnidir; sunucu yanıtı t6 satırlarında "PIN hatalı.")

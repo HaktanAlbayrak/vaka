@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Vaka.Web.Data;
@@ -8,8 +7,6 @@ namespace Vaka.Web.Services;
 
 public sealed class CleaningEventWriter : ICleaningEventWriter
 {
-    private const string MomentFormat = "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'";
-
     private readonly VakaDbContext _db;
     private readonly IEventDigest _digest;
 
@@ -31,15 +28,7 @@ public sealed class CleaningEventWriter : ICleaningEventWriter
         var sequence = (last?.Sequence ?? 0) + 1;
         var payload = JsonSerializer.Serialize(draft.Payload);
         var commandId = draft.CommandId?.ToString("D");
-        var canonical = string.Join(
-            '|',
-            draft.RecordId.ToString(CultureInfo.InvariantCulture),
-            sequence.ToString(CultureInfo.InvariantCulture),
-            draft.EventType,
-            draft.ActorUserId?.ToString(CultureInfo.InvariantCulture) ?? string.Empty,
-            draft.OccurredAtUtc.ToString(MomentFormat, CultureInfo.InvariantCulture),
-            commandId ?? string.Empty,
-            payload);
+        var canonical = EventCanonical.Build(draft.RecordId, sequence, draft.EventType, draft.ActorUserId, draft.OccurredAtUtc, commandId, payload);
 
         _db.CleaningEvents.Add(new CleaningEvent
         {

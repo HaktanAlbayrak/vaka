@@ -60,7 +60,7 @@ public sealed class AccountController : Controller
 
         await HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
-            AccountPrincipal.Create(state, CookieAuthenticationDefaults.AuthenticationScheme),
+            AccountPrincipal.Create(state, CookieAuthenticationDefaults.AuthenticationScheme, AccountPrincipal.NewSessionId()),
             VakaCookieEvents.CreateProperties(_time.GetUtcNow()));
 
         return !string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl)

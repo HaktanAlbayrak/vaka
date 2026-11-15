@@ -25,6 +25,7 @@ module.exports = {
       "chart-1": channel("chart-1"),
       "chart-2": channel("chart-2"),
       "chart-3": channel("chart-3"),
+      scrim: channel("scrim"),
     },
     fontFamily: {
       display: ["var(--font-display)"],

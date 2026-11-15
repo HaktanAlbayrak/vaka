@@ -188,6 +188,7 @@ public interface IDurationCalculator
     /// <summary>
     /// Canlı geçen süre, saniye (SH-14); adım, faz ve kayıt sayaçları için, sunucu hesaplar, JS yalnız ilerletir.
     /// Canlı = (Şimdi - Başlangıç) - Σ max(0, min(Mola bitişi ya da Şimdi, Şimdi) - max(Mola başlangıcı, Başlangıç)); açık molanın bitişi Şimdi sayılır
+    /// Fark tick düzeyinde alınır ve yalnız sonuç saniyeye aşağı yuvarlanır (tek yuvarlama)
     /// </summary>
     /// <remarks>
     /// Açık mola süresince Şimdi ile mola başlangıcı birlikte ilerler, fark sabit kalır: değer artmaz. Mola bitince değer kaldığı yerden sürer.

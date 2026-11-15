@@ -46,6 +46,7 @@ builder.Services.AddSingleton<ICredentialHasher, CredentialHasher>();
 builder.Services.AddSingleton<ITurkeyClock, TurkeyClock>();
 builder.Services.AddSingleton<IDurationCalculator, DurationCalculator>();
 builder.Services.AddSingleton<IDurationFormatter, DurationFormatter>();
+builder.Services.AddSingleton<ISessionRevocations, SessionRevocations>();
 builder.Services.AddScoped<VakaCookieEvents>();
 builder.Services.AddScoped<ISystemSettingsReader, SystemSettingsReader>();
 builder.Services.AddScoped<IPinFormatValidator, PinFormatValidator>();
@@ -99,6 +100,14 @@ builder.Services.AddScoped<IStepStarter, StepStarter>();
 builder.Services.AddScoped<IStepFinisher, StepFinisher>();
 builder.Services.AddScoped<IMyWorkReader, MyWorkReader>();
 builder.Services.AddScoped<IMachineBoardReader, MachineBoardReader>();
+builder.Services.AddScoped<IRecordListReader, RecordListReader>();
+builder.Services.AddScoped<IRecordStateAudit, RecordStateAudit>();
+builder.Services.AddScoped<IRecordIntegrity, RecordIntegrity>();
+builder.Services.AddScoped<IIntegrityReportReader, IntegrityReportReader>();
+builder.Services.AddScoped<IRecordPhaseReader, RecordPhaseReader>();
+builder.Services.AddScoped<IRecordDetailReader, RecordDetailReader>();
+builder.Services.AddScoped<IInterventionForms, InterventionForms>();
+builder.Services.AddScoped<IInterventionService, InterventionService>();
 
 var app = builder.Build();
 

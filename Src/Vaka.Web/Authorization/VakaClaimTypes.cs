@@ -4,4 +4,5 @@ public static class VakaClaimTypes
 {
     public const string UserId = "vaka:user-id";
     public const string RegistryNo = "vaka:registry-no";
+    public const string SessionId = "vaka:session-id";
 }

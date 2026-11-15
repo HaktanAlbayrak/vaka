@@ -1,0 +1,131 @@
+@using Vaka.Web.ViewModels.Records
+@model IntegrityReportViewModel
+@{
+    ViewData["Title"] = "Bütünlük doğrulama";
+    ViewData["Lead"] = "Olay zincirinin ve kayıt alanlarının olaylarla tutarlılığı.";
+    ViewData["NavKey"] = "records";
+
+    var detailsUrl = "/records/details/" + Model.RecordId;
+    var firstBad = Model.Events.FirstOrDefault(entry => !entry.IsValid);
+    string Stamp(DateTime value) => value.ToString("dd.MM.yyyy HH:mm:ss");
+}
+
+@section Actions {
+    <a class="btn btn-secondary print:hidden" href="@detailsUrl">
+        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-left" /></svg>
+        Kayıt ayrıntısına dön
+    </a>
+}
+
+<div class="space-y-6">
+    <section class="panel panel-tag @(Model.IsValid ? "border-t-ok" : "border-t-danger")" aria-labelledby="result-title">
+        <div class="panel-head">
+            <h2 id="result-title" class="panel-title">Sonuç</h2>
+            <partial name="_Badge" model='Model.IsValid ? "integrity.ok" : "integrity.broken"' />
+        </div>
+        <div class="panel-body space-y-4">
+            @if (Model.IsValid)
+            {
+                <p class="text-lg font-semibold">Kayıt oluştuğundan beri değişmedi.</p>
+                <p>Olay zinciri baştan sona doğrulandı ve kayıttaki zaman, kişi ve malzeme alanları olaylardaki değerlerle aynı.</p>
+            }
+            else
+            {
+                <p class="text-lg font-semibold">Kayıtta değişiklik saptandı.</p>
+                <p>
+                    @if (firstBad is not null)
+                    {
+                        <text>İlk tutarsız olay sırası <span class="mono font-bold">@firstBad.Sequence</span>. </text>
+                    }
+                    @if (Model.StateMismatches.Length > 0)
+                    {
+                        <text>@Model.StateMismatches.Length alan olaylardaki değerden farklı.</text>
+                    }
+                </p>
+                <p class="text-sm text-muted">Bulguyu sistem yöneticisine iletin. Kayıt ve olaylar bu ekrandan değiştirilemez.</p>
+            }
+            <dl class="kv grid-cols-2 md:grid-cols-3">
+                <div><dt>Kayıt</dt><dd class="mono whitespace-nowrap">@Model.RecordNo</dd></div>
+                <div><dt>Denetlenme</dt><dd class="mono">@Stamp(Model.CheckedAtLocal)</dd></div>
+                <div><dt>Olay sayısı</dt><dd class="mono">@Model.Events.Length</dd></div>
+            </dl>
+        </div>
+    </section>
+
+    @if (Model.StateMismatches.Length > 0)
+    {
+        <section aria-labelledby="mismatch-title">
+            <h2 id="mismatch-title" class="mb-1 text-xl font-bold">Değişen alanlar</h2>
+            <p class="mb-3 text-muted">Kayıtta saklanan değer ile ilgili olayın taşıdığı değer karşılaştırıldı.</p>
+            <div class="panel border-danger">
+                <table class="data-table table-stack">
+                    <caption class="sr-only">Saklanan değeri olaydan farklı olan alanlar</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Alan ve olay</th>
+                            <th scope="col">Saklanan değer</th>
+                            <th scope="col">Olaydaki değer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var mismatch in Model.StateMismatches)
+                        {
+                            <tr>
+                                <td data-label="" class="stack-wide stack-lead max-w-md break-words">
+                                    <span class="font-semibold">@mismatch.Field</span>
+                                    <span class="mt-0.5 block text-sm text-muted">Olay sırası <span class="mono">@mismatch.Sequence</span></span>
+                                </td>
+                                <td data-label="Saklanan değer" class="mono break-all text-danger">@mismatch.StoredValue</td>
+                                <td data-label="Olaydaki değer" class="mono break-all">@mismatch.EventValue</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
+
+    <section aria-labelledby="chain-title">
+        <h2 id="chain-title" class="mb-1 text-xl font-bold">Olay zinciri</h2>
+        <p class="mb-3 text-muted">Her olay bir önceki olayın özet koduna bağlıdır. Bir olay değiştirilirse kendisi ve sonraki olaylar tutarsız çıkar.</p>
+        @if (Model.Events.Length == 0)
+        {
+            <p class="panel panel-body text-muted">Bu kayıtta doğrulanacak olay yok.</p>
+        }
+        else
+        {
+            <div class="panel">
+                <table class="data-table table-stack">
+                    <caption class="sr-only">Olay zinciri doğrulaması, @Model.Events.Length olay</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-right">Sıra</th>
+                            <th scope="col">Olay</th>
+                            <th scope="col">Zaman</th>
+                            <th scope="col">Özet kodu</th>
+                            <th scope="col">Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var entry in Model.Events)
+                        {
+                            <tr class="@(entry.IsValid ? "" : "bg-danger-soft/40")">
+                                <td data-label="Sıra" class="num whitespace-nowrap">@entry.Sequence</td>
+                                <td data-label="Olay" class="stack-wide stack-lead max-w-md break-words">
+                                    <span class="font-semibold">@entry.EventLabel</span>
+                                    @if (!entry.IsValid && !string.IsNullOrEmpty(entry.Problem))
+                                    {
+                                        <span class="mt-0.5 block text-sm font-semibold text-danger">@entry.Problem</span>
+                                    }
+                                </td>
+                                <td data-label="Zaman"><time class="mono" datetime="@entry.OccurredAtLocal.ToString("yyyy-MM-dd'T'HH:mm:ss")"><span class="whitespace-nowrap">@entry.OccurredAtLocal.ToString("dd.MM.yyyy")</span> <span class="whitespace-nowrap">@entry.OccurredAtLocal.ToString("HH:mm:ss")</span></time></td>
+                                <td data-label="Özet kodu" class="mono break-all md:max-xl:col-span-2">@entry.HashShort</td>
+                                <td data-label="Durum" class="md:max-xl:col-span-2"><partial name="_Badge" model='entry.IsValid ? "integrity.event.ok" : "integrity.event.bad"' /></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+</div>

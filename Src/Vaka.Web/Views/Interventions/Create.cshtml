@@ -1,0 +1,129 @@
+@using Vaka.Web.ViewModels.Interventions
+@model InterventionViewModel
+@{
+    ViewData["Title"] = "Müdahale";
+    ViewData["Lead"] = "Kaydı iptal edin ya da yarıda kapatın. Gerekçe ve PIN'iniz gerekir, işlem geri alınamaz.";
+    ViewData["NavKey"] = "records";
+
+    var detailsUrl = "/records/details/" + Model.RecordId;
+    var selectedType = (int?)Model.Type;
+    var typeError = ViewData.ModelState.TryGetValue("Type", out var typeEntry) && typeEntry.Errors.Count > 0 ? typeEntry.Errors[0].ErrorMessage : null;
+    var reasonError = ViewData.ModelState.TryGetValue("Reason", out var reasonEntry) && reasonEntry.Errors.Count > 0 ? reasonEntry.Errors[0].ErrorMessage : null;
+    var blocked = Model.BlockReason is not null || Model.AllowedTypes.Length == 0;
+    string Effect(int type) => type switch
+    {
+        1 => "Kayıt hiç yapılmayacaksa ya da yanlış açıldıysa. Kayıt İptal edildi olur, makine boşalır.",
+        2 => "Temizlik başlamış ama tamamlanamayacaksa. Kayıt Yarıda kapatıldı olur, makine boşalır.",
+        _ => "",
+    };
+}
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+    <div class="min-w-0 space-y-5">
+        @if (blocked)
+        {
+            <partial name="_State" model='("empty", "lock", "Müdahale yapılamaz", Model.BlockReason ?? "Bu kayıt durumunda müdahale seçeneği yok.", "Kayıt ayrıntısına dön", detailsUrl)' />
+        }
+        else
+        {
+            <section class="panel panel-tag border-t-danger" aria-labelledby="intervention-title">
+                <div class="panel-head">
+                    <h2 id="intervention-title" class="panel-title">Müdahale bilgisi</h2>
+                    <span class="mono whitespace-nowrap text-sm font-bold">@Model.RecordNo</span>
+                </div>
+                <div class="panel-body">
+                    <form method="post" action="/interventions/create?recordId=@Model.RecordId" class="space-y-5" data-validate data-command-form asp-antiforgery="true">
+                        <partial name="_FormSummary" model='"İşlem yapılmadı"' />
+                        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                        {
+                            <div class="notice notice-danger" role="alert" tabindex="-1" data-form-summary>
+                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+                                <div class="min-w-0">
+                                    <p class="font-semibold">İşlem yapılmadı</p>
+                                    <p class="mt-0.5 text-sm">@Model.ErrorMessage</p>
+                                </div>
+                            </div>
+                        }
+                        <input type="hidden" name="CommandId" value="@Model.CommandId" />
+
+                        <fieldset class="field space-y-3" data-field aria-describedby="@(typeError is null ? null : "Type-error")">
+                            <legend class="field-label">Müdahale türü</legend>
+                            <div class="grid gap-2">
+                                @foreach (var option in Model.AllowedTypes)
+                                {
+                                                                        <label class="choice">
+                                        <input type="radio" name="Type" value="@option.Value" checked="@(option.Value == selectedType)" required data-required-message="Müdahale türünü seçin." />
+                                        <span class="min-w-0">
+                                            <span class="block font-bold">@option.Label</span>
+                                            <span class="mt-1 block text-sm text-muted">@Effect(option.Value)</span>
+                                        </span>
+                                    </label>
+                                }
+                            </div>
+                            @if (typeError is not null)
+                            {
+                                <partial name="_FieldError" model='("Type-error", typeError)' />
+                            }
+                        </fieldset>
+
+                        @if (!string.IsNullOrEmpty(Model.InProgressStepTitle))
+                        {
+                            <div class="notice notice-warn">
+                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>
+                                <p class="min-w-0 break-words">Devam eden adım <span class="font-semibold">@Model.InProgressStepTitle</span> müdahale anında Kesildi olarak kapanır. Tamamlanmamış fazlar da Kesildi olur.</p>
+                            </div>
+                        }
+                        @if (Model.OpenBreak is { } openBreak)
+                        {
+                            <div class="notice notice-warn">
+                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#coffee" /></svg>
+                                <p class="min-w-0 break-words">Kayıtta @openBreak.StartedByName tarafından <partial name="_Moment" model='(openBreak.StartedAtLocal, DateTime.MinValue)' /> saatinde başlatılan mola açık. Mola müdahale anında Müdahale türüyle kapanır.</p>
+                            </div>
+                        }
+
+                        <div class="field" data-field>
+                            <label class="field-label" for="Reason">Gerekçe</label>
+                            <textarea id="Reason" name="Reason" class="input" rows="4" autocomplete="off" required data-required-message="Gerekçeyi yazın."
+                                      aria-describedby="@(reasonError is null ? "Reason-hint" : "Reason-hint Reason-error")" aria-invalid="@(reasonError is null ? null : "true")">@Model.Reason</textarea>
+                            <p id="Reason-hint" class="field-hint">Müdahalenin nedeni olay günlüğüne yazılır ve kayıt detayında görünür.</p>
+                            @if (reasonError is not null)
+                            {
+                                <partial name="_FieldError" model='("Reason-error", reasonError)' />
+                            }
+                        </div>
+
+                        <div class="grid gap-3 md:max-w-md">
+                            <partial name="_PinInput" model='("pin-intervention", "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                            <div class="notice notice-danger" role="alert" data-command-status hidden>
+                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                                <p class="font-semibold" data-command-message></p>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] md:max-w-xl">
+                            <button type="submit" class="btn btn-danger btn-lg whitespace-nowrap" data-requires-online>
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#octagon-alert" /></svg>
+                                Müdahaleyi kaydet
+                            </button>
+                            <a class="btn btn-secondary btn-lg" href="@detailsUrl">Vazgeç</a>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        }
+    </div>
+
+    <aside class="min-w-0" aria-label="Kayıt bağlamı">
+        <section class="panel" aria-labelledby="context-title">
+            <div class="panel-head"><h2 id="context-title" class="panel-title">Kayıt</h2></div>
+            <div class="panel-body">
+                <dl class="kv grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
+                    <div><dt>Kayıt no</dt><dd class="mono break-all">@Model.RecordNo</dd></div>
+                    <div><dt>Makine</dt><dd>@Model.MachineLabel</dd></div>
+                    <div><dt>Sahip</dt><dd>@Model.OwnerName</dd></div>
+                    <div><dt>Durum</dt><dd class="mt-1"><partial name="_Badge" model='"record|" + Model.RecordStatusLabel' /></dd></div>
+                </dl>
+            </div>
+        </section>
+    </aside>
+</div>

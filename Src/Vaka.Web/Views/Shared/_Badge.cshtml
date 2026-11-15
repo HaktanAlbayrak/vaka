@@ -45,6 +45,11 @@
         ["user.firstlogin"] = ("İlk giriş bekliyor", "hourglass", "badge-warn"),
 
         ["machine.free"] = ("Boş", "circle-check", "badge-ok"),
+
+        ["integrity.ok"] = ("Doğrulandı", "shield-check", "badge-ok"),
+        ["integrity.broken"] = ("Bütünlük ihlali", "shield-alert", "badge-danger"),
+        ["integrity.event.ok"] = ("Geçerli", "check", "badge-ok"),
+        ["integrity.event.bad"] = ("Sorunlu", "octagon-x", "badge-danger"),
     };
 
     // Enum üye adından sözlük anahtarına tek eşleme. Görünümler enum adını verir, rozet biçimi yalnız burada belirlenir.
@@ -80,6 +85,15 @@
     };
 }
 @{
-    var badge = Vocabulary[EnumKeys.TryGetValue(Model, out var alias) ? alias : Model];
+    // "grup|Görünen ad" biçimi (ör. "record|Tamamlandı"): ViewModel yalnız etiket verdiğinde grup içindeki karşılığı bulunur.
+    var key = Model;
+    var split = Model.IndexOf('|');
+    if (split > 0)
+    {
+        var group = Model[..split] + ".";
+        var label = Model[(split + 1)..];
+        key = Vocabulary.Where(item => item.Key.StartsWith(group, StringComparison.Ordinal) && item.Value.Label == label).Select(item => item.Key).FirstOrDefault() ?? Model;
+    }
+    var badge = Vocabulary.TryGetValue(key, out var found) ? found : Vocabulary.TryGetValue(EnumKeys.GetValueOrDefault(key, key), out var viaEnum) ? viaEnum : (Label: split > 0 ? Model[(split + 1)..] : Model, Icon: "circle-dashed", Tone: "badge-muted");
 }
 <span class="badge @badge.Tone"><svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#@badge.Icon" /></svg><span>@badge.Label</span></span>

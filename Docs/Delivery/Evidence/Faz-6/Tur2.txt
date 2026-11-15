@@ -1,0 +1,124 @@
+Faz 6 tur 2 yeniden denetimi, 2026-11-16 (saatler sunucu anı: 2026-11-15 18:25-18:30 TR). main çalışma ağacı (HEAD 08a4975). Release yayını .qa/f6/build3 (B1 düzeltmesi ve migration 20261115152212_AddCleaningRecordListIndexes). Yeni kopyalar: .qa/f6/qa.db ve qa-dev.db = App_Data/vaka.db (migration uygulanmış) SQLite yedekleme API kopyası + DemoData.sql. Port 5601 Production (süreçte üretilen anahtar, yazılmadı), 5603 ve 5604 Development (user-secrets). Test PIN ve parolası yazılmadı.
+
+== B1: görevli satırları (t7.py; tamamlanmış kayıt 3 ve devam eden kayıt 4). Beklenen metin DB'deki ParticipantAdded olayının sunucu anından (TR), açılıştaki sahip için açılış anından üretildi
+doküman no versiyonu 302 [(2, 2, 'PRS-TM-014 Rev.3')]
+R1 (3, 'T1-H1-M10-P2026-1', 'T1-SD-2026-2', 4)
+R2 (4, 'T1-H1-M11-P2026-1', 'T1-SD-2026-3', 2)
+
+== kayıt 3 T1-H1-M10-P2026-1 durum 4 açılış (TR) 15.11.2026 18:25
+  detay "onay" kelimesi sayısı: 0 | "eklendi" sayısı: 12
+  adım 13 Makineyi durdur              QA Operatör 11   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 11, eklendi 15.11.2026 18:25" (açılış anı) | detayda var: True
+  adım 13 Makineyi durdur              QA Operatör 12   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 11, eklendi 15.11.2026 18:25" (olay) | detayda var: True
+  adım 14 Alanı hazırla                QA Operatör 11   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 11, eklendi 15.11.2026 18:25" (açılış anı) | detayda var: True
+  adım 15 Yüzeyi sil                   QA Operatör 11   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 11, eklendi 15.11.2026 18:25" (açılış anı) | detayda var: True
+  adım 15 Yüzeyi sil                   QA Operatör 12   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 11, eklendi 15.11.2026 18:25" (olay) | detayda var: True
+  adım 16 Alanı kontrol et ve teslim et QA Operatör 11   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 11, eklendi 15.11.2026 18:25" (açılış anı) | detayda var: True
+  adım 16 Alanı kontrol et ve teslim et QA Operatör 13   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 11, eklendi 15.11.2026 18:25" (olay) | detayda var: True
+  görevli satırları (ham): []
+
+== kayıt 4 T1-H1-M11-P2026-1 durum 2 açılış (TR) 15.11.2026 18:25
+  detay "onay" kelimesi sayısı: 0 | "eklendi" sayısı: 8
+  adım 17 Makineyi durdur              QA Operatör 14   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 14, eklendi 15.11.2026 18:25" (açılış anı) | detayda var: True
+  adım 17 Makineyi durdur              QA Operatör 15   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 14, eklendi 15.11.2026 18:25" (olay) | detayda var: True
+  adım 18 Alanı hazırla                QA Operatör 14   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 14, eklendi 15.11.2026 18:25" (açılış anı) | detayda var: True
+  adım 19 Yüzeyi sil                   QA Operatör 14   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 14, eklendi 15.11.2026 18:25" (açılış anı) | detayda var: True
+  adım 19 Yüzeyi sil                   QA Operatör 16   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 14, eklendi 15.11.2026 18:25" (olay) | detayda var: True
+  adım 20 Alanı kontrol et ve teslim et QA Operatör 14   ConfirmedAtUtc=None | beklenen "Ekleyen QA Operatör 14, eklendi 15.11.2026 18:25" (açılış anı) | detayda var: True
+  görevli satırları (ham): []
+
+== B1: dakika farkıyla eklenen görevli (kayıt 4, 18:27 eklenen QA Operatör 17); <time datetime> değerleri
+olay anı UTC 2026-11-15 15:27:04.4626453 -> TR 15.11.2026 18:27:04 | açılış TR 18:25:40
+   QA Operatör 14 | Ekleyen QA Operatör 14, eklendi 2026-11-15T18:25 (açılıştaki sahip, açılış anı)
+   QA Operatör 15 | Ekleyen QA Operatör 14, eklendi 2026-11-15T18:25
+   QA Operatör 16 | Ekleyen QA Operatör 14, eklendi 2026-11-15T18:25
+   QA Operatör 17 | Ekleyen QA Operatör 14, eklendi 2026-11-15T18:27
+
+== B1: "onay" geçen metin (detay HTML'i, kayıt 3, 4, 6 ve Development kayıt 3): yalnız kabuğun gizli çevrimdışı şeridi ("Kayıt, onay ve kullanıcı değiştirme") ve SKT gerekçesi ("depo onayıyla"); görevli satırında 0. Development detayı: "onay" 0, "eklendi" 7
+
+== Yazdırma önizlemesi (misc6d, emulateMedia print, koyu tema açıkken)
+yazdır m1 kayıt 3: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | Test Yönetici | Oluşturulma | 15.11.2026 18:29:27 | Prosedür versiyonu | Ve","butunluk":"Doğrulandı","olaySatir":22,"onay":0,"eklendi":12,"kapanis":"","dokuman":"PRS-TM-014 Rev.3 ","skt":"SKT geçmiş girildi. Gerekçe: SKT geçmiş, depo onayıyla kullanıldı. ","surealti":"Gerekçe: Ön hazırlık vardiya başında yapıldı. ","sorular":[]} | PDF A4 sayfa 5, 346195 bayt
+yazdır au kayıt 3: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | Test Denetçi | Oluşturulma | 15.11.2026 18:29:28 | Prosedür versiyonu | Ver","butunluk":"Doğrulandı","olaySatir":22,"onay":0,"eklendi":12,"kapanis":"","dokuman":"PRS-TM-014 Rev.3 ","skt":"SKT geçmiş girildi. Gerekçe: SKT geçmiş, depo onayıyla kullanıldı. ","surealti":"Gerekçe: Ön hazırlık vardiya başında yapıldı. ","sorular":[]} | PDF A4 sayfa 5, 345945 bayt
+yazdır op11 kayıt 3: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | QA Operatör 11 | Oluşturulma | 15.11.2026 18:29:28 | Prosedür versiyonu | V","butunluk":"Doğrulandı","olaySatir":22,"onay":0,"eklendi":12,"kapanis":"","dokuman":"PRS-TM-014 Rev.3 ","skt":"SKT geçmiş girildi. Gerekçe: SKT geçmiş, depo onayıyla kullanıldı. ","surealti":"Gerekçe: Ön hazırlık vardiya başında yapıldı. ","sorular":[]} | PDF A4 sayfa 5, 344956 bayt
+yazdır m1 kayıt 4: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | Test Yönetici | Oluşturulma | 15.11.2026 18:29:28 | Prosedür versiyonu | Ve","butunluk":"Doğrulandı","olaySatir":5,"onay":0,"eklendi":10,"kapanis":"","dokuman":"PRS-TM-014 Rev.3 ","skt":"","surealti":"","sorular":["Lot","SKT"]} | PDF A4 sayfa 5, 304753 bayt
+yazdır m1 kayıt 6: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | Test Yönetici | Oluşturulma | 15.11.2026 18:29:29 | Prosedür versiyonu | Ve","butunluk":"Doğrulandı","olaySatir":2,"onay":0,"eklendi":4,"kapanis":"İptal edildi | Doğrulandı ","dokuman":"PRS-TM-014 Rev.3 ","skt":"","surealti":"Gerekçe: Tur 2 liste verisi: iptal. ","sorular":["Lot","SKT"]} | PDF A4 sayfa 4, 303209 bayt
+
+== Bütünlük ve K5 gerilemesi (t8.py, index'li kopya)
+iptal 302 /records/details/6
+bütünlük kayıt 3 durum 4: Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zin | değişen alan bölümü: yok
+bütünlük kayıt 4 durum 2: Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zin | değişen alan bölümü: yok
+bütünlük kayıt 5 durum 1: Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zin | değişen alan bölümü: yok
+bütünlük kayıt 6 durum 6: Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zin | değişen alan bölümü: yok
+
+== K5 gerilemesi (index sonrası)
+  op11 varsayılan ['T1-H1-M10-P2026-1'] | beklenen ['T1-H1-M10-P2026-1'] | eşit True
+  op12 varsayılan ['T1-H1-M10-P2026-1'] | beklenen ['T1-H1-M10-P2026-1'] | eşit True
+  op2 varsayılan [] | beklenen [] | eşit True
+  m1 (süzgeçsiz)                                        -> 6 kayıt, beklenen 6, küme eşit True, sıra eşit True
+  m1 ?status=4                                          -> 2 kayıt, beklenen 2, küme eşit True, sıra eşit True
+  m1 ?status=6                                          -> 1 kayıt, beklenen 1, küme eşit True, sıra eşit True
+  m1 ?kind=1                                            -> 6 kayıt, beklenen 6, küme eşit True, sıra eşit True
+  m1 ?machineId=13                                      -> 1 kayıt, beklenen 1, küme eşit True, sıra eşit True
+  m1 ?query=T1-H1-M10-P2026-1                           -> 1 kayıt, beklenen 1, küme eşit True, sıra eşit True
+  m1 ?query=T1-SD-2026-2                                -> 1 kayıt, beklenen 1, küme eşit True, sıra eşit True
+  m1 ?query=IE-2026-071                                 -> 4 kayıt, beklenen 4, küme eşit True, sıra eşit True
+  m1 ?query=L2027-002                                   -> 3 kayıt, beklenen 3, küme eşit True, sıra eşit True
+  m1 ?query=l2026-001&status=4                          -> 1 kayıt, beklenen 1, küme eşit True, sıra eşit True
+  m1 ?facilityId=1&lineId=1&machineId=13&status=4&kind=1 -> 1 kayıt, beklenen 1, küme eşit True, sıra eşit True
+  m1 ?from=2026-11-15&to=2026-11-15                     -> 6 kayıt, beklenen 6, küme eşit True, sıra eşit True
+  m1 ?from=2026-11-16                                   -> 0 kayıt, beklenen 0, küme eşit True, sıra eşit True
+  m1 ?query=%25                                         -> 0 kayıt, beklenen 0, küme eşit True, sıra eşit True
+  sayfalama pageSize=2: ['T1-H1-M13-P2026-1', 'T1-H1-M12-P2026-1'] ['T1-H1-M11-P2026-1', 'T1-H1-M10-P2026-1'] ayrık True
+
+== K7 karşılaştırması tur 2 (k7.py, yeni Development kopyası, 5604)
+== değişiklik yok (kontrol) k7z.db
+  bütünlük 200 | Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zinciri baştan sona doğrulandı ve kayıttaki zaman, kişi ve malzeme alanları olaylardaki değerlerle aynı. Kayıt T1
+  değişen alanlar: yok
+  sorunlu olay satırları: []
+  detay rozeti: ihlal False | Doğrulandı True
+== iş emri k7a.db
+  bütünlük 200 | Sonuç Bütünlük ihlali Kayıtta değişiklik saptandı. 1 alan olaylardaki değerden farklı. Bulguyu sistem yöneticisine iletin. Kayıt ve olaylar bu ekrandan değiştirilemez. Ka
+  değişen alanlar: Değişen alanlar Kayıtta saklanan değer ile ilgili olayın taşıdığı değer karşılaştırıldı. Saklanan değeri olaydan farklı olan alanlar Alan ve olay Saklanan değer Olaydaki değer İş emri no Olay sırası 1 IE-DEV-9999 IE-DEV-0701 
+  sorunlu olay satırları: []
+  detay rozeti: ihlal True | Doğrulandı False
+== malzeme lot no k7b.db
+  bütünlük 200 | Sonuç Bütünlük ihlali Kayıtta değişiklik saptandı. 1 alan olaylardaki değerden farklı. Bulguyu sistem yöneticisine iletin. Kayıt ve olaylar bu ekrandan değiştirilemez. Ka
+  değişen alanlar: Değişen alanlar Kayıtta saklanan değer ile ilgili olayın taşıdığı değer karşılaştırıldı. Saklanan değeri olaydan farklı olan alanlar Alan ve olay Saklanan değer Olaydaki değer Malzeme, lot L2027-999: lot no Olay sırası 2 L2027-999 L2027-002 
+  sorunlu olay satırları: []
+  detay rozeti: ihlal True | Doğrulandı False
+== sahte olay eklendi (son olayın kopyası, yükü değişik) k7c.db
+  bütünlük 200 | Sonuç Bütünlük ihlali Kayıtta değişiklik saptandı. İlk tutarsız olay sırası 17 . Bulguyu sistem yöneticisine iletin. Kayıt ve olaylar bu ekrandan değiştirilemez. Kayıt T1
+  değişen alanlar: yok
+  sorunlu olay satırları: ['17 Kayıt tamamlandı Özet, olaydaki değerlerle uyuşmuyor. 15.11.2026 18:27:38 9ebe02ae818e Sorunlu']
+  detay rozeti: ihlal True | Doğrulandı False
+== adımı başlatan kişi k7d.db
+  bütünlük 200 | Sonuç Bütünlük ihlali Kayıtta değişiklik saptandı. 1 alan olaylardaki değerden farklı. Bulguyu sistem yöneticisine iletin. Kayıt ve olaylar bu ekrandan değiştirilemez. Ka
+  değişen alanlar: Değişen alanlar Kayıtta saklanan değer ile ilgili olayın taşıdığı değer karşılaştırıldı. Saklanan değeri olaydan farklı olan alanlar Alan ve olay Saklanan değer Olaydaki değer Faz 1, adım 1 (Makineyi durdur): başlatan Olay sırası 4 Test Yönetici (1001) Test Operatör 2 (2002) 
+  sorunlu olay satırları: []
+  detay rozeti: ihlal True | Doğrulandı False
+== adım başlangıç zamanı (tetikleyici beklenir): SQL reddedildi -> Başlamış ya da bitmiş adımın zamanı değiştirilemez.
+== olay yükü UPDATE (tetikleyici beklenir): SQL reddedildi -> Olay günlüğü değiştirilemez.
+
+== Ön tur ve gerileme: mekanik eval (an.py t2m t2o t2r)
+===== t2m 48
+  KALDI /interventions/create?recordId=5 360x800-light ['small:Type 20x20']
+  KALDI /interventions/create?recordId=5 768x1024-light ['small:Type 20x20']
+  KALDI /interventions/create?recordId=5 1024x768-light ['small:Type 20x20']
+  KALDI /interventions/create?recordId=5 1440x900-light ['small:Type 20x20']
+  KALDI /interventions/create?recordId=5 360x800-dark ['small:Type 20x20']
+  KALDI /interventions/create?recordId=5 768x1024-dark ['small:Type 20x20']
+  KALDI /interventions/create?recordId=5 1024x768-dark ['small:Type 20x20']
+  KALDI /interventions/create?recordId=5 1440x900-dark ['small:Type 20x20']
+  sınıflar {'temiz': 40, 'small': 8} kontrast>= 5.28 topbar<= 64
+===== t2o 24
+  sınıflar {'temiz': 24} kontrast>= 5.28 topbar<= 64
+===== t2r 8
+  sınıflar {'temiz': 8} kontrast>= 5.43 topbar<= 64
+KALDI satırları yalnız müdahale formu tür radyoları (label.choice içinde, tur 1'deki kabul)
+
+== G12 (an12.py t2g t2go)
+===== t2g 48
+  kontrol sayıları {'a+': 8, 'b+': 36, 'c+': 96, 'd+': 376, 'e+': 38, 'f+': 42} kusurlu hücre 0
+===== t2go 16
+  kontrol sayıları {'d+': 104, 'e+': 8, 'f+': 18} kusurlu hücre 0
+
+== G5a: 40 POST formu, belirteçsiz 0. §4 grep tam tablo 0; policy 0; sihirli rol 0; G8 0; gizli false 0; dash 0. Migration Up: 2 CreateIndex, Drop 0; DB-2026-008 onay satırı mevcut (O-07)

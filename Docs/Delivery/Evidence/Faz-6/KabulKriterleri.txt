@@ -1,0 +1,165 @@
+Faz 6 teslim testi, 2026-11-15. main çalışma ağacı (HEAD 08a4975). Ön tur 1 Release .qa/f6/build; düzeltme sonrası ön tur 2 ve teslim testi .qa/f6/build2. Port 5601 Production, DB .qa/f6/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5603 Development (.qa/f6/qa-dev.db) ve 5604 Development (K7 bozulmuş kopyaları), user-secrets anahtarı. Saatler: DB UTC, ekran Türkiye (UTC+3). Test PIN ve parolası yazılmadı.
+Ortam notu: Production anahtarı süreç başına üretildiği için 5601 yeniden başlatılınca önceki süreçte yazılmış kayıtların HMAC doğrulaması düşer (kayıt 1-10 "ihlal"). Bütünlük kanıtları yalnız aynı süreçte yazılan kayıtlarla (11 ve sonrası) ve sabit anahtarlı Development kopyalarıyla alındı.
+
+== Veri kurulumu (setup.py, v3.py): KSA v2 (açıklama, 1 dk, fotoğraf ve video), kayıtlar, ilk müdahaleler; v3 (2 dk, yeni açıklama); makine 6 adı değişti
+taslak 302 /procedure-versions/edit/5
+adım açıklama 302
+faz min 302
+medya ornek.jpg 302
+medya ornek.mp4 302
+yayın 302 /cleaning-types/details/4
+KSA versiyonları [(4, 1, 3), (5, 2, 2)]
+done 3 (3, 'T1-H1-M03-P2026-1', 'T1-SD-2026-2', 4, '2026-11-15 14:36:57.7584298', '2026-11-15 14:37:01.1413378', '2026-11-15 14:37:18.2085194', 17, 5, 12, 16, '2026-11-15 16:36:57.7584298', None)
+pln 302 /records/run/7
+müdahale cancel 302 /records/details/8 
+müdahale abort 302 /records/details/9 
+{'done': 3, 'running': 4, 'break': 5, 'opened': 6, 'pln': 7, 'cancel': 8, 'abort': 9}
+done (3, 'T1-H1-M03-P2026-1', 'T1-SD-2026-2', 4)
+running (4, 'T1-H1-M04-P2026-1', 'T1-SD-2026-3', 2)
+break (5, 'T1-H1-M05-P2026-1', 'T1-SD-2026-4', 2)
+opened (6, 'T1-H1-M06-P2026-1', None, 1)
+pln (7, 'T1-H1-M07-P2026-1', None, 1)
+cancel (8, 'T1-H1-M08-P2026-1', None, 6)
+abort (9, 'T1-H1-M09-P2026-1', 'T1-SD-2026-5', 7)
+taslak 302 /procedure-versions/edit/6
+adım açıklama 302
+faz min 302
+yayın 302 /cleaning-types/details/4
+KSA versiyonları [(4, 1, 3), (5, 2, 3), (6, 3, 2)]
+v3 medya [(2,)]
+makine adı değiştir 302 /machines  [('Dolum tankı yeni adı',)]
+
+== T6 (t6.py): K14 doküman no'lu versiyon, R1 (K1, K2, K6), K4, K5, müdahaleler (K15, K16, K17, K19, K21, G9), K20, K22, K19 zaman aşımı
+== K14 hazırlık: doküman no'lu KSA versiyonu
+  başlık 302
+  yayın 302 /cleaning-types/details/4 [(4, 2, 'PRS-TM-014 Rev.3')]
+
+== R1: tamamlanmış, iki görevli, molalı, malzemeli (op11 sahip, op12 görevli, makine 13)
+  kayıt (11, 'T1-H1-M10-P2026-1', 'T1-SD-2026-6', 4, '2026-11-15 14:54:17.4786905', '2026-11-15 14:54:21.8769041', '2026-11-15 14:54:37.628959', 15, 4, 11, 16, '2026-11-15 16:54:17.4786905', None)
+  adımlar [(47, 1, 1, 3, '2026-11-15 14:54:21.8769041', '2026-11-15 14:54:24.9684299', 0, 3, 6, 15, 14, 24), (48, 1, 2, 3, '2026-11-15 14:54:25.2775192', '2026-11-15 14:54:27.3776741', 0, 2, 2, 14, 14, 24), (49, 2, 1, 3, '2026-11-15 14:54:32.174402', '2026-11-15 14:54:35.2054026', 0, 3, 6, 15, 15, 25), (50, 2, 2, 3, '2026-11-15 14:54:35.4863456', '2026-11-15 14:54:37.628959', 0, 2, 2, 14, 14, 25)]
+  fazlar [(24, 1, 4, 5, 0, 5, 1, 'Ön hazırlık vardiya başında yapıldı.', 120), (25, 2, 4, 5, 0, 5, 1, 'Son kontrol iki kişiyle yapıldı.', 60)]
+  molalar [(3, 14, None, '2026-11-15 14:54:27.742848', '2026-11-15 14:54:32.0152491', 14, 1)]
+  versiyon [(7,)] malzeme [('L2027-002', '2027-09-30', 0, None), ('L2026-001', '2026-06-30', 1, 'SKT geçmiş, depo onayıyla kullanıldı.')]
+
+== K1/K2/K6: detay (Yönetici)
+  detay 200 4746 karakter; rozet Doğrulandı
+  olay sayısı DB 18 | detaydaki olay satırı 18
+  olay türleri ['RecordOpened', 'MaterialAdded', 'MaterialAdded', 'ParticipantAdded', 'ParticipantAdded', 'StepStarted', 'StepFinished', 'StepStarted', 'StepFinished', 'PhaseCompleted', 'BreakStarted', 'BreakEnded', 'StepStarted', 'StepFinished', 'StepStarted', 'StepFinished', 'PhaseCompleted', 'RecordCompleted']
+
+== K4: makine adı değişince eski ad
+  ad değişti 302 [('Karıştırıcı yeni adı', 1)]
+  detayda eski ad "QA makine M10": True | yeni ad görünüyor mu: False
+  listede makine metni: ['QA makine M10']
+
+== K5 liste süzgeçleri
+  op11 varsayılan: ['T1-H1-M10-P2026-1'] | beklenen (sahip ya da görevli) ['T1-H1-M10-P2026-1'] | eşit True
+  op12 varsayılan: ['T1-H1-M10-P2026-1'] | beklenen (sahip ya da görevli) ['T1-H1-M10-P2026-1'] | eşit True
+  op20 varsayılan: [] | beklenen (sahip ya da görevli) [] | eşit True
+  op12 mineOnly=false: 11 kayıt / 11 toplam | 11 kayıt
+  m1 ?status=4                                          -> 3 kayıt, beklenen 3, eşit True
+  m1 ?kind=1                                            -> 11 kayıt, beklenen 11, eşit True
+  m1 ?machineId=13                                      -> 1 kayıt, beklenen 1, eşit True
+  m1 ?query=T1-H1-M10-P2026-1                           -> 1 kayıt, beklenen 1, eşit True
+  m1 ?query=T1-SD-2026-6                                -> 1 kayıt, beklenen 1, eşit True
+  m1 ?query=IE-2026-0610                                -> 1 kayıt, beklenen 1, eşit True
+  m1 ?query=L2027-002                                   -> 4 kayıt, beklenen 4, eşit True
+  m1 ?query=l2027-002&status=4                          -> 3 kayıt, beklenen 3, eşit True
+  m1 ?facilityId=1&lineId=1&machineId=13&status=4&kind=1 -> 1 kayıt, beklenen 1, eşit True
+  m1 ?from=2026-11-15&to=2026-11-15                     -> 11 kayıt, beklenen 11, eşit True
+  m1 ?from=2026-11-16                                   -> 0 kayıt, beklenen 0, eşit True
+  m1 ?query=%25                                         -> 0 kayıt, beklenen 0, eşit True
+  sayfalama pageSize=2: sayfa1 ['T1-H1-M10-P2026-1', 'T1-H1-M17-P2026-1'] sayfa2 ['T1-H1-M08-P2026-1', 'T1-H1-M09-P2026-1'] | ayrık True | 11 kayıt
+  sayfa bağlantıları: ['/records?page=1&mineOnly=false', '/records?page=3&mineOnly=false']
+
+== Müdahaleler
+  K15 Açıldı iptal -> 302 /records/details/12 | durum 6 kapanış [(1, 2, 'Üretim planı değişti, temizlik ertelendi.', '2026-11-15 14:54:41.0935078')] | olay + 1 RecordCancelled
+  aynı makinede yeni kayıt: T1-H1-M11-P2026-1 -> T1-H1-M11-P2026-2 | eski kayıt duruyor: 1
+  K15 devam eden adımlı iptal -> 302 /records/details/14 | kayıt 6 | adım 1 4 2026-11-15 14:54:42.2496479 2026-11-15 14:54:46.3878611 süre 4 efor 8 | bitiş = kapanış True | fazlar [5, 5] | IsWorking 0 | olaylar ['StepStarted', 'StepInterrupted', 'RecordCancelled']
+  pano M12: M12 QA makine M12 Boş Kayıt açılabilir. M13 QA makine M13 Bo
+
+== K22 F5-B1: açık molada yürütme ekranı art arda (op2)
+  sayaçlar (running, saniye): [[('true', '0'), ('false', '1')], [('true', '0'), ('false', '1')], [('true', '1'), ('false', '1')], [('true', '1'), ('false', '1')], [('true', '2'), ('false', '1')], [('true', '2'), ('false', '1')]]
+  K15 açık molalı iptal -> 302 /records/details/15 | mola [(4, 18, None, '2026-11-15 14:54:48.2979128', '2026-11-15 14:54:51.2363461', 2, 3)] | kayıt 6 | olaylar ['BreakStarted', 'BreakEnded', 'RecordCancelled']
+  op15 /my-work (mola kilidi kalktı mı): (200, '')
+  Devam ediyor türler: ['1', '2']
+  K16 yarıda kapatma -> 302 /records/details/16 | durum 7 [(2,)] | makine 17 açık kayıt 0
+  K16 Açıldı türler: ['1']
+  K16 Açıldı yarıda kapatma POST -> 200 İşlem yapılmadı Açıldı durumundaki kayıt yarıda kapatılamaz, yalnız iptal edilir. | olay + 0 | durum 1
+
+== K17 yönetici mola bitirme (op18, makine 19)
+  op18 /my-work molada: (302, '/breaks/current')
+  detayda "Molayı bitir" bağlantısı: True
+  K19 gerekçesiz mola bitirme -> 200 İşlem yapılmadı Gerekçe yazın. | olay + 0 | mola açık True
+  K19 yanlış PIN mola bitirme -> 200 İşlem yapılmadı PIN hatalı. | olay + 0 | PIN sayacı 0 -> 1
+  K17/G9 mola bitirme iki gönderim -> (302, '/records/details/18') (302, '/records/details/18') | mola (5, 21, None, '2026-11-15 14:54:54.3452734', '2026-11-15 14:54:54.6908258', 2, 2) [('Operatör sahadan ayrıldı, mola yöneticice kapatıldı.',)] | istek anı (UTC) 2026-11-15 14:54:54.582 | olay + 1 | son olay BreakEnded {"BreakId":5,"EndKind":"Manager","DurationSeconds":0,"Reason":"Operat\u00F6r sahadan ayr\u0131ld\u0131, mola y\u00F6neticice kapat\u0131ld\u0131."}
+  op18 /my-work sonra: (200, '') | adım 2 başlatabilir mi: 302
+  detay mola satırı: Molalar Kayıt molaları, 1 mola Mola Başlangıç Bitiş Süre Kapanış QA Operatör 18 Gerekçe: Operatör sahadan ayrıldı, mola yöneticice kapatıldı. 15.11.2026 17:54 15.11.2026 17:54 0 sn Yönetici bitirdi Test Yönetici Malzemeler ve lotlar Bu kayıtta malzeme girilmed
+
+== K19 ret yolları
+  tamamlanmış kayıt formu: NOFORM Müdahale Kaydı iptal edin ya da yarıda kapatın. Gerekçe ve PIN'iniz gerekir, işlem geri alınamaz. Müdahale yapılamaz Kayıt tamamlandı, müdahale edilemez. Kayıt ayrıntısına dön Kayıt Kayıt no T1-H1-M10
+  doğrudan POST Tamamlandı -> 200  Bağlantı yok. Kayıt, onay ve kullanıcı değiştirme yapılamaz. Bağlantı gelince bu uyarı kapanır, işlemi yeniden yapın. | olay + 0 | durum 4
+  doğrudan POST İptal edildi -> 200  Bağlantı yok. Kayıt, onay ve kullanıcı değiştirme yapılamaz. Bağlantı gelince bu uyarı kapanır, işlemi yeniden yapın. | olay + 0 | durum 6
+  doğrudan POST Yarıda kapatıldı -> 200  Bağlantı yok. Kayıt, onay ve kullanıcı değiştirme yapılamaz. Bağlantı gelince bu uyarı kapanır, işlemi yeniden yapın. | olay + 0 | durum 7
+  gerekçesiz iptal -> 200 İşlem yapılmadı Gerekçe yazın. {'Reason': 'Gerekçe yazın.'} | olay + 0 | durum 1
+  501 karakter -> 200 İşlem yapılmadı Gerekçe en çok 500 karakter olabilir. | olay + 0
+  türsüz -> 200 İşlem yapılmadı Müdahale türünü seçin. | olay + 0
+  yanlış PIN -> 200 İşlem yapılmadı PIN hatalı. | olay + 0 | PIN sayacı 0 -> 1
+  G9 iptal iki gönderim -> (302, '/records/details/19') (302, '/records/details/19') | olay + 1 | RecordCancelled 1 | komut satırı 1
+
+== K21 olay günlüğü ve bütünlük müdahaleden sonra
+  kayıt 12 6 | rozet Doğrulandı | bütünlük Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zin | son olay DB RecordCancelled {"Reason":"\u00DCretim plan\u0131 de\u011Fi\u015Fti, temizlik ertelendi.","ClosureKind":1,"InterruptedStepId":null}
+  kayıt 14 6 | rozet Doğrulandı | bütünlük Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zin | son olay DB RecordCancelled {"Reason":"Makine ar\u0131zas\u0131, temizlik durduruldu.","ClosureKind":1,"InterruptedStepId":59}
+  kayıt 15 6 | rozet Doğrulandı | bütünlük Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zin | son olay DB RecordCancelled {"Reason":"Mola s\u0131ras\u0131nda iptal: hat kapand\u0131.","ClosureKind":1,"InterruptedStepId":null}
+  kayıt 16 7 | rozet Doğrulandı | bütünlük Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zin | son olay DB RecordAborted {"Reason":"Kimyasal bitti, temizlik yar\u0131da kald\u0131.","ClosureKind":2,"InterruptedStepId":67}
+  kayıt 18 2 | rozet Doğrulandı | bütünlük Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zin | son olay DB StepStarted {"StepId":76,"Title":"Alan\u0131 haz\u0131rla","FirstStep":false,"FieldBookRef":"T1-SD-2026-10","ParticipantUserIds":[21
+  kayıt 19 6 | rozet Doğrulandı | bütünlük Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zin | son olay DB RecordCancelled {"Reason":"G9 denemesi: ayn\u0131 komut iki kez.","ClosureKind":1,"InterruptedStepId":null}
+  kayıt 11 4 | rozet Doğrulandı | bütünlük Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zin | son olay DB RecordCompleted {"GrossSeconds":15,"BreakSeconds":4,"NetSeconds":11,"EffortSeconds":16}
+
+== K20 SC-16
+  X yarıda kapatma -> 302 /records/details/13 7
+  Y sahibi P'yi başlamamış adımdan çıkardı -> 302 [(13,)]
+  pasifleştirme -> 302 /users  | aktif [(0,)]
+  sahipler önce (23, 13) sonra (23, 13)
+
+== K19 kilit bitişi geçmiş Açıldı kayıtta iptal: {'rid': 10, 'res': (200, '', 'Bağlantı yok. Kayıt, onay ve kullanıcı değiştirme yapılamaz. Bağlantı gelince bu uyarı kapanır, işlemi yeniden yapın.', 1, 5, '2026-11-15 14:55:15.0645901', '2026-11-15 14:55:15.0645901', ['RecordOpened', 'RecordTimedOut'])}
+
+== Kapanmış kayıtlara doğrudan müdahale POST'u (ret metinleri)
+11 Tamamlandı: "Kayıt tamamlandı, müdahale edilemez." | 12 İptal edildi: "Kayıt zaten iptal edildi." | 16 Yarıda kapatıldı: "Kayıt zaten yarıda kapatıldı." | 10 Zaman aşımı: "Kayıt zaman aşımına düştü."; hepsinde olay +0, 200
+
+== K1 R1 detay metni (Yönetici, kayıt 11)
+Kayıt ayrıntısı Kaydın soruları, olay günlüğü ve bütünlük sonucu. Süreler net süredir, molalar düşülmüştür. Yazdır Kayıtlara dön Denetim çıktısı T1-H1-M10-P2026-1 Oluşturan Test Yönetici Oluşturulma 15.11.2026 17:54:37 Prosedür versiyonu Versiyon 4, doküman PRS-TM-014 Rev.3 Bütünlük Doğrulandı Kayıt bilgisi T1-H1-M10-P2026-1 M10 - QA makine M10 Planlı Tamamlandı Doğrulandı Tesis T1 - Ana tesis Hat H1 - Hazırlık hattı Makine M10 - QA makine M10 Temizlik tipi Kısa planlı temizlik Prosedür versiyonu Versiyon 4 Versiyon içeriğini aç Doküman no PRS-TM-014 Rev.3 İş emri IE-2026-0610 Saha defteri T1-SD-2026-6 Açıklama QA Süreler İlk adımın başlangıcından ölçülür Net süre 11 sn Brüt süre 15 sn Mola 4 sn Bekletme - Efor (kişi süresi) 16 sn Fazlar ve adımlar Faz 1: Hazırlık Tamamlandı - süre altında Minimum 2 dk Brüt 5 sn Mola 0 sn Net 5 sn Faz minimum sürenin altında tamamlandı Gerekçe: Ön hazırlık vardiya başında yapıldı. 1. Makineyi durdur Tamamlandı v3 açıklaması: yeni sürüm metni. ornek.jpg Fotoğraf ornek.mp4 Video Medya: 2 dosya Başlangıç 15.11.2026 17:54 QA Operatör 12 Bitiş 15.11.2026 17:54 QA Operatör 11 Süre 3 sn Efor 6 sn Görevliler QA Operatör 11 2011 Ekleyen QA Operatör 11, onay 15.11.2026 17:54 QA Operatör 12 2012 Ekleyen QA Operatör 11, onay 15.11.2026 17:54 2. Alanı hazırla Tamamlandı Başlangıç 15.11.2026 17:54 QA Operatör 11 Bitiş 15.11.2026 17:54 QA Operatör 11 Süre 2 sn Efor 2 sn Görevliler QA Operatör 11 2011 Ekleyen QA Operatör 11, onay 15.11.2026 17:54 Faz 2: Temizlik ve kontrol Tamamlandı - süre altında Minimum 1 dk Brüt 5 sn Mola 0 sn Net 5 sn Faz minimum sürenin altında tamamlandı Gerekçe: Son kontrol iki kişiyle yapıldı. 1. Yüzeyi sil Tamamlandı Başlangıç 15.11.2026 17:54 QA Operatör 12 Bitiş 15.11.2026 17:54 QA Operatör 12 Süre 3 sn Efor 6 sn Görevliler QA Operatör 11 2011 Ekleyen QA Operatör 11, onay 15.11.2026 17:54 QA Operatör 12 2012 Ekleyen QA Operatör 11, onay 15.11.2026 17:54 2. Alanı kontrol et ve teslim et Tamamlandı Başlangıç 15.11.2026 17:54 QA Operatör 11 Bitiş 15.11.2026 17:54 QA Operatör 11 Süre 2 sn Efor 2 sn Görevliler QA Operatör 11 2011 Ekleyen QA Operatör 11, onay 15.11.2026 17:54 Bütünlük Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zinciri ve durum alanları olaylarla tutarlı. Denetlenme: 15.11.2026 17:54 Doğrulama ayrıntısı Kişiler Kaydı açan (sorumlu) QA Operatör 11 2011 İlk adımı başlatan QA Operatör 12 Yardımcılar QA Operatör 12 2012 Zamanlar Açılış 15.11.2026 17:54 İlk adım başlangıcı 15.11.2026 17:54 Tamamlanma 15.11.2026 17:54 Kapanış - Molalar Kayıt molaları, 1 mola Mola Başlangıç Bitiş Süre Kapanış QA Operatör 11 15.11.2026 17:54 15.11.2026 17:54 4 sn Kişi bitirdi QA Operatör 11 Malzemeler ve lotlar Kayıtta kullanılan malzemeler, 2 satır Malzeme Lot no SKT Giren Giriş zamanı MLZ001 Yüzey dezenfektanı L2027-002 30.09.2027 QA Operatör 11 15.11.2026 17:54 MLZ001 Yüzey dezenfektanı SKT geçmiş girildi. Gerekçe: SKT geçmiş, depo onayıyla kullanıldı. L2026-001 30.06.2026 SKT geçmiş QA Operatör 11 15.11.2026 17:54 Olay günlüğü Kaydın olay günlüğü, 18 olay, sunucu zamanıyla Sıra Zaman Yapan Olay Özet 1 15.11.2026 17:54:17 QA Operatör 11 Kayıt açıldı Kayıt no T1-H1-M10-P2026-1, versiyon 4, iş emri IE-2026-0610 2 15.11.2026 17:54:17 QA Operatör 11 Malzeme eklendi Lot L2027-002 3 15.11.2026 17:54:18 QA Operatör 11 Malzeme eklendi Lot L2026-001, SKT geçmiş: SKT geçmiş, depo onayıyla kullanıldı. 4 15.11.2026 17:54:18 QA Operatör 11 Görevli eklendi QA Operatör 12, Makineyi durdur 5 15.11.2026 17:54:18 QA Operatör 11 Görevli eklendi QA Operatör 12, Yüzeyi sil 6 15.11.2026 17:54:21 QA Operatör 12 Adım başladı Makineyi durdur, saha referansı T1-SD-2026-6 7 15.11.2026 17:54:24 QA Operatör 11 Adım bitti Makineyi durdur, süre 3 sn, efor 6 sn 8 15.11.2026 17:54:25 QA Operatör 11 Adım başladı Alanı hazırla 9 15.11.2026 17:54:27 QA Operatör 11 Adım bitti Alanı hazırla, süre 2 sn, efor 2 sn 10 15.11.2026 17:54:27 QA Operatör 11 Faz değerlendirildi Net 5 sn, süre altı: Ön hazırlık vardiya başında yapıldı. 11 15.11.2026 17:54:27 QA Operatör 11 Mola başladı Mola açıldı 12 15.11.2026 17:54:32 QA Operatör 11 Mola bitti Kişi bitirdi, süre 4 sn 13 15.11.2026 17:54:32 QA Operatör 12 Adım başladı Yüzeyi sil 14 15.11.2026 17:54:35 QA Operatör 12 Adım bitti Yüzeyi sil, süre 3 sn, efor 6 sn 15 15.11.2026 17:54:35 QA Operatör 11 Adım başladı Alanı kontrol et ve teslim et 16 15.11.2026 17:54:37 QA Operatör 11 Adım bitti Alanı kontrol et ve teslim et, süre 2 sn, efor 2 sn 17 15.11.2026 17:54:37 QA Operatör 11 Faz değerlendirildi Net 5 sn, süre altı: Son kontrol iki kişiyle yapıldı. 18 15.11.2026 17:54:37 QA Operatör 11 Kayıt tamamlandı Brüt 15 sn, mola 4 sn, net 11 sn, efor 16 sn Bu sayfa 15.11.2026 17:54:37 anında Test Yönetici için oluşturuldu.
+
+DB: StepParticipants.ConfirmedAtUtc kayıt 11'in 6 görevli satırında NULL; detay "onay 15.11.2026 17:54" yazıyor (B1).
+
+== K3: kayıt 3 (v2) detayı v3 yayınlandıktan sonra "Minimum 1 dk", "v2 açıklaması..." ve 2 medya gösteriyor (v3: 2 dk, "v3 açıklaması")
+
+== K5 boş durumlar: Yönetici ?query=zzzz "Filtreye uyan kayıt yok"; op2 varsayılan "Sahibi ya da görevlisi olduğunuz kayıt yok ... Tüm kayıtları göster" (mineOnly seçili true)
+
+== K7 bütünlük bozma, Development kopyaları ve 5604 (k7.py; tetikleyiciler kaldırılmadı)
+== değişiklik yok (kontrol) k7z.db
+  bütünlük 200 | Sonuç Doğrulandı Kayıt oluştuğundan beri değişmedi. Olay zinciri baştan sona doğrulandı ve kayıttaki zaman, kişi ve malzeme alanları olaylardaki değerlerle aynı. Kayıt T1
+  değişen alanlar: yok
+  sorunlu olay satırları: []
+  detay rozeti: ihlal False | Doğrulandı True
+== iş emri k7a.db
+  bütünlük 200 | Sonuç Bütünlük ihlali Kayıtta değişiklik saptandı. 1 alan olaylardaki değerden farklı. Bulguyu sistem yöneticisine iletin. Kayıt ve olaylar bu ekrandan değiştirilemez. Ka
+  değişen alanlar: Değişen alanlar Kayıtta saklanan değer ile ilgili olayın taşıdığı değer karşılaştırıldı. Saklanan değeri olaydan farklı olan alanlar Alan ve olay Saklanan değer Olaydaki değer İş emri no Olay sırası 1 IE-DEV-9999 IE-DEV-0701 
+  sorunlu olay satırları: []
+  detay rozeti: ihlal True | Doğrulandı False
+== malzeme lot no k7b.db
+  bütünlük 200 | Sonuç Bütünlük ihlali Kayıtta değişiklik saptandı. 1 alan olaylardaki değerden farklı. Bulguyu sistem yöneticisine iletin. Kayıt ve olaylar bu ekrandan değiştirilemez. Ka
+  değişen alanlar: Değişen alanlar Kayıtta saklanan değer ile ilgili olayın taşıdığı değer karşılaştırıldı. Saklanan değeri olaydan farklı olan alanlar Alan ve olay Saklanan değer Olaydaki değer Malzeme, lot L2027-999: lot no Olay sırası 2 L2027-999 L2027-002 
+  sorunlu olay satırları: []
+  detay rozeti: ihlal True | Doğrulandı False
+== sahte olay eklendi (son olayın kopyası, yükü değişik) k7c.db
+  bütünlük 200 | Sonuç Bütünlük ihlali Kayıtta değişiklik saptandı. İlk tutarsız olay sırası 17 . Bulguyu sistem yöneticisine iletin. Kayıt ve olaylar bu ekrandan değiştirilemez. Kayıt T1
+  değişen alanlar: yok
+  sorunlu olay satırları: ['17 Kayıt tamamlandı Özet, olaydaki değerlerle uyuşmuyor. 15.11.2026 17:56:44 6139d74b8025 Sorunlu']
+  detay rozeti: ihlal True | Doğrulandı False
+== adımı başlatan kişi k7d.db
+  bütünlük 200 | Sonuç Bütünlük ihlali Kayıtta değişiklik saptandı. 1 alan olaylardaki değerden farklı. Bulguyu sistem yöneticisine iletin. Kayıt ve olaylar bu ekrandan değiştirilemez. Ka
+  değişen alanlar: Değişen alanlar Kayıtta saklanan değer ile ilgili olayın taşıdığı değer karşılaştırıldı. Saklanan değeri olaydan farklı olan alanlar Alan ve olay Saklanan değer Olaydaki değer Faz 1, adım 1 (Makineyi durdur): başlatan Olay sırası 4 Test Yönetici (1001) Test Operatör 2 (2002) 
+  sorunlu olay satırları: []
+  detay rozeti: ihlal True | Doğrulandı False
+== adım başlangıç zamanı (tetikleyici beklenir): SQL reddedildi -> Başlamış ya da bitmiş adımın zamanı değiştirilemez.
+== olay yükü UPDATE (tetikleyici beklenir): SQL reddedildi -> Olay günlüğü değiştirilemez.

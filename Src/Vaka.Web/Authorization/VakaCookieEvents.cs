@@ -2,6 +2,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Security.Claims;
 using Vaka.Web.Services;
 
 namespace Vaka.Web.Authorization;
@@ -13,17 +14,20 @@ public sealed class VakaCookieEvents : CookieAuthenticationEvents
     private readonly ISystemSettingsReader _settings;
     private readonly IAccountService _accounts;
     private readonly IDurationCalculator _durations;
+    private readonly ISessionRevocations _revocations;
     private readonly TimeProvider _time;
 
     public VakaCookieEvents(
         ISystemSettingsReader settings,
         IAccountService accounts,
         IDurationCalculator durations,
+        ISessionRevocations revocations,
         TimeProvider time)
     {
         _settings = settings;
         _accounts = accounts;
         _durations = durations;
+        _revocations = revocations;
         _time = time;
     }
 
@@ -48,6 +52,13 @@ public sealed class VakaCookieEvents : CookieAuthenticationEvents
             return;
         }
 
+        var sessionId = context.Principal!.FindFirstValue(VakaClaimTypes.SessionId);
+        if (sessionId is null || _revocations.IsRevoked(sessionId))
+        {
+            await EndSessionAsync(context, SessionEndReason.SignedOut);
+            return;
+        }
+
         var sessionMinutes = await _settings.GetValueAsync(SettingKeys.SessionMinutes, cancellationToken);
         if (_durations.IsSessionIdle(lastRequestAt, now, sessionMinutes))
         {
@@ -64,11 +75,21 @@ public sealed class VakaCookieEvents : CookieAuthenticationEvents
 
         if (IdentityChanged(context, state))
         {
-            context.ReplacePrincipal(AccountPrincipal.Create(state, context.Scheme.Name));
+            context.ReplacePrincipal(AccountPrincipal.Create(state, context.Scheme.Name, sessionId));
         }
 
         context.Properties.Items[LastRequestKey] = now.ToString("O", CultureInfo.InvariantCulture);
         context.ShouldRenew = true;
+    }
+
+    /// <summary>Çıkışta oturum kimliği iptal listesine girer; aynı kullanıcının başka tarayıcıdaki oturumu kendi kimliğiyle sürer (K23).</summary>
+    public override async Task SigningOut(CookieSigningOutContext context)
+    {
+        if (context.HttpContext.User.FindFirstValue(VakaClaimTypes.SessionId) is { } sessionId)
+        {
+            var sessionMinutes = await _settings.GetValueAsync(SettingKeys.SessionMinutes, context.HttpContext.RequestAborted);
+            _revocations.Revoke(sessionId, sessionMinutes);
+        }
     }
 
     public override Task RedirectToLogin(RedirectContext<CookieAuthenticationOptions> context)

@@ -1,0 +1,92 @@
+Faz 6 teslim testi, 2026-11-15. main çalışma ağacı (HEAD 08a4975). Ön tur 1 Release .qa/f6/build; düzeltme sonrası ön tur 2 ve teslim testi .qa/f6/build2. Port 5601 Production, DB .qa/f6/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5603 Development (.qa/f6/qa-dev.db) ve 5604 Development (K7 bozulmuş kopyaları), user-secrets anahtarı. Saatler: DB UTC, ekran Türkiye (UTC+3). Test PIN ve parolası yazılmadı.
+Ortam notu: Production anahtarı süreç başına üretildiği için 5601 yeniden başlatılınca önceki süreçte yazılmış kayıtların HMAC doğrulaması düşer (kayıt 1-10 "ihlal"). Bütünlük kanıtları yalnız aynı süreçte yazılan kayıtlarla (11 ve sonrası) ve sabit anahtarlı Development kopyalarıyla alındı.
+Ham istek, yönlendirme izlenmeden (mx6.py). "302>403": access-denied ve 403 sayfası.
+
+== oturumsuz
+  GET / 302 /account/login
+  GET /records 302 /account/login
+  GET /records/details/11 302 /account/login
+  GET /records/integrity/11 302 /account/login
+  GET /interventions/create?recordId=20 302 /account/login
+  GET /interventions/end-break/999 302 /account/login
+  GET /records/details/99999 302 /account/login
+  GET /prototype/run 404
+  GET /prototype/my-work 404
+  POST /interventions/create?recordId=20 belirteçli 302 /account/login | belirteçsiz 302 /account/login
+  POST /interventions/end-break/999 belirteçli 302 /account/login | belirteçsiz 302 /account/login
+== Operatör (op11, kaydın sahibi)
+  GET / 302 /my-work
+  GET /records 200
+  GET /records/details/11 200
+  GET /records/integrity/11 302>403
+  GET /interventions/create?recordId=20 302>403
+  GET /interventions/end-break/999 302>403
+  GET /records/details/99999 404
+  GET /prototype/run 404
+  GET /prototype/my-work 404
+  POST /interventions/create?recordId=20 belirteçli 302>403 | belirteçsiz 302>403
+  POST /interventions/end-break/999 belirteçli 302>403 | belirteçsiz 302>403
+== Operatör (op2, yabancı)
+  GET / 302 /my-work
+  GET /records 200
+  GET /records/details/11 200
+  GET /records/integrity/11 302>403
+  GET /interventions/create?recordId=20 302>403
+  GET /interventions/end-break/999 302>403
+  GET /records/details/99999 404
+  GET /prototype/run 404
+  GET /prototype/my-work 404
+  POST /interventions/create?recordId=20 belirteçli 302>403 | belirteçsiz 302>403
+  POST /interventions/end-break/999 belirteçli 302>403 | belirteçsiz 302>403
+== Yönetici (m1)
+  GET / 302 /records
+  GET /records 200
+  GET /records/details/11 200
+  GET /records/integrity/11 200
+  GET /interventions/create?recordId=20 200
+  GET /interventions/end-break/999 404
+  GET /records/details/99999 404
+  GET /prototype/run 404
+  GET /prototype/my-work 404
+  POST /interventions/create?recordId=20 belirteçli 200 | belirteçsiz 400
+  POST /interventions/end-break/999 belirteçli 404 | belirteçsiz 400
+== Denetçi (au)
+  GET / 302 /records
+  GET /records 200
+  GET /records/details/11 200
+  GET /records/integrity/11 200
+  GET /interventions/create?recordId=20 302>403
+  GET /interventions/end-break/999 302>403
+  GET /records/details/99999 404
+  GET /prototype/run 404
+  GET /prototype/my-work 404
+  POST /interventions/create?recordId=20 belirteçli 302>403 | belirteçsiz 302>403
+  POST /interventions/end-break/999 belirteçli 302>403 | belirteçsiz 302>403
+== Süper admin (sa)
+  GET / 302 /users
+  GET /records 302>403
+  GET /records/details/11 302>403
+  GET /records/integrity/11 302>403
+  GET /interventions/create?recordId=20 302>403
+  GET /interventions/end-break/999 302>403
+  GET /records/details/99999 302>403
+  GET /prototype/run 404
+  GET /prototype/my-work 404
+  POST /interventions/create?recordId=20 belirteçli 302>403 | belirteçsiz 302>403
+  POST /interventions/end-break/999 belirteçli 302>403 | belirteçsiz 302>403
+olay sayısı Yr değişmedi mi: 3 1
+pano bağlantıları m1 200 ['/records/details/17', '/records/details/18', '/records/details/20'] | menü ['/records']
+pano bağlantıları au 200 ['/records/details/17', '/records/details/18', '/records/details/20'] | menü ['/records']
+pano bağlantıları op11 200 ['/records/run/17', '/records/run/18', '/records/run/20'] | menü ['/records', '/my-work']
+pano bağlantıları sa 302 [] | menü []
+
+== K23
+  iki ayrı oturum girişi (302, '/') (302, '/') | ikisi /my-work (200, '') (200, '')
+  A çıkış (302, '/account/login?reason=signed-out')
+  A eski çerezle /my-work -> (302, '/account/login?ReturnUrl=%2Fmy-work&reason=signed-out') | /records -> (302, '/account/login?ReturnUrl=%2Frecords&reason=signed-out')
+  B (aynı kullanıcı, diğer oturum) /my-work -> (200, '')
+
+== K23 yeniden başlatma sonrası (5601 aynı yayın, yeni süreç)
+B oturumu (çıkış yapılmamış) /my-work -> 200
+A eski çerezi (çıkış yapılmış) /my-work -> 200 (iptal listesi bellekte, yeniden başlatmada boşaldı; PL-71 sınırı)
+Yönetici eski çerezi /records -> 200

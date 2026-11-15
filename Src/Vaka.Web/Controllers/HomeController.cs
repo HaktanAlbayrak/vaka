@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vaka.Web.Authorization;
@@ -17,7 +16,12 @@ public sealed class HomeController : Controller
             return RedirectToAction("Index", "MyWork");
         }
 
-        var roles = User.FindAll(ClaimTypes.Role).Select(claim => claim.Value).ToArray();
+        if (User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Auditor))
+        {
+            return RedirectToAction("Index", "Records");
+        }
+
+        var roles = User.GetRoles();
         if (roles.All(role => role == Roles.SuperAdmin))
         {
             return RedirectToAction("Index", "Users");

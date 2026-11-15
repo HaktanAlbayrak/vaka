@@ -16,6 +16,7 @@ import { MediaViewer } from "./MediaViewer.js";
 import { TypePicker } from "./TypePicker.js";
 import { LotPicker } from "./LotPicker.js";
 import { CommandForm } from "./CommandForm.js";
+import { PrintButton } from "./PrintButton.js";
 
 document.documentElement.dataset.js = "true";
 new ThemeToggle(document.querySelector("[data-theme-toggle]"));
@@ -39,6 +40,7 @@ function bindContent(root) {
   root.querySelectorAll("[data-editor-host]").forEach((host) => new ProcedureEditor(host));
   root.querySelectorAll("[data-media-dialog]").forEach((dialog) => new MediaViewer(dialog));
   root.querySelectorAll("form[data-command-form]").forEach((form) => new CommandForm(form));
+  root.querySelectorAll("[data-print]").forEach((button) => new PrintButton(button));
   bindBusyLinks(root);
 }
 

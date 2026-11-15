@@ -1,0 +1,213 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Records
+@inject IDurationFormatter DurationFormatter
+@model RecordListViewModel
+@{
+    ViewData["Title"] = "Kayıtlar";
+    ViewData["Lead"] = "Temizlik kayıtlarını arayın, süzün ve ayrıntısını açın. Süreler net süredir, molalar düşülmüştür.";
+    ViewData["NavKey"] = "records";
+
+    var filter = Model.Filter;
+    var fromText = filter.From?.ToString("yyyy-MM-dd") ?? "";
+    var toText = filter.To?.ToString("yyyy-MM-dd") ?? "";
+    var kindValue = (int?)filter.Kind;
+    var statusValue = (int?)filter.Status;
+    var hasFilter = !string.IsNullOrWhiteSpace(filter.Query) || filter.FacilityId is not null || filter.LineId is not null || filter.MachineId is not null
+        || filter.Kind is not null || filter.Status is not null || filter.From is not null || filter.To is not null;
+
+    string PageHref(int target) =>
+        "/records?page=" + target
+        + (string.IsNullOrWhiteSpace(filter.Query) ? "" : "&query=" + Uri.EscapeDataString(filter.Query))
+        + (filter.FacilityId is null ? "" : "&facilityId=" + filter.FacilityId)
+        + (filter.LineId is null ? "" : "&lineId=" + filter.LineId)
+        + (filter.MachineId is null ? "" : "&machineId=" + filter.MachineId)
+        + (kindValue is null ? "" : "&kind=" + kindValue)
+        + (statusValue is null ? "" : "&status=" + statusValue)
+        + (fromText == "" ? "" : "&from=" + fromText)
+        + (toText == "" ? "" : "&to=" + toText)
+        + "&mineOnly=" + (filter.MineOnly ? "true" : "false");
+
+}
+
+<form method="get" action="/records" class="panel mb-5" aria-label="Kayıt filtresi" data-busy-form>
+    <div class="grid gap-4 p-4 sm:grid-cols-2 md:p-5 xl:grid-cols-4">
+        <div class="field sm:col-span-2">
+            <label class="field-label" for="query">Kayıt no, saha referansı, iş emri ya da lot no</label>
+            <input id="query" name="query" type="search" class="input" value="@filter.Query" autocomplete="off" spellcheck="false" inputmode="search" />
+        </div>
+        <div class="field">
+            <label class="field-label" for="mineOnly">Kapsam</label>
+            <div class="select-wrap">
+                <select id="mineOnly" name="mineOnly" class="input">
+                    <option value="true" selected="@filter.MineOnly">Benim kayıtlarım</option>
+                    <option value="false" selected="@(!filter.MineOnly)">Tüm kayıtlar</option>
+                </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
+        </div>
+        <div class="field">
+            <label class="field-label" for="status">Durum</label>
+            <div class="select-wrap">
+                <select id="status" name="status" class="input">
+                    <option value="">Tüm durumlar</option>
+                    @foreach (var option in Model.StatusOptions)
+                    {
+                        <option value="@option.Id" selected="@(option.Id == statusValue)">@option.Label</option>
+                    }
+                </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
+        </div>
+        <div class="field">
+            <label class="field-label" for="facilityId">Tesis</label>
+            <div class="select-wrap">
+                <select id="facilityId" name="facilityId" class="input">
+                    <option value="">Tüm tesisler</option>
+                    @foreach (var facility in Model.Facilities)
+                    {
+                        <option value="@facility.Id" selected="@(facility.Id == filter.FacilityId)">@facility.Label</option>
+                    }
+                </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
+        </div>
+        <div class="field">
+            <label class="field-label" for="lineId">Hat</label>
+            <div class="select-wrap">
+                <select id="lineId" name="lineId" class="input">
+                    <option value="">Tüm hatlar</option>
+                    @foreach (var line in Model.Lines)
+                    {
+                        <option value="@line.Id" selected="@(line.Id == filter.LineId)">@line.Label</option>
+                    }
+                </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
+        </div>
+        <div class="field">
+            <label class="field-label" for="machineId">Makine</label>
+            <div class="select-wrap">
+                <select id="machineId" name="machineId" class="input">
+                    <option value="">Tüm makineler</option>
+                    @foreach (var machine in Model.Machines)
+                    {
+                        <option value="@machine.Id" selected="@(machine.Id == filter.MachineId)">@machine.Label</option>
+                    }
+                </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
+        </div>
+        <div class="field">
+            <label class="field-label" for="kind">Tür</label>
+            <div class="select-wrap">
+                <select id="kind" name="kind" class="input">
+                    <option value="">Planlı ve acil</option>
+                    @foreach (var option in Model.KindOptions)
+                    {
+                        <option value="@option.Id" selected="@(option.Id == kindValue)">@option.Label</option>
+                    }
+                </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
+        </div>
+        <div class="field">
+            <label class="field-label" for="from">Açılış, başlangıç</label>
+            <input id="from" name="from" type="date" class="input" value="@fromText" autocomplete="off" />
+        </div>
+        <div class="field">
+            <label class="field-label" for="to">Açılış, bitiş</label>
+            <input id="to" name="to" type="date" class="input" value="@toText" autocomplete="off" />
+        </div>
+        <div class="flex flex-wrap items-end gap-2 sm:col-span-2 xl:col-span-3 xl:justify-end">
+            <button type="submit" class="btn btn-primary min-h-12">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#funnel" /></svg>
+                Filtrele
+            </button>
+            <a class="btn btn-secondary min-h-12" href="/records">Filtreleri temizle</a>
+        </div>
+    </div>
+</form>
+
+<partial name="_ListSkeleton" />
+
+<div data-loading-target>
+    @if (Model.Items.Length == 0)
+    {
+        if (hasFilter)
+        {
+            <partial name="_State" model='("empty", "search", "Filtreye uyan kayıt yok", "Aramayı ya da süzgeçleri gevşetin. Lot no, kayıt no, saha referansı ve iş emri aramada birlikte taranır.", "Filtreleri temizle", "/records")' />
+        }
+        else if (filter.MineOnly)
+        {
+            <partial name="_State" model='("empty", "clipboard-list", "Sahibi ya da görevlisi olduğunuz kayıt yok", "Kendi kayıtlarınız burada listelenir. Diğer kayıtları görmek için kapsamı Tüm kayıtlar yapın.", "Tüm kayıtları göster", "/records?mineOnly=false")' />
+        }
+        else
+        {
+            <partial name="_State" model='("empty", "clipboard-list", "Henüz kayıt yok", "Kayıtlar operatörler temizlik kaydı açtıkça burada listelenir.", (string?)null, (string?)null)' />
+        }
+    }
+    else
+    {
+        <div class="panel">
+            <table class="data-table table-stack">
+                <caption class="sr-only">Temizlik kayıtları, toplam @Model.Total kayıt, sayfa @Model.Page</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Kayıt no</th>
+                        <th scope="col">Makine ve yer</th>
+                        <th scope="col">Sahip</th>
+                        <th scope="col">Durum</th>
+                        <th scope="col">Açılış</th>
+                        <th scope="col" class="text-right">Net süre</th>
+                        <th scope="col">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td data-label=""><span class="record-no text-sm xl:whitespace-nowrap">@item.RecordNo</span>@if (!string.IsNullOrEmpty(item.FieldBookRef)){<span class="mono mt-0.5 block text-xs text-muted">@item.FieldBookRef</span>}</td>
+                            <td data-label="Makine ve yer" class="stack-wide stack-lead max-w-md break-words">
+                                <span class="font-semibold">@item.MachineLabel</span>
+                                <span class="mt-0.5 block text-sm text-muted">@item.FacilityName, @item.LineName. @item.CleaningTypeName, versiyon @item.VersionNo</span>
+                            </td>
+                            <td data-label="Sahip" class="max-w-[12rem] break-words">@item.OwnerName</td>
+                            <td data-label="Durum" class="md:max-xl:col-span-2">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <partial name="_Badge" model='"CleaningTypeKind." + item.Kind' />
+                                    <partial name="_Badge" model='"RecordStatus." + item.Status' />
+                                    @if (item.HasBelowMinimum)
+                                    {
+                                        <span class="chip"><svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>Süre altı faz</span>
+                                    }
+                                    @if (item.HasExpiredMaterial)
+                                    {
+                                        <span class="chip"><svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#timer-off" /></svg>SKT geçmiş malzeme</span>
+                                    }
+                                </div>
+                            </td>
+                            <td data-label="Açılış"><partial name="_Moment" model='(item.OpenedAtLocal, DateTime.MinValue)' /></td>
+                            <td data-label="Net süre" class="num whitespace-nowrap">
+                                @if (item.NetSeconds is { } net)
+                                {
+                                    <partial name="_Duration" model="DurationFormatter.Format(net)" />
+                                }
+                                else
+                                {
+                                    <span aria-label="Net süre yok">-</span>
+                                }
+                            </td>
+                            <td data-label="İşlem" class="cell-action md:max-xl:col-span-4">
+                                <a class="btn btn-secondary" href="@item.Url" data-busy-link aria-label="@item.RecordNo kaydının ayrıntısı">
+                                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#file-text" /></svg>
+                                    Ayrıntı
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <partial name="_Pagination" model='(Model.Page, Model.PageSize, Model.Total, "kayıt", (Func<int, string>)PageHref)' />
+        </div>
+    }
+</div>

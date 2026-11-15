@@ -1,0 +1,89 @@
+@using Vaka.Web.ViewModels.Interventions
+@model EndBreakViewModel
+@{
+    ViewData["Title"] = "Molayı bitir";
+    ViewData["Lead"] = "Açık molayı yönetici olarak bitirin. Gerekçe ve PIN'iniz gerekir.";
+    ViewData["NavKey"] = "records";
+
+    var detailsUrl = "/records/details/" + Model.RecordId;
+    var reasonError = ViewData.ModelState.TryGetValue("Reason", out var reasonEntry) && reasonEntry.Errors.Count > 0 ? reasonEntry.Errors[0].ErrorMessage : null;
+}
+
+<div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+    <div class="min-w-0 space-y-5">
+        @if (Model.BlockReason is not null)
+        {
+            <partial name="_State" model='("empty", "lock", "Mola bitirilemez", Model.BlockReason, "Kayıt ayrıntısına dön", detailsUrl)' />
+        }
+        else
+        {
+            <section class="panel panel-tag border-t-warn" aria-labelledby="end-break-title">
+                <div class="panel-head">
+                    <h2 id="end-break-title" class="panel-title">Mola kapanışı</h2>
+                    <partial name="_Badge" model='"break.open"' />
+                </div>
+                <div class="panel-body">
+                    <form method="post" action="/interventions/end-break/@Model.BreakId" class="space-y-5" data-validate data-command-form asp-antiforgery="true">
+                        <partial name="_FormSummary" model='"İşlem yapılmadı"' />
+                        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                        {
+                            <div class="notice notice-danger" role="alert" tabindex="-1" data-form-summary>
+                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+                                <div class="min-w-0">
+                                    <p class="font-semibold">İşlem yapılmadı</p>
+                                    <p class="mt-0.5 text-sm">@Model.ErrorMessage</p>
+                                </div>
+                            </div>
+                        }
+                        <input type="hidden" name="CommandId" value="@Model.CommandId" />
+                        <p>Mola bitiş anı, bu işlemi yaptığınız andır. Kayıttaki adım Devam ediyor durumunda kalır ve sayaçlar yeniden işler. Molayı başlatan kişinin yazma kilidi kalkar.</p>
+
+                        <div class="field" data-field>
+                            <label class="field-label" for="Reason">Gerekçe</label>
+                            <textarea id="Reason" name="Reason" class="input" rows="4" autocomplete="off" required data-required-message="Gerekçeyi yazın."
+                                      aria-describedby="@(reasonError is null ? "Reason-hint" : "Reason-hint Reason-error")" aria-invalid="@(reasonError is null ? null : "true")">@Model.Reason</textarea>
+                            <p id="Reason-hint" class="field-hint">Molayı neden siz bitirdiğinizi yazın. Gerekçe mola satırında ve olay günlüğünde görünür.</p>
+                            @if (reasonError is not null)
+                            {
+                                <partial name="_FieldError" model='("Reason-error", reasonError)' />
+                            }
+                        </div>
+
+                        <div class="grid gap-3 md:max-w-md">
+                            <partial name="_PinInput" model='("pin-end-break", "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                            <div class="notice notice-danger" role="alert" data-command-status hidden>
+                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                                <p class="font-semibold" data-command-message></p>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] md:max-w-xl">
+                            <button type="submit" class="btn btn-primary btn-lg whitespace-nowrap" data-requires-online>
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#coffee" /></svg>
+                                Molayı bitir
+                            </button>
+                            <a class="btn btn-secondary btn-lg" href="@detailsUrl">Vazgeç</a>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        }
+    </div>
+
+    <aside class="min-w-0" aria-label="Mola bağlamı">
+        <section class="panel" aria-labelledby="context-title">
+            <div class="panel-head"><h2 id="context-title" class="panel-title">Mola</h2></div>
+            <div class="panel-body">
+                <dl class="kv grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
+                    <div><dt>Kayıt no</dt><dd class="mono break-all">@Model.RecordNo</dd></div>
+                    <div><dt>Başlatan</dt><dd>@Model.StartedByName</dd></div>
+                    <div><dt>Başlangıç</dt><dd><partial name="_Moment" model='(Model.StartedAtLocal, DateTime.MinValue)' /></dd></div>
+                    @if (!string.IsNullOrEmpty(Model.DuringStepTitle))
+                    {
+                        <div><dt>Mola anındaki adım</dt><dd>@Model.DuringStepTitle</dd></div>
+                    }
+                </dl>
+            </div>
+        </section>
+    </aside>
+</div>

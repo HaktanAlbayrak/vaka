@@ -1,0 +1,201 @@
+Faz 6 teslim testi, 2026-11-15. main çalışma ağacı (HEAD 08a4975). Ön tur 1 Release .qa/f6/build; düzeltme sonrası ön tur 2 ve teslim testi .qa/f6/build2. Port 5601 Production, DB .qa/f6/qa.db (App_Data/vaka.db SQLite yedekleme API kopyası + DemoData.sql), EventChain__HmacKey yalnız sunucu sürecinde üretilen rastgele 32 bayt (yazılmadı). Port 5603 Development (.qa/f6/qa-dev.db) ve 5604 Development (K7 bozulmuş kopyaları), user-secrets anahtarı. Saatler: DB UTC, ekran Türkiye (UTC+3). Test PIN ve parolası yazılmadı.
+Ortam notu: Production anahtarı süreç başına üretildiği için 5601 yeniden başlatılınca önceki süreçte yazılmış kayıtların HMAC doğrulaması düşer (kayıt 1-10 "ihlal"). Bütünlük kanıtları yalnız aynı süreçte yazılan kayıtlarla (11 ve sonrası) ve sabit anahtarlı Development kopyalarıyla alındı.
+
+== Ön tur 1 (build): mekanik eval
+===== mm 128
+  KALDI /records/details/3 360x800-light ['small:Versiyon içeriğini aç 138x20']
+  KALDI /records/details/5 360x800-light ['small:Versiyon içeriğini aç 138x20']
+  KALDI /records/details/8 360x800-light ['small:Versiyon içeriğini aç 138x20']
+  KALDI /records/details/9 360x800-light ['small:Versiyon içeriğini aç 138x20']
+  KALDI /records/details/7 360x800-light ['small:Versiyon içeriğini aç 138x20']
+  KALDI /interventions/create?recordId=4 360x800-light ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=6 360x800-light ['small:Type 20x20']
+  KALDI /records/details/3 768x1024-light ['small:Versiyon içeriğini aç 215x20']
+  KALDI /records/details/5 768x1024-light ['small:Versiyon içeriğini aç 215x20']
+  KALDI /records/details/8 768x1024-light ['small:Versiyon içeriğini aç 215x20']
+  KALDI /records/details/9 768x1024-light ['small:Versiyon içeriğini aç 215x20']
+  KALDI /records/details/7 768x1024-light ['small:Versiyon içeriğini aç 215x20']
+  KALDI /interventions/create?recordId=4 768x1024-light ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=6 768x1024-light ['small:Type 20x20']
+  KALDI /interventions/create?recordId=4 1024x768-light ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=6 1024x768-light ['small:Type 20x20']
+  KALDI /records/details/3 1440x900-light ['small:Versiyon içeriğini aç 216x20']
+  KALDI /records/details/5 1440x900-light ['small:Versiyon içeriğini aç 216x20']
+  KALDI /records/details/8 1440x900-light ['small:Versiyon içeriğini aç 216x20']
+  KALDI /records/details/9 1440x900-light ['small:Versiyon içeriğini aç 216x20']
+  KALDI /records/details/7 1440x900-light ['small:Versiyon içeriğini aç 216x20']
+  KALDI /interventions/create?recordId=4 1440x900-light ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=6 1440x900-light ['small:Type 20x20']
+  KALDI /records/details/3 360x800-dark ['small:Versiyon içeriğini aç 138x20']
+  KALDI /records/details/5 360x800-dark ['small:Versiyon içeriğini aç 138x20']
+  KALDI /records/details/8 360x800-dark ['small:Versiyon içeriğini aç 138x20']
+  KALDI /records/details/9 360x800-dark ['small:Versiyon içeriğini aç 138x20']
+  KALDI /records/details/7 360x800-dark ['small:Versiyon içeriğini aç 138x20']
+  KALDI /interventions/create?recordId=4 360x800-dark ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=6 360x800-dark ['small:Type 20x20']
+  KALDI /records/details/3 768x1024-dark ['small:Versiyon içeriğini aç 215x20']
+  KALDI /records/details/5 768x1024-dark ['small:Versiyon içeriğini aç 215x20']
+  KALDI /records/details/8 768x1024-dark ['small:Versiyon içeriğini aç 215x20']
+  KALDI /records/details/9 768x1024-dark ['small:Versiyon içeriğini aç 215x20']
+  KALDI /records/details/7 768x1024-dark ['small:Versiyon içeriğini aç 215x20']
+  KALDI /interventions/create?recordId=4 768x1024-dark ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=6 768x1024-dark ['small:Type 20x20']
+  KALDI /interventions/create?recordId=4 1024x768-dark ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=6 1024x768-dark ['small:Type 20x20']
+  KALDI /records/details/3 1440x900-dark ['small:Versiyon içeriğini aç 216x20']
+  KALDI /records/details/5 1440x900-dark ['small:Versiyon içeriğini aç 216x20']
+  KALDI /records/details/8 1440x900-dark ['small:Versiyon içeriğini aç 216x20']
+  KALDI /records/details/9 1440x900-dark ['small:Versiyon içeriğini aç 216x20']
+  KALDI /records/details/7 1440x900-dark ['small:Versiyon içeriğini aç 216x20']
+  KALDI /interventions/create?recordId=4 1440x900-dark ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=6 1440x900-dark ['small:Type 20x20']
+  sınıflar {'temiz': 82, 'small': 46} kontrast>= 5.28 topbar<= 64
+===== ma 24
+  KALDI /records/details/3 360x800-light ['small:Versiyon içeriğini aç 138x20']
+  KALDI /records/details/3 768x1024-light ['small:Versiyon içeriğini aç 215x20']
+  KALDI /records/details/3 1440x900-light ['small:Versiyon içeriğini aç 216x20']
+  KALDI /records/details/3 360x800-dark ['small:Versiyon içeriğini aç 138x20']
+  KALDI /records/details/3 768x1024-dark ['small:Versiyon içeriğini aç 215x20']
+  KALDI /records/details/3 1440x900-dark ['small:Versiyon içeriğini aç 216x20']
+  sınıflar {'temiz': 18, 'small': 6} kontrast>= 5.28 topbar<= 64
+===== mo 24
+  sınıflar {'temiz': 24} kontrast>= 5.28 topbar<= 64
+===== me 8
+  sınıflar {'temiz': 8} kontrast>= 5.95 topbar<= 64
+===== mn 32
+  KALDI /records/details/3 360x800-light-jsoff ['small:Versiyon içeriğini aç 138x20']
+  KALDI /interventions/create?recordId=4 360x800-light-jsoff ['small:Type 20x20;Type 20x20']
+  KALDI /records/details/3 768x1024-light-jsoff ['small:Versiyon içeriğini aç 215x20']
+  KALDI /interventions/create?recordId=4 768x1024-light-jsoff ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=4 1024x768-light-jsoff ['small:Type 20x20;Type 20x20']
+  KALDI /records/details/3 1440x900-light-jsoff ['small:Versiyon içeriğini aç 216x20']
+  KALDI /interventions/create?recordId=4 1440x900-light-jsoff ['small:Type 20x20;Type 20x20']
+  KALDI /records/details/3 360x800-dark-jsoff ['small:Versiyon içeriğini aç 138x20']
+  KALDI /interventions/create?recordId=4 360x800-dark-jsoff ['small:Type 20x20;Type 20x20']
+  KALDI /records/details/3 768x1024-dark-jsoff ['small:Versiyon içeriğini aç 215x20']
+  KALDI /interventions/create?recordId=4 768x1024-dark-jsoff ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=4 1024x768-dark-jsoff ['small:Type 20x20;Type 20x20']
+  KALDI /records/details/3 1440x900-dark-jsoff ['small:Versiyon içeriğini aç 216x20']
+  KALDI /interventions/create?recordId=4 1440x900-dark-jsoff ['small:Type 20x20;Type 20x20']
+  sınıflar {'temiz': 18, 'small': 14} kontrast>= 5.28 topbar<= 64
+===== rg 104
+  sınıflar {'temiz': 104} kontrast>= 5.28 topbar<= 64
+===== ro 32
+  sınıflar {'temiz': 32} kontrast>= 5.28 topbar<= 64
+===== rb 8
+  sınıflar {'temiz': 8} kontrast>= 5.58 topbar<= 64
+KALDI satırları: "Versiyon içeriğini aç" 20 px (YÜKSEK, düzeltildi) ve müdahale formu tür radyoları 20x20 (label.choice içinde, kabul)
+
+== Ön tur 1: Zaman hücresi taşması (j-ovf)
+320 /records/details/3 [{"cellW":122,"textW":160,"overRight":37.6,"overlapsNext":null,"txt":"15.11.2026 17:36:57","overflowX":"visible"},{"cellW":122,"textW":160,"overRight":37.6,"overlapsNext":null,"txt":"15.11.2026 17:36:59","overflowX":"visible"}]
+320 /records/integrity/7 [{"cellW":122,"textW":160,"overRight":37.6,"overlapsNext":null,"txt":"15.11.2026 17:37:21","overflowX":"visible"}]
+360 /records/details/3 [{"cellW":142,"textW":160,"overRight":17.6,"overlapsNext":null,"txt":"15.11.2026 17:36:57","overflowX":"visible"},{"cellW":142,"textW":160,"overRight":17.6,"overlapsNext":null,"txt":"15.11.2026 17:36:59","overflowX":"visible"}]
+360 /records/integrity/7 [{"cellW":142,"textW":160,"overRight":17.6,"overlapsNext":null,"txt":"15.11.2026 17:37:21","overflowX":"visible"}]
+390 /records/details/3 [{"cellW":157,"textW":160,"overRight":2.6,"overlapsNext":null,"txt":"15.11.2026 17:36:57","overflowX":"visible"},{"cellW":157,"textW":160,"overRight":2.6,"overlapsNext":null,"txt":"15.11.2026 17:36:59","overflowX":"visible"}]
+390 /records/integrity/7 [{"cellW":157,"textW":160,"overRight":2.6,"overlapsNext":null,"txt":"15.11.2026 17:37:21","overflowX":"visible"}]
+414 /records/details/3 [{"cellW":169,"textW":160,"overRight":-9.4,"overlapsNext":null,"txt":"15.11.2026 17:36:57","overflowX":"visible"},{"cellW":169,"textW":160,"overRight":-9.4,"overlapsNext":null,"txt":"15.11.2026 17:36:59","overflowX":"visible"}]
+414 /records/integrity/7 [{"cellW":169,"textW":160,"overRight":-9.4,"overlapsNext":null,"txt":"15.11.2026 17:37:21","overflowX":"visible"}]
+768 /records/details/3 [{"cellW":161,"textW":160,"overRight":-1.4,"overlapsNext":-17.4,"txt":"15.11.2026 17:36:57","overflowX":"visible"},{"cellW":161,"textW":160,"overRight":-1.4,"overlapsNext":-17.4,"txt":"15.11.2026 17:36:59","overflowX":"visible"}]
+768 /records/integrity/7 [{"cellW":161,"textW":160,"overRight":-1.4,"overlapsNext":null,"txt":"15.11.2026 17:37:21","overflowX":"visible"}]
+
+== Ön tur 2 (build2, düzeltme sonrası): mekanik eval (Faz 6 ekranları, Faz 4-5 _Moment kullanan ekranlar, 1920/1280/390 reduced-motion/%200 zoom)
+===== m2 88
+  KALDI /interventions/create?recordId=4 360x800-light ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=4 768x1024-light ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=4 1024x768-light ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=4 1440x900-light ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=4 360x800-dark ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=4 768x1024-dark ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=4 1024x768-dark ['small:Type 20x20;Type 20x20']
+  KALDI /interventions/create?recordId=4 1440x900-dark ['small:Type 20x20;Type 20x20']
+  sınıflar {'temiz': 80, 'small': 8} kontrast>= 5.28 topbar<= 64
+===== m2o 40
+  sınıflar {'temiz': 40} kontrast>= 5.43 topbar<= 64
+===== m2b 8
+  sınıflar {'temiz': 8} kontrast>= 5.58 topbar<= 64
+===== m2x 32
+  sınıflar {'temiz': 32} kontrast>= 5.28 topbar<= 64
+===== x6 30
+  KALDI /interventions/create?recordId=20 1920x1080-light ['small:Type 20x20']
+  KALDI /interventions/create?recordId=20 1280x900-light ['small:Type 20x20']
+  KALDI /interventions/create?recordId=20 390x844-light-reduce ['small:Type 20x20']
+  KALDI /interventions/create?recordId=20 320x640-light-zoom200 ['small:Type 20x20']
+  KALDI /interventions/create?recordId=20 640x400-dark-zoom200 ['small:Type 20x20']
+  sınıflar {'temiz': 25, 'small': 5} kontrast>= 5.28 topbar<= 64
+KALDI satırları yalnız tür radyoları (kabul)
+
+== Ön tur 2: Zaman hücresi (j-ovf2): 320/360/390/414/768 taşma 0
+320 /records/details/3 [{"cellW":122,"textW":84,"overRight":-38,"overlapsNext":null,"txt":"15.11.2026 17:36:57","overflowX":"visible"},{"cellW":122,"textW":84,"overRight":-38,"overlapsNext":null,"txt":"15.11.2026 17:36:59","overflowX":"visible"}]
+320 /records/integrity/7 [{"cellW":122,"textW":84,"overRight":-38,"overlapsNext":null,"txt":"15.11.2026 17:37:21","overflowX":"visible"}]
+320 /records/details/5 [{"cellW":122,"textW":84,"overRight":-38,"overlapsNext":null,"txt":"15.11.2026 17:37:19","overflowX":"visible"},{"cellW":122,"textW":84,"overRight":-38,"overlapsNext":null,"txt":"15.11.2026 17:37:19","overflowX":"visible"}]
+360 /records/details/3 [{"cellW":142,"textW":84,"overRight":-58,"overlapsNext":null,"txt":"15.11.2026 17:36:57","overflowX":"visible"},{"cellW":142,"textW":84,"overRight":-58,"overlapsNext":null,"txt":"15.11.2026 17:36:59","overflowX":"visible"}]
+360 /records/integrity/7 [{"cellW":142,"textW":84,"overRight":-58,"overlapsNext":null,"txt":"15.11.2026 17:37:21","overflowX":"visible"}]
+360 /records/details/5 [{"cellW":142,"textW":84,"overRight":-58,"overlapsNext":null,"txt":"15.11.2026 17:37:19","overflowX":"visible"},{"cellW":142,"textW":84,"overRight":-58,"overlapsNext":null,"txt":"15.11.2026 17:37:19","overflowX":"visible"}]
+390 /records/details/3 [{"cellW":157,"textW":84,"overRight":-73,"overlapsNext":null,"txt":"15.11.2026 17:36:57","overflowX":"visible"},{"cellW":157,"textW":84,"overRight":-73,"overlapsNext":null,"txt":"15.11.2026 17:36:59","overflowX":"visible"}]
+390 /records/integrity/7 [{"cellW":157,"textW":84,"overRight":-73,"overlapsNext":null,"txt":"15.11.2026 17:37:21","overflowX":"visible"}]
+390 /records/details/5 [{"cellW":157,"textW":84,"overRight":-73,"overlapsNext":null,"txt":"15.11.2026 17:37:19","overflowX":"visible"},{"cellW":157,"textW":84,"overRight":-73,"overlapsNext":null,"txt":"15.11.2026 17:37:19","overflowX":"visible"}]
+414 /records/details/3 [{"cellW":169,"textW":160,"overRight":-9.4,"overlapsNext":null,"txt":"15.11.2026 17:36:57","overflowX":"visible"},{"cellW":169,"textW":160,"overRight":-9.4,"overlapsNext":null,"txt":"15.11.2026 17:36:59","overflowX":"visible"}]
+414 /records/integrity/7 [{"cellW":169,"textW":160,"overRight":-9.4,"overlapsNext":null,"txt":"15.11.2026 17:37:21","overflowX":"visible"}]
+414 /records/details/5 [{"cellW":169,"textW":160,"overRight":-9.4,"overlapsNext":null,"txt":"15.11.2026 17:37:19","overflowX":"visible"},{"cellW":169,"textW":160,"overRight":-9.4,"overlapsNext":null,"txt":"15.11.2026 17:37:19","overflowX":"visible"}]
+768 /records/details/3 [{"cellW":161,"textW":160,"overRight":-1.4,"overlapsNext":-17.4,"txt":"15.11.2026 17:36:57","overflowX":"visible"},{"cellW":161,"textW":160,"overRight":-1.4,"overlapsNext":-17.4,"txt":"15.11.2026 17:36:59","overflowX":"visible"}]
+768 /records/integrity/7 [{"cellW":161,"textW":160,"overRight":-1.4,"overlapsNext":null,"txt":"15.11.2026 17:37:21","overflowX":"visible"}]
+768 /records/details/5 [{"cellW":161,"textW":160,"overRight":-1.4,"overlapsNext":-17.4,"txt":"15.11.2026 17:37:19","overflowX":"visible"},{"cellW":161,"textW":160,"overRight":-1.4,"overlapsNext":-17.4,"txt":"15.11.2026 17:37:19","overflowX":"visible"}]
+
+== G11 imzaları (ön tur 2, ilk satır)
+/records 360x800-light card minH 294 | Makine ve yer:2@1 (boş):1@2 Sahip:1@2 Durum:1@3 Açılış:1@3 Net süre:1@4 İşlem:1@4
+/records/details/{id} 360x800-light card minH 184 | Mola:2@1 Başlangıç:1@2 Bitiş:1@2 Süre:1@3 Kapanış:1@3
+/records/details/{id} 360x800-light card minH 156 | Malzeme:2@1 Lot no:1@2 SKT:1@2 Giren:1@3 Giriş zamanı:1@3
+/records/details/{id} 360x800-light card minH 176 | Özet:2@1 Sıra:1@2 Zaman:1@2 Yapan:1@3 Olay:1@3
+/records/integrity/{id} 360x800-light card minH 206 | Olay:2@1 Sıra:1@2 Zaman:1@2 Özet kodu:1@3 Durum:1@3
+/records/integrity/{id} 360x800-light card minH 114 | (boş):2@1 Saklanan değer:1@2 Olaydaki değer:1@2
+/records 768x1024-light card minH 192 | (boş):1@1 Makine ve yer:2@1 Sahip:1@1 Durum:2@2 Açılış:1@2 Net süre:1@2 İşlem:4@3
+/records/details/{id} 768x1024-light card minH 138 | Mola:2@1 Başlangıç:1@1 Bitiş:1@1 Süre:2@2 Kapanış:2@2
+/records/details/{id} 768x1024-light card minH 110 | Malzeme:2@1 Lot no:1@1 SKT:1@1 Giren:2@2 Giriş zamanı:2@2
+/records/details/{id} 768x1024-light card minH 110 | Sıra:1@1 Zaman:1@1 Yapan:2@1 Olay:2@2 Özet:2@2
+/records/integrity/{id} 768x1024-light card minH 140 | Sıra:1@1 Olay:2@1 Zaman:1@1 Özet kodu:2@2 Durum:2@2
+/records/integrity/{id} 768x1024-light card minH 68 | (boş):2@1 Saklanan değer:1@1 Olaydaki değer:1@1
+/records 1024x768-light card minH 192 | (boş):1@1 Makine ve yer:2@1 Sahip:1@1 Durum:2@2 Açılış:1@2 Net süre:1@2 İşlem:4@3
+/records/details/{id} 1024x768-light card minH 138 | Mola:2@1 Başlangıç:1@1 Bitiş:1@1 Süre:2@2 Kapanış:2@2
+/records/details/{id} 1024x768-light card minH 110 | Malzeme:2@1 Lot no:1@1 SKT:1@1 Giren:2@2 Giriş zamanı:2@2
+/records/details/{id} 1024x768-light card minH 110 | Sıra:1@1 Zaman:1@1 Yapan:2@1 Olay:2@2 Özet:2@2
+/records/integrity/{id} 1024x768-light card minH 140 | Sıra:1@1 Olay:2@1 Zaman:1@1 Özet kodu:2@2 Durum:2@2
+/records/integrity/{id} 1024x768-light card minH 68 | (boş):2@1 Saklanan değer:1@1 Olaydaki değer:1@1
+/records 1440x900-light table minH 87 | (boş):1@1 Makine ve yer:1@1 Sahip:1@1 Durum:1@1 Açılış:1@1 Net süre:1@1 İşlem:1@1
+/records/details/{id} 1440x900-light table minH 73 | Mola:1@1 Başlangıç:1@1 Bitiş:1@1 Süre:1@1 Kapanış:1@1
+/records/details/{id} 1440x900-light table minH 56 | Malzeme:1@1 Lot no:1@1 SKT:1@1 Giren:1@1 Giriş zamanı:1@1
+/records/details/{id} 1440x900-light table minH 56 | Sıra:1@1 Zaman:1@1 Yapan:1@1 Olay:1@1 Özet:1@1
+/records/integrity/{id} 1440x900-light table minH 67 | Sıra:1@1 Olay:1@1 Zaman:1@1 Özet kodu:1@1 Durum:1@1
+/records/integrity/{id} 1440x900-light table minH 67 | (boş):1@1 Saklanan değer:1@1 Olaydaki değer:1@1
+
+== Faz 1-4 G11 (g11f3.py)
+G11: aynı 72 farklı 0
+
+== Yazdırma, perde, rol düğmeleri (ön tur, misc6/misc6b)
+yazdır m1 kayıt 3: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":false,"olusturan":"","butunluk":"Doğrulandı","olaySatir":19,"sorular":["Tesis","Hat","Kaydı açan","İlk adımı başlatan","Başla","Bit","Efor","İş emri","Doküman"]} | PDF A4 sayfa 5, 332204 bayt
+yazdır au kayıt 3: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":false,"olusturan":"","butunluk":"Doğrulandı","olaySatir":19,"sorular":["Tesis","Hat","Kaydı açan","İlk adımı başlatan","Başla","Bit","Efor","İş emri","Doküman"]} | PDF A4 sayfa 5, 332137 bayt
+yazdır op3 kayıt 3: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":false,"olusturan":"","butunluk":"Doğrulandı","olaySatir":19,"sorular":["Tesis","Hat","Kaydı açan","İlk adımı başlatan","Başla","Bit","Efor","İş emri","Doküman"]} | PDF A4 sayfa 5, 330955 bayt
+yazdır m1 kayıt 9: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":false,"olusturan":"","butunluk":"Doğrulandı","olaySatir":4,"sorular":["Tesis","Hat","Kaydı açan","İlk adımı başlatan","Görevli","Başla","Bit","Net","Brüt","Efor","Lot","SKT","İş emri","Tamamlan","Doküman"]} | PDF A4 sayfa 4, 304752 bayt
+yazdır m1 kayıt 7: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":false,"olusturan":"","butunluk":"Bütünlük ihlali","olaySatir":2,"sorular":["Tesis","Hat","Kaydı açan","İlk adımı başlatan","Görevli","Başla","Bit","Net","Brüt","Efor","Lot","İş emri","Tamamlan","Doküman"]} | PDF A4 sayfa 5, 306690 bayt
+
+yazdır m1 kayıt 3: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | Test Yönetici | Oluşturulma | 15.11.2026 17:42:50 | Prosedür versiyonu | Ve","butunluk":"Doğrulandı","olaySatir":19,"sorular":["Doküman"]} | PDF A4 sayfa 5, 332205 bayt
+yazdır au kayıt 3: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | Test Denetçi | Oluşturulma | 15.11.2026 17:42:51 | Prosedür versiyonu | Ver","butunluk":"Doğrulandı","olaySatir":19,"sorular":["Doküman"]} | PDF A4 sayfa 5, 332132 bayt
+yazdır op3 kayıt 3: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | QA Operatör 3 | Oluşturulma | 15.11.2026 17:42:52 | Prosedür versiyonu | Ve","butunluk":"Doğrulandı","olaySatir":19,"sorular":["Doküman"]} | PDF A4 sayfa 5, 330956 bayt
+yazdır m1 kayıt 9: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | Test Yönetici | Oluşturulma | 15.11.2026 17:42:52 | Prosedür versiyonu | Ve","butunluk":"Doğrulandı","olaySatir":4,"sorular":["Lot","SKT","Doküman"]} | PDF A4 sayfa 4, 304756 bayt
+yazdır m1 kayıt 7: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | Test Yönetici | Oluşturulma | 15.11.2026 17:42:54 | Prosedür versiyonu | Ve","butunluk":"Bütünlük ihlali","olaySatir":2,"sorular":["Doküman"]} | PDF A4 sayfa 5, 306690 bayt
+çekmece perdesi koyu 360: {"bg":"rgba(4, 8, 12, 0.6)","gorunur":true}
+medya dialog perdesi koyu (Run, Yönetici Run erişemez: op5 ile ayrıca) {"open":true,"backdrop":"rgba(4, 8, 12, 0.7)","bg":"rgb(23, 30, 37)"}
+Run dialog perdesi light: {"backdrop":"rgba(10, 16, 22, 0.7)","bg":"rgb(247, 249, 250)","color":"rgb(20, 30, 40)"}
+Run dialog perdesi dark: {"backdrop":"rgba(4, 8, 12, 0.7)","bg":"rgb(23, 30, 37)","color":"rgb(228, 234, 239)"}
+düğmeler m1 kayıt 5: {"eylemler":["Yazdır","Kayıtlara dön","Müdahale et","Molayı bitir","Doğrulama ayrıntısı"],"integrityLink":true,"menuKayitlar":true}
+düğmeler au kayıt 5: {"eylemler":["Yazdır","Kayıtlara dön","Doğrulama ayrıntısı"],"integrityLink":true,"menuKayitlar":true}
+düğmeler op6 kayıt 5: {"eylemler":["Yazdır","Kayıtlara dön","Yürütme ekranına git"],"integrityLink":false,"menuKayitlar":true}
+düğmeler m1 kayıt 3: {"eylemler":["Yazdır","Kayıtlara dön","Doğrulama ayrıntısı"],"integrityLink":true,"menuKayitlar":true}
+düğmeler m1 kayıt 4: {"eylemler":["Yazdır","Kayıtlara dön","Müdahale et","Doğrulama ayrıntısı"],"integrityLink":true,"menuKayitlar":true}
+düğmeler op5 kayıt 4: {"eylemler":["Yazdır","Kayıtlara dön","Yürütme ekranına git"],"integrityLink":false,"menuKayitlar":true}
+
+== Yazdırma, teslim testi kayıtları (misc6c)
+yazdır m1 kayıt 11: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | Test Yönetici | Oluşturulma | 15.11.2026 18:05:12 | Prosedür versiyonu | Ve","butunluk":"Doğrulandı","olaySatir":21,"kapanis":"","dokuman":"PRS-TM-014 Rev.3 ","skt":"SKT geçmiş girildi. Gerekçe: SKT geçmiş, depo onayıyla kullanıldı. ","surealti":"Gerekçe: Ön hazırlık vardiya başında yapıldı. ","sorular":[]} | PDF A4 sayfa 5, 343069 bayt
+yazdır au kayıt 11: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | Test Denetçi | Oluşturulma | 15.11.2026 18:05:13 | Prosedür versiyonu | Ver","butunluk":"Doğrulandı","olaySatir":21,"kapanis":"","dokuman":"PRS-TM-014 Rev.3 ","skt":"SKT geçmiş girildi. Gerekçe: SKT geçmiş, depo onayıyla kullanıldı. ","surealti":"Gerekçe: Ön hazırlık vardiya başında yapıldı. ","sorular":[]} | PDF A4 sayfa 5, 343411 bayt
+yazdır op11 kayıt 11: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2,-2,-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | QA Operatör 11 | Oluşturulma | 15.11.2026 18:05:13 | Prosedür versiyonu | V","butunluk":"Doğrulandı","olaySatir":21,"kapanis":"","dokuman":"PRS-TM-014 Rev.3 ","skt":"SKT geçmiş girildi. Gerekçe: SKT geçmiş, depo onayıyla kullanıldı. ","surealti":"Gerekçe: Ön hazırlık vardiya başında yapıldı. ","sorular":[]} | PDF A4 sayfa 5, 342422 bayt
+yazdır m1 kayıt 22: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | Test Yönetici | Oluşturulma | 15.11.2026 18:05:14 | Prosedür versiyonu | Ve","butunluk":"Doğrulandı","olaySatir":2,"kapanis":"İptal edildi | Doğrulandı ","dokuman":"PRS-TM-014 Rev.3 ","skt":"","surealti":"Gerekçe: Plan değişti, temizlik ertelendi. ","sorular":["Lot","SKT"]} | PDF A4 sayfa 4, 306122 bayt
+yazdır m1 kayıt 16: {"navGizli":true,"topbarGizli":true,"altCubukGizli":true,"gorunurDugme":[],"hScroll":false,"tabloSagFark":[-2],"zemin":"rgb(255, 255, 255)","metin":"rgb(20, 30, 40)","denetim":true,"olusturan":"Oluşturan | Test Yönetici | Oluşturulma | 15.11.2026 18:05:14 | Prosedür versiyonu | Ve","butunluk":"Doğrulandı","olaySatir":4,"kapanis":"Yarıda kapatıldı | Doğrulandı ","dokuman":"PRS-TM-014 Rev.3 ","skt":"","surealti":"Gerekçe: Kimyasal bitti, temizlik yarıda kaldı. ","sorular":["Lot","SKT"]} | PDF A4 sayfa 4, 312397 bayt

@@ -15,6 +15,9 @@ public sealed class TurkeyClock : ITurkeyClock
     public DateTime ToLocal(DateTime utc) =>
         TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc), Zone);
 
+    public DateTime StartOfDayUtc(DateOnly day) =>
+        TimeZoneInfo.ConvertTimeToUtc(day.ToDateTime(TimeOnly.MinValue, DateTimeKind.Unspecified), Zone);
+
     public DateOnly Today() => DateOnly.FromDateTime(TimeZoneInfo.ConvertTime(_time.GetUtcNow(), Zone).DateTime);
 
     private static TimeZoneInfo FindZone()

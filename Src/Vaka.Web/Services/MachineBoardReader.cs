@@ -21,7 +21,7 @@ public sealed class MachineBoardReader : IMachineBoardReader
         _time = time;
     }
 
-    public async Task<MachineBoardViewModel> GetAsync(int? facilityId, bool viewerIsOperator, CancellationToken cancellationToken)
+    public async Task<MachineBoardViewModel> GetAsync(int? facilityId, IReadOnlyCollection<string> viewerRoles, CancellationToken cancellationToken)
     {
         await _timeouts.ApplyAsync(TimeoutScope.Everything, cancellationToken);
 
@@ -68,7 +68,7 @@ public sealed class MachineBoardReader : IMachineBoardReader
                 LineName = group.Key.LineName,
                 Machines = [.. group.Select(machine => ToItem(machine.Id, machine.Code, machine.Name, records.GetValueOrDefault(machine.Id) is { } record
                     ? (record.Id, record.RecordNo, record.Status, record.OwnerName, record.OpenedAtUtc, record.LockExpiresAtUtc)
-                    : null, viewerIsOperator))]
+                    : null, viewerRoles))]
             })
             .ToArray();
 
@@ -86,7 +86,7 @@ public sealed class MachineBoardReader : IMachineBoardReader
         string code,
         string name,
         (int Id, string RecordNo, RecordStatus Status, string OwnerName, DateTime OpenedAtUtc, DateTime? LockExpiresAtUtc)? record,
-        bool viewerIsOperator)
+        IReadOnlyCollection<string> viewerRoles)
     {
         if (record is not { } active)
         {
@@ -112,7 +112,7 @@ public sealed class MachineBoardReader : IMachineBoardReader
             OwnerName = active.OwnerName,
             OpenedAtLocal = _clock.ToLocal(active.OpenedAtUtc),
             LockExpiresAtLocal = state == MachineState.Opened && active.LockExpiresAtUtc is { } expires ? _clock.ToLocal(expires) : null,
-            RecordUrl = viewerIsOperator ? RecordLinks.Run(active.Id) : null
+            RecordUrl = RecordLinks.For(viewerRoles, active.Id)
         };
     }
 }

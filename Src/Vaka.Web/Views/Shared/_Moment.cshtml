@@ -1,2 +1,2 @@
 @model (DateTime Value, DateTime Reference)
-<time class="mono whitespace-nowrap" datetime="@Model.Value.ToString("yyyy-MM-dd'T'HH:mm")">@(Model.Value.Date == Model.Reference.Date ? Model.Value.ToString("HH:mm") : Model.Value.ToString("dd.MM.yyyy HH:mm"))</time>
+<time class="mono" datetime="@Model.Value.ToString("yyyy-MM-dd'T'HH:mm")">@if (Model.Value.Date == Model.Reference.Date){<span class="whitespace-nowrap">@Model.Value.ToString("HH:mm")</span>}else{<span class="whitespace-nowrap">@Model.Value.ToString("dd.MM.yyyy")</span><text> </text><span class="whitespace-nowrap">@Model.Value.ToString("HH:mm")</span>}</time>
