@@ -33,6 +33,7 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 
 | Tarih | Commit | Değişiklik |
 |---|---|---|
+| 2026-11-16 | 0552f38 | Düzeltme D-1: form hata yeri ve kart genişlikleri; sunum kayıtları hazırlandı |
 | 2026-11-16 | 3198d9e | Faz 6A: acil müdahale, süre ve efor raporu, malzeme izlenebilirliği; iş birimi dokümanının kalemleri tamamlandı |
 | 2026-11-16 | 8730e7e | Faz 6: kayıt listesi, 13 soruyu yanıtlayan detay ve denetim çıktısı, bütünlük doğrulaması, yönetici müdahalesi |
 | 2026-11-15 | 41379d3 | Faz 5: adım başlat ve bitir, görevli, adım arası mola, süre ve efor, süre altı gerekçe dialogu, kısa demo tipi |
