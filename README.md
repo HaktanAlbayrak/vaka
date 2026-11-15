@@ -33,6 +33,7 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 
 | Tarih | Commit | Değişiklik |
 |---|---|---|
+| 2026-11-15 | e867695 | Faz 3: temizlik tipi, makine eşleme, versiyonlu prosedür düzenleyici, PIN ile yayın, adım medyası |
 | 2026-11-14 | c3a4fd7 | Faz 2: tesis, hat, makine, vardiya, malzeme ve lot tanımları; Salı takvimine göre faz planı güncellendi |
 | 2026-11-14 | a3f6ec3 | Süreç: UI fazlarında tam testten önce QA yerleşim ön turu (rapor yok, tur sayılmaz) |
 | 2026-11-14 | 38d0b4e | Faz 1: giriş, ilk girişte parola ve PIN, PIN kilidi, kullanıcı yönetimi, Süper admin |
