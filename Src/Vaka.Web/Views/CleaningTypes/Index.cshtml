@@ -81,7 +81,7 @@
                     {
                         <tr>
                             <td data-label="Kod"><span class="record-no text-sm">@item.Code</span></td>
-                            <td data-label="Ad" class="max-w-xs break-words font-semibold stack-wide stack-lead">@item.Name</td>
+                            <td data-label="Ad" class="xl:max-w-xs break-words font-semibold stack-wide stack-lead">@item.Name</td>
                             <td data-label="Tür"><partial name="_LabelBadge" model='(item.KindLabel, item.Kind == CleaningTypeKind.Planned ? "kind.planned" : "kind.emergency")' /></td>
                             <td data-label="Versiyon" class="md:max-xl:col-span-2">
                                 <div class="space-y-1">

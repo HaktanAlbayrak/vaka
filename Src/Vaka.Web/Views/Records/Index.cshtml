@@ -167,11 +167,11 @@
                     {
                         <tr>
                             <td data-label=""><span class="record-no text-sm xl:whitespace-nowrap">@item.RecordNo</span>@if (!string.IsNullOrEmpty(item.FieldBookRef)){<span class="mono mt-0.5 block text-xs text-muted">@item.FieldBookRef</span>}</td>
-                            <td data-label="Makine ve yer" class="stack-wide stack-lead max-w-md break-words">
+                            <td data-label="Makine ve yer" class="stack-wide stack-lead xl:max-w-md break-words">
                                 <span class="font-semibold">@item.MachineLabel</span>
                                 <span class="mt-0.5 block text-sm text-muted">@item.FacilityName, @item.LineName. @item.CleaningTypeName, versiyon @item.VersionNo</span>
                             </td>
-                            <td data-label="Sahip" class="max-w-[12rem] break-words">@item.OwnerName</td>
+                            <td data-label="Sahip" class="xl:max-w-[12rem] break-words">@item.OwnerName</td>
                             <td data-label="Durum" class="md:max-xl:col-span-2">
                                 <div class="flex flex-wrap items-center gap-2">
                                     <partial name="_Badge" model='"CleaningTypeKind." + item.Kind' />

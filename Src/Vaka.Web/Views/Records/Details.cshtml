@@ -366,7 +366,7 @@
                         @foreach (var item in Model.Breaks)
                         {
                             <tr>
-                                <td data-label="Mola" class="stack-wide stack-lead max-w-md break-words">
+                                <td data-label="Mola" class="stack-wide stack-lead xl:max-w-md break-words">
                                     <span class="font-semibold">@item.StartedByName</span>
                                     @if (!string.IsNullOrEmpty(item.DuringStepTitle))
                                     {
@@ -416,7 +416,7 @@
                         @foreach (var material in Model.Materials)
                         {
                             <tr>
-                                <td data-label="Malzeme" class="stack-wide stack-lead max-w-md break-words">
+                                <td data-label="Malzeme" class="stack-wide stack-lead xl:max-w-md break-words">
                                     <span class="font-semibold"><span class="mono">@material.MaterialCode</span> @material.MaterialName</span>
                                     @if (material.ExpiredAtEntry)
                                     {
@@ -469,7 +469,7 @@
                                 <td data-label="Zaman"><time class="mono" datetime="@entry.OccurredAtLocal.ToString("yyyy-MM-dd'T'HH:mm:ss")"><span class="whitespace-nowrap">@entry.OccurredAtLocal.ToString("dd.MM.yyyy")</span> <span class="whitespace-nowrap">@entry.OccurredAtLocal.ToString("HH:mm:ss")</span></time></td>
                                 <td data-label="Yapan" class="break-words md:max-xl:col-span-2">@entry.ActorName</td>
                                 <td data-label="Olay" class="break-words font-semibold md:max-xl:col-span-2">@entry.EventLabel</td>
-                                <td data-label="Özet" class="log-summary stack-wide stack-lead max-w-xl md:max-xl:col-span-2">@entry.Summary</td>
+                                <td data-label="Özet" class="log-summary stack-wide stack-lead xl:max-w-xl md:max-xl:col-span-2">@entry.Summary</td>
                             </tr>
                         }
                     </tbody>

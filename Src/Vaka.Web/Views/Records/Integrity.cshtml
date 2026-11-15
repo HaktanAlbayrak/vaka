@@ -71,7 +71,7 @@
                         @foreach (var mismatch in Model.StateMismatches)
                         {
                             <tr>
-                                <td data-label="" class="stack-wide stack-lead max-w-md break-words">
+                                <td data-label="" class="stack-wide stack-lead xl:max-w-md break-words">
                                     <span class="font-semibold">@mismatch.Field</span>
                                     <span class="mt-0.5 block text-sm text-muted">Olay sırası <span class="mono">@mismatch.Sequence</span></span>
                                 </td>
@@ -111,7 +111,7 @@
                         {
                             <tr class="@(entry.IsValid ? "" : "bg-danger-soft/40")">
                                 <td data-label="Sıra" class="num whitespace-nowrap">@entry.Sequence</td>
-                                <td data-label="Olay" class="stack-wide stack-lead max-w-md break-words">
+                                <td data-label="Olay" class="stack-wide stack-lead xl:max-w-md break-words">
                                     <span class="font-semibold">@entry.EventLabel</span>
                                     @if (!entry.IsValid && !string.IsNullOrEmpty(entry.Problem))
                                     {

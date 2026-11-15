@@ -41,3 +41,9 @@ Mevcut token ve 2 px kenarlık/köşe, yeni ham renk ve token yok; acil vurgusu 
 
 ## Not
 Yalnız kendi sunucum (PID dosyası `.qa/fe/f6/pid`, port 5611) kapatıldı; temizlik için `pkill -f` ile kendi Chrome profil yoluma bakan bir komut da çalıştırdım (eşleşen süreç yoktu). Önceki not `mv` ile Archive'a taşındı; git indeksine dokunulmadı.
+
+## D-1 (PL-74, faz dışı düzeltme)
+- B1: `Views/CleaningTypes/Form.cshtml:45` `fieldset#Kind` artık `class="field space-y-2" data-field`; istemci "Tür seçin." hatası (`FormValidation.js` `closest("[data-field], .field")`) fieldset sonuna, radyo etiketinin dışına düşer. Hata kimliği `Kind-error`, sunucu hatasıyla aynı kimlik ve yer; `aria-describedby` sunucu hatasında fieldset'te, istemci hatasında radyoda.
+- B2: `max-w-md` ve `max-w-[12rem]` yalnız `xl:` önekiyle (tablo kipi): `Records/Index.cshtml` (Makine ve yer, Sahip), `Details.cshtml` (Mola, Malzeme), `Integrity.cshtml` (iki uzun hücre). Detaydaki 4 px farkın kaynağı `Details.cshtml:472` olay günlüğü "Özet" hücresinde önekiz kalan `max-w-xl` idi (D1-K1); `xl:max-w-xl` yapıldı. Önekiz `max-w` taşıyan başka `td` kalmadı (Views taraması). `xl:` altında sınır kalkar, G11 sütun/satır imzası değişmez (ızgara hücre izi `col-span` ile belirlenir); tarayıcıda yeniden ölçülmedi.
+- `build:css`, `dotnet build -warnaserror -o .qa/fe/build25` 0 uyarı 0 hata; dash ve `...` grep 0.
+- Aynı kusur 6 liste ekranında vardı (önekiz `max-w-xs`, Ad hücresi): CleaningTypes, Facilities, Machines, Materials, Shifts, Users Index; `xl:max-w-xs` yapıldı. Ölçülmedi.
