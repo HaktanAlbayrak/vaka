@@ -21,8 +21,8 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 | 1 | Giriş, PIN, kullanıcılar ve Süper admin | Tamamlandı | 2026-11-14 | 38d0b4e | [Faz-1-Teslim.md](Docs/Delivery/Faz-1-Teslim.md) |
 | 2 | Tesis yapısı, vardiya ve malzeme | Tamamlandı | 2026-11-14 | c3a4fd7 | [Faz-2-Teslim.md](Docs/Delivery/Faz-2-Teslim.md) |
 | 3 | Temizlik tipi ve prosedür versiyonu | Tamamlandı | 2026-11-15 | e867695 | [Faz-3-Teslim.md](Docs/Delivery/Faz-3-Teslim.md) |
-| 4 | Kayıt açma ve makine kilidi | Sırada | | | |
-| 5 | Adım yürütme ve mola | Bekliyor | | | |
+| 4 | Kayıt açma ve makine kilidi | Tamamlandı | 2026-11-15 | ecc7474 | [Faz-4-Teslim.md](Docs/Delivery/Faz-4-Teslim.md) |
+| 5 | Adım yürütme ve mola | Sırada | | | |
 | 6 | Kayıt listesi, detay ve denetim çıktısı, bütünlük, müdahale | Bekliyor | | | |
 | 6A | Acil müdahale, süre ve efor raporu, malzeme sorgusu | Bekliyor | | | |
 | 7 | Talep, beklemeye alma, yönetici panosu, adım içi mola, görevli PIN onayı | Bekliyor (doküman kalemlerinden sonra) | | | |
@@ -33,6 +33,7 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 
 | Tarih | Commit | Değişiklik |
 |---|---|---|
+| 2026-11-15 | ecc7474 | Faz 4: kayıt açma, otomatik kayıt no, makine kilidi ve zaman aşımı, olay zinciri, İşlerim ve makine panosu |
 | 2026-11-15 | e867695 | Faz 3: temizlik tipi, makine eşleme, versiyonlu prosedür düzenleyici, PIN ile yayın, adım medyası |
 | 2026-11-14 | c3a4fd7 | Faz 2: tesis, hat, makine, vardiya, malzeme ve lot tanımları; Salı takvimine göre faz planı güncellendi |
 | 2026-11-14 | a3f6ec3 | Süreç: UI fazlarında tam testten önce QA yerleşim ön turu (rapor yok, tur sayılmaz) |
