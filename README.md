@@ -20,13 +20,14 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 | T | Tasarım DNA'sı ve kabuk prototipi | Tamamlandı | 2026-11-13 | 947be60 | [Faz-T-Teslim.md](Docs/Delivery/Faz-T-Teslim.md) |
 | 1 | Giriş, PIN, kullanıcılar ve Süper admin | Tamamlandı | 2026-11-14 | 38d0b4e | [Faz-1-Teslim.md](Docs/Delivery/Faz-1-Teslim.md) |
 | 2 | Tesis yapısı, vardiya ve malzeme | Tamamlandı | 2026-11-14 | c3a4fd7 | [Faz-2-Teslim.md](Docs/Delivery/Faz-2-Teslim.md) |
-| 3 | Temizlik tipi ve prosedür versiyonu | Sırada | | | |
-| 4 | Kayıt açma ve makine kilidi | Bekliyor | | | |
-| 5 | Adım yürütme, görevli ve mola | Bekliyor | | | |
-| 6 | Kayıt listesi, detay, bütünlük ve müdahale | Bekliyor | | | |
-| 7 | Talep, beklemeye alma ve yönetici panosu | Bekliyor (2026-11-17 sonrası) | | | |
-| 8 | Acil müdahale, bildirim ve düzeltme | Bekliyor (2026-11-17 sonrası) | | | |
-| 9 | Raporlar, denetim çıktısı ve sistem ayarları | Bekliyor (2026-11-17 sonrası) | | | |
+| 3 | Temizlik tipi ve prosedür versiyonu | Tamamlandı | 2026-11-15 | e867695 | [Faz-3-Teslim.md](Docs/Delivery/Faz-3-Teslim.md) |
+| 4 | Kayıt açma ve makine kilidi | Sırada | | | |
+| 5 | Adım yürütme ve mola | Bekliyor | | | |
+| 6 | Kayıt listesi, detay ve denetim çıktısı, bütünlük, müdahale | Bekliyor | | | |
+| 6A | Acil müdahale, süre ve efor raporu, malzeme sorgusu | Bekliyor | | | |
+| 7 | Talep, beklemeye alma, yönetici panosu, adım içi mola, görevli PIN onayı | Bekliyor (doküman kalemlerinden sonra) | | | |
+| 8 | Bildirim ve düzeltme | Bekliyor (doküman kalemlerinden sonra) | | | |
+| 9 | Grafik, CSV, sistem ayarları ve son regresyon | Bekliyor (doküman kalemlerinden sonra) | | | |
 
 ## Son Değişiklikler
 
@@ -46,6 +47,14 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 dotnet tool install --global dotnet-ef     # bir kez
 dotnet ef database update --project Src/Vaka.Web
 dotnet run --project Src/Vaka.Web          # Development, http://localhost:5080
+```
+
+Olay zinciri özet anahtarı (Faz 4 ve sonrası) repoda ve `appsettings*.json`'da tutulmaz. Development'ta bir kez
+user-secrets'a yazılır; anahtar yoksa ya da çözülünce 32 bayttan kısaysa uygulama başlamaz. Üretimde aynı değer
+`EventChain__HmacKey` ortam değişkeniyle verilir. Geliştirme anahtarıyla yazılmış zincir üretim anahtarıyla doğrulanmaz.
+
+```bash
+dotnet user-secrets set "EventChain:HmacKey" "$(openssl rand -base64 32)" --project Src/Vaka.Web
 ```
 
 Seed tek bir Süper admin hesabı içerir (sicil no `0001`). Geliştirme parolası depoda tutulmaz, ekipten alınır;
