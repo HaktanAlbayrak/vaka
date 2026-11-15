@@ -977,6 +977,10 @@ PIN formları dahil) kapandı. Faz 3 ve Faz 6 ekranlarındaki DÜŞÜK B1, B2 D-
 
 ## Sunum hazırlığı (faz değil, Faz 6A'dan sonra, Faz 7'den önce)
 
+**Durum:** Tamamlandı 2026-11-16. Üç `KSA` kaydı (A `T1-H2-M01-P2026-1`, B `T1-H1-M01-P2026-3`, C `T1-H1-M01-P2026-4`) kullanıcının
+`App_Data/vaka.db`'sinde arayüzden gerçek zamanla tamamlandı, üçünde bütünlük "Doğrulandı". Sapma: B görevlisiz yürütüldü (A'nın molası sürüyordu,
+madde 4'teki istisna); adım bazlı görevli ve efor gösterimi sunumda canlı yapılır. Sonuçlar `Docs/Local/SunumSenaryosu.md` §5.
+
 **Amaç:** Salı sunumunda ekranlar boş kalmasın ve süre beklemeden anlatılabilsin diye kullanıcının veritabanında uygulama üzerinden gerçek zamanla
 tamamlanmış kayıtlar bulunması (PL-65). Faz kapısı ve teslim raporu yoktur.
 
