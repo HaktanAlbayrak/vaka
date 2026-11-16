@@ -27,7 +27,7 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 | 6A | Acil müdahale, süre ve efor raporu, malzeme sorgusu | Tamamlandı | 2026-11-16 | 3198d9e | [Faz-6A-Teslim.md](Docs/Delivery/Faz-6A-Teslim.md) |
 | 6B | Yönetici panosu, rapor grafikleri, kart listeleri, kabuk iyileştirmeleri, isteğe bağlı iş emri no | Tamamlandı | 2026-11-16 | 60c3ee3 | [Faz-6B-Teslim.md](Docs/Delivery/Faz-6B-Teslim.md) |
 | 6C | Kayıt zaman çizelgesi ve görevli seçimi | Tamamlandı | 2026-11-16 | b15d6d2 | [Faz-6C-Teslim.md](Docs/Delivery/Faz-6C-Teslim.md) |
-| 6D | Makine raporu ve malzeme kullanım oranı | Bekliyor | | | |
+| 6D | Makine raporu ve malzeme kullanım oranı | Tamamlandı | 2026-11-16 | aa522fe | [Faz-6D-Teslim.md](Docs/Delivery/Faz-6D-Teslim.md) |
 | 6E | Görevlinin adıma katılma ve ayrılma girişi | Bekliyor | | | |
 | 6F | Operatör için PIN ile giriş ve giriş deneme sınırı | Bekliyor | | | |
 | 7 | Talep, beklemeye alma, adım içi mola | Bekliyor (doküman kalemlerinden sonra) | | | |
@@ -38,6 +38,7 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 
 | Tarih | Commit | Değişiklik |
 |---|---|---|
+| 2026-11-16 | aa522fe | Faz 6D: makine raporu, prosedür minimumuyla plan farkı, malzeme kullanım oranı; kayıt listesinde Ayrıntı düğmesi kırpılmıyor |
 | 2026-11-16 | b15d6d2 | Faz 6C: kayıt detayında zaman çizelgesi, klavye ve ekran okuyucuyla kullanılabilen görevli seçici |
 | 2026-11-16 | 60c3ee3 | Faz 6B: Yönetici panosu ve rapor grafikleri, dar ekranda kart listeleri, köşe yumuşatma, sabit ve geçişli kenar çubuğu, tam ekran düğmesi, isteğe bağlı iş emri no |
 | 2026-11-16 | 0552f38 | Düzeltme D-1: form hata yeri ve kart genişlikleri; sunum kayıtları hazırlandı |
