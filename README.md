@@ -29,7 +29,7 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 | 6C | Kayıt zaman çizelgesi ve görevli seçimi | Tamamlandı | 2026-11-16 | b15d6d2 | [Faz-6C-Teslim.md](Docs/Delivery/Faz-6C-Teslim.md) |
 | 6D | Makine raporu ve malzeme kullanım oranı | Tamamlandı | 2026-11-16 | aa522fe | [Faz-6D-Teslim.md](Docs/Delivery/Faz-6D-Teslim.md) |
 | 6E | Görevlinin adıma katılma ve ayrılma girişi | Tamamlandı | 2026-11-17 | aa929cf | [Faz-6E-Teslim.md](Docs/Delivery/Faz-6E-Teslim.md) |
-| 6F | Operatör için PIN ile giriş ve giriş deneme sınırı | Bekliyor | | | |
+| 6F | Operatör için PIN ile giriş ve giriş deneme sınırı | Tamamlandı | 2026-11-17 | 6b0fc76 | [Faz-6F-Teslim.md](Docs/Delivery/Faz-6F-Teslim.md) |
 | 7 | Talep, beklemeye alma, adım içi mola | Kapsam dışı (kullanıcı kararı) | | | |
 | 8 | Bildirim ve düzeltme | Kapsam dışı (kullanıcı kararı) | | | |
 | 9 | Grafik, CSV, sistem ayarları ve son regresyon | Kapsam dışı (kullanıcı kararı; son regresyon Faz 6F'de) | | | |
@@ -38,6 +38,7 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 
 | Tarih | Commit | Değişiklik |
 |---|---|---|
+| 2026-11-17 | 6b0fc76 | Faz 6F: operatör PIN ile girer, giriş deneme sınırı ve 15 dakikalık kilit, yönetici kilidi açar; son regresyon |
 | 2026-11-17 | aa929cf | Faz 6E: görevli kendi PIN'iyle adıma katılır ve ayrılır, girişi bekleyen varken adım bitmez, efor kişi çalışma sürelerinden |
 | 2026-11-16 | aa522fe | Faz 6D: makine raporu, prosedür minimumuyla plan farkı, malzeme kullanım oranı; kayıt listesinde Ayrıntı düğmesi kırpılmıyor |
 | 2026-11-16 | b15d6d2 | Faz 6C: kayıt detayında zaman çizelgesi, klavye ve ekran okuyucuyla kullanılabilen görevli seçici |
