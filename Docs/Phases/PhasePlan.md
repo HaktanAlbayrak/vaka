@@ -1622,7 +1622,7 @@ sayacında tutulur ve süreli kilide götürür; giriş ekranından kimsenin iş
 
 ---
 
-## Düzeltme D-2: görevli panelinin metinleri (faz dışı, Faz 6F'den sonra)
+## Düzeltme D-2: görevli panelinin metinleri (faz dışı, Faz 6F'den sonra; TESLİM ALINDI 2026-11-17, PL-107)
 
 **İstek (2026-11-17):** "görevleri düzenle yazısı yerine yardımcı ekle tarzı bir şey eklenebilir yada projeye uygun bir yazı" (PL-106).
 

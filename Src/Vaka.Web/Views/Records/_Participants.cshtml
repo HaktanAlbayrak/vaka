@@ -201,13 +201,13 @@
     {
         <details class="tool" open="@open">
             <summary>
-                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#users" /></svg>
-                Görevleri düzenle
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-plus" /></svg>
+                Yardımcı ekle
             </summary>
             <div class="tool-body space-y-5">
                 <form method="get" action="/records/run/@run.Id" class="field" data-people-nojs>
                     <input type="hidden" name="stepId" value="@step.Id" />
-                    <label class="field-label" for="@(stepKey)-people">Kişi ara</label>
+                    <label class="field-label" for="@(stepKey)-people">Yardımcı ara</label>
                     <div class="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
                         <input id="@(stepKey)-people" name="people" type="search" class="input" value="@(filtering ? run.ParticipantQuery : null)" autocomplete="off" spellcheck="false" inputmode="search" />
                         <button type="submit" class="btn btn-secondary min-h-12">
@@ -221,7 +221,7 @@
                     <input type="hidden" name="CommandId" value="@run.CommandId" />
                     <div class="space-y-3" data-people-picker data-people-url="/records/people" data-step-id="@step.Id">
                         <div class="field" data-field data-people-js>
-                            <label class="field-label" for="@(stepKey)-search">Görevli ekle</label>
+                            <label class="field-label" for="@(stepKey)-search">Yardımcı ara</label>
                             <input id="@(stepKey)-search" type="text" role="combobox" class="input" autocomplete="off" spellcheck="false" inputmode="search" enterkeyhint="search"
                                    data-choice-for="[data-people-input]" data-required-message="Bir kişi seçin." aria-autocomplete="list" aria-expanded="false" aria-controls="@(stepKey)-results" aria-describedby="@(stepKey)-hint @(stepKey)-status" data-people-search />
                             <ul id="@(stepKey)-results" role="listbox" tabindex="-1" class="lot-results" aria-label="Bulunan kişiler" data-people-results hidden></ul>
@@ -229,7 +229,7 @@
                                 <div class="skeleton h-14 w-full"></div>
                                 <div class="skeleton h-14 w-full"></div>
                             </div>
-                            <p id="@(stepKey)-hint" class="field-hint">Ad ya da sicil no parçası yazın, listeden operatörü seçin.@(step.Status == StepStatus.InProgress ? " Eklenen kişi kendi PIN'iyle katılınca çalışmaya başlar." : "")</p>
+                            <p id="@(stepKey)-hint" class="field-hint">Ad ya da sicil no parçası yazın, listeden yardımcıyı seçin.@(step.Status == StepStatus.InProgress ? " Eklenen yardımcı kendi PIN'iyle katılınca çalışmaya başlar." : "")</p>
                             <p id="@(stepKey)-status" class="field-hint" role="status" data-people-status></p>
                         </div>
                         <div class="space-y-2" data-people-js>
@@ -255,7 +255,7 @@
                         }
 
                         <fieldset class="space-y-2" data-people-nojs>
-                            <legend class="field-label">Görevli seç</legend>
+                            <legend class="field-label">Yardımcı seç</legend>
                             @if (!filtering)
                             {
                                 <p class="text-sm text-muted">Önce kişi arayın.</p>
@@ -297,7 +297,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg">
                         <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-plus" /></svg>
-                        Görevliyi ekle
+                        Yardımcıyı ekle
                     </button>
                 </form>
             </div>
