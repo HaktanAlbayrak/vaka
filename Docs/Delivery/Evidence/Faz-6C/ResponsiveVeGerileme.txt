@@ -1,0 +1,133 @@
+# Faz 6C responsive matris (UiDelivery §3 eval + çizelge/seçici G12 ölçümü)
+## Kayıt detayı (yönetici)
+360x800 light          det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=alt-alta radius=6px flag=1px]
+360x800 light          det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=alt-alta radius=6px flag=1px]
+360x800 light          det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=alt-alta radius=6px flag=1px]
+360x800 light          det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=alt-alta radius=6px flag=1px]
+360x800 light          det12    TEMIZ  tl[rows=2 days=1 warn=0/0 yerlesim=alt-alta radius=6px flag=None]
+360x800 dark           det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=alt-alta radius=6px flag=1px]
+360x800 dark           det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=alt-alta radius=6px flag=1px]
+360x800 dark           det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=alt-alta radius=6px flag=1px]
+360x800 dark           det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=alt-alta radius=6px flag=1px]
+360x800 dark           det12    TEMIZ  tl[rows=2 days=1 warn=0/0 yerlesim=alt-alta radius=6px flag=None]
+768x1024 light         det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+768x1024 light         det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=1px]
+768x1024 light         det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+768x1024 light         det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+768x1024 light         det12    TEMIZ  tl[rows=2 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+768x1024 dark          det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+768x1024 dark          det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=1px]
+768x1024 dark          det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+768x1024 dark          det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+768x1024 dark          det12    TEMIZ  tl[rows=2 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+1024x768 light         det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1024x768 light         det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=1px]
+1024x768 light         det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1024x768 light         det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1024x768 light         det12    TEMIZ  tl[rows=2 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+1024x768 dark          det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1024x768 dark          det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=1px]
+1024x768 dark          det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1024x768 dark          det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1024x768 dark          det12    TEMIZ  tl[rows=2 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+1440x900 light         det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1440x900 light         det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=1px]
+1440x900 light         det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1440x900 light         det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1440x900 light         det12    TEMIZ  tl[rows=2 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+1440x900 dark          det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1440x900 dark          det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=1px]
+1440x900 dark          det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1440x900 dark          det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1440x900 dark          det12    TEMIZ  tl[rows=2 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+1920x1080 light        det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1920x1080 light        det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=1px]
+1920x1080 light        det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1920x1080 light        det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1920x1080 light        det12    TEMIZ  tl[rows=2 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+1920x1080 dark reduce  det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1920x1080 dark reduce  det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=1px]
+1920x1080 dark reduce  det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1920x1080 dark reduce  det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+1920x1080 dark reduce  det12    TEMIZ  tl[rows=2 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+320x640 light          det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=alt-alta radius=6px flag=1px]
+320x640 light          det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=alt-alta radius=6px flag=1px]
+320x640 light          det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=alt-alta radius=6px flag=1px]
+320x640 light          det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=alt-alta radius=6px flag=1px]
+320x640 light          det12    TEMIZ  tl[rows=2 days=1 warn=0/0 yerlesim=alt-alta radius=6px flag=None]
+640x400 dark           det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+640x400 dark           det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=1px]
+640x400 dark           det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+640x400 dark           det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=1px]
+640x400 dark           det12    TEMIZ  tl[rows=2 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+sorunlu hucre 0 / 60 konsol []
+## Yürütme ekranı görevli seçici (sahip 2002, kayıt 12 adım 46)
+360x800 light          run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}]]
+360x800 light          run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}]]
+360x800 light          run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -68} submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}]]
+360x800 light          run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}]]
+360x800 dark           run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}]]
+360x800 dark           run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}]]
+360x800 dark           run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -68} submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}]]
+360x800 dark           run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}]]
+768x1024 light         run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+768x1024 light         run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+768x1024 light         run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -159} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+768x1024 light         run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+768x1024 dark          run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+768x1024 dark          run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+768x1024 dark          run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -159} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+768x1024 dark          run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+1024x768 light         run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}]]
+1024x768 light         run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}]]
+1024x768 light         run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -100} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}]]
+1024x768 light         run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}]]
+1024x768 dark          run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}]]
+1024x768 dark          run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}]]
+1024x768 dark          run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -100} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}]]
+1024x768 dark          run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}]]
+1440x900 light         run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+1440x900 light         run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+1440x900 light         run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -163} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+1440x900 light         run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+1440x900 dark          run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+1440x900 dark          run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+1440x900 dark          run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -163} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+1440x900 dark          run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+1920x1080 light reduce run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+1920x1080 light reduce run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+1920x1080 light reduce run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -571} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+1920x1080 light reduce run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+320x640 light          run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[76] rm=[{'w': 148, 'fits': True, 'h': 92}, {'w': 148, 'fits': True, 'h': 140}]]
+320x640 light          run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[76] rm=[{'w': 148, 'fits': True, 'h': 92}, {'w': 148, 'fits': True, 'h': 140}]]
+320x640 light          run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -28} submitH=[76] rm=[{'w': 148, 'fits': True, 'h': 92}, {'w': 148, 'fits': True, 'h': 140}]]
+320x640 light          run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[76] rm=[{'w': 148, 'fits': True, 'h': 92}, {'w': 148, 'fits': True, 'h': 140}]]
+640x400 dark           run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+640x400 dark           run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+640x400 dark           run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -75} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+640x400 dark           run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}]]
+sorunlu hucre 0 / 44 konsol []
+
+## K10 HEAD (5ed7ad7) ile çalışma ağacı karşılaştırması, kayıt 1-11
+1 durum 200 200 olay gunlugu ayni: True cizelge disi sayfa ayni: False
+    2 insert 'pan></time> </td> </tr> </tbody> </table> </div> </section> <section aria-labell' -> ' '
+2 durum 200 200 olay gunlugu ayni: True cizelge disi sayfa ayni: False
+    2 insert 'pan></time> </td> </tr> </tbody> </table> </div> </section> <section aria-labell' -> ' '
+3 durum 200 200 olay gunlugu ayni: True cizelge disi sayfa ayni: False
+    2 insert 'dy text-muted">Bu kayıtta malzeme girilmedi.</p> </section> <section aria-labell' -> ' '
+4 durum 200 200 olay gunlugu ayni: True cizelge disi sayfa ayni: False
+    2 insert 'pan></time> </td> </tr> </tbody> </table> </div> </section> <section aria-labell' -> ' '
+5 durum 200 200 olay gunlugu ayni: True cizelge disi sayfa ayni: False
+    2 insert 'dy text-muted">Bu kayıtta malzeme girilmedi.</p> </section> <section aria-labell' -> ' '
+6 durum 200 200 olay gunlugu ayni: True cizelge disi sayfa ayni: False
+    2 insert 'pan></time> </td> </tr> </tbody> </table> </div> </section> <section aria-labell' -> ' '
+7 durum 200 200 olay gunlugu ayni: True cizelge disi sayfa ayni: False
+    2 insert 'pan></time> </td> </tr> </tbody> </table> </div> </section> <section aria-labell' -> ' '
+8 durum 200 200 olay gunlugu ayni: True cizelge disi sayfa ayni: False
+    2 insert 'dy text-muted">Bu kayıtta malzeme girilmedi.</p> </section> <section aria-labell' -> ' '
+9 durum 200 200 olay gunlugu ayni: True cizelge disi sayfa ayni: False
+    2 insert 'dy text-muted">Bu kayıtta malzeme girilmedi.</p> </section> <section aria-labell' -> ' '
+10 durum 200 200 olay gunlugu ayni: True cizelge disi sayfa ayni: False
+    2 insert 'dy text-muted">Bu kayıtta malzeme girilmedi.</p> </section> <section aria-labell' -> ' '
+11 durum 200 200 olay gunlugu ayni: True cizelge disi sayfa ayni: False
+    2 insert 'pan></time> </td> </tr> </tbody> </table> </div> </section> <section aria-labell' -> ' '

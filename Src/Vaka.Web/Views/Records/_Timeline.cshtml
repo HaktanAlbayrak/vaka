@@ -1,0 +1,90 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Records
+@inject IDurationFormatter DurationFormatter
+@model RecordTimelineDayViewModel[]
+@{
+    (string Icon, string Tone) Look(RecordTimelineEntryViewModel entry)
+    {
+        var (icon, tone) = entry.Kind switch
+        {
+            TimelineEntryKind.Opened => ("file-text", "accent"),
+            TimelineEntryKind.TimedOut => ("clock", "danger"),
+            TimelineEntryKind.MaterialAdded => ("package", "neutral"),
+            TimelineEntryKind.MaterialRemoved => ("package", "neutral"),
+            TimelineEntryKind.ParticipantAdded => ("user-plus", "neutral"),
+            TimelineEntryKind.ParticipantRemoved => ("user-x", "neutral"),
+            TimelineEntryKind.StepStarted => ("play", "accent"),
+            TimelineEntryKind.StepFinished => ("check", "ok"),
+            TimelineEntryKind.StepInterrupted => ("octagon-alert", "warn"),
+            TimelineEntryKind.BreakStarted => ("coffee", "neutral"),
+            TimelineEntryKind.BreakEnded => ("coffee", "neutral"),
+            TimelineEntryKind.PhaseCompleted => ("list-checks", "ok"),
+            TimelineEntryKind.Completed => ("circle-check", "ok"),
+            TimelineEntryKind.Cancelled => ("ban", "danger"),
+            TimelineEntryKind.Aborted => ("circle-x", "danger"),
+            _ => ("circle-dashed", "neutral"),
+        };
+        if (entry.IsWarning && tone is "ok" or "accent" or "neutral") tone = "warn";
+        return (icon, tone);
+    }
+    var total = Model.Sum(day => day.Entries.Length);
+}
+<section class="print:hidden" aria-labelledby="timeline-title">
+    <h2 id="timeline-title" class="mb-1 text-xl font-bold">Zaman çizelgesi</h2>
+    <p class="mb-3 text-sm text-muted">Olay günlüğünün okunur hali, @total satır. Kanıt değeri aşağıdaki günlüktedir.</p>
+    @if (total == 0)
+    {
+        <p class="panel panel-body text-muted">Çizilecek olay yok.</p>
+    }
+    else
+    {
+        <div class="panel panel-body">
+            @foreach (var day in Model)
+            {
+                var dayId = "timeline-day-" + day.DateLocal.ToString("yyyyMMdd");
+                <h3 id="@dayId" class="tl-day"><time datetime="@day.DateLocal.ToString("yyyy-MM-dd")">@day.DateLocal.ToString("dd.MM.yyyy")</time></h3>
+                <ol class="tl" aria-labelledby="@dayId">
+                    @foreach (var entry in day.Entries)
+                    {
+                        var (icon, tone) = Look(entry);
+                        <li class="tl-item" data-tone="@tone">
+                            <time class="tl-time mono" datetime="@entry.OccurredAtLocal.ToString("yyyy-MM-dd'T'HH:mm:ss")">@entry.OccurredAtLocal.ToString("HH:mm")</time>
+                            <span class="tl-mark" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#@icon" /></svg></span>
+                            <div class="tl-body">
+                                <p class="tl-title">
+                                    @if (entry.IsWarning)
+                                    {
+                                        <span class="tl-flag"><svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>Uyarı</span>
+                                    }
+                                    @entry.Title
+                                </p>
+                                @if (!string.IsNullOrEmpty(entry.StepLabel))
+                                {
+                                    var cut = entry.StepLabel.IndexOf(" - ", StringComparison.Ordinal);
+                                    <p class="tl-detail"><span class="mono">@(cut < 0 ? entry.StepLabel : entry.StepLabel[..cut])</span>@(cut < 0 ? "" : entry.StepLabel[cut..])</p>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(entry.Detail))
+                                {
+                                    <p class="tl-detail">@entry.Detail</p>
+                                }
+                                @if (entry.DurationSeconds is not null || entry.EffortSeconds is not null)
+                                {
+                                    <dl class="tl-meta">
+                                        @if (entry.DurationSeconds is { } seconds)
+                                        {
+                                            <div><dt>Süre</dt><dd><partial name="_Duration" model="DurationFormatter.Format(seconds)" /></dd></div>
+                                        }
+                                        @if (entry.EffortSeconds is { } effort)
+                                        {
+                                            <div><dt>Efor</dt><dd><partial name="_Duration" model="DurationFormatter.Format(effort)" /></dd></div>
+                                        }
+                                    </dl>
+                                }
+                            </div>
+                        </li>
+                    }
+                </ol>
+            }
+        </div>
+    }
+</section>

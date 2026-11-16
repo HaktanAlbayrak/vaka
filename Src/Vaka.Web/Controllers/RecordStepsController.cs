@@ -73,8 +73,21 @@ public sealed class RecordStepsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> People(string? q, int? stepId, CancellationToken cancellationToken) =>
-        Json((await _directory.SearchAsync(q, stepId, null, cancellationToken)).Options);
+    public async Task<IActionResult> People(string? q, int? stepId, CancellationToken cancellationToken)
+    {
+        if (stepId is not { } id)
+        {
+            return BadRequest();
+        }
+
+        var lookup = await _directory.SearchForOwnerAsync(id, User.GetUserId(), q, cancellationToken);
+        return lookup.Status switch
+        {
+            CommandStatus.NotFound => NotFound(),
+            CommandStatus.Forbidden => Forbid(),
+            _ => Json(new ParticipantSearchResponseViewModel { Items = lookup.Value!.Options, Truncated = lookup.Value.Truncated })
+        };
+    }
 
     [HttpPost("{stepId:int}")]
     public async Task<IActionResult> AddParticipant(int stepId, AddParticipantViewModel model, CancellationToken cancellationToken)

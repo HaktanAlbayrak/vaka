@@ -91,6 +91,7 @@ builder.Services.AddScoped<IRecordMaterialService, RecordMaterialService>();
 builder.Services.AddScoped<IBreakReader, BreakReader>();
 builder.Services.AddScoped<IBreakService, BreakService>();
 builder.Services.AddScoped<IParticipantDirectory, ParticipantDirectory>();
+builder.Services.AddSingleton<IRecordTimelineBuilder, RecordTimelineBuilder>();
 builder.Services.AddScoped<IParticipantService, ParticipantService>();
 builder.Services.AddScoped<IRunBreakReader, RunBreakReader>();
 builder.Services.AddScoped<IRunProgressReader, RunProgressReader>();

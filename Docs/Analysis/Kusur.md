@@ -124,6 +124,7 @@
 - Öneri: **Varsayılan:** personel yalnız adım düzeyinde tutulur; kayıt düzeyindeki "yardımcılar" adım görevlilerinin birleşimi olarak gösterilir; görevliyi yalnız sahip ekler/çıkarır; görevli listesi adım başladıktan sonra değişmez; sahip bir adımdan çıkarılabilir ama o adımı başlatıp bitirebilir. Efor = adım süresi x görevli sayısı. **Alternatifler:** (a) adım sürerken katılma/ayrılma olayları; efor = kişi bazlı katılım aralıklarının toplamı (daha doğru, ek etkileşim); (b) kayıt açılışında bir "ekip" seçilir, adımda bu ekipten seçim yapılır.
 - Öncelik: Engelleyici
 - **Karar (2026-11-13):** Görevli adım düzeyinde tutulur; kayıt düzeyindeki "yardımcı personel" adım görevlilerinin birleşimidir. Görevliyi yalnız kaydın sahibi, adım başlamadan ekler ya da çıkarır; adım başladıktan sonra liste değişmez. Sahip bir adımdan çıkarılabilir ve o adımı yine de başlatıp bitirebilir. Efor = adım süresi x görevli sayısı (SH-02).
+- **Karar (2026-11-16, O-10, PL-93):** Alternatif (a) seçildi, Faz 6E'den itibaren geçerli. Sahip adım başlamadan ya da sürerken görevli ekler; görevli adıma katılma ve isterse ayrılma anını kendi PIN'iyle girer (anlar sunucu saati, elle süre yok). Adım girişi bekleyen kişiyle de başlar; sahip dışında girişi bekleyen kişi varken adım bitmez. Sahip yalnız hiç katılmamış kişiyi çıkarır. Efor = kişi çalışma sürelerinin toplamı (SH-02, SH-02a). Kişi aralığı yeni tablo `StepWorkIntervals` (Eklemeli).
 
 ### K-08: "Aynı anda iki temizlikte çalışamaz" kuralının kapsamı
 - Kaynak: doc.txt satır 76-77
@@ -148,6 +149,7 @@
 - Öneri: **Varsayılan:** tüm saha personeli sistem kullanıcısıdır (sicil no ile); sahip görevliyi listeden seçer, yardımcı ayrıca onay vermez; seçim olay günlüğüne "ekleyen: sahip" olarak yazılır. **Alternatifler:** (a) yardımcı, kendi sicil + PIN'iyle aynı cihazda katılımı onaylar (kanıt güçlenir, sahada bir adım daha); (b) giriş yapmayan personel kayıtları (`Personnel`) ayrı tutulur, yalnız sahip giriş yapar.
 - Öncelik: Engelleyici
 - **Karar (2026-11-13):** Belgeye göre seçenek (a). Tüm saha personeli sistem kullanıcısıdır (sicil no). Sahip yardımcıyı listeden seçer, yardımcı katılımını aynı cihazda kendi PIN'iyle onaylar; onay vermeyen kişi görevli olmaz. Gerekçe: satır 52 "kimlerin gerçekten çalıştığı" ve satır 112 bunun kanıtını istiyor; K-09'daki PIN altyapısı onayı tek PIN girişine indiriyor; kişi kısıtı (K-08) kimseyi habersiz kilitlemiyor.
+- **Not (2026-11-16, PL-93):** Onay ekleme isteğinden ayrıldı; görevli katılma ve ayrılmayı kendi PIN'iyle, aynı cihazda ya da kendi oturumunda girer (K-07 kararı 2026-11-16).
 
 ### K-11: Malzemenin giriş anı, düzeyi, miktarı ve lot kaynağı
 - Kaynak: doc.txt satır 20-24, 37

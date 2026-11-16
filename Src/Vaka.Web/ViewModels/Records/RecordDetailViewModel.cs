@@ -18,6 +18,8 @@ public sealed class RecordDetailViewModel
 
     public RecordMaterialViewModel[] Materials { get; set; } = [];
 
+    public RecordTimelineDayViewModel[] Timeline { get; set; } = [];
+
     public RecordDetailEventViewModel[] Events { get; set; } = [];
 
     public RecordIntegrityViewModel Integrity { get; set; } = new();

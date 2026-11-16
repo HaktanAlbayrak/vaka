@@ -6,6 +6,9 @@
 > 2026-11-15: Doküman Salı öncesi tamamlanır (O-04): yeni Faz 6A, K-39 ve K-10 Faz 7'ye, Ö-01..Ö-05 Salı öncesi (PL-56..PL-59).
 > 2026-11-15 (kullanıcı istekleri): yeni Faz 6B, yönetici ana sayfası, rapor grafikleri, kart listesi deseni, köşe yumuşatma, isteğe bağlı iş emri
 > no (boşsa sistem atar), kabuk düzeltmeleri; G11 kart listesi desenine geçti (PL-75..PL-82). Plan kullanıcı onaylı (O-08).
+> 2026-11-16 (kullanıcı istekleri, onaylandı O-09): yeni Faz 6C (kayıt zaman çizelgesi, aranabilir görevli seçimi), Faz 6D (makine raporu, malzeme kullanım oranı),
+> ikisi de sunumdan önce, önce 6C; malzeme miktarı istenmedi; karşılık tablosu "2026-11-16 kullanıcı istekleri" bölümünde (PL-85..PL-88).
+> 2026-11-16 (kullanıcı istekleri, O-10, O-11): yeni Faz 6E (görevli girişi ve adım içi katılım; S-3 kapandı, aday Faz 10 kalktı) ve Faz 6F (operatörde PIN ile giriş, ayrı giriş sayacı ve 15 dakikalık süreli kilit), 6D'den sonra (PL-89..PL-94). Brief ve Kusur K-07, K-10 işlendi (O-11).
 > Kimlikler: FR, NFR, BR, SC, SH, SK `Docs/Analysis/Brief.md`; E (ekran) `Docs/Analysis/Requirements.md §4`; K `Docs/Analysis/Kusur.md`; PL `Decisions.md`.
 
 ## Özet
@@ -22,9 +25,14 @@
 | 6 | Kayıt listesi, detay, bütünlük ve müdahale | 13 soruyu yanıtlayan detay ve yazdırılabilir denetim çıktısı, olay günlüğü, bütünlük, iptal, yarıda kapatma, yöneticinin molayı bitirmesi | Evet | TESLİM ALINDI (tur 2, 2026-11-16) |
 | 6A | Acil müdahale, süre raporu ve malzeme izlenebilirliği | Acil müdahale ekranı ve "Acil" ayrımı, süre ve efor raporu (tablo), lot ve makine bazlı malzeme sorgusu | Evet | TESLİM ALINDI (tur 1, 2026-11-16) |
 | 6B | Yönetici ana sayfası, rapor grafikleri ve arayüz iyileştirmeleri | Yönetici ve Denetçi ana sayfası (pano, kısmi), süre raporunda grafikler, ayırt edilir kart listeleri, yumuşak köşeler, sabit logo ve alt blokla kayan menü, yumuşak menü geçişi, tam ekran düğmesi, isteğe bağlı iş emri no (boşsa sistem atar) | Evet | TESLİM ALINDI (tur 2, 2026-11-16) |
-| 7 | Talep, beklemeye alma ve yönetici panosu (Salı sonrası) | Talepler, Taleplerim, bekleme ve devam, yönetici panosu, adım sürerken mola, görevli PIN onayı | Evet | BEKLİYOR |
+| 6C | Kayıt zaman çizelgesi ve görevli seçimi (Salı öncesi) | Kayıt detayında olayların gün ve saat sırasıyla cümle olarak okunduğu zaman çizelgesi ("X ve Y birlikte adıma başladı"); görevli eklemede aktif operatörler arasından klavyeyle de kullanılan aranabilir seçim kutusu | Evet | TESLİM ALINDI (tur 2, 2026-11-16) |
+| 6D | Makine raporu ve malzeme kullanım oranı (Salı öncesi, 6C'den sonra) | Makine seçilerek tip başına ortalama süre, efor ve prosedür minimumuyla karşılaştırma; malzeme başına kullanım oranı | Evet | BEKLİYOR (Faz 6C kapısı) |
+| 6E | Görevli girişi ve adım içi katılım (6D'den sonra) | Sahip adımı yardımcıyı beklemeden başlatır; yardımcı katıldığı anda kendi PIN'iyle girer, erken giderse ayrılır, eforu çalıştığı süre; girişi bekleyen varken adım bitmez, "Girişi bekleniyor"; giriş aynı tablette ya da kendi cihazında. Yeni tablo (Eklemeli) | Evet | BEKLİYOR (Faz 6D kapısı) |
+| 6F | PIN ile giriş ve giriş deneme sınırı (6E'den sonra) | Operatör sicil no ve PIN ile girer; Yönetici, Denetçi, Süper admin parola ile; parola ve PIN girişinde ayrı sayaç ve süreli kilit, yönetici erken açar. `Users`'a iki kolon (ALTER) | Evet | BEKLİYOR (Faz 6E kapısı) |
+| 7 | Talep, beklemeye alma ve yönetici panosu (Salı sonrası) | Talepler, Taleplerim, bekleme ve devam, yönetici panosu, adım sürerken mola, adım sürerken mola kişi aralıklarıyla; görevli PIN onayı Faz 6E'de karşılandı (PL-92) | Evet | BEKLİYOR |
 | 8 | Acil müdahale, bildirim ve düzeltme (Salı sonrası) | Acil ve talep bildirimleri, panoda acil, düzeltme formu | Evet | BEKLİYOR |
 | 9 | Raporlar, denetim çıktısı ve sistem ayarları (Salı sonrası) | Rapor grafikleri ve CSV, düzeltmeli denetim çıktısı adresi, Sistem ayarları ekranı, son regresyon | Evet | BEKLİYOR |
+| 10 (aday) | Adım sürerken katılma ve malzeme miktarı | Kapandı: konu A Faz 6E'ye alındı (S-3, O-10), konu B istenmedi (S-4, O-09) | - | KAPANDI |
 
 Durum değerleri: BEKLİYOR, GELİŞTİRMEDE, QA'DA, İADE, TESLİM ALINDI. Faz 0 QA'sız analiz fazıdır, kullanıcı onayıyla TAMAMLANDI olur.
 
@@ -42,6 +50,11 @@ Salı öncesine alındı, yer açmak için kullanıcının kendi iki eki (K-39 a
 - Kabul ekleri Salı öncesi (PL-58): Ö-01 Faz 4 demo verisi, Ö-05 Faz 4 K4, Ö-02 Faz 5 K22, Ö-03 Faz 5 K16, Ö-04 Faz 5 K23.
 - Bilinçli tasarım sınırları değişmez, sunumda gerekçesiyle anlatılır: periyodik takvim yok (satır 3, K-34), kişiye makine yetkisi yok (13, K-20),
   saniye eşiği yok (128, İÖ-06).
+- 2026-11-16 istekleri (PL-85, PL-86, O-09): Faz 6C ve Faz 6D bugün, sunumdan önce (migration yok). Önce Faz 6C; faz kapısından geçince hemen Faz 6D.
+  Faz 7, 8, 9 Salı sonrası kalır. Yardımcı, iki görevlinin eforu ve makine bazlı ortalama süre bugünkü uygulamada vardır,
+  sunumda gösterilir; yeni geliştirme istemez.
+- 2026-11-16 ikinci istekler (PL-89, O-10): Faz 6E ve Faz 6F, Faz 6D'nin faz kapısından sonra sırayla; hedef sunumdan önce, yetişmezse
+  durulmaz, Faz 7'den önce tamamlanır. Faz 6C ve 6D'nin sırası ve kapsamı değişmez.
 
 ### Faz sayısı neden arttı
 
@@ -77,6 +90,19 @@ Salı öncesine alındı, yer açmak için kullanıcının kendi iki eki (K-39 a
 2026-11-15 kullanıcı istekleri (PL-75) Faz 6B'yi ekledi: E-22 panonun bugünkü verilerle çalışan kısmı ve `/` yönlendirmesi Faz 7'den, E-30
 grafikleri Faz 9'dan geldi; kart listesi deseni, köşe, kabuk ve isteğe bağlı iş emri no yeni. Ekran sayısı 3 (E-22 yeni; E-30 ve E-14 değişen), liste
 deseni ve kabuk ortak katmandır.
+
+2026-11-16 kullanıcı istekleri (PL-85..PL-87, O-09) iki faz ekler, bir aday faz açar:
+
+- Faz 6C: E-20'ye zaman çizelgesi bölümü (mevcut olay günlüğünden türer, yeni olay türü ve tablo yok); E-17 görevli panelinde aranabilir seçim kutusu
+  (PL-88). Ekran sayısı 2 (değişen).
+- Faz 6D: E-34 Makine raporu (yeni), E-31'e kullanım oranı modu ve E-30'dan bağlantı (değişen). Ekran sayısı 3; şema yok, iki yeni formül (SH-18, SH-19).
+- Aday Faz 10: kapandı. Adım içi katılma Faz 6E'ye alındı (S-3, O-10); malzeme miktarı istenmedi (S-4, O-09).
+
+2026-11-16 ikinci istekler (PL-89..PL-94, O-10) iki faz ekler:
+
+- Faz 6E: E-15 görevli paneli (E-17) katılma, ayrılma ve bitiş kapısı, E-13 İşlerim'de bekleyen giriş, E-20 detay ve çizelgede kişi aralıkları.
+  Ekran sayısı 3 (değişen); yeni tablo `StepWorkIntervals` (Eklemeli); K-07 ve SH-02 değişir. Faz 7'den K-10 kısmı buraya gelir, aday Faz 10 konu A da.
+- Faz 6F: E-01 Giriş'e PIN modu, E-04'e giriş kilidini açma. Ekran sayısı 2; `Users`'a iki kolon (ALTER, kullanıcı seçti) ve bir ayar satırı.
 
 ---
 
@@ -134,6 +160,8 @@ Her metodun XML `<summary>`'sinde formül ve SH kimliği yazılır; bu, ilgili f
 | SH-05 faz beklemesi | `CalculatePhaseHolds` | 7 | |
 | SH-10 kayıt beklemesi | `CalculateRecordHolds` | 7 | |
 | SH-15 rapor ortalaması | `CalculateAverage` | 6A | Yalnız Tamamlandı kayıtlar, versiyon içinde (PL-56) |
+| SH-18 kaydın planlanan minimumu | `CalculateRecordPlannedMinimum` | 6D | Kaydın faz minimum anlık değerlerinin toplamı; hiçbiri dolu değilse (acil) boş (PL-86) |
+| SH-19 plan farkı | `CalculatePlanVariance` | 6D | Ortalama net - ortalama planlanan minimum; negatif olabilir (PL-86) |
 
 **Her kod fazında ortak kabul kriterleri** (qa-tester her fazın raporunda ayrıca işaretler)
 
@@ -1170,10 +1198,433 @@ Açık kalemler A1 (eval yanlış pozitifi) ve A2 (`/shifts/create` tesis parame
 
 ---
 
+## 2026-11-16 kullanıcı istekleri: karşılık (PL-85)
+
+Kullanıcının sözü: "yönetici iş emri detayını görebilmeli history gibi bir şey yapılabilinir 8.15te kayıt açıldı / x iş emrine başladı 8.20 / 9.00 x
+ve y birlikte iş emrine başladı veya x iş emrine başladı gibi / ve iki kişinin çalıştığı durumda ikisi de efor girebiliyor mu giremiyorsa bunu
+çözmeliyiz / yardımcı tanımlama var mı sistemde? / makine bazlı rapor çekme eklenebilir ortalama temizlik süresi ek olarak makine ile yapılmış plan
+bazlı temizlik raporu gibi / malzeme kullanımı oranı vs".
+
+"İş emri" bu bölümde kayıttır: planlı her kaydın iş emri no'su vardır, boşsa sistem atar (PL-80); kayıt ile iş emri bire birdir (Varsayım, PL-86).
+
+| # | İstek | Bugünkü karşılık (kanıt) | Doküman | Karar |
+|---|---|---|---|---|
+| 1 | Yönetici iş emri detayını görsün | Var. `/records/details/{id}` `RecordReaders` (`RecordsController.cs:9`); `/records` araması iş emri no'da da arar (`RecordListReader.cs:164`); detayda iş emri (`Details.cshtml:83`) | Satır 109-122 | Değişiklik yok; Faz 6C K9 gerileme |
+| 2 | History: "8.15 kayıt açıldı, 8.20 X başladı, 9.00 X ve Y birlikte başladı" | Kısmen. Her olay `CleaningEvents`'te sunucu zamanı, yapan ve yükle tutuluyor (`CleaningEvent.cs`), detayda "Olay günlüğü" tablosu var (`Details.cshtml:444-478`). Eksik: adım başlangıcı özeti görevlileri adlandırmıyor (`RecordEventText.cs:40`), süreler ham saniye (`RecordEventText.cs:41`), okuma tablo biçiminde. Görevli listesi olay yükünde var (`StepStartApplier.cs:263`), yeni tablo gerekmez | Satır 109-122, 130 (tamamlayıcı) | Faz 6C |
+| 3 | İki kişi çalışınca ikisi de efor girebiliyor mu | Evet, doküman modeliyle. Efor elle girilmez, sistem hesaplar: efor = adım süresi x görevli sayısı (`StepFinisher.cs:161-168`, `DurationCalculator.cs:143`, K-07). Sahip ya da adımın her görevlisi adımı kendi PIN'iyle başlatır ve bitirir (`StepStarter.cs:93`, `StepFinisher.cs:126`); görevli İşlerim'de "Görevli olduğum adımlar"da görür (`MyWorkReader.cs:82-85`). Sınırlar: görevli listesi adım başlayınca donar (`ParticipantService.cs:187-189`), görevliyi yalnız sahip ekler (`ParticipantService.cs:169`), adıma başlayan herkes aynı anda başlamış sayılır (`StepStartApplier.cs:238-245`); adımın ortasında katılan ya da erken ayrılan kişi temsil edilemez | Satır 51-58, 62-65 (karşılanıyor) | Adım içi katılma Faz 6E (S-3, O-10) |
+| 4 | Yardımcı tanımlama var mı | Var. Yardımcı = adım görevlisi (`StepParticipant.cs`); sahip her adıma otomatik görevli (`RecordPhaseBuilder.cs:39`), sahip yürütme ekranında adım başlamadan aktif Operatör ekler ve çıkarır (`ParticipantService.cs:39-148`, `:196`); detayda adım başına "Görevliler" ve kayıt düzeyinde "Yardımcılar" (`Details.cshtml:252`, `:308`). Eksik: görevlinin kendi PIN onayı (K-10), Faz 7 kalem 7 (PL-57); `ConfirmedAtUtc` kolonu var, yazılmıyor | Satır 38, 51-54, 104-105 (karşılanıyor) | Değişiklik yok; K-10 Faz 7'de |
+| 5 | Makine bazlı rapor, ortalama temizlik süresi | Var. `/reports/durations` makine süzgeci, makine ve tip başına ortalama brüt, mola, net, efor (`DurationReportReader.cs:132-141`), makine grafiği (Faz 6B) | Satır 8 (karşılanıyor) | Makineye odaklı sayfa Faz 6D |
+| 6 | Makine ile yapılmış plan bazlı temizlik raporu | Belirsiz (S-1). Faz düzeyinde ortalama-minimum karşılaştırması E-30 faz grafiğinde var (Faz 6B K8); makine düzeyinde planlanan süreyle karşılaştırma yok. Planlı/acil ayrımı E-30 tür süzgecinde var | Satır 8, 18-19 (ek) | Faz 6D, yorum (a) (S-1, O-09) |
+| 7 | Malzeme kullanım oranı | Yok. Miktar tutulmuyor (K-11; `RecordMaterial.cs` miktar alanı yok); E-31 kayıt ve lot listeler, toplam vermez | Satır 25 (ek) | Sayıma dayalı oran Faz 6D (S-2, O-09); miktar istenmedi (S-4) |
+| 8 | "Yardımcı eklerken operatör sicil no yazmasın, autocomplete ile seçsin" (koordinatör iletisi, aynı gün) | Kısmen. Faz 5'ten beri aramalı seçici var: "Görevli ekle" alanına ad ya da sicil no parçası yazılır (`_Participants.cshtml:76-79`, ipucu "Ad ya da sicil no yazın."), `ParticipantPicker.js` 250 ms sonra `GET /records/people?q=&stepId=` çağırır (`ParticipantPicker.js:27-30`, `:60-61`; `RecordStepsController.cs:75-77`), sonuçlar düğme listesidir, seçim gizli `ParticipantUserId`'ye yazılır (`ParticipantPicker.js:99-104`). Sicil no değer olarak elle girilmez. Eksikler: ARIA combobox değil (rol, `aria-expanded`, `aria-activedescendant` yok), ok tuşlarıyla gezinme yok, Enter seçmez yeniden arar (`ParticipantPicker.js:34-41`); pasif kullanıcı ve adımda zaten görevli olan listede çıkar (`ParticipantDirectory.cs:58-59`, yalnız devre dışı); arama `Contains` ile büyük-küçük harf duyarlı (`ParticipantDirectory.cs:25`, SQLite `instr`), "ahmet" "Ahmet"i bulmaz; uç nokta `stepId`'siz ve sahip olmayan operatöre de liste döner (`RecordStepsController.cs:75-77`) | Satır 54 (tamamlayıcı) | Faz 6C (PL-88) |
+
+**Kullanıcıya sorulacaklar** (Faz 6C onaydan başka soru istemez). Yanıtlar 2026-11-16, O-09; her sorunun altında.
+
+- S-1 (Faz 6D öncesi): "Plan bazlı" ile ne kastediliyor? Öneri (a): makinede her temizlik tipi için prosedürdeki faz minimumlarının toplamı
+  (planlanan süre) ile gerçekleşen ortalama net sürenin karşılaştırması. Diğer okumalar: (b) yalnız planlı kayıtlar, acil hariç (bugün E-30 tür
+  süzgeciyle var); (c) periyodik temizlik planına uyum, bu K-34 ile kapsam dışıdır, takvim tablosu ve ekranları ister.
+  **Yanıt:** (a). Faz 6D Paralel: Evet kesinleşti.
+- S-2 (Faz 6D öncesi): Malzeme kullanım oranı "malzemenin kullanıldığı kayıt sayısı / tamamlanan kayıt sayısı" olarak yeterli mi? Miktar (litre,
+  kg) isteniyorsa S-4.
+  **Yanıt:** Yeterli.
+- S-3 (Faz 6E): Adımın ortasında göreve katılan ya da erken ayrılan kişi için kişi başına gerçek çalışma süresi tutulsun mu? Bugünkü model doküman
+  satır 53'ü adım düzeyinde karşılıyor; değişiklik K-07 ve efor formülünü (SH-02) değiştirir, yeni tablo ister (ALTER değil).
+  **Yanıt:** Seçenek seçilmedi; kullanıcı "bu son isteklerimi yapmanı istiyorum" yazdı. Koordinatör yorumu: ilk istek ("ikisi de efor girebiliyor
+  mu") mevcut modelle karşılanıyor, ara katılım ayrıca istenmedi. Aday Faz 10 konu A yerinde kalır; kullanıcı yorumu teyit edilecek.
+  **Kesin yanıt (O-10):** Evet. Kullanıcı: "Y olmadan başlatabilmeli eğer y nin eforu varsa girebilmeli". Koordinatör yorumu geçersiz; konu Faz 6E'de.
+- S-4 (aday Faz 10): Malzeme miktarı ve birimi tutulsun mu? K-11'i değiştirir; mevcut `Materials` ve `RecordMaterials` tablolarına kolon ekleme
+  **ALTER sınıfıdır, kullanıcı onayı ister**. Miktarın ne zaman girileceği de karar ister (malzeme ilk adımdan sonra değişmez, BR-47; tüketim iş
+  sonunda belli olur).
+  **Yanıt:** Miktar istenmedi; ALTER yok.
+- S-5: Sıra. Öneri: Faz 6C bugün, Faz 6D Salı sonrası ve Faz 7'den önce. Alternatif: Faz 6D Faz 9'dan sonra.
+  **Yanıt:** İkisi de bugün, sunumdan önce. Önce Faz 6C; faz kapısından geçince hemen Faz 6D.
+
+---
+
+## Faz 6C: Kayıt zaman çizelgesi ve görevli seçimi (Salı öncesi)
+
+**Amaç:** Yönetici ve kaydı okuyan her rol kayıt detayında işin akışını gün ve saat sırasıyla cümle olarak okur: kim kaydı açtı, adıma kim ya da
+kimler birlikte başladı, kim bitirdi ve ne kadar sürdü, mola, faz sonucu, tamamlanma ya da kapanış (PL-85 madde 2). Kanıt değeri olay günlüğündedir;
+çizelge aynı olayların okunur halidir. Sahip görevli eklerken sicil no hatırlamaz: aktif operatörler arasından ad ya da sicil no parçasıyla arar,
+listeden fare, dokunma ya da klavyeyle seçer (PL-88).
+
+**Başlama şartı:** Faz 6B commit'i (60c3ee3, karşılandı) ve kullanıcı onayı (O-09, karşılandı). Migration yok. QA kopyada çalışır, kullanıcının `App_Data/vaka.db`'si ve
+Sunum hazırlığı kayıtları korunur. Çizelge mevcut olaylardan türediği için Faz 6C'den önce oluşmuş kayıtlarda da çizilir.
+
+**Kapsam**
+
+| # | Tür | İş kalemi | Sahibi |
+|---|---|---|---|
+| 1 | BE | `IRecordTimelineBuilder` ve `RecordTimelineBuilder` (`Services/`): `RecordDetailReader`'ın okuduğu olaylardan (`ParsedEvent`) olay başına bir satır, `Sequence` sırasıyla, Türkiye gününe göre gruplu çizelge. Kişi adları ve adım etiketi (`Faz <faz sırası> / Adım <adım sırası> - <başlık>`, prosedür faz ve adım sırasından) okuyucunun sözlüklerinden; `StepStarted` ve `StepFinished` yükündeki `ParticipantUserIds` dizisinden kişi metni (`ParsedEvent.Numbers` mevcut). Süre ve efor yalnız olay yükündeki saklı saniyelerden; yeni süre hesabı yok (G8). Yapanı olmayan olayda kişi "Sistem". Bilinmeyen tür `RecordEventText.Label` ile tek satır | backend-engineer |
+| 2 | BE | `RecordDetailViewModel.Timeline` dolar; DI kaydı `Program.cs`'te. Yeni olay türü, kolon, tablo, migration yok | backend-engineer |
+| 3 | FE | `Views/Records/_Timeline.cshtml` ve `Details.cshtml`'de "Zaman çizelgesi" bölümü, "Olay günlüğü"nden önce: gün başlığı, saat `HH:mm` mono ve saniyeli `<time datetime>`, cümle, adım etiketi, ayrıntı, süre ve efor `_Duration` ile; `TimelineEntryKind` ikon ve ton eşlemesi tek yerde; `IsWarning` satırı renk dışında metinle ayrılır. Yazdırmada gizli; olay günlüğü yazdırmada kalır | frontend-engineer |
+| 4 | FE | `Styles/app.css`: çizelge stilleri tokenlerden, açık ve koyu tema; 360 px'te yatay kaydırma yok | frontend-engineer |
+| 5 | BE | Görevli adayı arama (PL-88), `ParticipantDirectory` ve `GET /records/people`: `stepId` zorunlu; adım yoksa 404, istek sahibi kaydın sahibi değilse 403 (K-30 düzeni, servis kararı); liste yalnız `Operator` rolü olan **aktif** kullanıcılar, o adımda **zaten görevli olanlar listelenmez**; sahip adımda görevliyse bu kuralla çıkar, kendini adımdan çıkardıysa geri eklenebilsin diye listelenir. Molada olan listelenir, `IsAvailable = false` ve nedenle. Arama ad ve sicil no'da, parça eşleşmesi, Türkçe kurala göre büyük-küçük harf duyarsız ("ahmet", "AHMET" ve "Ahmet" aynı; "i" ve "İ", "ı" ve "I" eşleşir); boş arama ada göre ilk 50. Yanıt `{ items, truncated }`. Ekleme servisi (`ParticipantService.CheckCandidateAsync`) aynı kuralları sunucuda yine uygular, listeye güvenmez. JS kapalı listede (`Run?stepId=&people=`) aynı süzgeç | backend-engineer |
+| 6 | FE | `_Participants.cshtml` ve `ParticipantPicker.js`: mevcut arama ve düğme listesi WAI-ARIA combobox desenine geçer (giriş `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded`, `aria-controls`, `aria-activedescendant`; açılır liste `role="listbox"`, seçenekler `role="option"`, eklenemeyen seçenek `aria-disabled="true"` ve nedenli). Seçenek metni ad ve `Sicil <no>`; seçilen kişi alanın altında ad ve sicil no ile, "Değiştir" düğmesiyle görünür; K-41 uyarısı sürer. Durum metinleri canlı bölgede. JS kapalı yol (arama formu ve radyo listesi) kalır | frontend-engineer |
+
+**Satır metinleri** (backend `Title` ve `Detail`'i bu kalıpla üretir; adlar `User.FullName`)
+
+| Olay | Title | Detail | Süre alanları |
+|---|---|---|---|
+| `RecordOpened` | `<Ad> kaydı açtı` | `Kayıt no <no>`, iş emri doluysa `, iş emri <no>` | - |
+| `StepStarted` | 1 görevli: `<Ad> adıma başladı`; 2: `<Ad> ve <Ad> birlikte adıma başladı`; 3 ve üstü: `<Ad>, <Ad> ve <Ad> birlikte adıma başladı` | Başlatan görevliler arasında değilse `Başlatan: <Ad>`; ilk adımda saha referansı doluysa `Saha referansı <no>` | - |
+| `StepFinished` | `<Ad> adımı bitirdi` | Görevli sayısı 2 ve üstüyse `Görevliler: <adlar>` | `DurationSeconds`, `EffortSeconds` |
+| `StepInterrupted` | `Adım kesildi` | - | `DurationSeconds`, `EffortSeconds` |
+| `PhaseCompleted` | `Faz <sıra> tamamlandı` ya da `Faz <sıra> süre altında tamamlandı` (`IsWarning`) | Süre altıysa `Gerekçe: <metin>` | `DurationSeconds` = net |
+| `RecordCompleted` | `Kayıt tamamlandı` | - | `DurationSeconds` = net, `EffortSeconds` |
+| `BreakStarted` | `<Ad> mola başlattı` | - | - |
+| `BreakEnded` | Kişi: `<Ad> molayı bitirdi`; yönetici: `<Ad> molayı yönetici olarak bitirdi` | Gerekçe doluysa `Gerekçe: <metin>` | `DurationSeconds` |
+| `MaterialAdded`, `MaterialRemoved` | `<Ad> malzeme ekledi`, `<Ad> malzeme çıkardı` | `Lot <no>`; SKT geçmişse `, SKT geçmiş: <gerekçe>` (`IsWarning`) | - |
+| `ParticipantAdded`, `ParticipantRemoved` | `<Ad> görevli ekledi: <Ad>`, `<Ad> görevli çıkardı: <Ad>` | Adım etiketi `StepLabel`'da | - |
+| `RecordCancelled`, `RecordAborted` | `<Ad> kaydı iptal etti`, `<Ad> kaydı yarıda kapattı` (`IsWarning`) | `Gerekçe: <metin>`; kesilen adım varsa `StepLabel` | - |
+| `RecordTimedOut` | `Kilit süresi doldu, kayıt zaman aşımına düştü` (`IsWarning`) | `Kilit bitişi <saat>` | - |
+| Bilinmeyen | `RecordEventText.Label(tür)` | - | - |
+
+`RecordCompleted` satırında brüt ve mola ayrıca gösterilmez; detayın özet kartında vardır.
+
+**Paralel:** Evet. Gerekçe: şema yok; route mevcut; ViewModel ve enum aşağıda; dosyalar ayrık.
+
+**Sözleşme**
+
+| Route | Action | Rol | ViewModel (alanlar) | Görünüm |
+|---|---|---|---|---|
+| GET `/records/details/{id}` (mevcut) | `RecordsController.Details` | RecordReaders | `RecordDetailViewModel`'e ek: `Timeline: RecordTimelineDayViewModel[]`. `RecordTimelineDayViewModel { DateLocal: DateOnly, Entries: RecordTimelineEntryViewModel[] }`. `RecordTimelineEntryViewModel { Sequence: int, OccurredAtLocal: DateTime, Kind: TimelineEntryKind, Title: string, StepLabel: string?, Detail: string?, DurationSeconds: int?, EffortSeconds: int?, IsWarning: bool }` | `Views/Records/Details.cshtml`, `Views/Records/_Timeline.cshtml` |
+
+| GET `/records/people?q=&stepId=` (mevcut, değişir) | `RecordStepsController.People` | Operator (servis: yalnız kaydın sahibi) | JSON `ParticipantSearchResponseViewModel { Items: ParticipantOptionViewModel[], Truncated: bool }`; `ParticipantOptionViewModel { UserId, FullName, RegistryNo, IsAvailable, UnavailableReason?, HasOwnActiveRecord }` (alanlar aynı, JSON camelCase). `stepId` yoksa 400, adım yoksa 404, sahip değilse 403 | - |
+| GET `/records/run/{id}?stepId=&people=` (mevcut) | `RecordsController.Run` | Operator | `ParticipantOptions[]` ve `ParticipantOptionsTruncated` aynı süzgeçle dolar; alan değişikliği yok | `Views/Records/_Participants.cshtml` |
+
+`TimelineEntryKind` (`Services/TimelineEntryKind.cs`): `Opened`, `TimedOut`, `MaterialAdded`, `MaterialRemoved`, `ParticipantAdded`, `ParticipantRemoved`,
+`StepStarted`, `StepFinished`, `StepInterrupted`, `BreakStarted`, `BreakEnded`, `PhaseCompleted`, `Completed`, `Cancelled`, `Aborted`, `Other`.
+
+**Dosya sınırı:** backend `Services/IRecordTimelineBuilder.cs`, `Services/RecordTimelineBuilder.cs`, `Services/TimelineEntryKind.cs`, `Services/RecordDetailReader.cs`,
+`ViewModels/Records/RecordTimeline*.cs`, `ViewModels/Records/RecordDetailViewModel.cs`, `Program.cs`, `Services/ParticipantDirectory.cs`, `Services/IParticipantDirectory.cs`,
+`Services/ParticipantService.cs` (yalnız aday denetimi), `Controllers/RecordStepsController.cs` (`People`), `ViewModels/Records/ParticipantSearchResponseViewModel.cs`;
+frontend `Views/Records/Details.cshtml`, `Views/Records/_Timeline.cshtml`, `Views/Records/_Participants.cshtml`, `wwwroot/js/ParticipantPicker.js`, `Styles/app.css`. `RecordEventText.cs` ve olay günlüğü değişmez.
+
+**Tasarım girdisi (frontend-engineer için)**
+
+| Konu | Girdi |
+|---|---|
+| Kitle ve iş | Yönetici ve Denetçi bir kaydın nasıl yürüdüğünü baştan sona birkaç saniyede okur; sorulan "kim, ne zaman, kimlerle" |
+| Biçim | Dikey çizelge: solda saat, ortada ince çizgi ve tür işareti, sağda cümle ve altında küçük ayrıntı; gün değişince gün başlığı. Kart yığını değil |
+| Ton | Kayıt detayının belge havası; uyarı satırı (süre altı, SKT geçmiş, iptal, yarıda kapatma, zaman aşımı) DNA uyarı tonu ve metinle |
+| Kısıt | 360 px'te yatay kaydırma yok, saat ve cümle alt alta inebilir; açık ve koyu tema; `<ol>`, bölüm `aria-labelledby`; animasyon yok |
+| Görevli seçimi | Sahada eldivenle tablet: seçenek satırı en az 44 px, ad büyük ve kalın, sicil no mono ve küçük; açılır liste alanın hemen altında, alan genişliğinde, kendi içinde kayar ve sayfayı yatay taşırmaz; mevcut lot seçicisiyle (`lot-results`) aynı görsel dil |
+
+**Kabul kriterleri**
+
+QA kopyada şu kayıtları arayüzden oluşturur: planlı bir kayıt (iki görevlili bir adım; sahibin kendini görevli listesinden çıkardığı ve
+adımı yine kendisinin başlattığı bir adım; iki adım arasında mola; süre altı faz; tamamlanma), iptal edilmiş bir kayıt, SKT geçmiş lotlu bir kayıt.
+
+- [ ] K1: Yönetici (`1001`) `/records/details/{id}`'de "Zaman çizelgesi" bölümünü "Olay günlüğü"nden önce görür; çizelgedeki satır sayısı kaydın `CleaningEvents` satır sayısına eşittir, sıra `Sequence` sırasıdır.
+- [ ] K2: Satır saati `CleaningEvents.OccurredAtUtc`'nin Türkiye saatidir (görünür `HH:mm`, `<time datetime>` saniyeli); kayıt iki güne yayılırsa her gün için `dd.MM.yyyy` başlığı vardır (QA bu durumu kod okumasıyla ve gruplama birimiyle gösterir, canlı gün geçişi beklenmez).
+- [ ] K3: İlk satır açan kişinin adını, kayıt no'yu ve iş emri no'yu taşır.
+- [ ] K4: Tek görevli adımın başlangıcı "<Ad> adıma başladı", iki görevli adımın "<Ad> ve <Ad> birlikte adıma başladı" yazar; adlar `StepStarted` yükündeki görevlilerle aynıdır; satırda `Faz <n> / Adım <m> - <başlık>` etiketi vardır. Başlatan görevliler arasında değilse "Başlatan: <Ad>" ayrıca yazar.
+- [ ] K5: Adım bitiş satırı bitireni, süreyi ve eforu `sa dk sn` biçiminde yazar; değerler `RecordSteps.DurationSeconds` ve `EffortSeconds` ile aynıdır, iki görevli adımda efor süre x 2'dir.
+- [ ] K6: Mola başlangıç ve bitiş satırları kişiyi ve mola süresini, yönetici bitirdiyse yöneticinin adını ve gerekçeyi yazar; süre altı faz satırı "süre altında" ve gerekçeyi metinle yazar; tamamlanma satırı net süre ve eforu yazar.
+- [ ] K7: İptal satırı yöneticinin adını, gerekçeyi ve kesilen adımı; SKT geçmiş lot satırı uyarıyı metinle yazar; zaman aşımı satırı bir kişiye atfedilmez (satır tablosundaki adsız başlık; olay günlüğünde yapan "Sistem", PL-95) (zaman aşımı QA kopyasında `RecordTimeouts` ile üretilebiliyorsa ölçülür, değilse kod okumasıyla).
+- [ ] K8: Denetçi ve kaydın sahibi olmayan Operatör aynı bölümü görür; bölümde düğme ve form yoktur. Yalnız Süper admin rolü `/records/details/{id}`'de 403 alır (G10 gerileme).
+- [ ] K9: Yönetici `/records` aramasına iş emri no yazarak kaydı bulur ve detayı açar (gerileme).
+- [ ] K10: Olay günlüğü tablosu, bütünlük rozeti ve yazdırma çıktısı değişmez; zaman çizelgesi yazdırma önizlemesinde görünmez.
+- [ ] K11: Faz 6C'den önce oluşmuş bir kayıtta (QA kopyasındaki Sunum hazırlığı kaydı) çizelge çizilir; migration yok, `CleaningEvents`'e satır eklenmez, bütünlük "Doğrulandı" kalır.
+- [ ] K12: Bilinmeyen olay türü tür adıyla tek satır çizilir; QA `RecordTimelineBuilder`'ın varsayılan dalını kod okumasıyla gösterir.
+- [ ] K13: Çizelge 360, 768, 1024 ve 1440 px'te açık ve koyu temada yatay kaydırmasızdır; uyarı satırları renk dışında metinle ayrılır (NFR-05); G12 hizalama kusuru 0.
+Görevli seçimi (PL-88). QA kopyada: aktif iki operatör, bir pasif operatör, molada bir operatör, Operatör rolü olmayan bir Yönetici; adlardan biri
+Türkçe büyük harfli ("İ", "Ö" ya da "Ş" içeren) olur.
+
+- [ ] K14: Sahip (`2002`) yürütme ekranında bekleyen bir adımın "Görevleri düzenle" panelinde alana odaklanınca liste açılır; listede yalnız Operatör rolü olan aktif kullanıcılar vardır. Pasif operatör, Operatör rolü olmayan Yönetici ve o adımda zaten görevli olanlar (sahip dahil) listede yoktur; molada olan operatör "Molada" nedeniyle seçilemez görünür.
+- [ ] K15: Arama ad ve sicil no parçasında çalışır; aynı kişi "ahmet", "AHMET" ve "Ahmet" ile bulunur; "İ" içeren ad küçük "i" ile, "I" içeren ad "ı" ile bulunur; sicil no parçası (ör. son iki hane) kişiyi bulur.
+- [ ] K16: Klavye: alan odaktayken Aşağı ok listeyi açar ve ilk seçilebilir seçeneği etkin yapar; Aşağı ve Yukarı ok etkin seçeneği değiştirir ve seçilemeyen seçeneği atlar; Enter etkin seçeneği seçer ve formu göndermez; Escape listeyi kapatır, odak alanda kalır; Tab listeyi seçim yapmadan kapatır. Tüm akış fare kullanmadan tamamlanır ve görevli eklenir.
+- [ ] K17: ARIA: alan `role="combobox"`, `aria-autocomplete="list"`, `aria-controls` liste kimliğini, `aria-expanded` liste açıkken `true` kapalıyken `false` taşır; etkin seçenekte alanın `aria-activedescendant`'ı o seçeneğin kimliğidir; liste `role="listbox"`, seçenekler `role="option"`, seçilemeyen `aria-disabled="true"`. Sonuç sayısı, boş sonuç ve hata metni `role="status"` bölgesinde okunur. QA erişilebilirlik ağacını ve DOM özniteliklerini ölçer.
+- [ ] K18: Boş ve hata durumu: eşleşme yoksa "Aramaya uyan aktif operatör yok." görünür; uç nokta hata verir ya da bağlantı kesilirse "Kişiler alınamadı. Bağlantıyı kontrol edip yeniden arayın." görünür ve form kişi seçilmeden gönderilmez; kişi seçmeden "Görevliyi ekle" "Bir kişi seçin." hatasını alanın hata yerinde gösterir (D-1); sonuç 50'yi aşarsa "Liste kısaltıldı. Aramayı daraltın." görünür. Hızlı yazmada eski yanıt yeni sonucun üstüne yazılmaz.
+- [ ] K19: Seçilen kişi alanın altında ad ve sicil no ile görünür; "Değiştir" seçimi temizler ve odağı alana verir; kendi açık kaydı olan kişi seçilince K-41 uyarısı görünür (Faz 5 K7 gerileme). Reddedilen eklemede seçili kişi korunur, PIN korunmaz (PL-64 gerileme).
+- [ ] K20: `GET /records/people` `stepId`'siz 400, olmayan adımda 404, kaydın sahibi olmayan Operatör'de 403, Yönetici ve Denetçi'de 403 döner; sahipte 200 ve `{ items, truncated }`. Pasif ya da adımda zaten görevli kişinin kimliği elle POST'lanırsa ekleme reddedilir, olay yazılmaz (sunucu denetimi).
+- [ ] K21: JS kapalıyken arama formu ve radyo listesi aynı süzgeçle (pasif ve zaten görevli yok, Türkçe harf duyarsız) çalışır ve görevli eklenir.
+- [ ] K22: Panel 360, 768, 1024 ve 1440 px'te açık ve koyu temada yatay kaydırmasızdır; açılır liste alan genişliğini aşmaz; seçenek satırı en az 44 px; G12 hizalama kusuru 0; konsol 0 hata.
+
+- Ortak: G1-G8, G10, G12; G5a `_Participants.cshtml` formlarında yeniden sayılır; G9 uygulanmaz (yeni komut yok, ekleme komutu değişmez), G11 uygulanmaz (yeni liste ekranı yok).
+
+**Kapsam dışı:** Görevlinin kendi PIN'iyle katılım onayı (K-10, Faz 6E, PL-92); adımlar arası molasız boşluğun ayrıca gösterilmesi (yeni süre formülü ister); çizelgenin yazdırma ve CSV çıktısı (Faz 9'da istenirse);
+adım içi katılma satırları (Faz 6E).
+
+---
+
+## Faz 6D: Makine raporu ve malzeme kullanım oranı (Salı öncesi, Faz 6C'den sonra)
+
+**Amaç:** Yönetici ve Denetçi bir makine seçip o makinedeki temizlikleri tip başına ortalama süre, efor ve prosedürün planladığı minimum süreyle
+karşılaştırarak görür; malzemelerin tamamlanan temizliklerde hangi oranda kullanıldığını görür (PL-85 madde 5-7).
+
+**Başlama şartı:** Faz 6C commit'i. Kullanıcı onayı, S-1 (a) ve S-2 yanıtı karşılandı (O-09). Faz 6C faz kapısından geçince hemen başlar. Migration yok.
+
+**Kapsam**
+
+| # | Tür | İş kalemi | Sahibi |
+|---|---|---|---|
+| 1 | BE | `IMachineReportReader` ve okuyucu: süzgeç (makine zorunlu; tesis, hat; tarih açılış anının Türkiye günü, gün dahil; tür) doğrulaması E-30 düzeninde. Tip başına satır: kayıt sayısı, Tamamlandı sayısı, ortalama brüt, mola, net, efor (yalnız Tamamlandı, SH-15, versiyonlar birlikte), ortalama planlanan minimum (SH-18'in kayıt başına değerlerinin SH-15 ortalaması), plan farkı (SH-19), süre altı faz sayısı ve değerlendirilen faz sayısı (`RecordPhases.BelowMinimum`); durum sayıları süzgece uyan tüm kayıtlardan; son 20 kayıt (açılış anına göre yeniden eskiye); makinenin malzeme kullanım satırları kalem 2'deki servisten | backend-engineer |
+| 2 | BE | `IMaterialUsageReader`: süzgece uyan Tamamlandı kayıtlarda malzeme başına kayıt sayısı, kullanım oranı, farklı lot sayısı, SKT geçmiş kullanım sayısı; çıkarılmış satır (`RemovedAtUtc` dolu) sayılmaz. Oran formülü XML yorumunda: `Kullanım oranı (%) = malzemenin en az bir lotuyla yer aldığı Tamamlandı kayıt sayısı / süzgece uyan Tamamlandı kayıt sayısı x 100`, bir ondalık, payda 0 ise oran yok ve satır yok. E-31'e `MaterialTraceMode.Usage` | backend-engineer |
+| 3 | BE | `IDurationCalculator`: SH-18 `CalculateRecordPlannedMinimum` (kaydın `RecordPhases.MinDurationSecondsSnapshot` dolu değerleri toplamı; hiçbiri dolu değilse boş), SH-19 `CalculatePlanVariance` (ortalama net - ortalama planlanan minimum). Formüller XML yorumunda; Brief §9.5'e analist ekler | backend-engineer |
+| 4 | BE | `DurationReportViewModel.ByMachine[]` satırına `MachineReportUrl` (aynı süzgeçle makine raporu adresi) | backend-engineer |
+| 5 | FE | E-34 `Views/Reports/Machine.cshtml`: süzgeç (JS kapalı çalışır, tesis ve hat değişince seçenekler sunucudan yenilenir, Faz 6A düzeni), makine başlığı, durum sayıları, tip tablosu (G11 kart deseni), bir grafik (tip başına ortalama net ve planlanan minimum, PL-78 SVG partial), son kayıtlar listesi, malzeme kullanım tablosu; makine seçilmeden boş durum. Menüde Raporlar altında "Makine raporu" | frontend-engineer |
+| 6 | FE | E-31'e "Kullanım oranı" modu (mevcut Lot ve Makine mod seçimi düzeninde; tarih, tesis, hat, makine, tip süzgeci; tablo; paydanın sayfada yazması); E-30 makine satırında makine raporu bağlantısı | frontend-engineer |
+| 7 | DB | Yok. Sorgular mevcut index'lerle; ölçümde gerek çıkarsa mevcut tabloya index O-07 düzeninde kullanıcı onayı ister | - |
+
+**Paralel:** Evet (S-1 (a) ile kesinleşti, O-09). Gerekçe: şema yok; route, rol, ViewModel aşağıda; dosyalar ayrık.
+
+**Sözleşme**
+
+| Route | Action | Rol | ViewModel (alanlar) | Görünüm |
+|---|---|---|---|---|
+| GET `/reports/machine` | `ReportsController.Machine` | ManagerOrAuditor | `MachineReportViewModel { Filter: MachineReportFilterViewModel { From?, To?, FacilityId?, LineId?, MachineId?, Kind? }, FacilityOptions[], LineOptions[], MachineOptions[], KindOptions[] (`SelectOptionViewModel`), Machine?: MachineReportHeaderViewModel { Label, LineLabel, FacilityLabel, RetiredAtLocal? }, StatusCounts[] (`StatusCountViewModel`), ByType[]: MachineTypeRowViewModel { CleaningTypeName, KindLabel, RecordCount, CompletedCount, AvgGrossSeconds?, AvgBreakSeconds?, AvgNetSeconds?, AvgEffortSeconds?, AvgPlannedMinSeconds?, PlanVarianceSeconds?, BelowMinimumPhaseCount, EvaluatedPhaseCount }, Recent[]: MachineRecentRecordViewModel { RecordId, RecordNo, CleaningTypeName, KindLabel, OpenedAtLocal, StatusLabel, NetSeconds?, EffortSeconds?, PlannedMinSeconds?, Url }, CompletedRecordCount, Materials[]: MaterialUsageRowViewModel, ErrorMessage? }` | `Views/Reports/Machine.cshtml` |
+| GET `/reports/materials?mode=Usage` | `ReportsController.Materials` (mevcut) | ManagerOrAuditor | `MaterialTraceViewModel`'e ek: `Mode = Usage`; süzgeç `FacilityId?, LineId?, CleaningTypeId?` ve seçenek listeleri (`MachineId`, `From`, `To` mevcut); `Usage?: MaterialUsageViewModel { CompletedRecordCount, RecordsWithMaterialCount, Rows[]: MaterialUsageRowViewModel }`. `MaterialUsageRowViewModel { MaterialCode, MaterialName, RecordCount, UsageRatePercent: decimal, LotCount, ExpiredUseCount }` | `Views/Reports/Materials.cshtml` |
+| GET `/reports/durations` (mevcut) | `ReportsController.Durations` | ManagerOrAuditor | `ByMachine[]`'e `MachineReportUrl` | `Views/Reports/Durations.cshtml` |
+
+`PlanVarianceSeconds` negatif olabilir; görünüm işareti metinle yazar (ör. `+4 dk`, `-2 dk`), biçim `_Duration` ve işaret ayrı. Süre metni yalnız
+`IDurationFormatter`'dan.
+
+**Dosya sınırı:** backend `Controllers/ReportsController.cs`, `Services/IMachineReportReader.cs`, `Services/MachineReportReader.cs`,
+`Services/IMaterialUsageReader.cs`, `Services/MaterialUsageReader.cs`, `Services/MaterialTraceMode.cs`, `Services/MaterialTraceReader.cs`,
+`Services/DurationReportReader.cs` (yalnız bağlantı), `Services/IDurationCalculator.cs`, `Services/DurationCalculator.cs`, `ViewModels/Reports/**`, `Program.cs`;
+frontend `Views/Reports/Machine.cshtml`, `Views/Reports/Materials.cshtml`, `Views/Reports/Durations.cshtml` (yalnız bağlantı), `Views/Shared/_NavList.cshtml`
+(menü), grafik partial'ı, `Styles/app.css`.
+
+**Tasarım girdisi (frontend-engineer için)**
+
+| Konu | Girdi |
+|---|---|
+| Kitle ve iş | Yönetici makine başına "bu makinenin temizliği normalde ne kadar sürüyor, planlanandan uzun mu" sorusunu yanıtlar (doküman satır 8) |
+| Hiyerarşi | Üstte makine ve süzgeç, sonra tip tablosu ve plan karşılaştırma grafiği, sonra son kayıtlar ve malzeme; dört eşit KPI kartı yok (DNA) |
+| Grafik | Tip başına yatay çubuk: ortalama net ve planlanan minimum işareti; minimumu aşan ve altında kalan renk dışında metinle de ayrılır |
+| Kısıt | E-30 süzgeç ve grafik düzeniyle aynı dil; 360 px'te yatay kaydırma yok; açık ve koyu tema |
+
+**Kabul kriterleri**
+
+- [ ] K1: Yönetici ve Denetçi `/reports/machine`'i açar; Operatör ve yalnız Süper admin rolü 403 alır, menüde görmez (G10).
+- [ ] K2: Makine seçilmeden sayfa boş durum metniyle açılır ve tablo çizilmez; olmayan ya da süzgeçle uyuşmayan tesis, hat, makine ve bitişi başlangıçtan önceki tarih `ErrorMessage` ve boş tablolarla döner.
+- [ ] K3: Tip satırındaki kayıt sayısı, Tamamlandı sayısı ve ortalama brüt, mola, net, efor QA kopyasındaki veritabanı sorgusuyla aynıdır; aynı süzgeçle `/reports/durations` makine satırındaki ortalamalarla aynıdır.
+- [ ] K4: Planlı tipte ortalama planlanan minimum, Tamamlandı kayıtların faz minimum anlık değerleri toplamlarının ortalamasıdır; plan farkı ortalama net - ortalama planlanan minimumdur, negatifse işaretiyle yazar; acil tipte iki alan "-"dir. QA bir makine için elle hesaplayıp karşılaştırır.
+- [ ] K5: Süre altı faz sayısı ve değerlendirilen faz sayısı `RecordPhases` sayımıyla aynıdır.
+- [ ] K6: Son kayıtlar en çok 20 satırdır, açılış anına göre yeniden eskiye sıralıdır, her satır kayıt detayına gider; durum sayıları süzgece uyan tüm kayıtlardandır.
+- [ ] K7: SH-18 ve SH-19 `DurationCalculator`'da, kullanım oranı formülü `MaterialUsageReader`'da XML yorumunda formülle yazılıdır.
+- [ ] K8: `/reports/materials?mode=Usage`'da malzeme başına kayıt sayısı, oran (bir ondalık, %), lot sayısı ve SKT geçmiş kullanım sayısı veritabanı sorgusuyla aynıdır; çıkarılmış malzeme sayılmaz; payda (Tamamlandı kayıt sayısı) sayfada yazar; Tamamlandı kayıt yoksa boş durum metni, hata yok.
+- [ ] K9: Makine raporundaki malzeme tablosu, aynı makine ve süzgeçle kullanım oranı modunun değerleriyle aynıdır.
+- [ ] K10: Grafik değerleri tablodakiyle aynıdır; SVG sunucu HTML'indedir, JS kapalıyken çizilir; planlanan minimum renk dışında desen ya da metinle ayrılır (NFR-05).
+- [ ] K11: `/reports/durations` makine satırındaki bağlantı makine raporunu aynı makine, tarih ve türle açar.
+- [ ] K12: Süzgeç JS kapalıyken çalışır; tesis değişince hat ve makine seçenekleri sunucudan yenilenir.
+- Ortak: G1-G8, G10-G12; G9 uygulanmaz (yeni komut yok). G11 imzaları (tip tablosu, son kayıtlar, malzeme tablosu, kullanım oranı tablosu) frontend devir notunda.
+
+**Kapsam dışı:** Periyodik temizlik planına uyum (K-34); malzeme miktarı (S-4, istenmedi, O-09); CSV (Faz 9 kalem 3'e eklenir); personel bazlı rapor (K-36).
+
+---
+
+## Faz 6E: Görevli girişi ve adım içi katılım (Faz 6D'den sonra)
+
+**Amaç:** Sahip adımı yardımcısını beklemeden başlatır. Yardımcı adıma gerçekten katıldığı anda kendi PIN'iyle girişini yapar, erken giderse
+ayrılır; eforu yalnız çalıştığı süredir. Sahibin eklediği yardımcı girişini yapmadan ya da listeden çıkarılmadan adım bitmez, dolayısıyla sonraki
+faza geçilmez; ekranda "Girişi bekleniyor: <Ad>" yazar (PL-89, PL-93, O-10). S-3 bu fazla kapandı; aday Faz 10 konu A buraya alındı.
+
+**Dokümandaki dayanak:**
+
+| Satır | Doküman | Kurala etkisi |
+|---|---|---|
+| 52 | "Her adımda kimlerin gerçekten çalıştığını seçebilmemiz gerekiyor." | Listede olmak yetmez; çalıştığını kişinin kendisi PIN'le kaydeder |
+| 53 | "gerektiğinde o adıma başka kişiler de eklenebilmeli" | Ekleme adım sürerken de yapılır; K-07'nin "yalnız adım başlamadan" sınırı kalkar |
+| 55-57 | Başlama ve bitiş saatini sistem kaydeder; "Ben bu işlemi 10 dakika yaptım" gibi elle bilgi yok | Yardımcı süre ya da dakika girmez; katılma ve ayrılma anı sunucu saatidir |
+| 61-62 | 10 dakikalık adımda iki kişi çalıştıysa emek 20 dakika | Adımın tamamında çalışan kişiler için formül bugünküyle aynı sonucu verir |
+| 76-77 | Kişi aynı anda iki temizlikte çalışamaz | Meşguliyet kişinin katılma ve ayrılma aralığıdır; girişini yapmamış kişi başka işte çalışabilir |
+| 112, 116 | Kimler hangi adımlarda görev almış, toplam insan eforu | Detayda kişi başına katılma, ayrılma ve çalışma süresi |
+| 128, 131 | Yapılmamış adım sonradan yapılmış gibi gösterilemez; bilgi işlem anında oluşur | Adım bittikten sonra giriş yok; kapı bu yüzden faz geçişinde değil adım bitişindedir |
+
+Doküman adım içi katılımı tek başına zorunlu kılmaz (satır 54 "Daha sonra ilgili adım başlatılacak" önce seçim, sonra başlatma sırasını anlatır ve
+K-07 bunu izledi). Kullanıcının okuması (satır 52, 53) dokümanla uyumludur; karar kullanıcınındır (O-10). Dokümanın zorunlu kıldığı şey biçimdir:
+yardımcının katkısı elle süre olarak değil, işlem anında sistem saatiyle oluşur.
+
+**Netleşen kurallar**
+
+| Soru | Karar | Gerekçe |
+|---|---|---|
+| Kapı nerede (onaylı, O-11) | Adım bitişinde: sahip dışında listede olup girişini yapmamış kişi varsa adım bitirilemez; adım bitmeden faz tamamlanmadığı için sonraki faza da geçilmez | Faz geçişinde kapı, adım kapandıktan sonra yardımcının geriye dönük katkı girmesini gerektirir; satır 128 ve 131 buna izin vermez. Adım başlangıcı kapısını kullanıcı reddetti |
+| Yardımcının girdiği | Süre değil iki işlem: "Adıma katıl" (PIN) ve isterse "Adımdan ayrıl" (PIN). Adım başlamadan katılan, adım başladığı anda çalışmaya başlamış sayılır ("X ve Y birlikte başladı"); adım sürerken katılan, katıldığı andan itibaren. Ayrılmayan kişinin aralığı adım bitince kapanır | Satır 55-57 |
+| Nereden | Aynı tablette görevli panelinde kişinin adının yanında "Katıl" ve "Ayrıl", form kişinin adıyla etiketli ve PIN o kişinin (SK-8 istisnası); ya da kişinin kendi cihazında İşlerim'deki "Girişiniz bekleniyor" kartından açılan aynı form. Tek servis | Kullanıcı UX kararını bıraktı; ekip birlikteyken tablet, yardımcı başka noktadaysa kendi cihazı |
+| SH-02 | Değişir. Kişi çalışma süresi (SH-02a) = kişi bitişi - kişi başlangıcı - kişi aralığıyla kesişen kayıt molası; kişi başlangıcı = en geç (katılma, adım başlangıcı), kişi bitişi = en erken (ayrılma, adım bitişi). Adım eforu (SH-02) = adımdaki kişi çalışma sürelerinin toplamı | Adımın tamamında çalışan iki kişide 10 + 10 = 20 dk (satır 61-62); 10 dakikalık adıma 4. dakikada katılan yardımcıyla 10 + 6 = 16 dk |
+| SH-01 | Değişmez: adım süresi kişilerden bağımsızdır | Süre ile efor ayrı (satır 63) |
+| Bekleme sırasında süre | Kapı süreyi durdurmaz; adım saati işler. Girişi bekleyen kişiye efor yazılmaz. Sahip beklemek yerine gelmeyen kişiyi çıkarır | Satır 71 gerçek çalışma süresi; bekleme ayrı bir durum değildir |
+| Y gelmezse | Sahip kişiyi kendi PIN'iyle listeden çıkarır (adım başlamadan ya da sürerken); yalnız hiç katılmamış kişi çıkarılır. Katılmış kişi çıkarılamaz, ayrılır | Çalışmış kişinin izi silinmez (satır 129) |
+| Sahip yokken | Adımı bitirecek görevli bekleyen kişiyi çıkaramaz (görevliyi yalnız sahip yönetir, SK-2); kişi katılır ya da sahip gelir. Kayıt ilerleyemiyorsa yönetici bugünkü müdahaleleri kullanır | Yönetici başkası adına giriş yapamaz; yaparsa kanıt anlamını yitirir |
+| Diğer takılmalar | Pasif, PIN'i kilitli, molada ya da başka kayıtta devam eden adımda çalışan kişi katılamaz, neden yazılır; sahip çıkarır ya da kişi uygun olunca katılır | BR-36, BR-49, BR-39, satır 76 |
+| Ayrılan kişi | Aynı adıma yeniden katılamaz (kişi başına adımda tek aralık); adımda çalışan son kişi ayrılamaz, adımı bitirir | Aralık modeli basit kalır; adımsız çalışan adım olmaz |
+| Sahip | Listedeyse adım başladığında girişsiz çalışmaya başlar (bugünkü davranış); kendini adımdan çıkarabilir. Adım sürerken kendini eklerse aynı istekte katılmış olur | K-07'nin sahip kuralı sürer |
+| Mevcut veri | Bitmiş adımların eforu saklıdır, yeniden hesaplanmaz. Yayın anında devam eden adımda aralık satırı olmayan görevli adımın tamamında çalışmış sayılır. Başlamamış adımda listede olan sahip dışı kişi girişi bekler | Geriye dönük değişiklik yok |
+
+**Şema (Eklemeli, ALTER yok):** yeni tablo `StepWorkIntervals`. Kişinin girişi mevcut `StepParticipants.ConfirmedAtUtc` kolonuna yazılır (kolon
+Faz 4'ten beri var, değer yazmak şema değişikliği değildir).
+
+| Kolon | Tip | Kural |
+|---|---|---|
+| `Id` | INTEGER PK | |
+| `StepParticipantId` | INTEGER NOT NULL, FK `StepParticipants` (Restrict) | Unique: kişi başına adımda tek aralık |
+| `StartedAtUtc` | TEXT NOT NULL | Sunucu anı; adım başlamadan katılanda adım başlangıcı |
+| `EndedAtUtc` | TEXT NULL | Ayrılma, adım bitişi ya da müdahale anı |
+| `EndKind` | INTEGER NULL | `Left`, `StepFinished`, `Interrupted` |
+| `EndedByUserId` | INTEGER NULL, FK `Users` | Ayrılan kişi, adımı bitiren ya da müdahale eden |
+| `WorkSeconds` | INTEGER NULL | SH-02a, aralık kapanınca yazılır |
+
+Tetikleyiciler (BR-28 düzeni): dolu `StartedAtUtc` ve `EndedAtUtc` değişmez, satır silinmez. Mevcut tabloya index, kolon ya da tetikleyici eklenmez.
+Backend `Docs/Db/DB-2026-<sıra>.md` talebini Eklemeli sınıfla açar.
+
+**Başlama şartı:** Faz 6D commit'i ve kullanıcı onayı (O-10). DB talebi uygulanmadan backend kalem 2-4 bitmez; frontend sözleşmeyle paralel başlar.
+
+**Kapsam**
+
+| # | Tür | İş kalemi | Sahibi |
+|---|---|---|---|
+| 1 | DB | `StepWorkIntervals` tablosu, FK'lar, unique, tetikleyiciler; entity `StepWorkInterval`, `StepParticipant.WorkInterval` gezinmesi | backend-engineer talebi, dbadmin |
+| 2 | BE | `ParticipantService`: ekleme adım Bekliyor ya da Devam ediyorken (yalnız sahip, sahibin PIN'i; sahip kendini sürerken eklerse aynı istekte katılır); çıkarma yalnız hiç katılmamış kişide. `JoinAsync`: oturumdaki kullanıcı sahip ya da kişinin kendisi (değilse 403, K-30); kişi listede, girişini yapmamış, aktif, PIN'i kilitli değil, açık molası yok, başka adımda çalışmıyor; PIN kişinin PIN'i, hatalı deneme onun sayacına. Adım Bekliyorsa yalnız `ConfirmedAtUtc`; Devam ediyorsa aralık ve `IsWorking`, `ConfirmedAtUtc` boşsa katılma anıyla dolar (ilk giriş anı korunur). `LeaveAsync`: kişinin PIN'i, açık aralık var, çalışan son kişi değil; aralık kapanır (`Left`). Olaylar `ParticipantJoined` (`StepId`, `ParticipantUserId`, `SessionUserId`, `BeforeStart`), `ParticipantLeft` (`StepId`, `ParticipantUserId`, `SessionUserId`, `WorkSeconds`); komut kimliği (G9) | backend-engineer |
+| 3 | BE | Başlatma: girişi bekleyen kişi başlatmayı engellemez. Adım başlarken başlatan, listedeki sahip ve girişini yapmış kişiler için aralık açılır ve `IsWorking`; başlatan girişsizse onun girişi aynı işlemde yazılır. Başlatan ve listedeki sahip için bugünkü uygunluk denetimi sürer; girişini yapmış başka bir kişi o anda pasif, molada ya da başka adımda çalışıyorsa başlatma engellenmez, kişi aralıksız kalır ve "Girişi bekleniyor" olur (`ConfirmedAtUtc` değişmez). `StepStarted.ParticipantUserIds` başlangıçta çalışanlardır. Bitirme kapısı (`StepFinisher`): sahip dışında girişi bekleyen kişi varsa red: `Girişi bekleniyor: <Ad>, <Ad>. Kişi kendi PIN'iyle katılsın ya da sahip listeden çıkarsın.`; açık aralıklar adım bitişinde kapanır (`StepFinished`), `EffortSeconds` SH-02. Müdahalede (`InterventionService`) açık aralıklar müdahale anında kapanır (`Interrupted`) | backend-engineer |
+| 4 | BE | `IDurationCalculator`: `CalculateParticipantWork` (SH-02a) ve `CalculateStepEffort` yeni imzayla (kişi süreleri toplamı); formüller XML yorumunda (Brief §9.5 SH-02 ve SH-02a, O-11). Aralık satırı olmayan eski görevli adımın tamamı sayılır | backend-engineer |
+| 5 | BE | Faz 6C'den devreden B5 (PL-95, PL-96): `RecordDetailReader`'dan olay okuma ve sözlük kurma (`ReadEventsAsync`) ayrı bir okuyucuya alınır, davranış değişmez. Okuyucular: `RecordRunReader` görevli durumu ve eylem bayrakları, adımda `PendingNames` ve `CannotFinishReason`; `MyWorkReader` `AwaitingMyEntry` (önce gelir); `RecordDetailReader` kişi başına katılma, ayrılma, çalışma süresi; `RecordTimelineBuilder`: `<Ad> adıma katıldı` (başlamadan katıldıysa `<Ad> adıma katılacağını onayladı`), `<Ad> adımdan ayrıldı` ve çalışma süresi, oturum başkasınınsa ayrıntı `Cihazdaki oturum: <Ad>`; `StepFinished` ayrıntısına kişi süreleri. `EventTypes`, `RecordEventText`, `TimelineEntryKind` (`ParticipantJoined`, `ParticipantLeft`) | backend-engineer |
+| 6 | FE | Faz 6C'den devreden B7 (PL-96): `FormValidation.mark` `aria-describedby`'a kimliği yoksa ekler, hata silinince kimliği listeden çıkarır; seçici ve en az iki başka formda ölçülür (K16). `_Participants.cshtml`: panel adım sürerken de açık; kişi satırında durum metin ve ikonla (Girişi bekleniyor, Katılacak, Çalışıyor HH:mm'den beri, Ayrıldı HH:mm ve süre); `CanJoin` ve `CanLeave` satırında kişinin adıyla etiketli PIN formu ve "Bu PIN <Ad> adına girilir; <Ad> kendisi girsin."; `CanRemove` yalnız katılmamış kişide; neden varsa düğme yerine neden metni. Adım kartında Bitir pasifken `CannotFinishReason` görünür. JS kapalı tam akış | frontend-engineer |
+| 7 | FE | `Views/MyWork/Index.cshtml`: "Girişiniz bekleniyor" rozeti ve panele bağlantı; `Details.cshtml` görevli satırında katılma, ayrılma, çalışma süresi, aralık kaydı olmayan eski adımda "Adım boyunca"; `_Timeline.cshtml` iki yeni tür; `Styles/app.css` | frontend-engineer |
+
+**Paralel:** Evet. Gerekçe: tablo yeni (Eklemeli) ve kolonları yukarıda; route, rol, ViewModel aşağıda; backend servis ve okuyucu, frontend görünüm
+dosyalarında ayrık. Backend sırası: DB talebi, dbadmin, servisler.
+
+**Sözleşme**
+
+| Route | Action | Rol | ViewModel (alanlar) | Görünüm |
+|---|---|---|---|---|
+| POST `/records/join-step/{stepId}` | `RecordStepsController.JoinStep` | Operator (servis: sahip ya da kişinin kendisi) | `JoinStepViewModel { CommandId: Guid, ParticipantUserId: int, Pin: string }`; dönüş `/records/run/{id}?stepId=` (PIN korunmaz) | `_Participants.cshtml` |
+| POST `/records/leave-step/{stepId}` | `RecordStepsController.LeaveStep` | Operator (aynı) | `LeaveStepViewModel { CommandId: Guid, ParticipantUserId: int, Pin: string }` | aynı |
+| POST `/records/add-participant/{stepId}`, `/records/remove-participant/{stepId}` (mevcut) | mevcut | Operator | Alan değişmez; kural değişir (sürerken ekleme, yalnız katılmamış kişiyi çıkarma) | aynı |
+| GET `/records/run/{id}` (mevcut) | `RecordsController.Run` | Operator | `StepParticipantViewModel`'e ek: `State: ParticipantState` (`Pending`, `Confirmed`, `Working`, `Left`), `JoinedAtLocal: DateTime?`, `LeftAtLocal: DateTime?`, `WorkSeconds: int?`, `CanJoin`, `CanLeave`, `CanRemove: bool`, `BlockedReason: string?`. `RecordStepViewModel`'e ek: `PendingNames: string[]`; `CannotFinishReason` (mevcut) kapı metnini taşır; `CanManageParticipants` adım sürerken de true olabilir | `Run.cshtml`, `_Participants.cshtml` |
+| GET `/my-work` (mevcut) | `MyWorkController.Index` | Operator | `AssignedStepViewModel`'e ek: `AwaitingMyEntry: bool`, `StepId: int` | `Views/MyWork/Index.cshtml` |
+| GET `/records/details/{id}` (mevcut) | `RecordsController.Details` | RecordReaders | `RecordDetailParticipantViewModel`'e ek: `JoinedAtLocal: DateTime?`, `LeftAtLocal: DateTime?`, `WorkSeconds: int?`, `HasInterval: bool`; `TimelineEntryKind.ParticipantJoined`, `ParticipantLeft` | `Details.cshtml`, `_Timeline.cshtml` |
+
+`ParticipantState` `Services/ParticipantState.cs`'tedir.
+
+**Dosya sınırı:** dbadmin `Domain/Entities/StepWorkInterval.cs`, `Domain/Entities/StepParticipant.cs` (yalnız gezinme), `Data/`; backend `Services/ParticipantService.cs`,
+`Services/IParticipantService.cs`, `Services/StepStartApplier.cs`, `Services/StepFinisher.cs`, `Services/InterventionService.cs`, `Services/DurationCalculator.cs`,
+`Services/IDurationCalculator.cs`, `Services/EventTypes.cs`, `Services/RecordEventText.cs`, `Services/RecordRunReader.cs`, `Services/MyWorkReader.cs`, `Services/RecordDetailReader.cs`,
+`Services/RecordTimelineBuilder.cs`, `Services/TimelineEntryKind.cs`, `Services/ParticipantState.cs`, `Services/RecordEventReader.cs` ve arayüzü (B5), `Controllers/RecordStepsController.cs`, `ViewModels/Records/` (yukarıdaki sınıflar);
+frontend `Views/Records/_Participants.cshtml`, `Views/Records/Run.cshtml`, `Views/MyWork/Index.cshtml`, `Views/Records/Details.cshtml`, `Views/Records/_Timeline.cshtml`, `Styles/app.css`, `wwwroot/js/FormValidation.js` (B7).
+
+**Kabul kriterleri**
+
+QA kopyada: sahip X (`2002`), aktif operatörler Y ve Z, PIN'i kilitli bir operatör, molada bir operatör; planlı bir kayıt, 2. fazın ilk adımına Y eklenmiş.
+
+- [ ] K1: X, Y girişini yapmadan 2. fazın adımını başlatır; adım Devam ediyor olur, `StepStarted` görevlileri yalnız X'tir; panelde Y "Girişi bekleniyor" der.
+- [ ] K2: Y girişini yapmadan X Bitir'e basarsa adım bitmez, "Girişi bekleniyor: <Y>." görünür, `StepFinished` yazılmaz; elle POST da reddedilir. 3. fazın adımı başlatılamaz.
+- [ ] K3: Aynı tablette Y satırındaki "Katıl" ile Y'nin PIN'i girilir: Y "Çalışıyor" olur, `StepWorkIntervals.StartedAtUtc` ve boş olan `ConfirmedAtUtc` katılma anıdır, `ParticipantJoined` olayının yapanı Y, `SessionUserId` X'tir. Sahibin PIN'i ya da yanlış PIN reddedilir, hatalı deneme Y'nin sayacına yazılır.
+- [ ] K4: Ayrı cihaz: Y kendi oturumunda İşlerim'de "Girişiniz bekleniyor" kartından panele gider ve kendi PIN'iyle katılır; `SessionUserId` Y'dir.
+- [ ] K5: Efor: X adımın tamamında, Y katılma anından bitişe kadar çalışır; `EffortSeconds` = adım süresi + Y'nin (bitiş - katılma) süresidir ve kişi satırlarının `WorkSeconds` toplamına eşittir. Adımın tamamında çalışan iki kişide efor = süre x 2 (satır 61-62 gerileme). `DurationSeconds` kişilerden bağımsızdır.
+- [ ] K6: Ayrılma: Y bitişten önce kendi PIN'iyle ayrılır; aralık ayrılma anında kapanır, Y yeniden katılamaz; adımda çalışan son kişi ayrılamaz.
+- [ ] K7: Adım başlamadan katılan Z, adım başladığı anda çalışmaya başlar; çizelgede "X ve Z birlikte adıma başladı" yazar (Faz 6C K4 gerileme).
+- [ ] K8: Gelmeyen kişi: X adım sürerken girişini yapmamış Z'yi kendi PIN'iyle çıkarır, adım bitirilebilir olur. Katılmış Y'yi çıkarma isteği reddedilir.
+- [ ] K9: X adım sürerken Z'yi ekler; Z girişini yapana kadar efor almaz ve bitiş kapısına takılır.
+- [ ] K10: PIN'i kilitli, molada ve başka kayıtta devam eden adımda çalışan kişide "Katıl" yerine neden metni görünür; elle POST reddedilir, olay yazılmaz. Girişini yapmamış Y aynı anda başka kayıtta adım başlatabilir (satır 76-77, meşguliyet yalnız aralıkta).
+- [ ] K11: Yetki: sahip ya da kişinin kendisi olmayan Operatör'ün katıl ve ayrıl isteği 403; Yönetici ve Denetçi 403; bitmiş adıma katılma reddedilir. Aynı komut kimliğiyle ikinci istek tek olay üretir (G9).
+- [ ] K12: Müdahale: X'in kaydı Y çalışırken yarıda kapatılırsa Y'nin aralığı müdahale anında `Interrupted` ile kapanır, efor kapanan aralıklardan hesaplanır.
+- [ ] K13: Veritabanı: `StepWorkIntervals`'ta dolu `StartedAtUtc` ya da `EndedAtUtc`'yi değiştiren ve satır silen SQL tetikleyiciyle reddedilir; aynı kişiye ikinci aralık unique ile reddedilir.
+- [ ] K14: Faz 6E'den önce bitmiş kayıtlarda efor değişmez, görevli satırı "Adım boyunca" der, bütünlük "Doğrulandı" kalır. Acil açılış ve ilk adım değişmeden çalışır (Faz 6A gerileme).
+- [ ] K15: Detay görevli satırında katılma, ayrılma ve çalışma süresi; çizelgede katılma ve ayrılma satırları görünür.
+- [ ] K16: Faz 6C B7: hata üç kez açılıp kapandıktan sonra alanın `aria-describedby` listesinde hata kimliği en çok bir kez geçer ve hata yokken geçmez; görevli seçicide ve en az iki başka formda (`/users/create`, `/materials/create`) ölçülür.
+- [ ] K17: JS kapalıyken ekleme, katılma, ayrılma ve bitirme tamamlanır; panel, İşlerim ve detay 360, 768, 1024, 1440 px'te açık ve koyu temada yatay kaydırmasız; durumlar renk dışında metinle ayrılır; G12 hizalama kusuru 0; konsol 0 hata.
+
+- Ortak: G1-G10, G12; G5a `_Participants.cshtml` formlarında yeniden sayılır.
+
+**Kapsam dışı:** Aynı adıma yeniden katılma; sahibin başkası adına ayrılma işaretlemesi (ayrılmayan kişinin aralığı adım sonuna uzar; düzeltme Faz 8);
+adım sürerken mola (Faz 7; mola kişi aralıklarından SH-02a ile düşülür); yöneticinin başkası adına giriş yapması.
+
+**Etkilenen fazlar:** Faz 7 kalem 7 (adım sürerken mola kişi aralığı ile kesişir; görevli PIN onayı bu fazla karşılandı, K24, K25 kalkar);
+Faz 8 PL-09 görevli düzeltmesi aralıkları da kapsar; Faz 9 CSV'ye kişi çalışma süresi kolonu.
+
+---
+
+## Faz 6F: PIN ile giriş ve giriş deneme sınırı (Faz 6E'den sonra)
+
+**Amaç:** Sahadaki operatör paylaşılan tablete sicil no ve PIN'le girer (PL-91, O-10). Parola ve PIN girişindeki hatalı denemeler ayrı bir giriş
+sayacında tutulur ve süreli kilide götürür; giriş ekranından kimsenin işlem PIN'i kilitlenemez (PL-94).
+
+**Kararlar:**
+
+| Konu | Karar | Gerekçe |
+|---|---|---|
+| Kimler (onaylı, O-10) | Tüm rolleri Operatör olan hesaplar. Yönetici, Denetçi, Süper admin ve Operatör ile başka rolü birlikte olan hesap parola ile | 4 haneli PIN tek başına yönetim yetkisi açmamalı; operatör işlemleri zaten PIN ister |
+| Ne girilir | Sicil no + PIN. Ad ya da listeden kişi seçimi yok | Paylaşılan tablette kişi listesi sicil no'ları açar |
+| Ekran | "PIN ile" ve "Parola ile" seçimi; cihazda son seçim kişisel veri taşımayan çerezde; çerez yoksa "PIN ile" | Saha tableti PIN'de, ofis bilgisayarı parolada kalır |
+| Giriş sayacı (onaylı, O-10) | Parola ve PIN girişi tek sayaç kullanır: `Users.LoginFailedCount`. İşlem PIN sayacından (`PinFailedCount`) ayrıdır; giriş ekranındaki deneme işlem PIN'ini kilitlemez | Kullanıcı ayrı sayacı seçti; PL-91'deki kilitleme riski kalkar |
+| Sınır | `<PinDenemeSınırı>` değeri (başlangıç 5) giriş için de geçerli; yeni sınır ayarı yok | Kullanıcının verdiği deneme sayısı; ayrı değer istenirse yeni ayar satırı |
+| Kilit (onaylı, O-11) | Art arda sınıra ulaşan hatalı girişte giriş `<GirişKilitSüresi>` (15 dakika) kapanır (`LoginLockedUntilUtc`); süre dolunca sayaç sıfırdan başlar. Yönetici (SK-9 kapsamı) ve Süper admin E-04'te "Giriş kilidini aç" ile PIN'le erken açar. Kilitliyken doğru parola ya da PIN de reddedilir: "Çok sayıda hatalı giriş. Giriş HH:mm'e kadar kapalı; yöneticiniz erken açabilir." | Süreli kilit: tek Süper admin kendini kilitlerse kimse açamazdı (Requirements §9); başkasının hesabını kilitleme etkisi süreyle sınırlı. Yalnız yönetici sıfırlaması bu yüzden önerilmez |
+| Sayılan deneme | Yanlış parola (her hesap) ve uygun hesapta yanlış PIN sayılır. PIN girişine uygun olmayan hesapta PIN doğrulanmaz ve sayılmaz. Olmayan sicil no hiçbir şey yazmaz. Başarılı giriş sayacı sıfırlar | Yönetici hesabı PIN moduyla kilitlenemez |
+| Hata metni | Yanlış sicil no, yanlış parola ya da PIN ve uygun olmayan hesap aynı metni alır: "Sicil no ya da parola hatalı." / "Sicil no ya da PIN hatalı." | Hesap varlığı sızmaz; kilit metni yalnız kilitli hesapta |
+| İlk giriş ve sıfırlama | `MustChangePassword`, `MustSetPin` doluysa ya da PIN yoksa PIN girişi reddedilir: "İlk girişinizi parola ile yapın." BR-55 aynen | Hesap tamamlanmadan PIN yoktur |
+| Paylaşılan tablet | `<OturumSüresi>`, kabukta ad ve "Kullanıcı değiştir" aynen; çıkış ve kullanıcı değiştir giriş ekranını PIN modunda, alanlar boş açar; PIN modunda iki alan `autocomplete="off"`, PIN `inputmode="numeric"` | Önceki kişinin bilgileri tablette kalmaz |
+| Saklama | Bugünkü PIN özeti (Identity `PasswordHasher`, PBKDF2, tuzlu) yeterli | Çevrimiçi deneme sayaçla sınırlı; veritabanı dosyası ele geçerse 4 haneli PIN bulunur, dosya erişimi BT denetiminde |
+
+**Şema (ALTER, kullanıcı ayrı sayacı seçti, dbadmin uygularken yine onay sorulur):** backend `Docs/Db/DB-2026-<sıra>.md` talebini şu içerikle açar:
+
+- Sınıf: ALTER (mevcut tabloya kolon) ve Eklemeli (seed ekleme).
+- `Users` tablosuna `LoginFailedCount INTEGER NOT NULL DEFAULT 0` ve `LoginLockedUntilUtc TEXT NULL` (UTC an). Entity `User`'a aynı adlı iki özellik.
+- Mevcut satırlar: varsayılanla `0` ve `NULL` alır; veri `UPDATE` yok, index yok. SQLite'ta `ADD COLUMN` tabloyu yeniden kurmaz; `Down` yalnız geri alma.
+- Ayar tablosuna `LoginLockMinutes` satırı (`<GirişKilitSüresi>`, birim dakika), seed değeri `15` (kullanıcı, O-11); Sistem ayarları ekranında (Faz 9) değişir.
+
+**Başlama şartı:** Faz 6E commit'i ve DB talebine dbadmin uygulama anında kullanıcı onayı (`<GirişKilitSüresi>` 15 dakika, O-11).
+
+**Kapsam**
+
+| # | Tür | İş kalemi | Sahibi |
+|---|---|---|---|
+| 1 | DB | `Users`'a iki kolon, ayar satırı | backend-engineer talebi, dbadmin |
+| 2 | BE | `ILoginAttemptGuard` (giriş sayacı ve süreli kilit; kilit bitişi formülü XML yorumunda: `Kilit bitişi = sınıra ulaşan hatalı denemenin sunucu anı + <GirişKilitSüresi>`); `IAccountService.SignInAsync` (parola) ve `SignInWithPinAsync` bu servisi kullanır; PIN doğrulaması işlem sayacına yazmayan ayrı yol (`ICredentialHasher` ile); sonuç `SignInResult { Status: Success, Invalid, LockedUntil, PasswordRequired, LockedUntilLocal?, State? }` | backend-engineer |
+| 3 | BE | `AccountController.Login`: `Mode`'a göre yol ve doğrulama; giriş modu çerezi `vaka-login-mode` (`pin` ya da `password`, HttpOnly, SameSite=Lax, 1 yıl). `UsersController.UnlockLogin` (PIN, SK-9 kapsamı) | backend-engineer |
+| 4 | FE | `Views/Account/Login.cshtml`: mod seçimi (JS kapalı çalışır), PIN modunda sicil no ve PIN alanı, altta "PIN ile giriş operatör hesapları içindir; Yönetici, Denetçi ve Süper admin parola ile girer."; kilit metni; hata yerleri D-1 düzeninde. E-04 kullanıcı formunda giriş kilidi durumu ve "Giriş kilidini aç" (PIN) | frontend-engineer |
+
+**Paralel:** Evet. Gerekçe: kolonlar ve route'lar yazılı, dosyalar ayrık. Backend sırası: DB talebi, kullanıcı onayı, dbadmin, servisler.
+
+**Sözleşme**
+
+| Route | Action | Rol | ViewModel (alanlar) | Görünüm |
+|---|---|---|---|---|
+| GET `/account/login?mode=pin\|password` (mevcut, değişir) | `AccountController.Login` | anonim | `LoginViewModel`'e ek: `Mode: LoginMode` (`Pin`, `Password`), `Pin: string?`, `LockedUntilLocal: DateTime?`; `Password` yalnız parola modunda zorunlu | `Views/Account/Login.cshtml` |
+| POST `/account/login` (mevcut, değişir) | `AccountController.Login` | anonim | Aynı model; hata `ErrorMessage` (mevcut) | aynı |
+| POST `/users/unlock-login/{id}` | `UsersController.UnlockLogin` | ManagerOrSuperAdmin (servis: SK-9 kapsamı) | `UserResetViewModel` (mevcut, `Prefix = "UnlockLogin"`) | E-04 kullanıcı formu |
+| GET `/users/edit/{id}` (mevcut) | `UsersController.Edit` | ManagerOrSuperAdmin | `UserFormViewModel`'e ek: `LoginLockedUntilLocal: DateTime?`, `LoginFailedCount: int`, `CanUnlockLogin: bool` | E-04 |
+
+`LoginMode` `ViewModels/Account/LoginMode.cs`'tedir.
+
+**Dosya sınırı:** dbadmin `Domain/Entities/User.cs`, `Data/`; backend `Services/AccountService.cs`, `Services/IAccountService.cs`, `Services/LoginAttemptGuard.cs`,
+`Services/ILoginAttemptGuard.cs`, `Services/SignInResult.cs`, `Services/SettingKeys.cs`, kullanıcı yönetimi servisi, `Controllers/AccountController.cs`, `Controllers/UsersController.cs`,
+`ViewModels/Account/LoginViewModel.cs`, `ViewModels/Account/LoginMode.cs`, `ViewModels/Users/UserFormViewModel.cs`, `Program.cs`; frontend `Views/Account/Login.cshtml`, `Views/Users/` kullanıcı formu, `Styles/app.css`.
+
+**Kabul kriterleri**
+
+- [ ] K1: Yalnız Operatör rolü olan, ilk girişini tamamlamış kullanıcı (`2002`) "PIN ile" modunda sicil no ve PIN'le girer, İşlerim'e yönlenir.
+- [ ] K2: Yönetici (`1001`), Denetçi, Süper admin ve Operatör ile Yönetici rolü birlikte olan hesap PIN moduyla giremez; hata "Sicil no ya da PIN hatalı.", bu hesapların `LoginFailedCount` ve `PinFailedCount` değerleri değişmez. Aynı hesaplar "Parola ile" girer.
+- [ ] K3: Operatör giriş ekranında art arda sınır kadar yanlış PIN girer: `LoginFailedCount` her denemede artar, sınırda `LoginLockedUntilUtc` = son deneme + `<GirişKilitSüresi>` (seed 15 dakika) olur; `PinFailedCount` ve `PinLockedAtUtc` değişmez. Kilitliyken doğru PIN ve doğru parola reddedilir, kilit metni bitiş saatini yazar.
+- [ ] K4: Yönetici art arda sınır kadar yanlış parola girer, aynı kilit oluşur; Süper admin E-04'te "Giriş kilidini aç" ile PIN'le açar, yönetici hemen girer. Yönetici kapsamı dışındaki hesapta (Süper admin ya da başka Yönetici) açma düğmesi yoktur, elle POST 403 (SK-9).
+- [ ] K5: Kilit süresi dolunca doğru bilgiyle giriş olur; başarılı giriş sayacı 0 yapar. QA süreyi QA kopyasının ayar tablosunda kısaltarak ölçer.
+- [ ] K6: Olmayan sicil no ile hata metni yanlış parola ya da PIN ile aynıdır ve hiçbir satır değişmez; pasif kullanıcı hiçbir modla giremez.
+- [ ] K7: Yeni açılmış ya da PIN'i sıfırlanmış operatör PIN moduyla giremez, "İlk girişinizi parola ile yapın." görür; parola ile girince BR-55 ekranı açılır.
+- [ ] K8: Mod seçimi JS kapalıyken çalışır; son seçim aynı tarayıcıda hatırlanır, çerez yoksa "PIN ile" seçilidir. Çıkış ve "Kullanıcı değiştir" PIN modunda boş alanlarla açar; alanlarda `autocomplete="off"`, PIN'de `inputmode="numeric"`.
+- [ ] K9: PIN ile açılan oturum parola oturumuyla aynı rollere ve `<OturumSüresi>`'ne sahiptir (gerileme).
+- [ ] K10: Migration yalnız iki `AddColumn` ve `LoginLockMinutes` = 15 ayar seed'ini içerir; mevcut kullanıcı satırları `0` ve `NULL` alır; Guard onay istemi çıkar ve onay DB kaydına işlenir.
+- [ ] K11: Giriş ekranı ve E-04 360, 768, 1024, 1440 px'te açık ve koyu temada yatay kaydırmasız; hata alanın hata yerinde; G12 hizalama kusuru 0; konsol 0 hata.
+
+- Ortak: G1-G8, G10, G12; G9 uygulanmaz (komut kimlikli işlem yok), G11 uygulanmaz.
+
+**Kapsam dışı:** IP bazlı hız sınırı; kart okuyucu (K-09); giriş denemelerinin ayrı denetim günlüğü.
+
+---
+
+## Aday Faz 10: kapandı (O-10)
+
+S-3 "evet" ile yanıtlandı ve konu A (adım içi katılma ve ayrılma) Faz 6E'ye alındı; konu B (malzeme miktarı) S-4 ile istenmedi (O-09). Faz 10 açılmaz.
+
+---
+
 ## Faz 7: Talep, beklemeye alma ve yönetici panosu (Salı sonrası)
 
 **Amaç:** Sahibin yöneticiye gerekçeli talep açması, yöneticinin talepleri karara bağlaması, kaydın beklemeye alınıp devam ettirilmesi ve
-yöneticinin aktif işleri tek ekranda görmesi. Faz 5'ten ertelenen adım sürerken mola (K-39) ve görevli PIN onayı (K-10) da bu fazdadır (PL-57).
+yöneticinin aktif işleri tek ekranda görmesi. Faz 5'ten ertelenen adım sürerken mola (K-39) ve görevli PIN onayı (K-10) da bu fazdadır (PL-57). Görevli PIN onayı (kalem 7'nin K-10 bölümü, kalem 8'in görevli paneli kısmı, K24, K25) Faz 6E'de karşılanır ve buradan kalkar; adım sürerken mola kişi aralıklarından SH-02a ile düşülür (PL-92, PL-93).
 Takvim: Salı (2026-11-17) sonrası (O-03, PL-46).
 
 **Kapsam**

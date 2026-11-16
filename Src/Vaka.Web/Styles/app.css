@@ -791,7 +791,8 @@
   }
 
   .tool > summary {
-    @apply btn btn-secondary cursor-pointer list-none;
+    @apply btn btn-secondary h-auto min-w-0 max-w-full cursor-pointer list-none whitespace-normal text-left;
+    overflow-wrap: anywhere;
   }
   .tool > summary::-webkit-details-marker {
     display: none;
@@ -920,6 +921,107 @@
   .lot-result {
     @apply flex min-h-14 w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-2 text-left hover:bg-sunken;
   }
+  .combo-option {
+    @apply flex min-h-14 cursor-pointer flex-col items-start justify-center gap-0.5 px-3 py-2 text-left;
+  }
+  .combo-option:hover {
+    @apply bg-sunken;
+  }
+  .combo-option[data-active="true"] {
+    @apply bg-accent-soft;
+    outline: 3px solid rgb(var(--accent));
+    outline-offset: -3px;
+  }
+  .combo-option[aria-disabled="true"] {
+    @apply cursor-not-allowed bg-sunken text-muted;
+  }
+  .combo-note {
+    @apply px-3 py-2 text-sm text-muted;
+  }
+
+  .tl-day {
+    @apply mb-3 mt-6 border-b-2 border-line pb-1 text-sm font-bold uppercase tracking-wide text-muted;
+  }
+  .tl-day:first-child {
+    @apply mt-0;
+  }
+  .tl {
+    @apply m-0 list-none p-0;
+  }
+  .tl-item {
+    @apply relative grid pb-5;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    grid-template-areas: "mark time" "mark body";
+    column-gap: 0.75rem;
+  }
+  .tl-item:last-child {
+    @apply pb-0;
+  }
+  .tl-item::before {
+    @apply absolute bottom-0 top-9 w-0.5 bg-line;
+    content: "";
+    left: calc(1.125rem - 1px);
+  }
+  .tl-item:last-child::before {
+    display: none;
+  }
+  .tl-time {
+    @apply self-center text-sm font-bold text-muted;
+    grid-area: time;
+  }
+  .tl-mark {
+    @apply flex h-9 w-9 items-center justify-center rounded-ui border-2 border-line-strong bg-surface text-ink;
+    grid-area: mark;
+  }
+  .tl-body {
+    @apply min-w-0 space-y-1;
+    grid-area: body;
+  }
+  .tl-title {
+    @apply break-words font-semibold;
+    overflow-wrap: anywhere;
+  }
+  .tl-detail {
+    @apply break-words text-sm text-muted;
+    overflow-wrap: anywhere;
+  }
+  .tl-meta {
+    @apply flex flex-wrap items-center gap-x-4 gap-y-1 text-sm;
+  }
+  .tl-meta dt {
+    @apply inline text-xs font-bold uppercase tracking-wide text-muted;
+  }
+  .tl-meta dd {
+    @apply ml-1 inline;
+  }
+  .tl-item[data-tone="accent"] .tl-mark {
+    @apply border-accent bg-accent-soft text-accent;
+  }
+  .tl-item[data-tone="ok"] .tl-mark {
+    @apply border-ok bg-ok-soft text-ok;
+  }
+  .tl-item[data-tone="warn"] .tl-mark {
+    @apply border-warn bg-warn-soft text-warn;
+  }
+  .tl-item[data-tone="danger"] .tl-mark {
+    @apply border-danger bg-danger-soft text-danger;
+  }
+  .tl-flag {
+    @apply inline-flex items-center gap-1 rounded-ui border-2 border-warn bg-warn-soft px-1.5 text-xs font-bold uppercase tracking-wide text-warn;
+  }
+  @media (min-width: 640px) {
+    .tl-item {
+      grid-template-columns: 3.5rem 2.25rem minmax(0, 1fr);
+      grid-template-areas: "time mark body";
+    }
+    .tl-item::before {
+      left: calc(3.5rem + 0.75rem + 1.125rem - 1px);
+    }
+    .tl-time {
+      @apply self-start pt-1.5;
+    }
+  }
+
   .lot-row {
     @apply space-y-3 rounded-ui border-2 border-line-strong bg-surface p-3;
   }

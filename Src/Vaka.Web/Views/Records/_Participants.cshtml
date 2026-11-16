@@ -20,7 +20,7 @@
         <ul class="flex flex-wrap gap-2" aria-label="Görevliler">
             @foreach (var person in step.Participants)
             {
-                <li class="chip break-words">@person.FullName <span class="mono text-xs text-muted">@person.RegistryNo</span>@(person.IsOwner ? ", sahip" : "")</li>
+                <li class="chip break-words"><span class="min-w-0">@person.FullName <span class="mono text-xs text-muted">@person.RegistryNo</span>@(person.IsOwner ? ", sahip" : "")</span></li>
             }
         </ul>
     }
@@ -74,14 +74,26 @@
                     <div class="space-y-3" data-people-picker data-people-url="/records/people" data-step-id="@step.Id">
                         <div class="field" data-field data-people-js>
                             <label class="field-label" for="@(stepKey)-search">Görevli ekle</label>
-                            <input id="@(stepKey)-search" type="search" class="input" autocomplete="off" spellcheck="false" inputmode="search" enterkeyhint="search"
-                                   aria-controls="@(stepKey)-results" aria-describedby="@(stepKey)-hint @(stepKey)-status" data-people-search />
-                            <p id="@(stepKey)-hint" class="field-hint">Ad ya da sicil no yazın.</p>
+                            <input id="@(stepKey)-search" type="text" role="combobox" class="input" autocomplete="off" spellcheck="false" inputmode="search" enterkeyhint="search"
+                                   data-choice-for="[data-people-input]" data-required-message="Bir kişi seçin." aria-autocomplete="list" aria-expanded="false" aria-controls="@(stepKey)-results" aria-describedby="@(stepKey)-hint @(stepKey)-status" data-people-search />
+                            <ul id="@(stepKey)-results" role="listbox" tabindex="-1" class="lot-results" aria-label="Bulunan kişiler" data-people-results hidden></ul>
+                            <div class="space-y-2" aria-hidden="true" data-people-loading hidden>
+                                <div class="skeleton h-14 w-full"></div>
+                                <div class="skeleton h-14 w-full"></div>
+                            </div>
+                            <p id="@(stepKey)-hint" class="field-hint">Ad ya da sicil no parçası yazın, listeden operatörü seçin.</p>
                             <p id="@(stepKey)-status" class="field-hint" role="status" data-people-status></p>
                         </div>
-                        <ul id="@(stepKey)-results" class="lot-results" aria-label="Bulunan kişiler" data-people-js data-people-results hidden></ul>
                         <div class="space-y-2" data-people-js>
-                            <p class="text-sm" data-people-chosen hidden><span class="font-semibold">Seçilen kişi:</span> <span data-people-chosen-name></span></p>
+                            <div data-people-chosen hidden>
+                                <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                                    <p class="min-w-0 break-words text-base"><span class="font-semibold">Seçilen kişi:</span> <span data-people-chosen-name></span></p>
+                                    <button type="button" class="btn btn-secondary min-h-11" data-people-change>
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#pencil" /></svg>
+                                        Değiştir
+                                    </button>
+                                </div>
+                            </div>
                             <div class="notice notice-warn" data-people-warning hidden>
                                 <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>
                                 <p class="text-sm">Bu kişinin kendi açık kaydı var. Yine de ekleyebilirsiniz.</p>
@@ -102,7 +114,7 @@
                             }
                             else if (options.Length == 0)
                             {
-                                <p class="text-sm text-muted">Aramaya uyan kişi yok.</p>
+                                <p class="text-sm text-muted">Aramaya uyan aktif operatör yok.</p>
                             }
                             else
                             {

@@ -14,12 +14,12 @@ export class FormValidation {
   check() {
     let first = null;
     const radioGroups = new Set();
-    this.form.querySelectorAll("[required]").forEach((field) => {
+    this.form.querySelectorAll("[required], [data-choice-for]").forEach((field) => {
       if (field.type === "radio") {
         if (radioGroups.has(field.name)) return;
         radioGroups.add(field.name);
       }
-      const empty = field.type === "radio" ? !this.form.querySelector(`[name="${field.name}"]:checked`) : !field.value.trim();
+      const empty = field.dataset.choiceFor ? !this.form.querySelector(field.dataset.choiceFor)?.value : field.type === "radio" ? !this.form.querySelector(`[name="${field.name}"]:checked`) : !field.value.trim();
       this.mark(field, empty);
       if (empty && !first) first = field;
     });

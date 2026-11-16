@@ -1,0 +1,77 @@
+# Faz 6C yetki matrisi ve sunucu denetimi
+kayit 10 (sahip 2006) bekleyen adim 39
+/records/details/10                        oturumsuz: 302 login | Operator sahip 2006: 200 | Operator sahip degil 2001: 200 | Yonetici 1001: 200 | Denetci 3001: 200 | Super admin 0001: 302 >403
+/records/people?stepId=39                  oturumsuz: 302 login | Operator sahip 2006: 200 | Operator sahip degil 2001: 302 >403 | Yonetici 1001: 302 >403 | Denetci 3001: 302 >403 | Super admin 0001: 302 >403
+/records/people?stepId=39&q=saha           oturumsuz: 302 login | Operator sahip 2006: 200 | Operator sahip degil 2001: 302 >403 | Yonetici 1001: 302 >403 | Denetci 3001: 302 >403 | Super admin 0001: 302 >403
+/records/run/10?stepId=39&people=saha      oturumsuz: 302 login | Operator sahip 2006: 200 | Operator sahip degil 2001: 302 /breaks/current | Yonetici 1001: 302 >403 | Denetci 3001: 302 >403 | Super admin 0001: 302 >403
+/records/run/10                            oturumsuz: 302 login | Operator sahip 2006: 200 | Operator sahip degil 2001: 302 /breaks/current | Yonetici 1001: 302 >403 | Denetci 3001: 302 >403 | Super admin 0001: 302 >403
+POST belirtecsiz Operator sahip degil 2001 400
+POST belirtecsiz Yonetici 1001 302
+2002 sahip degil, molada degil /records/run/10 200  
+2002 sahip degil, molada degil /records/run/10?stepId=39&people=saha 200  
+2002 sahip degil, molada degil /records/people?stepId=39 302 http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D39 403
+2002 gecerli belirtecle baskasinin adimina ekleme POST 403   olay once/sonra 108 108
+
+sahip 2002                         /records/people?stepId=32                200  items=50 truncated=True keys=['items', 'truncated'] names=['Ahmet Yılmaz', 'IŞIL ÖZGÜR', 'Saha Operatörü 01']
+sahip 2002 q                       /records/people?stepId=32&q=ışıl         200  items=1 truncated=False keys=['items', 'truncated'] names=['IŞIL ÖZGÜR']
+sahip stepId yok                   /records/people                          400  
+sahip stepId yok q                 /records/people?q=a                      400  
+sahip olmayan adım                 /records/people?stepId=99999             404  
+sahip stepId metin                 /records/people?stepId=abc               400  
+sahip baska kaydin adimi (2001)    /records/people?stepId=34                302 http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D34 
+rol 2001                           /records/people?stepId=30                302 http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 
+   -> takip http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 403
+rol 2006                           /records/people?stepId=30                302 http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 
+   -> takip http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 403
+rol 2003                           /records/people?stepId=30                302 http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 
+   -> takip http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 403
+rol 1001                           /records/people?stepId=30                302 http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 
+   -> takip http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 403
+rol 3001                           /records/people?stepId=30                302 http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 
+   -> takip http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 403
+rol 0001                           /records/people?stepId=30                302 http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 
+   -> takip http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 403
+oturumsuz                          /records/people?stepId=30                302 http://127.0.0.1:5781/account/login?ReturnUrl=%2Frecords%2Fpeople%3FstepId%3D30 
+
+/records/add-participant/30 200 None ['Bağlantı yok. Kayıt, onay ve kullanıcı değiştirme yapılamaz. Bağlantı gelince bu uyarı kapanır, işlemi yeniden yapın.', 'İşlem yapılmadı', 'Görevliyi çıkar\r\n                            ']
+pasif 2005 durum 200 olay/gorevli once (86, 44) sonra (86, 44)
+/records/add-participant/30 200 None ['Bağlantı yok. Kayıt, onay ve kullanıcı değiştirme yapılamaz. Bağlantı gelince bu uyarı kapanır, işlemi yeniden yapın.', 'İşlem yapılmadı', 'Görevliyi çıkar\r\n                            ']
+adimda zaten gorevli 2003 durum 200 olay/gorevli once (86, 44) sonra (86, 44)
+/records/add-participant/30 200 None ['Bağlantı yok. Kayıt, onay ve kullanıcı değiştirme yapılamaz. Bağlantı gelince bu uyarı kapanır, işlemi yeniden yapın.', 'İşlem yapılmadı', 'Görevliyi çıkar\r\n                            ']
+sahip zaten gorevli 2002 durum 200 olay/gorevli once (86, 44) sonra (86, 44)
+/records/add-participant/30 200 None ['Bağlantı yok. Kayıt, onay ve kullanıcı değiştirme yapılamaz. Bağlantı gelince bu uyarı kapanır, işlemi yeniden yapın.', 'İşlem yapılmadı', 'Görevliyi çıkar\r\n                            ']
+Operator olmayan Yonetici Iki durum 200 olay/gorevli once (86, 44) sonra (86, 44)
+/records/add-participant/30 200 None ['Bağlantı yok. Kayıt, onay ve kullanıcı değiştirme yapılamaz. Bağlantı gelince bu uyarı kapanır, işlemi yeniden yapın.', 'İşlem yapılmadı', 'Görevliyi çıkar\r\n                            ']
+molada 2001 durum 200 olay/gorevli once (86, 44) sonra (86, 44)
+belirtecsiz POST 400
+belirtecsiz POST remove 400
+9 200 İşlem yapılmadı   Pasif Operatör pasif, görevli olarak eklenemez.
+6 200 İşlem yapılmadı   Şükrüye İnceoğlu Karamustafapaşalıoğulları bu adımda zaten görevli.
+4 200 İşlem yapılmadı   Test Operatör 2 bu adımda zaten görevli.
+10 200 İşlem yapılmadı   Kişi seçilemez.        <div class="panel-body space-
+3 200 İşlem yapılmadı   Test Operatör 1 molada, görevli olarak eklenemez.
+
+## K8 çizelge görünürlüğü
+1001 8 200 cizelge: True satir: 20 form/button/a/input: 0
+1001 11 200 cizelge: True satir: 5 form/button/a/input: 0
+3001 8 200 cizelge: True satir: 20 form/button/a/input: 0
+3001 11 200 cizelge: True satir: 5 form/button/a/input: 0
+2001 8 200 cizelge: True satir: 20 form/button/a/input: 0
+2001 11 200 cizelge: True satir: 5 form/button/a/input: 0
+2006 8 200 cizelge: True satir: 20 form/button/a/input: 0
+2006 11 200 cizelge: True satir: 5 form/button/a/input: 0
+2002 8 200 cizelge: True satir: 20 form/button/a/input: 0
+2002 11 200 cizelge: True satir: 5 form/button/a/input: 0
+0001 8 302 http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fdetails%2F8 -> 403
+0001 11 302 http://127.0.0.1:5781/account/access-denied?ReturnUrl=%2Frecords%2Fdetails%2F11 -> 403
+oturumsuz (302, 'http://127.0.0.1:5781/account/login?ReturnUrl=%2Frecords%2Fdetails%2F8')
+
+## G5a
+2002 /records/run/12 post form 15 kendi belirteci olmayan [] participant formlari [('/records/remove-participant/46', 1), ('/records/remove-participant/46', 1), ('/records/remove-participant/46', 1), ('/records/add-participant/46', 1), ('/records/remove-participant/47', 1), ('/records/add-participant/47', 1), ('/records/remove-participant/48', 1), ('/records/add-participant/48', 1), ('/records/remove-participant/49', 1), ('/records/add-participant/49', 1)]
+   em/en-dash 0 h1 1
+2002 /records/run/12?stepId=46&people=saha post form 15 kendi belirteci olmayan [] participant formlari [('/records/remove-participant/46', 1), ('/records/remove-participant/46', 1), ('/records/remove-participant/46', 1), ('/records/add-participant/46', 1), ('/records/remove-participant/47', 1), ('/records/add-participant/47', 1), ('/records/remove-participant/48', 1), ('/records/add-participant/48', 1), ('/records/remove-participant/49', 1), ('/records/add-participant/49', 1)]
+   em/en-dash 0 h1 1
+1001 /records/details/8 post form 3 kendi belirteci olmayan [] participant formlari []
+   em/en-dash 0 h1 1
+3001 /records/details/11 post form 3 kendi belirteci olmayan [] participant formlari []
+   em/en-dash 0 h1 1

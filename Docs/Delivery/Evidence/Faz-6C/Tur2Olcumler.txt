@@ -1,0 +1,188 @@
+# Faz 6C tur 2 ölçümleri (port 5791, .qa/f6c2, kaynak çalışma ağacı kopyası)
+## B1 odak (kayıt 12 adım 46, sahip 2002)
+360 kisi+PIN bos {"focus": "step-46-search", "errors": ["step-46-search-error:Bir kişi seçin.", "pin-add-person-46-error:Bu alanı doldurun."], "personInvalid": "true", "pinInvalid": "true", "describedby": "step-46-hint step-46-status step-46-search-error", "personErrLeft": [114, 114, 114], "personErrInField": true, "url": "/records/run/12"}
+360 ardindan kisi secildi {"focus": "step-46-search", "errors": ["pin-add-person-46-error:Bu alanı doldurun."], "personInvalid": null, "pinInvalid": "true", "describedby": "step-46-hint step-46-status step-46-search-error", "personErrLeft": null, "personErrInField": null, "url": "/records/run/12"}
+360 ardindan yalniz PIN bos {"focus": "pin-add-person-46", "errors": ["pin-add-person-46-error:Bu alanı doldurun."], "personInvalid": null, "pinInvalid": "true", "describedby": "step-46-hint step-46-status step-46-search-error", "personErrLeft": null, "personErrInField": null, "url": "/records/run/12"}
+360 yalniz kisi bos {"focus": "step-46-search", "errors": ["step-46-search-error:Bir kişi seçin."], "personInvalid": "true", "pinInvalid": null, "describedby": "step-46-hint step-46-status step-46-search-error", "personErrLeft": [114, 114, 114], "personErrInField": true, "url": "/records/run/12"}
+360 yalniz PIN bos {"focus": "pin-add-person-46", "errors": ["pin-add-person-46-error:Bu alanı doldurun."], "personInvalid": null, "pinInvalid": "true", "describedby": "step-46-hint step-46-status", "personErrLeft": null, "personErrInField": null, "url": "/records/run/12"}
+768 kisi+PIN bos {"focus": "step-46-search", "errors": ["step-46-search-error:Bir kişi seçin.", "pin-add-person-46-error:Bu alanı doldurun."], "personInvalid": "true", "pinInvalid": "true", "describedby": "step-46-hint step-46-status step-46-search-error", "personErrLeft": [138, 138, 138], "personErrInField": true, "url": "/records/run/12"}
+768 ardindan kisi secildi {"focus": "step-46-search", "errors": ["pin-add-person-46-error:Bu alanı doldurun."], "personInvalid": null, "pinInvalid": "true", "describedby": "step-46-hint step-46-status step-46-search-error", "personErrLeft": null, "personErrInField": null, "url": "/records/run/12"}
+768 ardindan yalniz PIN bos {"focus": "pin-add-person-46", "errors": ["pin-add-person-46-error:Bu alanı doldurun."], "personInvalid": null, "pinInvalid": "true", "describedby": "step-46-hint step-46-status step-46-search-error", "personErrLeft": null, "personErrInField": null, "url": "/records/run/12"}
+768 yalniz kisi bos {"focus": "step-46-search", "errors": ["step-46-search-error:Bir kişi seçin."], "personInvalid": "true", "pinInvalid": null, "describedby": "step-46-hint step-46-status step-46-search-error", "personErrLeft": [138, 138, 138], "personErrInField": true, "url": "/records/run/12"}
+768 yalniz PIN bos {"focus": "pin-add-person-46", "errors": ["pin-add-person-46-error:Bu alanı doldurun."], "personInvalid": null, "pinInvalid": "true", "describedby": "step-46-hint step-46-status", "personErrLeft": null, "personErrInField": null, "url": "/records/run/12"}
+1440 kisi+PIN bos {"focus": "step-46-search", "errors": ["step-46-search-error:Bir kişi seçin.", "pin-add-person-46-error:Bu alanı doldurun."], "personInvalid": "true", "pinInvalid": "true", "describedby": "step-46-hint step-46-status step-46-search-error", "personErrLeft": [394, 394, 394], "personErrInField": true, "url": "/records/run/12"}
+1440 ardindan kisi secildi {"focus": "step-46-search", "errors": ["pin-add-person-46-error:Bu alanı doldurun."], "personInvalid": null, "pinInvalid": "true", "describedby": "step-46-hint step-46-status step-46-search-error", "personErrLeft": null, "personErrInField": null, "url": "/records/run/12"}
+1440 ardindan yalniz PIN bos {"focus": "pin-add-person-46", "errors": ["pin-add-person-46-error:Bu alanı doldurun."], "personInvalid": null, "pinInvalid": "true", "describedby": "step-46-hint step-46-status step-46-search-error", "personErrLeft": null, "personErrInField": null, "url": "/records/run/12"}
+1440 yalniz kisi bos {"focus": "step-46-search", "errors": ["step-46-search-error:Bir kişi seçin."], "personInvalid": "true", "pinInvalid": null, "describedby": "step-46-hint step-46-status step-46-search-error", "personErrLeft": [394, 394, 394], "personErrInField": true, "url": "/records/run/12"}
+1440 yalniz PIN bos {"focus": "pin-add-person-46", "errors": ["pin-add-person-46-error:Bu alanı doldurun."], "personInvalid": null, "pinInvalid": "true", "describedby": "step-46-hint step-46-status", "personErrLeft": null, "personErrInField": null, "url": "/records/run/12"}
+768 3 dongu sonrasi {"focus": "step-46-search", "errors": ["step-46-search-error:Bir kişi seçin."], "personInvalid": "true", "pinInvalid": null, "describedby": "step-46-hint step-46-status step-46-search-error step-46-search-error step-46-search-error step-46-search-error", "personErrLeft": [138, 138, 138], "personErrInField": true, "url": "/records/run/12"}
+konsol []
+## B2 ve B3 (kayıt 8)
+360 light tl-flag kenarlik ['2px solid']
+    {"mono": "Faz 1 / Adım 1", "rest": " - Makine Kapa", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+    {"mono": "Faz 1 / Adım 2", "rest": " - Makine Kontrol", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+    {"mono": "Faz 2 / Adım 1", "rest": " - Yüzeyi sil", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+    {"mono": "Faz 2 / Adım 2", "rest": " - Alanı kontrol et ve teslim et", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 2, "overflow": false}
+360 dark tl-flag kenarlik ['2px solid']
+    {"mono": "Faz 1 / Adım 1", "rest": " - Makine Kapa", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+    {"mono": "Faz 1 / Adım 2", "rest": " - Makine Kontrol", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+    {"mono": "Faz 2 / Adım 1", "rest": " - Yüzeyi sil", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+    {"mono": "Faz 2 / Adım 2", "rest": " - Alanı kontrol et ve teslim et", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 2, "overflow": false}
+1440 light tl-flag kenarlik ['2px solid']
+    {"mono": "Faz 1 / Adım 1", "rest": " - Makine Kapa", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+    {"mono": "Faz 1 / Adım 2", "rest": " - Makine Kontrol", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+    {"mono": "Faz 2 / Adım 1", "rest": " - Yüzeyi sil", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+    {"mono": "Faz 2 / Adım 2", "rest": " - Alanı kontrol et ve teslim et", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+1440 dark tl-flag kenarlik ['2px solid']
+    {"mono": "Faz 1 / Adım 1", "rest": " - Makine Kapa", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+    {"mono": "Faz 1 / Adım 2", "rest": " - Makine Kontrol", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+    {"mono": "Faz 2 / Adım 1", "rest": " - Yüzeyi sil", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+    {"mono": "Faz 2 / Adım 2", "rest": " - Alanı kontrol et ve teslim et", "monoFont": "\"JetBrains Mono\"", "restFont": "\"Hanken Grotesk\"", "lines": 1, "overflow": false}
+## K16 klavye (adım 47)
+tab-ile-alana-odak (16+2 Tab) {"focus": "step-47-search", "expanded": "true", "open": true, "active": null, "chosen": null, "url": "/records/run/12", "status": "50 kişi bulundu. Liste kısaltıldı. Aramayı daraltın."}
+Escape {"focus": "step-47-search", "expanded": "false", "open": false, "active": null, "chosen": null, "url": "/records/run/12", "status": "50 kişi bulundu. Liste kısaltıldı. Aramayı daraltın."}
+ArrowDown-kapaliyken {"focus": "step-47-search", "expanded": "true", "open": true, "active": "Ahmet Yılmaz", "chosen": null, "url": "/records/run/12", "status": "50 kişi bulundu. Liste kısaltıldı. Aramayı daraltın."}
+yaz-1 {"focus": "step-47-search", "expanded": "true", "open": true, "active": null, "chosen": null, "url": "/records/run/12", "status": "16 kişi bulundu."}
+Down {"focus": "step-47-search", "expanded": "true", "open": true, "active": "Saha Operatörü 01", "chosen": null, "url": "/records/run/12", "status": "16 kişi bulundu."}
+Up-sarma {"focus": "step-47-search", "expanded": "true", "open": true, "active": "Saha Operatörü 51", "chosen": null, "url": "/records/run/12", "status": "16 kişi bulundu."}
+Down-sarma {"focus": "step-47-search", "expanded": "true", "open": true, "active": "Saha Operatörü 01", "chosen": null, "url": "/records/run/12", "status": "16 kişi bulundu."}
+Down2 {"focus": "step-47-search", "expanded": "true", "open": true, "active": "Saha Operatörü 10", "chosen": null, "url": "/records/run/12", "status": "16 kişi bulundu."}
+End {"focus": "step-47-search", "expanded": "true", "open": true, "active": "Saha Operatörü 51", "chosen": null, "url": "/records/run/12", "status": "16 kişi bulundu."}
+Home {"focus": "step-47-search", "expanded": "true", "open": true, "active": "Saha Operatörü 01", "chosen": null, "url": "/records/run/12", "status": "16 kişi bulundu."}
+Escape-acikken {"focus": "step-47-search", "expanded": "false", "open": false, "active": null, "chosen": null, "url": "/records/run/12", "status": "16 kişi bulundu."}
+yeniden-ac {"focus": "step-47-search", "expanded": "true", "open": true, "active": "Saha Operatörü 10", "chosen": null, "url": "/records/run/12", "status": "16 kişi bulundu."}
+Tab-secimsiz {"focus": "pin-add-person-47", "expanded": "false", "open": false, "active": null, "chosen": null, "url": "/records/run/12", "status": "16 kişi bulundu."}
+ShiftTab-geri {"focus": "step-47-search", "expanded": "true", "open": true, "active": null, "chosen": null, "url": "/records/run/12", "status": "16 kişi bulundu."}
+sukr-Down {"focus": "step-47-search", "expanded": "true", "open": true, "active": "Saha Operatörü 07", "chosen": null, "url": "/records/run/12", "status": "1 kişi bulundu."}
+Enter-sec {"focus": "step-47-search", "expanded": "false", "open": false, "active": null, "chosen": "Saha Operatörü 07, sicil 2907", "url": "/records/run/12", "status": "Saha Operatörü 07 seçildi."}
+PIN (2 Tab) {"focus": "pin-add-person-47", "expanded": "false", "open": false, "active": null, "chosen": "Saha Operatörü 07, sicil 2907", "url": "/records/run/12", "status": "Saha Operatörü 07 seçildi."}
+gonder-dugmesi (2 Tab) {"focus": "BUTTON:Görevliyi ekle", "expanded": "false", "open": false, "active": null, "chosen": "Saha Operatörü 07, sicil 2907", "url": "/records/run/12", "status": "Saha Operatörü 07 seçildi."}
+sonuc (B6 cip metni dahil): ['Test Operatör 2 2002, sahip Şükrüye İnceoğlu Karamustafapaşalıoğulları 2003 IŞIL ÖZGÜR 2004', 'Test Operatör 2 2002, sahip Saha Operatörü 07 2907']
+## K17-K19 (adım 47)
+closedAttrs ["role=combobox", "aria-autocomplete=list", "aria-expanded=false", "aria-controls=step-47-results", "aria-activedescendant=null", "aria-describedby=step-47-hint step-47-status"]
+openAttrs {"expanded": "true", "controlsIsList": "listbox", "listLabel": "Bulunan kişiler", "listTabindex": "-1", "activeId": "step-47-results-option-1", "activeRole": "option", "activeInList": true, "activeSelected": "true", "optionRoles": ["option"], "disabled": ["Test Operatör 1 Sicil 2001 Eklenemez: Molada"], "statusRole": "status", "statusText": "16 kişi bulundu.", "statusInDescribedby": true}
+aria ["- text: Görevli ekle", "- combobox \"Görevli ekle\" [expanded]: \"1\"", "- listbox \"Bulunan kişiler\":", "  - option \"Saha Operatörü 01 Sicil 2901\"", "  - option \"Saha Operatörü 10 Sicil 2910\" [selected]", "  - option \"Saha Operatörü 11 Sicil 2911\"", "  - option \"Saha Operatörü 12 Sicil 2912\"", "  - option \"Saha Operatörü 13 Sicil 2913\"", "  - option \"Saha Operatörü 14 Sicil 2914\"", "  - option \"Saha Operatörü 15 Sicil 2915\"", "  - option \"Saha Operatörü 16 Sicil 2916\"", "  - option \"Saha Operatörü 17 Sicil 2917\"", "  - option \"Saha Operatörü 18 Sicil 2918\"", "  - option \"Saha Operatörü 19 Sicil 2919\""]
+empty {"status": "Aramaya uyan aktif operatör yok.", "open": false}
+trunc {"status": "50 kişi bulundu. Liste kısaltıldı. Aramayı daraltın.", "note": "Liste kısaltıldı. Aramayı daraltın.", "count": 50}
+noChoice {"errorVisible": true, "text": "Bir kişi seçin.", "focus": "step-47-search", "invalid": "true", "describedby": "step-47-hint step-47-status step-47-search-error", "lefts": [386, 386, 386]}
+noChoiceUrl true
+err500 {"status": "Kişiler alınamadı. Bağlantıyı kontrol edip yeniden arayın.", "cls": "field-hint text-danger font-semibold", "open": false}
+errAbort "Kişiler alınamadı. Bağlantıyı kontrol edip yeniden arayın."
+errSubmitBlocked true
+race {"status": "1 kişi bulundu.", "names": ["Ahmet Yılmaz"]}
+chosen {"name": "Ahmet Yılmaz, sicil 2006", "chosenVisible": true, "warn": "Bu kişinin kendi açık kaydı var. Yine de ekleyebilirsiniz.", "errGone": true}
+afterChange {"chosenVisible": false, "value": "", "disabled": true, "focus": "step-47-search", "warnHidden": true, "status": "50 kişi bulundu. Liste kısaltıldı. Aramayı daraltın."}
+rejected {"url": "/records/run/12", "toolOpen": true, "chosen": "Ahmet Yılmaz, sicil 2006", "warn": true, "value": "8", "pin": "", "errs": ["İşlem yapılmadı PIN hatalı.", "PIN hatalı.", "PIN hatalı."]}
+## K13 ve K22 matrisleri
+360x800 light          det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=alt-alta radius=6px flag=2px]
+360x800 light          det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=alt-alta radius=6px flag=2px]
+360x800 light          det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=alt-alta radius=6px flag=2px]
+360x800 light          det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=alt-alta radius=6px flag=2px]
+360x800 light          det12    TEMIZ  tl[rows=3 days=1 warn=0/0 yerlesim=alt-alta radius=6px flag=None]
+360x800 dark           det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=alt-alta radius=6px flag=2px]
+360x800 dark           det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=alt-alta radius=6px flag=2px]
+360x800 dark           det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=alt-alta radius=6px flag=2px]
+360x800 dark           det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=alt-alta radius=6px flag=2px]
+360x800 dark           det12    TEMIZ  tl[rows=3 days=1 warn=0/0 yerlesim=alt-alta radius=6px flag=None]
+768x1024 light         det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+768x1024 light         det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=2px]
+768x1024 light         det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+768x1024 light         det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+768x1024 light         det12    TEMIZ  tl[rows=3 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+768x1024 dark          det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+768x1024 dark          det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=2px]
+768x1024 dark          det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+768x1024 dark          det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+768x1024 dark          det12    TEMIZ  tl[rows=3 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+1024x768 light         det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1024x768 light         det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=2px]
+1024x768 light         det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1024x768 light         det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1024x768 light         det12    TEMIZ  tl[rows=3 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+1024x768 dark          det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1024x768 dark          det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=2px]
+1024x768 dark          det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1024x768 dark          det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1024x768 dark          det12    TEMIZ  tl[rows=3 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+1440x900 light         det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1440x900 light         det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=2px]
+1440x900 light         det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1440x900 light         det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1440x900 light         det12    TEMIZ  tl[rows=3 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+1440x900 dark          det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1440x900 dark          det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=2px]
+1440x900 dark          det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1440x900 dark          det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1440x900 dark          det12    TEMIZ  tl[rows=3 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+1920x1080 light        det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1920x1080 light        det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=2px]
+1920x1080 light        det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1920x1080 light        det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1920x1080 light        det12    TEMIZ  tl[rows=3 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+1920x1080 dark reduce  det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1920x1080 dark reduce  det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=2px]
+1920x1080 dark reduce  det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1920x1080 dark reduce  det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+1920x1080 dark reduce  det12    TEMIZ  tl[rows=3 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+320x640 light          det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=alt-alta radius=6px flag=2px]
+320x640 light          det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=alt-alta radius=6px flag=2px]
+320x640 light          det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=alt-alta radius=6px flag=2px]
+320x640 light          det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=alt-alta radius=6px flag=2px]
+320x640 light          det12    TEMIZ  tl[rows=3 days=1 warn=0/0 yerlesim=alt-alta radius=6px flag=None]
+640x400 dark           det8     TEMIZ  tl[rows=20 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+640x400 dark           det11    TEMIZ  tl[rows=5 days=1 warn=3/3 yerlesim=yan-yana radius=6px flag=2px]
+640x400 dark           det6     TEMIZ  tl[rows=15 days=2 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+640x400 dark           det1     TEMIZ  tl[rows=2 days=1 warn=1/1 yerlesim=yan-yana radius=6px flag=2px]
+640x400 dark           det12    TEMIZ  tl[rows=3 days=1 warn=0/0 yerlesim=yan-yana radius=6px flag=None]
+sorunlu hucre 0 / 60 konsol []
+360x800 light          run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}, {'w': 188, 'fits': True, 'h': 44}]]
+360x800 light          run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}, {'w': 188, 'fits': True, 'h': 44}]]
+360x800 light          run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -68} submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}, {'w': 188, 'fits': True, 'h': 44}]]
+360x800 light          run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}, {'w': 188, 'fits': True, 'h': 44}]]
+360x800 dark           run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}, {'w': 188, 'fits': True, 'h': 44}]]
+360x800 dark           run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}, {'w': 188, 'fits': True, 'h': 44}]]
+360x800 dark           run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -68} submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}, {'w': 188, 'fits': True, 'h': 44}]]
+360x800 dark           run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[76] rm=[{'w': 188, 'fits': True, 'h': 68}, {'w': 188, 'fits': True, 'h': 116}, {'w': 188, 'fits': True, 'h': 44}]]
+768x1024 light         run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+768x1024 light         run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+768x1024 light         run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -159} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+768x1024 light         run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+768x1024 dark          run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+768x1024 dark          run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+768x1024 dark          run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -159} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+768x1024 dark          run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+1024x768 light         run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}, {'w': 188, 'fits': True, 'h': 44}]]
+1024x768 light         run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}, {'w': 188, 'fits': True, 'h': 44}]]
+1024x768 light         run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -100} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}, {'w': 188, 'fits': True, 'h': 44}]]
+1024x768 light         run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}, {'w': 188, 'fits': True, 'h': 44}]]
+1024x768 dark          run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}, {'w': 188, 'fits': True, 'h': 44}]]
+1024x768 dark          run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}, {'w': 188, 'fits': True, 'h': 44}]]
+1024x768 dark          run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -100} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}, {'w': 188, 'fits': True, 'h': 44}]]
+1024x768 dark          run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 220, 'fits': True, 'h': 92}, {'w': 188, 'fits': True, 'h': 44}]]
+1440x900 light         run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+1440x900 light         run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+1440x900 light         run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -163} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+1440x900 light         run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+1440x900 dark          run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+1440x900 dark          run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+1440x900 dark          run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -163} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+1440x900 dark          run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+1920x1080 light reduce run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+1920x1080 light reduce run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+1920x1080 light reduce run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -571} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+1920x1080 light reduce run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+320x640 light          run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[76] rm=[{'w': 148, 'fits': True, 'h': 92}, {'w': 148, 'fits': True, 'h': 140}, {'w': 148, 'fits': True, 'h': 68}]]
+320x640 light          run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=95 n=50 chosen=None submitH=[76] rm=[{'w': 148, 'fits': True, 'h': 92}, {'w': 148, 'fits': True, 'h': 140}, {'w': 148, 'fits': True, 'h': 68}]]
+320x640 light          run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -28} submitH=[76] rm=[{'w': 148, 'fits': True, 'h': 92}, {'w': 148, 'fits': True, 'h': 140}, {'w': 148, 'fits': True, 'h': 68}]]
+320x640 light          run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[76] rm=[{'w': 148, 'fits': True, 'h': 92}, {'w': 148, 'fits': True, 'h': 140}, {'w': 148, 'fits': True, 'h': 68}]]
+640x400 dark           run-ready TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+640x400 dark           run-open TEMIZ  pk[list={'dl': 0, 'dw': 0, 'gap': 6, 'h': 288, 'scrollable': True, 'overflowY': 'auto'} optMinH=67 n=50 chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+640x400 dark           run-chosen TEMIZ  pk[list=None optMinH=None n=None chosen={'btnH': 44, 'txtLeft': 0, 'btnRight': -75} submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+640x400 dark           run-error TEMIZ  pk[list=None optMinH=None n=None chosen=None submitH=[56] rm=[{'w': 219, 'fits': True, 'h': 44}, {'w': 425, 'fits': True, 'h': 44}, {'w': 188, 'fits': True, 'h': 44}]]
+sorunlu hucre 0 / 44 konsol []
+## FormValidation gerilemesi (768 px, klavyeyle gönderim)
+"{\"out\":[[\"bos gonderim\",{\"focus\":\"RegistryNo\",\"firstInvalid\":\"RegistryNo\",\"invalidCount\":3,\"errors\":[\"RegistryNo-error:Sicil no alanını doldurun. sol[46,46,46]\",\"FullName-error:Ad soyad alanını doldurun. sol[394,394,394]\",\"TemporaryPassword-error:Geçici parola alanını doldurun sol[46,46,46]\"],\"dupDescribedby\":[],\"url\":\"/users/create\"}],[\"ilk alan dolu\",{\"focus\":\"FullName\",\"firstInvalid\":\"FullName\",\"invalidCount\":2,\"errors\":[\"FullName-error:Ad soyad alanını doldurun. sol[394,394,394]\",\"TemporaryPassword-error:Geçici parola alanını doldurun sol[46,46,46]\"],\"dupDescribedby\":[],\"url\":\"/users/create\"}]],\"errs\":[]}"
+"{\"out\":[[\"bos gonderim\",{\"focus\":\"Code\",\"firstInvalid\":\"Code\",\"invalidCount\":2,\"errors\":[\"Code-error:Kod alanını doldurun. sol[46,46,46]\",\"Name-error:Ad alanını doldurun. sol[394,394,394]\"],\"dupDescribedby\":[],\"url\":\"/materials/create\"}]],\"errs\":[]}"
+"{\"out\":[[\"bos gonderim\",{\"focus\":\"Pin\",\"firstInvalid\":\"Pin\",\"invalidCount\":1,\"errors\":[\"Pin-error:Bu alanı doldurun. sol[46,46,46]\"],\"dupDescribedby\":[],\"url\":\"/users/deactivate/11\"}]],\"errs\":[]}"
+recordcreate ("Kaydı oluştur" ile): odak FacilityId; hatalar FacilityId, LineId, MachineId, LockMinutes, pin-new
+materials Code aria-describedby (hata, düzelt, yeniden hata): Code-hint Code-error Code-error

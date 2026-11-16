@@ -6,6 +6,7 @@
 > `Docs/Analysis/Requirements.md`, faz planı `Docs/Phases/PhasePlan.md`.
 > Kaynak: `Docs/Dijital_Temizlik_Takip_Projesi_Is_Birimi_Anlatim_Senaryosu.docx` (düz metin çıkarımı, satır numaraları `doc.txt` satırlarıdır).
 > Bu belgede verilen kimlikler (FR, NFR, BR, SC, SH, K) sonraki tüm belgelerde aynen kullanılır; silinen kimlik yeniden kullanılmaz.
+> 2026-11-16 (O-10, PL-93, PL-94): Faz 6E ve 6F kuralları işlendi: FR-46, FR-48, NFR-09, SK-2, SK-4, SK-8, BR-17, BR-48, BR-53, SC-32, SH-02, yeni SH-02a, §9.8. Kurallar ilgili fazın tesliminden itibaren geçerlidir.
 
 ---
 
@@ -95,13 +96,13 @@ acil müdahale ve bildirim satırları eklendi; kritik işlemler PIN ister (BR-4
 
 - **SK-1:** Bir adımı başlatma ve bitirme yalnız (a) kaydın sahibi ya da (b) o adımda görevli olarak belirlenmiş kişi tarafından yapılabilir.
   Yönetici rolü bu hakkı vermez; yöneticinin araçları müdahale ve düzeltmedir.
-- **SK-2:** Bir adıma görevli ekleme ve çıkarma yalnız kaydın sahibi tarafından, adım başlamadan yapılır (K-07).
+- **SK-2:** Bir adıma görevli ekleme ve çıkarma yalnız kaydın sahibi tarafından yapılır. Ekleme adım başlamadan ya da sürerken yapılır; çıkarma yalnız adıma hiç katılmamış kişide yapılır, katılmış kişi çıkarılmaz, ayrılır (K-07, Faz 6E'den itibaren; PL-93).
 - **SK-3:** Kaydın sahibi hiçbir işlemle değişmez (satır 36).
-- **SK-4:** Adıma eklenen kişi katılımını kendi PIN'iyle onaylar; onaylamayan kişi görevli olmaz (K-10).
+- **SK-4:** Adıma eklenen kişi katılımını kendi PIN'iyle girer: "Adıma katıl" ve isterse "Adımdan ayrıl". Anları sunucu saatidir; kişi süre girmez. Adım bitmeden giriş yapılır, bittikten sonra yapılmaz. Girişini yapmamış kişi o adımda çalışmış sayılmaz ve efor almaz; sahip dışında girişi bekleyen kişi varken adım bitirilemez (K-10, PL-93).
 - **SK-5:** Talebi yalnız kaydın sahibi açar; yalnız talebi açan kişi geri çeker (K-05).
 - **SK-6:** Molayı kaydın sahibi ya da kaydın o anki adımının (devam eden adım, yoksa sıradaki adım) görevlisi başlatır; başlatan kişi o anda başka bir kayıtta devam eden adımda olamaz. Yalnız başlatan kişi bitirir, yönetici gerekçeyle bitirebilir (K-39 kararı).
 - **SK-7:** Beklemedeki kaydı yalnız sahibi devam ettirir (K-45 varsayılanı).
-- **SK-8:** Kritik işlemde girilen PIN oturumdaki kullanıcının PIN'idir. Tek istisna SK-4: eklenen kişi kendi PIN'ini aynı cihazda girer.
+- **SK-8:** Kritik işlemde girilen PIN oturumdaki kullanıcının PIN'idir. Tek istisna SK-4: görevli katılma ve ayrılma işleminde kendi PIN'ini sahibin oturumu açık cihazda da girebilir; işlemin yapanı görevlidir, oturumdaki kişi olay yükünde ayrıca yazılır.
 - **SK-9:** Hesap yönetimi kapsamı hedef hesabın rollerine bağlıdır. Yönetici yalnız `Manager` ve `SuperAdmin` rolü taşımayan hesapları
   yönetir ve yalnız `Operator` ile `Auditor` rolü atar; Süper admin tüm hesapları yönetir ve tüm rolleri atar. Kimse kendi hesabını
   pasifleştiremez ve kendi rollerini değiştiremez. Son aktif Süper admin pasifleştirilemez ve Süper admin rolü ondan kaldırılamaz (PL-05, PL-16).
@@ -172,9 +173,9 @@ ve PIN doğrulaması bir yetki politikası değil, **verinin iş kuralıdır** v
 | FR-43 | Kayıt sahibi, kaydı için yöneticiye gerekçeli iptal, yarıda kapatma ya da beklemeye alma talebi açar; talebini izler ve karar verilmeden geri çekebilir. | 92-94, K-05, K-08 | Zorunlu |
 | FR-44 | Yönetici talepleri tek ekrandan izler, onaylar ya da gerekçeyle reddeder; onay ilgili işlemi kayda uygular. | 94, K-05 | Zorunlu |
 | FR-45 | Beklemedeki kayıt sahibinin yeni iş açmasını engellemez; sahip kaydı kaldığı yerden devam ettirir. | 78-81, K-08 | Zorunlu |
-| FR-46 | Kullanıcı sicil no ve parola ile giriş yapar; ilk girişte parolasını değiştirir ve kişisel PIN belirler. | K-09 | Zorunlu |
+| FR-46 | Kullanıcı sicil no ve parola ile giriş yapar; ilk girişte parolasını değiştirir ve kişisel PIN belirler. Tüm rolleri Operatör olan hesap sicil no ve PIN ile de girer (Faz 6F). Parola ve PIN girişindeki hatalı denemeler giriş sayacında tutulur; `<PinDenemeSınırı>` art arda hatalı denemede giriş `<GirişKilitSüresi>` (15 dakika) kapanır, hesabı yönetebilen kullanıcı erken açar (PL-91, PL-94). | K-09 | Zorunlu |
 | FR-47 | Kritik işlemler işlemi yapanın PIN'iyle onaylanır (BR-48). | K-09 | Zorunlu |
-| FR-48 | Adıma eklenen görevli katılımını kendi PIN'iyle onaylar. | 52, 112, K-10 | Zorunlu |
+| FR-48 | Adıma eklenen görevli adıma katılma ve ayrılma anını kendi PIN'iyle girer; eforu katıldığı süredir (SH-02a). Girişini yapmamış görevli varken adım bitirilemez (PL-93). | 52, 53, 55-57, 112, K-10 | Zorunlu |
 | FR-49 | Yönetici tesis bazında vardiyaları tanımlar. | 79, K-03, K-38 | Zorunlu |
 | FR-50 | Temizlik tipinde varsayılan kilit süresi tanımlanır; operatör kayıt açarken bu süreyi değiştirebilir. | 83-84, K-03 | Zorunlu |
 | FR-51 | Acil müdahale tek ekrandan açılır ve aynı işlemde başlar; "Acil" türünde kısa genel bir checklist kullanılır; ne olduğu açıklaması zorunludur. | 41-44, K-14 | Zorunlu |
@@ -195,7 +196,7 @@ ve PIN doğrulaması bir yetki politikası değil, **verinin iş kuralıdır** v
 | NFR-06 | Yetki yalnız rol bazlıdır; sahiplik kuralı servis katmanında iş kuralı olarak uygulanır. | türetilmiş (CLAUDE.md) | Zorunlu |
 | NFR-07 | Hiçbir tanım ve kayıt fiziksel olarak silinmez; pasifleştirme ve durum kullanılır. | 31, 33 | Zorunlu |
 | NFR-08 | Aynı komutun tekrar gönderilmesi (çift dokunma, yeniden deneme) ikinci kez etki üretmez. | türetilmiş (73, 87) | Zorunlu |
-| NFR-09 | Paylaşılan cihazda oturumdaki kişinin kimliği her ekranda görünür; oturum `<OturumSüresi>` (başlangıç 30 dakika) işlemsizlikte kapanır; kritik işlemler PIN ile yeniden doğrulanır. | türetilmiş (48, 111), K-09, PL-24 | Zorunlu |
+| NFR-09 | Paylaşılan cihazda oturumdaki kişinin kimliği her ekranda görünür; oturum `<OturumSüresi>` (başlangıç 30 dakika) işlemsizlikte kapanır; kritik işlemler PIN ile yeniden doğrulanır. Giriş ekranı PIN modunda alanları boş açar, tarayıcı sicil no ve PIN'i kaydetmez; giriş ekranındaki hatalı deneme işlem PIN'ini kilitlemez (PL-94). | türetilmiş (48, 111), K-09, PL-24 | Zorunlu |
 | NFR-10 | Medya dosyaları değişmezdir; bir versiyona bağlanan dosya sonradan değişemez. | 16, 32 | Önemli |
 | NFR-11 | Arayüz dili Türkçedir. | türetilmiş, K-31 | Önemli |
 | NFR-12 | POST işlemlerinde antiforgery, sırlar (ör. özet anahtarı) `appsettings.json` dışında tutulur. | türetilmiş (CodingStandards) | Zorunlu |
@@ -211,7 +212,7 @@ ve PIN doğrulaması bir yetki politikası değil, **verinin iş kuralıdır** v
 | 1 | Hangi tesiste yapılmış? (109) | FR-10, FR-31 | Kayıt detayı başlığı (açılış anı değeri) |
 | 2 | Hangi hatta ve hangi makinede? (110) | FR-10, FR-31 | Kayıt detayı başlığı |
 | 3 | Kim başlatmış? (111) | FR-12, FR-18 | Kaydı açan (sorumlu) ve ilk adımı başlatan kişi ayrı ayrı (K-35) |
-| 4 | Kimler hangi adımlarda görev almış? (112) | FR-17, FR-48 | Zaman çizelgesi, adım satırında görevliler ve PIN onay zamanları |
+| 4 | Kimler hangi adımlarda görev almış? (112) | FR-17, FR-48 | Zaman çizelgesi, adım satırında görevliler, katılma ve ayrılma anları, kişi çalışma süresi |
 | 5 | Hangi adım ne zaman başlamış? (113) | FR-18 | Zaman çizelgesi |
 | 6 | Ne zaman bitmiş? (114) | FR-18 | Zaman çizelgesi |
 | 7 | Toplam ne kadar sürmüş? (115) | FR-21, FR-23 | Özet: brüt, mola, bekleme ve net süre (SH-08..SH-11); molalar ayrı listede |
@@ -259,8 +260,8 @@ Değeri iş biriminden gelecekler `<...>` yer tutucusuyla gösterilmiştir; sist
 - **BR-14:** Adımlar versiyondaki sırayla yürütülür; bir adım, kendinden önceki adım tamamlanmadan başlatılamaz; atlama yoktur (K-06).
 - **BR-15:** Bir kayıtta aynı anda en çok bir adım "Devam ediyor" durumunda olabilir (K-06).
 - **BR-16:** Adım başlatma ve bitirme yalnız kaydın sahibi ya da o adımın görevlisi tarafından yapılır (SK-1). Diğer kullanıcının isteği sunucuda reddedilir.
-- **BR-17:** Kaydın sahibi her adımın görevli listesine varsayılan olarak gelir. Görevliyi yalnız sahip, adım başlamadan ekler ya da çıkarır; adım başladığında liste donar. Sahip bir adımdan çıkarılabilir ve o adımı yine de başlatıp bitirebilir. Bir adım en az bir görevli olmadan başlatılamaz (K-07).
-- **BR-53:** Eklenen görevli katılımını aynı istekte kendi PIN'iyle onaylar. Pasif, PIN'i kilitli ya da açık molası olan kişi eklenemez (K-10).
+- **BR-17:** Kaydın sahibi her adımın görevli listesine varsayılan olarak gelir. Görevliyi yalnız sahip ekler ya da çıkarır (SK-2); adım sürerken eklenebilir, katılmış kişi çıkarılmaz. Sahip bir adımdan çıkarılabilir ve o adımı yine de başlatıp bitirebilir. Bir adım en az bir görevli olmadan başlatılamaz (K-07).
+- **BR-53:** Eklenen görevli katılımını ekleme isteğinden ayrı, kendi PIN'iyle girer (SK-4). Adım başlamadan katılan adım başlangıcında, sürerken katılan katıldığı anda çalışmaya başlar; ayrılmayanın aralığı adım bitişinde ya da müdahale anında kapanır. Kişi başına adımda tek aralık vardır, ayrılan aynı adıma yeniden katılamaz; adımda çalışan son kişi ayrılamaz. Pasif, PIN'i kilitli, açık molası olan ya da başka adımda çalışan kişi katılamaz. Girişi bekleyen kişi adım başlatmayı engellemez, adım bitirmeyi engeller (K-10, PL-93).
 - **BR-18:** Adımın başlangıç ve bitiş zamanı, işlemin sunucuya ulaştığı andaki sunucu saatidir; istemciden gelen zaman alanı yoktur.
 - **BR-19:** Adım molası SH-17, adım süresi SH-01 (adımla kesişen mola düşülür), adım eforu SH-02 ile hesaplanır ve adım bitişinde bir kez yazılır (K-39).
 - **BR-20:** Kaydın brüt süresi SH-08, net süresi SH-11'dir. Brüt, mola, bekleme ve net ayrı saklanır ve ayrı gösterilir (K-02).
@@ -289,7 +290,7 @@ Değeri iş biriminden gelecekler `<...>` yer tutucusuyla gösterilmiştir; sist
 
 **Kimlik ve PIN**
 
-- **BR-48:** PIN isteyen işlemler. Operatör: kayıt açma, acil müdahale açma, görevli ekleme ve çıkarma (sahibin PIN'i) ile katılım onayı (eklenen kişinin PIN'i), malzeme ekleme ve çıkarma, adım başlatma, adım bitirme, mola başlatma ve bitirme, talep açma ve geri çekme, beklemeden devam. Yönetici: talep onayı ve reddi, iptal, yarıda kapatma, beklemeye alma, açık molayı bitirme, düzeltme, prosedür versiyonu yayınlama, kullanıcı pasifleştirme, PIN sıfırlama, parola sıfırlama (PL-06), sistem ayarı değiştirme. Süper admin: kullanıcı pasifleştirme, PIN sıfırlama, parola sıfırlama, sistem ayarı değiştirme. PIN istenmeyenler: giriş, okuma ekranları, tanım ekleme ve düzenleme, bildirimi okundu işaretleme (K-09).
+- **BR-48:** PIN isteyen işlemler. Operatör: kayıt açma, acil müdahale açma, görevli ekleme ve çıkarma (sahibin PIN'i) ile adıma katılma ve ayrılma (görevlinin PIN'i), malzeme ekleme ve çıkarma, adım başlatma, adım bitirme, mola başlatma ve bitirme, talep açma ve geri çekme, beklemeden devam. Yönetici: talep onayı ve reddi, iptal, yarıda kapatma, beklemeye alma, açık molayı bitirme, düzeltme, prosedür versiyonu yayınlama, kullanıcı pasifleştirme, PIN sıfırlama, parola sıfırlama (PL-06), giriş kilidini açma (PL-94), sistem ayarı değiştirme. Süper admin: kullanıcı pasifleştirme, PIN sıfırlama, parola sıfırlama, giriş kilidini açma, sistem ayarı değiştirme. PIN istenmeyenler: giriş, okuma ekranları, tanım ekleme ve düzenleme, bildirimi okundu işaretleme (K-09).
 - **BR-49:** PIN yalnız rakamdır, `<PinUzunluğu>` hanedir; tüm haneleri aynı ya da ardışık PIN reddedilir. `<PinDenemeSınırı>` art arda hatalı denemede PIN kilitlenir ve oturum kapanır; hesabı yönetebilen kullanıcı (SK-9) sıfırlar, kullanıcı sonraki girişte yeni PIN belirler. Uzunluk kuralı yalnız yeni PIN belirlenirken uygulanır; `<PinUzunluğu>` değişse de mevcut PIN'ler geçerlidir (PL-18). Hatalı PIN'li istek işlem yapmaz ve kayıt olay günlüğüne yazılmaz (K-42 varsayılanı). Başlangıç değerleri `<PinUzunluğu>` 4, `<PinDenemeSınırı>` 5: art arda 5. hatalı denemede kilit, doğru PIN sayacı sıfırlar (PL-24).
 - **BR-55:** Yönetici ya da Süper admin kullanıcıyı geçici parolayla açar (kapsam SK-9). Kullanıcı ilk girişte parolasını değiştirir ve PIN belirler; bu iki adım bitmeden başka ekran açılmaz (K-09).
 
@@ -1118,10 +1119,10 @@ değerleri dokümandan alınmıştır (satır 17-18, 28, 61-71); saat değerleri
 - Ne zaman: Adım başlatırken art arda `<PinDenemeSınırı>` kez yanlış PIN girer.
 - O zaman: Hiçbir denemede adım başlamaz ve olay yazılmaz; son denemede PIN kilitlenir ve oturum kapanır; Ahmet girişten sonra PIN isteyen işlem yapamaz; yönetici PIN'i sıfırlayınca Ahmet yeni PIN belirler.
 
-**SC-32: Yardımcının PIN ile katılım onayı (K-10)**
-- Verilen: Ahmet'in kaydında 2. adım başlamadı; Mehmet aynı cihazın başında.
-- Ne zaman: Ahmet Mehmet'i görevli seçer; Mehmet kendi PIN'ini girer. Başka bir denemede Mehmet yanlış PIN girer.
-- O zaman: Doğru PIN'le Mehmet görevli olur, olay "ekleyen Ahmet, onaylayan Mehmet" bilgisini taşır; yanlış PIN'de Mehmet eklenmez ve hatalı deneme Mehmet'in sayacına yazılır.
+**SC-32: Yardımcının PIN ile adıma katılması (K-10, PL-93)**
+- Verilen: Ahmet'in kaydında 2. fazın adımına Ahmet Mehmet'i görevli ekledi; Mehmet henüz gelmedi.
+- Ne zaman: Ahmet adımı 10:00'da başlatır. Mehmet 10:04'te aynı tabletten ya da kendi cihazından kendi PIN'iyle "Adıma katıl" der. Ahmet adımı 10:10'da bitirir. Başka bir denemede Mehmet hiç katılmaz ve Ahmet 10:10'da Bitir'e basar.
+- O zaman: Adım Mehmet'i beklemeden başlar. Mehmet'in aralığı 10:04-10:10, çalışma süresi 6 dk; adım süresi 10 dk, efor 10 + 6 = 16 dk (SH-02a, SH-02). Olayın yapanı Mehmet, oturumdaki kişi yükte yazılı. Yanlış PIN'de katılım olmaz, hatalı deneme Mehmet'in sayacına yazılır. Mehmet katılmadığı denemede adım bitmez, "Girişi bekleniyor: Mehmet" görünür; Ahmet Mehmet'i listeden çıkarınca bitirir ve efor 10 dk olur.
 
 **SC-33: Bağlantı yokken işlem (K-15)**
 - Verilen: Operatör yürütme ekranında, ağ bağlantısı kesik.
@@ -1212,7 +1213,8 @@ Bitmemiş adım, kapanmamış mola ve bitmemiş bekleme toplamlara girmez; canl�
 |---|---|---|
 | SH-17 | Adım molası = Σ max(0, min(mola bitişi, adım bitişi) - max(mola başlangıcı, adım başlangıcı)), kaydın kapanmış molaları üzerinden (adımla kesişen mola süresi) | 5 |
 | SH-01 | Adım süresi = adım bitişi - adım başlangıcı - SH-17 | 5 |
-| SH-02 | Adım eforu = SH-01 x adımın görevli sayısı | 5 |
+| SH-02a | Kişi çalışma süresi = kişi bitişi - kişi başlangıcı - kişi aralığıyla kesişen kayıt molası; kişi başlangıcı = en geç (katılma anı, adım başlangıcı), kişi bitişi = en erken (ayrılma anı, adım bitişi). Aralık satırı olmayan Faz 6E öncesi görevlide adım başlangıcı ve bitişi (PL-93) | 6E |
+| SH-02 | Adım eforu = adımdaki görevlilerin SH-02a toplamı. Faz 6E'ye kadar SH-01 x adımın görevli sayısı idi; adımın tamamında çalışan görevlilerde iki formül aynı sonucu verir (satır 61-62). Bitmiş adımın eforu saklıdır, yeniden hesaplanmaz | 5, 6E |
 | SH-03 | Faz brüt = fazın son adımının bitişi - fazın ilk adımının başlangıcı | 5 |
 | SH-04 | Faz molası = Σ max(0, min(mola bitişi, fazın son adım bitişi) - max(mola başlangıcı, fazın ilk adım başlangıcı)), kaydın kapanmış molaları üzerinden | 5 |
 | SH-05 | Faz beklemesi = Σ (devam anı - beklemeye alınma anı), aynı aralıktaki beklemeler | 7 |
@@ -1233,6 +1235,9 @@ Mola verilmediyse faz brüt = faz net = 40 dk 12 sn + `d`. Ayrılmadan mola veri
 
 Örnek (SC-37, adım içinde mola): adım 10:00:00-10:50:00, iki görevli, mola 10:04:00-10:44:00. Adım molası 40 dk, adım süresi 10 dk,
 efor 20 dk; faz ve kayıt neti 40 dk azalır, brüt değişmez.
+
+Örnek (SC-32, adım içi katılma): adım 10:00-10:10, Ahmet adımın tamamında, Mehmet 10:04'te katılır. Ahmet 10 dk, Mehmet 6 dk; adım süresi
+10 dk, efor 16 dk (SH-02a, SH-02).
 
 Tutarlılık: mola açıkken adım başlatılamadığı ve bitirilemediği için (BR-39) her mola bütünüyle bir adımın içinde ya da iki adım arasındadır.
 Bu yüzden faz net (SH-06) = fazdaki adım sürelerinin (SH-01) toplamı + adımlar arasındaki molasız boşluklar; faz minimumu (SH-07) adım
@@ -1257,10 +1262,10 @@ Eski seçenek karşılaştırması (adım toplamı, boşluk eşiği, duraklat/de
 
 ### 9.8 Kimlik doğrulama ve PIN (K-09, K-10 kararları)
 
-- Cookie kimlik doğrulama, sicil no + parola; işlemsizlikte `<OturumSüresi>` (başlangıç 30 dakika) sonra oturum kapanır; kabukta oturumdaki kişinin adı her zaman görünür ve tek dokunuşla "kullanıcı değiştir" vardır.
+- Cookie kimlik doğrulama, sicil no + parola; tüm rolleri Operatör olan hesapta sicil no + PIN de (Faz 6F, PL-91). Parola ve PIN girişi işlem PIN sayacından ayrı giriş sayacını (`LoginFailedCount`) kullanır; `<PinDenemeSınırı>` art arda hatalı denemede giriş `<GirişKilitSüresi>` (15 dakika) kapanır (`LoginLockedUntilUtc`), hesabı yönetebilen kullanıcı (SK-9) erken açar; PIN girişine uygun olmayan hesapta PIN doğrulanmaz ve sayılmaz (PL-94). İşlemsizlikte `<OturumSüresi>` (başlangıç 30 dakika) sonra oturum kapanır; kabukta oturumdaki kişinin adı her zaman görünür ve tek dokunuşla "kullanıcı değiştir" vardır.
 - İlk giriş: Yönetici ya da Süper admin geçici parolayla açar (SK-9); kullanıcı parolasını değiştirir ve PIN belirler (BR-55). Bu adım tamamlanmadan diğer ekranlar ilk giriş ekranına yönlenir.
 - PIN, işlem isteğinin bir alanıdır ve aynı transaction'da doğrulanır; ayrı bir "PIN oturumu" tutulmaz. Parola ve PIN tek yönlü özetle saklanır (NFR-15).
-- Yardımcının katılım onayı (SK-4) görevli ekleme isteğinde eklenen kişinin PIN'iyle yapılır; hatalı deneme o kişinin sayacına yazılır.
+- Yardımcının katılma ve ayrılma girişi (SK-4) ekleme isteğinden ayrı, görevlinin kendi PIN'iyle yapılır; hatalı deneme o kişinin işlem PIN sayacına yazılır (Faz 6E, PL-93).
 - Kart okuyucu ve kurumsal dizin entegrasyonu kapsam dışıdır.
 
 ---

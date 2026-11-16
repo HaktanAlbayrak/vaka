@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Vaka.Web.Authorization;
 using Vaka.Web.Data;
@@ -9,6 +10,8 @@ public sealed class ParticipantDirectory : IParticipantDirectory
 {
     private const int PageSize = 50;
 
+    private static readonly CultureInfo Turkish = CultureInfo.GetCultureInfo("tr-TR");
+
     private readonly VakaDbContext _db;
 
     public ParticipantDirectory(VakaDbContext db)
@@ -16,62 +19,71 @@ public sealed class ParticipantDirectory : IParticipantDirectory
         _db = db;
     }
 
+    public async Task<LookupResult<ParticipantSearchResult>> SearchForOwnerAsync(int stepId, int actorUserId, string? query, CancellationToken cancellationToken)
+    {
+        var ownerId = await _db.RecordSteps
+            .AsNoTracking()
+            .Where(step => step.Id == stepId)
+            .Select(step => (int?)step.Phase.Record.OwnerUserId)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (ownerId is null)
+        {
+            return LookupResult<ParticipantSearchResult>.Missing();
+        }
+
+        return ownerId != actorUserId
+            ? LookupResult<ParticipantSearchResult>.OutOfScope()
+            : LookupResult<ParticipantSearchResult>.Found(await SearchAsync(query, stepId, null, cancellationToken));
+    }
+
     public async Task<ParticipantSearchResult> SearchAsync(string? query, int? stepId, int? includeUserId, CancellationToken cancellationToken)
     {
-        var users = _db.Users.AsNoTracking().Where(user => user.Roles.Any(role => role.Role == Roles.Operator));
-        var term = query?.Trim();
-        if (!string.IsNullOrEmpty(term))
+        // SQLite karşılaştırması Türkçe harfte büyük-küçük harfe duyarlıdır; aday sayısı küçük olduğundan ad ve sicil no bellekte süzülür.
+        var candidates = _db.Users
+            .AsNoTracking()
+            .Where(user => user.IsActive && user.Roles.Any(role => role.Role == Roles.Operator));
+        if (stepId is { } step)
         {
-            users = users.Where(user => user.FullName.Contains(term) || user.RegistryNo.Contains(term));
+            candidates = candidates.Where(user => !_db.StepParticipants.Any(item => item.RecordStepId == step && item.UserId == user.Id));
         }
 
-        var rows = await users
-            .OrderBy(user => user.FullName).ThenBy(user => user.Id)
-            .Take(PageSize + 1)
-            .Select(user => new CandidateRow(user.Id, user.FullName, user.RegistryNo, user.IsActive))
+        var rows = await candidates
+            .Select(user => new CandidateRow(user.Id, user.FullName, user.RegistryNo))
             .ToListAsync(cancellationToken);
-        var truncated = rows.Count > PageSize;
-        rows = rows.Take(PageSize).ToList();
 
-        if (includeUserId is { } extra && rows.All(row => row.Id != extra))
+        var term = query?.Trim();
+        var matched = rows
+            .Where(row => string.IsNullOrEmpty(term) || Contains(row.FullName, term) || Contains(row.RegistryNo, term))
+            .OrderBy(row => row.FullName, StringComparer.Create(Turkish, true)).ThenBy(row => row.Id)
+            .ToList();
+        var truncated = matched.Count > PageSize;
+        var page = matched.Take(PageSize).ToList();
+
+        if (includeUserId is { } extra && page.All(row => row.Id != extra) && rows.FirstOrDefault(row => row.Id == extra) is { } pending)
         {
-            var pending = await _db.Users
-                .AsNoTracking()
-                .Where(user => user.Id == extra && user.Roles.Any(role => role.Role == Roles.Operator))
-                .Select(user => new CandidateRow(user.Id, user.FullName, user.RegistryNo, user.IsActive))
-                .FirstOrDefaultAsync(cancellationToken);
-            if (pending is not null)
-            {
-                rows.Add(pending);
-            }
+            page.Add(pending);
         }
 
-        var ids = rows.Select(row => row.Id).ToArray();
-        var inStep = stepId is { } step
-            ? await _db.StepParticipants.AsNoTracking().Where(item => item.RecordStepId == step && ids.Contains(item.UserId)).Select(item => item.UserId).ToListAsync(cancellationToken)
-            : [];
+        var ids = page.Select(row => row.Id).ToArray();
         var onBreak = await _db.RecordBreaks.AsNoTracking().Where(item => item.EndedAtUtc == null && ids.Contains(item.StartedByUserId)).Select(item => item.StartedByUserId).ToListAsync(cancellationToken);
         var running = await _db.CleaningRecords.AsNoTracking().Where(item => item.Status == RecordStatus.InProgress && ids.Contains(item.OwnerUserId)).Select(item => item.OwnerUserId).ToListAsync(cancellationToken);
 
-        var options = rows.Select(row =>
+        var options = page.Select(row => new ParticipantOptionViewModel
         {
-            var reason = !row.IsActive ? "Pasif kullanıcı"
-                : inStep.Contains(row.Id) ? "Adımda zaten görevli"
-                : onBreak.Contains(row.Id) ? "Molada"
-                : null;
-            return new ParticipantOptionViewModel
-            {
-                UserId = row.Id,
-                FullName = row.FullName,
-                RegistryNo = row.RegistryNo,
-                IsAvailable = reason is null,
-                UnavailableReason = reason,
-                HasOwnActiveRecord = running.Contains(row.Id)
-            };
+            UserId = row.Id,
+            FullName = row.FullName,
+            RegistryNo = row.RegistryNo,
+            IsAvailable = !onBreak.Contains(row.Id),
+            UnavailableReason = onBreak.Contains(row.Id) ? "Molada" : null,
+            HasOwnActiveRecord = running.Contains(row.Id)
         });
 
         return new ParticipantSearchResult([.. options], truncated);
     }
 
-    private sealed record CandidateRow(int Id, string FullName, string RegistryNo, bool IsActive);
+    private static bool Contains(string text, string term) =>
+        Turkish.CompareInfo.IndexOf(text, term, CompareOptions.IgnoreCase) >= 0;
+
+    private sealed record CandidateRow(int Id, string FullName, string RegistryNo);
 }

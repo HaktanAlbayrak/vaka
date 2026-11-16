@@ -1,0 +1,211 @@
+# Faz 6C gÃ¶revli seÃ§ici (tarayÄ±cÄ±, sahip 2002)
+## K14/K15 arama
+{
+ "focusOpen": {
+  "expanded": "true",
+  "open": true,
+  "count": 50,
+  "status": "50 kiþi bulundu. Liste kýsaltýldý. Aramayý daraltýn.",
+  "note": "Liste kýsaltýldý. Aramayý daraltýn.",
+  "first": [
+   "Ahmet Yýlmaz Sicil 2006 Kendi açýk kaydý var, yine de eklenebilir.",
+   "IÞIL ÖZGÜR Sicil 2004",
+   "Saha Operatörü 01 Sicil 2901"
+  ],
+  "last": [
+   "Saha Operatörü 47 Sicil 2947",
+   "Saha Operatörü 48 Sicil 2948"
+  ]
+ },
+ "k14": [
+  {
+   "q": "Test",
+   "status": "1 kiþi bulundu.",
+   "names": [
+    "Test Operatör 1 Sicil 2001 Eklenemez: Molada [disabled]"
+   ]
+  },
+  {
+   "q": "pasif",
+   "status": "Aramaya uyan aktif operatör yok.",
+   "names": []
+  },
+  {
+   "q": "Pasif Operatör",
+   "status": "Aramaya uyan aktif operatör yok.",
+   "names": []
+  },
+  {
+   "q": "yönetici",
+   "status": "Aramaya uyan aktif operatör yok.",
+   "names": []
+  },
+  {
+   "q": "Yönetici Ýki",
+   "status": "Aramaya uyan aktif operatör yok.",
+   "names": []
+  },
+  {
+   "q": "Test Operatör 2",
+   "status": "Aramaya uyan aktif operatör yok.",
+   "names": []
+  },
+  {
+   "q": "2002",
+   "status": "Aramaya uyan aktif operatör yok.",
+   "names": []
+  },
+  {
+   "q": "2005",
+   "status": "Aramaya uyan aktif operatör yok.",
+   "names": []
+  },
+  {
+   "q": "1002",
+   "status": "Aramaya uyan aktif operatör yok.",
+   "names": []
+  }
+ ],
+ "k15": [
+  {
+   "q": "ahmet",
+   "status": "1 kiþi bulundu.",
+   "names": [
+    "Ahmet Yýlmaz Sicil 2006 Kendi açýk kaydý var, yine de eklenebilir."
+   ]
+  },
+  {
+   "q": "AHMET",
+   "status": "1 kiþi bulundu.",
+   "names": [
+    "Ahmet Yýlmaz Sicil 2006 Kendi açýk kaydý var, yine de eklenebilir."
+   ]
+  },
+  {
+   "q": "Ahmet",
+   "status": "1 kiþi bulundu.",
+   "names": [
+    "Ahmet Yýlmaz Sicil 2006 Kendi açýk kaydý var, yine de eklenebilir."
+   ]
+  },
+  {
+   "q": "inceoðlu",
+   "status": "1 kiþi bulundu.",
+   "names": [
+    "Þükrüye Ýnceoðlu Karamustafapaþalýoðullarý Sicil 2003"
+   ]
+  },
+  {
+   "q": "ÝNCEOÐLU",
+   "status": "1 kiþi bulundu.",
+   "names": [
+    "Þükrüye Ýnceoðlu Karamustafapaþalýoðullarý Sicil 2003"
+   ]
+  },
+  {
+   "q": "ýþýl",
+   "status": "1 kiþi bulundu.",
+   "names": [
+    "IÞIL ÖZGÜR Sicil 2004"
+   ]
+  },
+  {
+   "q": "IÞIL",
+   "status": "1 kiþi bulundu.",
+   "names": [
+    "IÞIL ÖZGÜR Sicil 2004"
+   ]
+  },
+  {
+   "q": "þükrüye",
+   "status": "1 kiþi bulundu.",
+   "names": [
+    "Þükrüye Ýnceoðlu Karamustafapaþalýoðullarý Sicil 2003"
+   ]
+  },
+  {
+   "q": "ÞÜKRÜYE",
+   "status": "1 kiþi bulundu.",
+   "names": [
+    "Þükrüye Ýnceoðlu Karamustafapaþalýoðullarý Sicil 2003"
+   ]
+  },
+  {
+   "q": "isil",
+   "status": "Aramaya uyan aktif operatör yok.",
+   "names": []
+  },
+  {
+   "q": "06",
+   "status": "2 kiþi bulundu.",
+   "names": [
+    "Ahmet Yýlmaz Sicil 2006 Kendi açýk kaydý var, yine de eklenebilir.",
+    "Saha Operatörü 06 Sicil 2906"
+   ]
+  },
+  {
+   "q": "51",
+   "status": "1 kiþi bulundu.",
+   "names": [
+    "Saha Operatörü 51 Sicil 2951"
+   ]
+  },
+  {
+   "q": "zzzz",
+   "status": "Aramaya uyan aktif operatör yok.",
+   "names": []
+  }
+ ]
+}
+## K16 yalnÄ±z klavye (adÄ±m 31, IÅžIL Ã–ZGÃœR eklendi)
+tab-ile-alana-odak (16+2 Tab) {"focus": "step-31-search", "expanded": "true", "open": true, "active": null, "activeSel": null, "activeDis": null, "selectedCount": 0, "chosen": null, "value": "", "url": "/records/run/8", "status": "50 kiþi bulundu. Liste kýsaltýldý. Aramayý daraltýn."}
+Escape {"focus": "step-31-search", "expanded": "false", "open": false, "active": null, "activeSel": null, "activeDis": null, "selectedCount": 0, "chosen": null, "value": "", "url": "/records/run/8", "status": "50 kiþi bulundu. Liste kýsaltýldý. Aramayý daraltýn."}
+ArrowDown-kapaliyken {"focus": "step-31-search", "expanded": "true", "open": true, "active": "Ahmet Yýlmaz", "activeSel": "true", "activeDis": null, "selectedCount": 1, "chosen": null, "value": "", "url": "/records/run/8", "status": "50 kiþi bulundu. Liste kýsaltýldý. Aramayý daraltýn."}
+yaz-1 {"focus": "step-31-search", "expanded": "true", "open": true, "active": null, "activeSel": null, "activeDis": null, "selectedCount": 0, "chosen": null, "value": "", "url": "/records/run/8", "status": "16 kiþi bulundu."}
+Down {"focus": "step-31-search", "expanded": "true", "open": true, "active": "Saha Operatörü 01", "activeSel": "true", "activeDis": null, "selectedCount": 1, "chosen": null, "value": "", "url": "/records/run/8", "status": "16 kiþi bulundu."}
+Up-sarma {"focus": "step-31-search", "expanded": "true", "open": true, "active": "Saha Operatörü 51", "activeSel": "true", "activeDis": null, "selectedCount": 1, "chosen": null, "value": "", "url": "/records/run/8", "status": "16 kiþi bulundu."}
+Down-sarma {"focus": "step-31-search", "expanded": "true", "open": true, "active": "Saha Operatörü 01", "activeSel": "true", "activeDis": null, "selectedCount": 1, "chosen": null, "value": "", "url": "/records/run/8", "status": "16 kiþi bulundu."}
+Down2 {"focus": "step-31-search", "expanded": "true", "open": true, "active": "Saha Operatörü 10", "activeSel": "true", "activeDis": null, "selectedCount": 1, "chosen": null, "value": "", "url": "/records/run/8", "status": "16 kiþi bulundu."}
+End {"focus": "step-31-search", "expanded": "true", "open": true, "active": "Saha Operatörü 51", "activeSel": "true", "activeDis": null, "selectedCount": 1, "chosen": null, "value": "", "url": "/records/run/8", "status": "16 kiþi bulundu."}
+Home {"focus": "step-31-search", "expanded": "true", "open": true, "active": "Saha Operatörü 01", "activeSel": "true", "activeDis": null, "selectedCount": 1, "chosen": null, "value": "", "url": "/records/run/8", "status": "16 kiþi bulundu."}
+Escape-acikken {"focus": "step-31-search", "expanded": "false", "open": false, "active": null, "activeSel": null, "activeDis": null, "selectedCount": 0, "chosen": null, "value": "", "url": "/records/run/8", "status": "16 kiþi bulundu."}
+yeniden-ac {"focus": "step-31-search", "expanded": "true", "open": true, "active": "Saha Operatörü 10", "activeSel": "true", "activeDis": null, "selectedCount": 1, "chosen": null, "value": "", "url": "/records/run/8", "status": "16 kiþi bulundu."}
+Tab-secimsiz {"focus": "pin-add-person-31", "expanded": "false", "open": false, "active": null, "activeSel": null, "activeDis": null, "selectedCount": 0, "chosen": null, "value": "", "url": "/records/run/8", "status": "16 kiþi bulundu."}
+ShiftTab-geri {"focus": "step-31-search", "expanded": "true", "open": true, "active": null, "activeSel": null, "activeDis": null, "selectedCount": 0, "chosen": null, "value": "", "url": "/records/run/8", "status": "16 kiþi bulundu."}
+sukr-Down {"focus": "step-31-search", "expanded": "true", "open": true, "active": "IÞIL ÖZGÜR", "activeSel": "true", "activeDis": null, "selectedCount": 1, "chosen": null, "value": "", "url": "/records/run/8", "status": "1 kiþi bulundu."}
+Enter-sec {"focus": "step-31-search", "expanded": "false", "open": false, "active": null, "activeSel": null, "activeDis": null, "selectedCount": 0, "chosen": "IÞIL ÖZGÜR, sicil 2004", "value": "7", "url": "/records/run/8", "status": "IÞIL ÖZGÜR seçildi."}
+PIN (2 Tab) {"focus": "pin-add-person-31", "expanded": "false", "open": false, "active": null, "activeSel": null, "activeDis": null, "selectedCount": 0, "chosen": "IÞIL ÖZGÜR, sicil 2004", "value": "7", "url": "/records/run/8", "status": "IÞIL ÖZGÜR seçildi."}
+gonder-dugmesi (2 Tab) {"focus": "BUTTON:Görevliyi ekle", "expanded": "false", "open": false, "active": null, "activeSel": null, "activeDis": null, "selectedCount": 0, "chosen": "IÞIL ÖZGÜR, sicil 2004", "value": "7", "url": "/records/run/8", "status": "IÞIL ÖZGÜR seçildi."}
+sonuc http://127.0.0.1:5781/records/run/8 ['Test Operatör 2 2002 , sahip Þükrüye Ýnceoðlu Karamustafapaþalýoðullarý 2003', 'Test Operatör 2 2002 , sahip IÞIL ÖZGÜR 2004']
+## K17/K18/K19
+closedAttrs ["role=combobox", "aria-autocomplete=list", "aria-expanded=false", "aria-controls=step-30-results", "aria-activedescendant=null", "aria-describedby=step-30-hint step-30-status"]
+openAttrs {"expanded": "true", "controlsIsList": "listbox", "listLabel": "Bulunan kiþiler", "listTabindex": "-1", "activeId": "step-30-results-option-1", "activeRole": "option", "activeInList": true, "activeSelected": "true", "optionRoles": ["option"], "disabled": ["Test Operatör 1 Sicil 2001 Eklenemez: Molada"], "statusRole": "status", "statusText": "16 kiþi bulundu.", "statusInDescribedby": true}
+aria ["- text: Görevli ekle", "- combobox \"Görevli ekle\" [expanded]: \"1\"", "- listbox \"Bulunan kiþiler\":", "  - option \"Saha Operatörü 01 Sicil 2901\"", "  - option \"Saha Operatörü 10 Sicil 2910\" [selected]", "  - option \"Saha Operatörü 11 Sicil 2911\"", "  - option \"Saha Operatörü 12 Sicil 2912\"", "  - option \"Saha Operatörü 13 Sicil 2913\"", "  - option \"Saha Operatörü 14 Sicil 2914\"", "  - option \"Saha Operatörü 15 Sicil 2915\"", "  - option \"Saha Operatörü 16 Sicil 2916\"", "  - option \"Saha Operatörü 17 Sicil 2917\"", "  - option \"Saha Operatörü 18 Sicil 2918\"", "  - option \"Saha Operatörü 19 Sicil 2919\""]
+empty {"status": "Aramaya uyan aktif operatör yok.", "open": false}
+trunc {"status": "50 kiþi bulundu. Liste kýsaltýldý. Aramayý daraltýn.", "note": "Liste kýsaltýldý. Aramayý daraltýn.", "count": 50}
+noChoice {"errorVisible": true, "text": "Bir kiþi seçin.", "focus": "step-30-search", "invalid": "true", "describedby": "step-30-hint step-30-status step-30-error", "lefts": [386, 386, 386]}
+noChoiceUrl true
+err500 {"status": "Kiþiler alýnamadý. Baðlantýyý kontrol edip yeniden arayýn.", "cls": "field-hint text-danger font-semibold", "open": false}
+errAbort "Kiþiler alýnamadý. Baðlantýyý kontrol edip yeniden arayýn."
+errSubmitBlocked true
+race {"status": "1 kiþi bulundu.", "names": ["Ahmet Yýlmaz"]}
+chosen {"name": "Ahmet Yýlmaz, sicil 2006", "chosenVisible": true, "warn": "Bu kiþinin kendi açýk kaydý var. Yine de ekleyebilirsiniz.", "errHidden": true}
+afterChange {"chosenVisible": false, "value": "", "disabled": true, "focus": "step-30-search", "warnHidden": true, "status": "50 kiþi bulundu. Liste kýsaltýldý. Aramayý daraltýn."}
+rejected {"url": "/records/run/8", "toolOpen": true, "chosen": "Ahmet Yýlmaz, sicil 2006", "warn": true, "value": "8", "pin": "", "errs": ["Ýþlem yapýlmadý PIN hatalý.", "PIN hatalý.", "PIN hatalý."]}
+## K21 JS kapalÄ± (HTTP ve JS kapalÄ± tarayÄ±cÄ± baÄŸlamÄ±)
+adim 32 q=''               200 50 [('Ahmet YÄ±lmaz', '2006', '', 'Kendi aÃ§Ä±k kaydÄ± var, yine de eklenebilir.'), ('IÅžIL Ã–ZGÃœR', '2004', '', ''), ('Saha OperatÃ¶rÃ¼ 01', '2901', '', ''), ('Saha OperatÃ¶rÃ¼ 02', '2902', '', '')] KISALTILDI 
+adim 32 q='ahmet'          200 1 [('Ahmet YÄ±lmaz', '2006', '', 'Kendi aÃ§Ä±k kaydÄ± var, yine de eklenebilir.')]  
+adim 32 q='AHMET'          200 1 [('Ahmet YÄ±lmaz', '2006', '', 'Kendi aÃ§Ä±k kaydÄ± var, yine de eklenebilir.')]  
+adim 32 q='inceoÄŸlu'       200 1 [('ÅžÃ¼krÃ¼ye Ä°nceoÄŸlu KaramustafapaÅŸalÄ±oÄŸullarÄ±', '2003', '', '')]  
+adim 32 q='Ä°NCEOÄžLU'       200 1 [('ÅžÃ¼krÃ¼ye Ä°nceoÄŸlu KaramustafapaÅŸalÄ±oÄŸullarÄ±', '2003', '', '')]  
+adim 32 q='Ä±ÅŸÄ±l'           200 1 [('IÅžIL Ã–ZGÃœR', '2004', '', '')]  
+adim 32 q='IÅžIL'           200 1 [('IÅžIL Ã–ZGÃœR', '2004', '', '')]  
+adim 32 q='pasif'          200 0 []  BOS
+adim 32 q='yÃ¶netici'       200 0 []  BOS
+adim 32 q='test'           200 1 [('Test OperatÃ¶r 1', '2001', 'disabled', 'Eklenemez: Molada')]  
+adim 32 q='2002'           200 0 []  BOS
+adim 32 q='51'             200 1 [('Saha OperatÃ¶rÃ¼ 51', '2951', '', '')]  
+adim 32 q='zzzz'           200 0 []  BOS
+adim 30 q='ÅŸÃ¼kr'           200 0 []  BOS
+adim 32 q='2905'           200 1 [('Saha OperatÃ¶rÃ¼ 05', '2905', '', '')]  
+nojs ekleme 302 /records/run/8 gorevli once 1 sonra 2

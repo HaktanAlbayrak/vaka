@@ -1,0 +1,156 @@
+# Faz 6C zaman çizelgesi: DOM satırları x CleaningEvents (yönetici 1001, port 5781, .qa/f6c/qa.db)
+=== kayit 8 durum 200 gun [('timeline-day-20261116', '2026-11-16', '16.11.2026')] satir 20 CleaningEvents 20
+   cizelge olay gunlugunden once: True
+   1 RecordOpened      2026-11-16T20:41:28 20:41 accent  file-text    | Test Operatör 2 kaydı açtı | Kayıt no T1-H1-M02-P2026-1, iş emri IE-QA6C-0101 |  
+   2 ParticipantAdded  2026-11-16T20:45:35 20:45 neutral user-plus    | Test Operatör 2 görevli ekledi: Şükrüye İnceoğlu Karamustafapaşalıoğulları | Faz 1 / Adım 1 - Makine Kapa |  
+   3 ParticipantAdded  2026-11-16T20:46:34 20:46 neutral user-plus    | Test Operatör 2 görevli ekledi: IŞIL ÖZGÜR | Faz 1 / Adım 2 - Makine Kontrol |  
+   4 ParticipantAdded  2026-11-16T20:49:17 20:49 neutral user-plus    | Test Operatör 2 görevli ekledi: Saha Operatörü 05 | Faz 2 / Adım 1 - Yüzeyi sil |  
+   5 ParticipantRemoved 2026-11-16T20:49:29 20:49 neutral user-x       | Test Operatör 2 görevli çıkardı: Test Operatör 2 | Faz 1 / Adım 2 - Makine Kontrol |  
+   6 StepStarted       2026-11-16T20:49:29 20:49 accent  play         | Test Operatör 2 ve Şükrüye İnceoğlu Karamustafapaşalıoğulları birlikte adıma başladı | Faz 1 / Adım 1 - Makine Kapa // Saha referansı T1-SD-2026-8 |  
+   7 StepFinished      2026-11-16T20:50:39 20:50 ok      check        | Test Operatör 2 adımı bitirdi | Faz 1 / Adım 1 - Makine Kapa // Görevliler: Test Operatör 2, Şükrüye İnceoğlu Karamustafapaşalıoğulları | Süre 1 dk 10 sn Efor 2 dk 20 sn 
+   8 BreakStarted      2026-11-16T20:50:39 20:50 neutral coffee       | Test Operatör 2 mola başlattı |  |  
+   9 BreakEnded        2026-11-16T20:51:00 20:51 neutral coffee       | Test Operatör 2 molayı bitirdi |  | Süre 20 sn 
+  10 StepStarted       2026-11-16T20:51:08 20:51 accent  play         | IŞIL ÖZGÜR adıma başladı | Faz 1 / Adım 2 - Makine Kontrol // Başlatan: Test Operatör 2 |  
+  11 StepFinished      2026-11-16T20:51:27 20:51 ok      check        | Test Operatör 2 adımı bitirdi | Faz 1 / Adım 2 - Makine Kontrol | Süre 18 sn Efor 18 sn 
+  12 PhaseCompleted    2026-11-16T20:51:27 20:51 warn    list-checks  | Uyarı  Faz 1 süre altında tamamlandı | Gerekçe: Hazırlık iki kişiyle kısa sürdü, makine zaten boştu. | Süre 1 dk 38 sn 
+  13 BreakStarted      2026-11-16T20:51:33 20:51 neutral coffee       | Test Operatör 2 mola başlattı |  |  
+  14 BreakEnded        2026-11-16T20:51:56 20:51 neutral coffee       | Test Yönetici molayı yönetici olarak bitirdi | Gerekçe: Operatör molayı kapatmayı unuttu, vardiya amiri kapattı. | Süre 22 sn 
+  15 StepStarted       2026-11-16T20:52:12 20:52 accent  play         | Test Operatör 2 ve Saha Operatörü 05 birlikte adıma başladı | Faz 2 / Adım 1 - Yüzeyi sil |  
+  16 StepFinished      2026-11-16T20:52:47 20:52 ok      check        | Test Operatör 2 adımı bitirdi | Faz 2 / Adım 1 - Yüzeyi sil // Görevliler: Test Operatör 2, Saha Operatörü 05 | Süre 35 sn Efor 1 dk 10 sn 
+  17 StepStarted       2026-11-16T20:52:47 20:52 accent  play         | Test Operatör 2 adıma başladı | Faz 2 / Adım 2 - Alanı kontrol et ve teslim et |  
+  18 StepFinished      2026-11-16T20:53:22 20:53 ok      check        | Test Operatör 2 adımı bitirdi | Faz 2 / Adım 2 - Alanı kontrol et ve teslim et | Süre 35 sn Efor 35 sn 
+  19 PhaseCompleted    2026-11-16T20:53:22 20:53 ok      list-checks  | Faz 2 tamamlandı |  | Süre 1 dk 10 sn 
+  20 RecordCompleted   2026-11-16T20:53:22 20:53 ok      circle-check | Kayıt tamamlandı |  | Süre 3 dk 10 sn Efor 4 dk 23 sn 
+   saat uyusmazligi: 0
+=== kayit 11 durum 200 gun [('timeline-day-20261116', '2026-11-16', '16.11.2026')] satir 5 CleaningEvents 5
+   cizelge olay gunlugunden once: True
+   1 RecordOpened      2026-11-16T20:53:29 20:53 accent  file-text    | Şükrüye İnceoğlu Karamustafapaşalıoğulları kaydı açtı | Kayıt no T1-H1-M02-P2026-2, iş emri IE-QA6C-0301 |  
+   2 MaterialAdded     2026-11-16T20:53:35 20:53 warn    package      | Uyarı  Şükrüye İnceoğlu Karamustafapaşalıoğulları malzeme ekledi | Lot L2026-001, SKT geçmiş: Yeni lot depoda yok, vardiya amiri onayıyla kullanıldı. |  
+   3 StepStarted       2026-11-16T20:53:35 20:53 accent  play         | Şükrüye İnceoğlu Karamustafapaşalıoğulları adıma başladı | Faz 1 / Adım 1 - Makine Kapa // Saha referansı T1-SD-2026-9 |  
+   4 StepInterrupted   2026-11-16T20:53:43 20:53 warn    octagon-alert | Adım kesildi | Faz 1 / Adım 1 - Makine Kapa | Süre 8 sn Efor 8 sn 
+   5 RecordCancelled   2026-11-16T20:53:43 20:53 danger  ban          | Uyarı  Test Yönetici kaydı iptal etti | Faz 1 / Adım 1 - Makine Kapa // Gerekçe: Makine arızası, temizlik iptal edildi. |  
+   saat uyusmazligi: 0
+=== kayit 1 durum 200 gun [('timeline-day-20261115', '2026-11-15', '15.11.2026')] satir 2 CleaningEvents 2
+   cizelge olay gunlugunden once: True
+   1 RecordOpened      2026-11-15T05:29:20 05:29 accent  file-text    | Test Operatör 1 kaydı açtı | Kayıt no T1-H1-M01-P2026-1, iş emri 12131 |  
+   2 RecordTimedOut    2026-11-15T16:26:09 16:26 danger  clock        | Uyarı  Kilit süresi doldu, kayıt zaman aşımına düştü | Kilit bitişi 15.11.2026 06:59:20 |  
+   saat uyusmazligi: 0
+=== kayit 2 durum 200 gun [('timeline-day-20261115', '2026-11-15', '15.11.2026')] satir 17 CleaningEvents 17
+   cizelge olay gunlugunden once: True
+   1 RecordOpened      2026-11-15T16:26:48 16:26 accent  file-text    | Test Operatör 1 kaydı açtı | Kayıt no T1-H1-M01-P2026-2, iş emri 1001 |  
+   2 StepStarted       2026-11-15T16:27:00 16:27 accent  play         | Test Operatör 1 adıma başladı | Faz 1 / Adım 1 - Makineyi durdur ve enerjiyi kes // Saha referansı T1-SD-2026-1 |  
+   3 StepFinished      2026-11-15T16:27:58 16:27 ok      check        | Test Operatör 1 adımı bitirdi | Faz 1 / Adım 1 - Makineyi durdur ve enerjiyi kes | Süre 57 sn Efor 57 sn 
+   4 StepStarted       2026-11-15T16:28:11 16:28 accent  play         | Test Operatör 1 adıma başladı | Faz 1 / Adım 2 - Ürün kalıntısını boşalt |  
+   5 StepFinished      2026-11-15T16:28:28 16:28 ok      check        | Test Operatör 1 adımı bitirdi | Faz 1 / Adım 2 - Ürün kalıntısını boşalt | Süre 16 sn Efor 16 sn 
+   6 PhaseCompleted    2026-11-15T16:28:28 16:28 warn    list-checks  | Uyarı  Faz 1 süre altında tamamlandı | Gerekçe: Erken bitirdim | Süre 1 dk 27 sn 
+   7 StepStarted       2026-11-15T16:28:52 16:28 accent  play         | Test Operatör 1 adıma başladı | Faz 2 / Adım 1 - Yüzeyi dezenfektanla sil |  
+   8 StepFinished      2026-11-15T16:28:56 16:28 ok      check        | Test Operatör 1 adımı bitirdi | Faz 2 / Adım 1 - Yüzeyi dezenfektanla sil | Süre 4 sn Efor 4 sn 
+   9 StepStarted       2026-11-15T16:29:06 16:29 accent  play         | Test Operatör 1 adıma başladı | Faz 2 / Adım 2 - Temas parçalarını sök ve yıka |  
+  10 StepFinished      2026-11-15T16:29:10 16:29 ok      check        | Test Operatör 1 adımı bitirdi | Faz 2 / Adım 2 - Temas parçalarını sök ve yıka | Süre 3 sn Efor 3 sn 
+  11 StepStarted       2026-11-15T16:29:14 16:29 accent  play         | Test Operatör 1 adıma başladı | Faz 2 / Adım 3 - Parçaları yerine tak |  
+  12 StepFinished      2026-11-15T16:29:24 16:29 ok      check        | Test Operatör 1 adımı bitirdi | Faz 2 / Adım 3 - Parçaları yerine tak | Süre 10 sn Efor 10 sn 
+  13 PhaseCompleted    2026-11-15T16:29:24 16:29 warn    list-checks  | Uyarı  Faz 2 süre altında tamamlandı | Gerekçe: işim erken bitti | Süre 32 sn 
+  14 StepStarted       2026-11-15T16:29:32 16:29 accent  play         | Test Operatör 1 adıma başladı | Faz 3 / Adım 1 - Yüzeyi gözle kontrol et ve onayla |  
+  15 StepFinished      2026-11-15T16:29:47 16:29 ok      check        | Test Operatör 1 adımı bitirdi | Faz 3 / Adım 1 - Yüzeyi gözle kontrol et ve onayla | Süre 14 sn Efor 14 sn 
+  16 PhaseCompleted    2026-11-15T16:29:47 16:29 warn    list-checks  | Uyarı  Faz 3 süre altında tamamlandı | Gerekçe: erken bitti | Süre 14 sn 
+  17 RecordCompleted   2026-11-15T16:29:47 16:29 ok      circle-check | Kayıt tamamlandı |  | Süre 2 dk 46 sn Efor 1 dk 44 sn 
+   saat uyusmazligi: 0
+=== kayit 3 durum 200 gun [('timeline-day-20261115', '2026-11-15', '15.11.2026')] satir 14 CleaningEvents 14
+   cizelge olay gunlugunden once: True
+   1 RecordOpened      2026-11-15T19:50:20 19:50 accent  file-text    | Test Operatör 2 kaydı açtı | Kayıt no T1-H2-M01-P2026-1, iş emri IE-2026-0815 |  
+   2 StepStarted       2026-11-15T19:50:20 19:50 accent  play         | Test Operatör 2 adıma başladı | Faz 1 / Adım 1 - Makineyi durdur // Saha referansı T1-SD-2026-2 |  
+   3 StepFinished      2026-11-15T19:50:32 19:50 ok      check        | Test Operatör 2 adımı bitirdi | Faz 1 / Adım 1 - Makineyi durdur | Süre 12 sn Efor 12 sn 
+   4 BreakStarted      2026-11-15T19:50:33 19:50 neutral coffee       | Test Operatör 2 mola başlattı |  |  
+   5 BreakEnded        2026-11-15T20:30:33 20:30 neutral coffee       | Test Operatör 2 molayı bitirdi |  | Süre 40 dk 
+   6 StepStarted       2026-11-15T20:30:33 20:30 accent  play         | Test Operatör 2 adıma başladı | Faz 1 / Adım 2 - Alanı hazırla |  
+   7 StepFinished      2026-11-15T20:30:37 20:30 ok      check        | Test Operatör 2 adımı bitirdi | Faz 1 / Adım 2 - Alanı hazırla | Süre 4 sn Efor 4 sn 
+   8 PhaseCompleted    2026-11-15T20:30:37 20:30 warn    list-checks  | Uyarı  Faz 1 süre altında tamamlandı | Gerekçe: Mola sonrası alan hazırdı, makine önceden durdurulmuştu; hazırlık kısa sürdü. | Süre 16 sn 
+   9 StepStarted       2026-11-15T20:30:37 20:30 accent  play         | Test Operatör 2 adıma başladı | Faz 2 / Adım 1 - Yüzeyi sil |  
+  10 StepFinished      2026-11-15T20:31:13 20:31 ok      check        | Test Operatör 2 adımı bitirdi | Faz 2 / Adım 1 - Yüzeyi sil | Süre 36 sn Efor 36 sn 
+  11 StepStarted       2026-11-15T20:31:13 20:31 accent  play         | Test Operatör 2 adıma başladı | Faz 2 / Adım 2 - Alanı kontrol et ve teslim et |  
+  12 StepFinished      2026-11-15T20:31:49 20:31 ok      check        | Test Operatör 2 adımı bitirdi | Faz 2 / Adım 2 - Alanı kontrol et ve teslim et | Süre 36 sn Efor 36 sn 
+  13 PhaseCompleted    2026-11-15T20:31:49 20:31 ok      list-checks  | Faz 2 tamamlandı |  | Süre 1 dk 12 sn 
+  14 RecordCompleted   2026-11-15T20:31:49 20:31 ok      circle-check | Kayıt tamamlandı |  | Süre 1 dk 28 sn Efor 1 dk 28 sn 
+   saat uyusmazligi: 0
+=== kayit 4 durum 200 gun [('timeline-day-20261115', '2026-11-15', '15.11.2026')] satir 12 CleaningEvents 12
+   cizelge olay gunlugunden once: True
+   1 RecordOpened      2026-11-15T19:50:40 19:50 accent  file-text    | Test Operatör 1 kaydı açtı | Kayıt no T1-H1-M01-P2026-3, iş emri IE-2026-0816 |  
+   2 StepStarted       2026-11-15T19:50:40 19:50 accent  play         | Test Operatör 1 adıma başladı | Faz 1 / Adım 1 - Makineyi durdur // Saha referansı T1-SD-2026-3 |  
+   3 StepFinished      2026-11-15T19:51:14 19:51 ok      check        | Test Operatör 1 adımı bitirdi | Faz 1 / Adım 1 - Makineyi durdur | Süre 34 sn Efor 34 sn 
+   4 StepStarted       2026-11-15T19:51:14 19:51 accent  play         | Test Operatör 1 adıma başladı | Faz 1 / Adım 2 - Alanı hazırla |  
+   5 StepFinished      2026-11-15T19:51:48 19:51 ok      check        | Test Operatör 1 adımı bitirdi | Faz 1 / Adım 2 - Alanı hazırla | Süre 34 sn Efor 34 sn 
+   6 PhaseCompleted    2026-11-15T19:51:48 19:51 ok      list-checks  | Faz 1 tamamlandı |  | Süre 1 dk 8 sn 
+   7 StepStarted       2026-11-15T19:51:48 19:51 accent  play         | Test Operatör 1 adıma başladı | Faz 2 / Adım 1 - Yüzeyi sil |  
+   8 StepFinished      2026-11-15T19:52:23 19:52 ok      check        | Test Operatör 1 adımı bitirdi | Faz 2 / Adım 1 - Yüzeyi sil | Süre 34 sn Efor 34 sn 
+   9 StepStarted       2026-11-15T19:52:23 19:52 accent  play         | Test Operatör 1 adıma başladı | Faz 2 / Adım 2 - Alanı kontrol et ve teslim et |  
+  10 StepFinished      2026-11-15T19:52:57 19:52 ok      check        | Test Operatör 1 adımı bitirdi | Faz 2 / Adım 2 - Alanı kontrol et ve teslim et | Süre 34 sn Efor 34 sn 
+  11 PhaseCompleted    2026-11-15T19:52:57 19:52 ok      list-checks  | Faz 2 tamamlandı |  | Süre 1 dk 8 sn 
+  12 RecordCompleted   2026-11-15T19:52:57 19:52 ok      circle-check | Kayıt tamamlandı |  | Süre 2 dk 16 sn Efor 2 dk 16 sn 
+   saat uyusmazligi: 0
+=== kayit 5 durum 200 gun [('timeline-day-20261115', '2026-11-15', '15.11.2026')] satir 12 CleaningEvents 12
+   cizelge olay gunlugunden once: True
+   1 RecordOpened      2026-11-15T19:53:11 19:53 accent  file-text    | Test Operatör 1 kaydı açtı | Kayıt no T1-H1-M01-P2026-4, iş emri IE-2026-0817 |  
+   2 StepStarted       2026-11-15T19:53:11 19:53 accent  play         | Test Operatör 1 adıma başladı | Faz 1 / Adım 1 - Makineyi durdur // Saha referansı T1-SD-2026-4 |  
+   3 StepFinished      2026-11-15T19:53:29 19:53 ok      check        | Test Operatör 1 adımı bitirdi | Faz 1 / Adım 1 - Makineyi durdur | Süre 18 sn Efor 18 sn 
+   4 StepStarted       2026-11-15T19:53:29 19:53 accent  play         | Test Operatör 1 adıma başladı | Faz 1 / Adım 2 - Alanı hazırla |  
+   5 StepFinished      2026-11-15T19:53:41 19:53 ok      check        | Test Operatör 1 adımı bitirdi | Faz 1 / Adım 2 - Alanı hazırla | Süre 12 sn Efor 12 sn 
+   6 PhaseCompleted    2026-11-15T19:53:41 19:53 warn    list-checks  | Uyarı  Faz 1 süre altında tamamlandı | Gerekçe: Ürün değişimi öncesi makine zaten boşaltılmıştı, hazırlık kısa sürdü. | Süre 30 sn 
+   7 StepStarted       2026-11-15T19:53:41 19:53 accent  play         | Test Operatör 1 adıma başladı | Faz 2 / Adım 1 - Yüzeyi sil |  
+   8 StepFinished      2026-11-15T19:54:15 19:54 ok      check        | Test Operatör 1 adımı bitirdi | Faz 2 / Adım 1 - Yüzeyi sil | Süre 34 sn Efor 34 sn 
+   9 StepStarted       2026-11-15T19:54:15 19:54 accent  play         | Test Operatör 1 adıma başladı | Faz 2 / Adım 2 - Alanı kontrol et ve teslim et |  
+  10 StepFinished      2026-11-15T19:54:49 19:54 ok      check        | Test Operatör 1 adımı bitirdi | Faz 2 / Adım 2 - Alanı kontrol et ve teslim et | Süre 34 sn Efor 34 sn 
+  11 PhaseCompleted    2026-11-15T19:54:49 19:54 ok      list-checks  | Faz 2 tamamlandı |  | Süre 1 dk 8 sn 
+  12 RecordCompleted   2026-11-15T19:54:49 19:54 ok      circle-check | Kayıt tamamlandı |  | Süre 1 dk 38 sn Efor 1 dk 38 sn 
+   saat uyusmazligi: 0
+=== kayit 6 durum 200 gun [('timeline-day-20261115', '2026-11-15', '15.11.2026'), ('timeline-day-20261116', '2026-11-16', '16.11.2026')] satir 15 CleaningEvents 15
+   cizelge olay gunlugunden once: True
+   1 RecordOpened      2026-11-15T22:52:59 22:52 accent  file-text    | Test Operatör 1 kaydı açtı | Kayıt no T1-H1-M01-P2026-5, iş emri 11312 |  
+   2 StepStarted       2026-11-15T22:53:06 22:53 accent  play         | Test Operatör 1 adıma başladı | Faz 1 / Adım 1 - Makine Kapa // Saha referansı T1-SD-2026-5 |  
+   3 StepFinished      2026-11-15T22:53:54 22:53 ok      check        | Test Operatör 1 adımı bitirdi | Faz 1 / Adım 1 - Makine Kapa | Süre 47 sn Efor 47 sn 
+   4 StepStarted       2026-11-15T22:54:01 22:54 accent  play         | Test Operatör 1 adıma başladı | Faz 1 / Adım 2 - Makine Kontrol |  
+   5 StepFinished      2026-11-15T22:54:20 22:54 ok      check        | Test Operatör 1 adımı bitirdi | Faz 1 / Adım 2 - Makine Kontrol | Süre 19 sn Efor 19 sn 
+   6 PhaseCompleted    2026-11-15T22:54:20 22:54 warn    list-checks  | Uyarı  Faz 1 süre altında tamamlandı | Gerekçe: Erken bitirdim. | Süre 1 dk 14 sn 
+   7 BreakStarted      2026-11-16T19:57:26 19:57 neutral coffee       | Test Operatör 1 mola başlattı |  |  
+   8 BreakEnded        2026-11-16T20:06:01 20:06 neutral coffee       | Test Operatör 1 molayı bitirdi |  | Süre 8 dk 34 sn 
+   9 ParticipantAdded  2026-11-16T20:07:14 20:07 neutral user-plus    | Test Operatör 1 görevli ekledi: Test Operatör 2 | Faz 2 / Adım 1 - Yüzeyi sil |  
+  10 StepStarted       2026-11-16T20:07:17 20:07 accent  play         | Test Operatör 1 ve Test Operatör 2 birlikte adıma başladı | Faz 2 / Adım 1 - Yüzeyi sil |  
+  11 StepFinished      2026-11-16T20:08:21 20:08 ok      check        | Test Operatör 1 adımı bitirdi | Faz 2 / Adım 1 - Yüzeyi sil // Görevliler: Test Operatör 1, Test Operatör 2 | Süre 1 dk 3 sn Efor 2 dk 6 sn 
+  12 StepStarted       2026-11-16T20:08:30 20:08 accent  play         | Test Operatör 1 adıma başladı | Faz 2 / Adım 2 - Alanı kontrol et ve teslim et |  
+  13 StepFinished      2026-11-16T20:08:44 20:08 ok      check        | Test Operatör 1 adımı bitirdi | Faz 2 / Adım 2 - Alanı kontrol et ve teslim et | Süre 13 sn Efor 13 sn 
+  14 PhaseCompleted    2026-11-16T20:08:44 20:08 ok      list-checks  | Faz 2 tamamlandı |  | Süre 1 dk 26 sn 
+  15 RecordCompleted   2026-11-16T20:08:44 20:08 ok      circle-check | Kayıt tamamlandı |  | Süre 21 sa 7 dk 3 sn Efor 3 dk 25 sn 
+   saat uyusmazligi: 0
+=== kayit 7 durum 200 gun [('timeline-day-20261116', '2026-11-16', '16.11.2026')] satir 5 CleaningEvents 5
+   cizelge olay gunlugunden once: True
+   1 RecordOpened      2026-11-16T20:16:59 20:16 accent  file-text    | Test Operatör 1 kaydı açtı | Kayıt no T1-H1-M01-A2026-6 |  
+   2 StepStarted       2026-11-16T20:16:59 20:16 accent  play         | Test Operatör 1 adıma başladı | Faz 1 / Adım 1 - Müdahaleyi yap ve durumu yaz |  
+   3 StepFinished      2026-11-16T20:18:44 20:18 ok      check        | Test Operatör 1 adımı bitirdi | Faz 1 / Adım 1 - Müdahaleyi yap ve durumu yaz | Süre 1 dk 45 sn Efor 1 dk 45 sn 
+   4 PhaseCompleted    2026-11-16T20:18:44 20:18 ok      list-checks  | Faz 1 tamamlandı |  | Süre 1 dk 45 sn 
+   5 RecordCompleted   2026-11-16T20:18:44 20:18 ok      circle-check | Kayıt tamamlandı |  | Süre 1 dk 45 sn Efor 1 dk 45 sn 
+   saat uyusmazligi: 0
+=== kayit 9 durum 200 gun [('timeline-day-20261116', '2026-11-16', '16.11.2026')] satir 4 CleaningEvents 4
+   cizelge olay gunlugunden once: True
+   1 RecordOpened      2026-11-16T20:41:39 20:41 accent  file-text    | Test Operatör 1 kaydı açtı | Kayıt no T1-H1-M01-P2026-7, iş emri IE-QA6C-0201 |  
+   2 StepStarted       2026-11-16T20:41:40 20:41 accent  play         | Test Operatör 1 adıma başladı | Faz 1 / Adım 1 - Makine Kapa // Saha referansı T1-SD-2026-6 |  
+   3 StepFinished      2026-11-16T20:41:53 20:41 ok      check        | Test Operatör 1 adımı bitirdi | Faz 1 / Adım 1 - Makine Kapa | Süre 13 sn Efor 13 sn 
+   4 BreakStarted      2026-11-16T20:41:54 20:41 neutral coffee       | Test Operatör 1 mola başlattı |  |  
+   saat uyusmazligi: 0
+=== kayit 10 durum 200 gun [('timeline-day-20261116', '2026-11-16', '16.11.2026')] satir 2 CleaningEvents 2
+   cizelge olay gunlugunden once: True
+   1 RecordOpened      2026-11-16T20:41:40 20:41 accent  file-text    | Ahmet Yılmaz kaydı açtı | Kayıt no T1-H2-M01-P2026-2, iş emri IE-QA6C-0601 |  
+   2 StepStarted       2026-11-16T20:41:40 20:41 accent  play         | Ahmet Yılmaz adıma başladı | Faz 1 / Adım 1 - Makine Kapa // Saha referansı T1-SD-2026-7 |  
+   saat uyusmazligi: 0
+
+# K11 bütünlük rozeti
+1 200 ['Doğrulandı', 'Doğrulandı']
+2 200 ['Doğrulandı', 'Doğrulandı']
+3 200 ['Doğrulandı', 'Doğrulandı']
+4 200 ['Doğrulandı', 'Doğrulandı']
+5 200 ['Doğrulandı', 'Doğrulandı']
+6 200 ['Doğrulandı', 'Doğrulandı']
+7 200 ['Doğrulandı', 'Doğrulandı']
+8 200 ['Doğrulandı', 'Doğrulandı']
+9 200 ['Doğrulandı', 'Doğrulandı']
+10 200 ['Doğrulandı', 'Doğrulandı']
+11 200 ['Doğrulandı', 'Doğrulandı']
+kayit 1-7 olay sayisi: 77 (baslangic 77)

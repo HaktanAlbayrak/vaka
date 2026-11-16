@@ -15,6 +15,7 @@ public sealed class RecordDetailReader : IRecordDetailReader
     private readonly IDurationCalculator _calculator;
     private readonly ITurkeyClock _clock;
     private readonly TimeProvider _time;
+    private readonly IRecordTimelineBuilder _timeline;
 
     public RecordDetailReader(
         VakaDbContext db,
@@ -24,7 +25,8 @@ public sealed class RecordDetailReader : IRecordDetailReader
         IProcedureLinks links,
         IDurationCalculator calculator,
         ITurkeyClock clock,
-        TimeProvider time)
+        TimeProvider time,
+        IRecordTimelineBuilder timeline)
     {
         _db = db;
         _timeouts = timeouts;
@@ -34,6 +36,7 @@ public sealed class RecordDetailReader : IRecordDetailReader
         _calculator = calculator;
         _clock = clock;
         _time = time;
+        _timeline = timeline;
     }
 
     public async Task<LookupResult<RecordDetailViewModel>> GetAsync(int recordId, RecordViewer viewer, CancellationToken cancellationToken)
@@ -91,6 +94,7 @@ public sealed class RecordDetailReader : IRecordDetailReader
         var canSeeProcedure = isManager || viewer.Roles.Contains(Roles.Auditor);
         var isActive = row.Status is RecordStatus.Opened or RecordStatus.InProgress or RecordStatus.OnHold;
         var openBreak = breaks.Open;
+        var events = await ReadEventsAsync(recordId, cancellationToken);
 
         var model = new RecordDetailViewModel
         {
@@ -140,7 +144,8 @@ public sealed class RecordDetailReader : IRecordDetailReader
             Phases = section.Phases,
             Breaks = breaks.Items,
             Materials = await ReadMaterialsAsync(recordId, cancellationToken),
-            Events = await ReadEventsAsync(recordId, cancellationToken),
+            Events = events.Events,
+            Timeline = events.Timeline,
             Integrity = new RecordIntegrityViewModel
             {
                 IsValid = integrity?.IsValid ?? false,
@@ -262,7 +267,7 @@ public sealed class RecordDetailReader : IRecordDetailReader
         })];
     }
 
-    private async Task<RecordDetailEventViewModel[]> ReadEventsAsync(int recordId, CancellationToken cancellationToken)
+    private async Task<(RecordDetailEventViewModel[] Events, RecordTimelineDayViewModel[] Timeline)> ReadEventsAsync(int recordId, CancellationToken cancellationToken)
     {
         var rows = await _db.CleaningEvents
             .AsNoTracking()
@@ -272,22 +277,35 @@ public sealed class RecordDetailReader : IRecordDetailReader
             .ToListAsync(cancellationToken);
 
         var parsed = rows.Select(row => ParsedEvent.From(row.Sequence, row.EventType, row.ActorUserId, row.OccurredAtUtc, row.PayloadJson)).ToList();
-        var userIds = parsed.Select(item => item.Number("ParticipantUserId")).OfType<int>().Distinct().ToArray();
+        var userIds = parsed
+            .SelectMany(item => (item.Numbers("ParticipantUserIds") ?? []).Append(item.Number("ParticipantUserId") ?? 0).Append(item.ActorUserId ?? 0))
+            .Where(id => id != 0)
+            .Distinct()
+            .ToArray();
         var users = await _db.Users.AsNoTracking().Where(user => userIds.Contains(user.Id)).ToDictionaryAsync(user => user.Id, user => user.FullName, cancellationToken);
-        var steps = await _db.RecordSteps
+        var stepRows = await _db.RecordSteps
             .AsNoTracking()
             .Where(step => step.Phase.CleaningRecordId == recordId)
-            .Select(step => new { step.Id, step.ProcedureStep.Title })
-            .ToDictionaryAsync(step => step.Id, step => step.Title, cancellationToken);
+            .Select(step => new { step.Id, step.ProcedureStep.Title, PhaseOrder = step.Phase.ProcedurePhase.OrderNo, StepOrder = step.ProcedureStep.OrderNo })
+            .ToListAsync(cancellationToken);
+        var steps = stepRows.ToDictionary(step => step.Id, step => step.Title);
+        var stepLabels = stepRows.ToDictionary(step => step.Id, step => $"Faz {step.PhaseOrder} / Adım {step.StepOrder} - {step.Title}");
+        var phaseRows = await _db.RecordPhases
+            .AsNoTracking()
+            .Where(phase => phase.CleaningRecordId == recordId)
+            .Select(phase => new { phase.Id, phase.ProcedurePhase.OrderNo })
+            .ToListAsync(cancellationToken);
+        var phaseOrders = phaseRows.ToDictionary(phase => phase.Id, phase => phase.OrderNo);
 
         string LocalText(DateTime utc) => _clock.ToLocal(utc).ToString("dd.MM.yyyy HH:mm:ss");
-        return [.. rows.Select((row, index) => new RecordDetailEventViewModel
+        var events = rows.Select((row, index) => new RecordDetailEventViewModel
         {
             Sequence = row.Sequence,
             OccurredAtLocal = _clock.ToLocal(row.OccurredAtUtc),
             ActorName = row.ActorName ?? "Sistem",
             EventLabel = RecordEventText.Label(row.EventType),
             Summary = RecordEventText.Summary(parsed[index], users, steps, LocalText)
-        })];
+        }).ToArray();
+        return (events, _timeline.Build(parsed, new TimelineNames(users, stepLabels, phaseOrders)));
     }
 }

@@ -4,6 +4,9 @@
 > İster, iş kuralı, senaryo ve formül kimlikleri (FR, NFR, BR, SC, SH, SK) `Docs/Analysis/Brief.md`'dedir; açık konular (K) `Docs/Analysis/Kusur.md`'de,
 > kararlar `Docs/Phases/Decisions.md`'de, fazlar ve sözleşmeler `Docs/Phases/PhasePlan.md`'de. Bu belge kimliklere atıf yapar, metinlerini tekrar etmez.
 > Bu belgenin yetkili olduğu konular: rol ve yetki matrisi (§3), ekran envanteri (§4), veri varlıkları listesi (§5), ayar değerleri (§6).
+> 2026-11-16: kullanıcı istekleri (zaman çizelgesi, aranabilir görevli seçimi, makine raporu, malzeme kullanım oranı) işlendi, onaylandı (O-09; PL-85..PL-88); karşılık tablosu
+> ve sorular PhasePlan "2026-11-16 kullanıcı istekleri" bölümünde.
+> 2026-11-16 ikinci istekler işlendi (O-10, O-11; PL-89..PL-94; PhasePlan Faz 6E, 6F): görevli girişi ve adım içi katılım, operatörde PIN ile giriş, ayrı giriş sayacı.
 
 ## 1. Amaç
 
@@ -41,13 +44,13 @@ Gösterim: **E** yapar; **S** salt okunur görür; **-** erişemez (403, menüde
 
 | Ekran / işlem | Operatör | Yönetici | Denetçi | Süper admin | İş kuralı |
 |---|---|---|---|---|---|
-| Giriş, çıkış, kullanıcı değiştir | E | E | E | E | FR-46 |
+| Giriş, çıkış, kullanıcı değiştir | E | E | E | E | FR-46. Faz 6F'den itibaren (O-10, PL-91, PL-94): yalnız tüm rolleri Operatör olan hesap sicil no + PIN ile de girer, diğer hesaplar parola ile; parola ve PIN girişinde ortak giriş sayacı, sınırda `<GirişKilitSüresi>` (15 dakika) kilit |
 | İlk giriş: parola değiştirme, PIN belirleme | E | E | E | E | BR-55 |
 | Kendi parolasını ve PIN'ini değiştirme | E | E | E | E | K-42: yeni PIN eski PIN'le |
 | Kullanıcı listesi | - | S | - | S | Düzenleme bağlantısı yalnız yönetebildiği hesapta (SK-9) |
 | Kullanıcı ekleme, düzenleme, rol verme | - | E | - | E | SK-9: Yönetici yalnız Operatör ve Denetçi hesabı ve rolü; kendi rolünü kimse değiştiremez |
 | Kullanıcı pasifleştirme ve yeniden etkinleştirme | - | E, PIN | - | E, PIN | BR-36 açık iş; SK-9 kapsam; kendini ve son aktif Süper admin'i pasifleştirme yok |
-| PIN sıfırlama, parola sıfırlama | - | E, PIN | - | E, PIN | BR-49; SK-9 kapsam |
+| PIN sıfırlama, parola sıfırlama, giriş kilidini açma | - | E, PIN | - | E, PIN | BR-49; SK-9 kapsam; giriş kilidini açma Faz 6F (PL-94) |
 | Sistem ayarları | - | E, PIN | - | E, PIN | FR-55, PL-18 |
 | Tesis, hat, makine, vardiya tanımları | - | E | - | - | FR-01, FR-49, BR-54 |
 | Makineyi kullanımdan kaldırma | - | E | - | - | BR-35 |
@@ -62,13 +65,14 @@ Gösterim: **E** yapar; **S** salt okunur görür; **-** erişemez (403, menüde
 | Yeni kayıt açma | E, PIN | - | - | - | BR-01, BR-02, BR-23, BR-37 |
 | Malzeme ekleme ve çıkarma (ilk adımdan önce) | E, PIN | - | - | - | Yalnız sahip (BR-47) |
 | Yürütme ekranını görme | S | - | - | - | K-17, PL-12 |
-| Görevli ekleme ve çıkarma | E, PIN | - | - | - | Yalnız sahip, adım başlamadan (SK-2) |
-| Katılımı onaylama | E, PIN | - | - | - | Eklenen kişinin kendi PIN'i (SK-4) |
+| Görevli ekleme ve çıkarma | E, PIN | - | - | - | Yalnız sahip, adım başlamadan (SK-2); Faz 6E'den itibaren adım sürerken de eklenir, çıkarma yalnız hiç katılmamış kişide (PL-93); aday listesi yalnız aktif operatörler, adımda zaten görevli olanlar hariç; liste uç noktası `/records/people` yalnız sahibe (PL-88) |
+| Adıma katılma ve ayrılma (Faz 6E öncesi: katılımı onaylama) | E, PIN | - | - | - | Kişinin kendi PIN'i (SK-4); aynı tablette (oturum sahibin) ya da kendi oturumunda; adım başlamadan ya da sürerken, bittikten sonra değil; sahip dışında girişi bekleyen kişi varken adım bitirilemez; yönetici başkası adına giremez (PL-93) |
 | Adım başlatma ve bitirme | E, PIN | - | - | - | Sahip ya da adımın görevlisi (SK-1); kayıtta açık mola yokken (BR-39) |
 | Mola başlatma | E, PIN | - | - | - | Sahip ya da o anki adımın görevlisi; iki adım arasında ya da adım sürerken; başlatan başka kayıtta devam eden adımda değil (SK-6, BR-38) |
 | Molayı bitirme | E, PIN | E, PIN, gerekçe | - | - | Operatörde yalnız başlatan (SK-6) |
 | Kayıt listesi | S | S | S | - | Operatörde varsayılan filtre "benim kayıtlarım" (K-17) |
 | Kayıt detayı (13 soru, olay günlüğü, bütünlük rozeti) | S | S | S | - | FR-31 |
+| Kayıt zaman çizelgesi (E-20 içinde) | S | S | S | - | Olay günlüğünden türer, yeni olay yok (PL-85, Faz 6C) |
 | Bütünlük doğrulama ekranı | - | S | S | - | FR-32 |
 | Yönetici panosu | - | S | S | - | İÖ-07 |
 | Talep açma ve geri çekme | E, PIN | - | - | - | Talebi yalnız sahip açar, yalnız açan geri çeker (SK-5) |
@@ -81,6 +85,7 @@ Gösterim: **E** yapar; **S** salt okunur görür; **-** erişemez (403, menüde
 | Bildirimler | - | E | - | - | BR-51 |
 | Düzeltme | - | E, PIN, gerekçe | - | - | BR-29 |
 | Süre ve efor raporu, malzeme izlenebilirliği | - | S | S | - | FR-36, FR-37, BR-34 |
+| Makine raporu, malzeme kullanım oranı | - | S | S | - | PL-85, PL-86 (Faz 6D) |
 | Denetim çıktısı ve CSV | - | S | S | - | FR-35 |
 
 ## 4. Ekran envanteri
@@ -89,10 +94,10 @@ Route'lar taslaktır; kesin liste ve ViewModel alanları PhasePlan sözleşmeler
 
 | Kimlik | Ekran | Route taslağı | Rol | İster | Faz |
 |---|---|---|---|---|---|
-| E-01 | Giriş | `/account/login` | anonim | FR-46 | 1 |
+| E-01 | Giriş | `/account/login` | anonim | FR-46 | 1; 6F (operatörde PIN modu, giriş kilidi, PL-91, PL-94) |
 | E-02 | Parola ve PIN (ilk giriş zorunlu modu, Hesabım modu) | `/account/first-login`, `/account/security` | Any | FR-46, BR-49, BR-55 | 1 |
 | E-03 | Kullanıcılar | `/users` | ManagerOrSuperAdmin | FR-39, FR-54 | 1 |
-| E-04 | Kullanıcı formu: ekle, düzenle, pasifleştir, PIN ve parola sıfırla | `/users/create`, `/users/edit/{id}`, `/users/deactivate/{id}` | ManagerOrSuperAdmin | FR-39, FR-54, BR-36 | 1 |
+| E-04 | Kullanıcı formu: ekle, düzenle, pasifleştir, PIN ve parola sıfırla | `/users/create`, `/users/edit/{id}`, `/users/deactivate/{id}` | ManagerOrSuperAdmin | FR-39, FR-54, BR-36 | 1; 6F (giriş kilidini açma, `/users/unlock-login/{id}`, PL-94) |
 | E-05 | Tesisler ve hatlar | `/facilities`, `/facilities/details/{id}`, `/lines/edit/{id}` | Manager | FR-01, BR-54 | 2 |
 | E-06 | Vardiyalar | `/shifts` | Manager | FR-49 | 2 |
 | E-07 | Makineler | `/machines`, `/machines/retire/{id}` | Manager | FR-01, FR-02 | 2 |
@@ -101,14 +106,14 @@ Route'lar taslaktır; kesin liste ve ViewModel alanları PhasePlan sözleşmeler
 | E-10 | Tip detayı ve versiyon geçmişi | `/cleaning-types/details/{id}` | Manager | FR-09 | 3 |
 | E-11 | Prosedür taslağı düzenleyici | `/procedure-versions/edit/{id}` | Manager | FR-04..FR-07 | 3 |
 | E-12 | Versiyon görüntüleme | `/procedure-versions/details/{id}` | ManagerOrAuditor | FR-09 | 3 |
-| E-13 | İşlerim | `/my-work` | Operator | FR-26, FR-45 | 4 |
+| E-13 | İşlerim | `/my-work` | Operator | FR-26, FR-45 | 4; 6E (girişiniz bekleniyor, PL-93) |
 | E-14 | Yeni kayıt | `/records/create` | Operator | FR-10, FR-11, FR-50, FR-53 | 4; 6B (iş emri no isteğe bağlı, boşsa sistem atar; PL-80) |
 | E-15 | Yürütme ekranı | `/records/run/{id}` | Operator | FR-16..FR-23, FR-42 | 4 (Açıldı hali), 5 (tam) |
 | E-16 | Makine durum panosu | `/machine-board` | RecordReaders | FR-41 | 4 |
-| E-17 | Görevli paneli ve katılım onayı (E-15 içinde) | `/records/add-participant/{stepId}` | Operator | FR-17, FR-48 | 5 (ekleme), 7 (katılım onayı, PL-57) |
+| E-17 | Görevli paneli ve katılım onayı (E-15 içinde) | `/records/add-participant/{stepId}`, `/records/people` | Operator | FR-17, FR-48 | 5 (ekleme), 6C (aranabilir seçim kutusu, PL-88), 6E (katılma ve ayrılma, sürerken ekleme, `/records/join-step/{stepId}`, `/records/leave-step/{stepId}`, PL-92, PL-93) |
 | E-18 | Mola ekranı | `/breaks/current` | Operator | FR-42 | 5 |
 | E-19 | Kayıtlar | `/records` | RecordReaders | FR-38 | 6 |
-| E-20 | Kayıt detayı | `/records/details/{id}` | RecordReaders | FR-31, FR-34 | 6 |
+| E-20 | Kayıt detayı | `/records/details/{id}` | RecordReaders | FR-31, FR-34 | 6; 6C (zaman çizelgesi, PL-85); 6E (kişi aralıkları ve çalışma süresi, çizelgede katılma ve ayrılma, PL-93) |
 | E-21 | Bütünlük doğrulama | `/records/integrity/{id}` | ManagerOrAuditor | FR-32 | 6 |
 | E-22 | Yönetici panosu | `/dashboard` | ManagerOrAuditor | İÖ-07 | 6B (özet, aktif, süre altı, son tamamlanan, son 7 gün; PL-76), 7 (SH-16, bekleme, talepler), 8 (acil) |
 | E-23 | Talep formu (E-15 ve E-20 içinde) | `/requests/create` | Operator | FR-43 | 7 |
@@ -119,9 +124,10 @@ Route'lar taslaktır; kesin liste ve ViewModel alanları PhasePlan sözleşmeler
 | E-28 | Bildirimler | `/notifications` | Manager | FR-52 | 8 |
 | E-29 | Düzeltme | `/corrections/create` | Manager | BR-29 | 8 |
 | E-30 | Süre ve efor raporu | `/reports/durations` | ManagerOrAuditor | FR-21, FR-36, FR-40 | 6A (tablo), 6B (grafik, PL-78), 9 (CSV); PL-56 |
-| E-31 | Malzeme izlenebilirliği | `/reports/materials` | ManagerOrAuditor | FR-37 | 6A (sorgu), 9 (CSV); PL-56 |
+| E-31 | Malzeme izlenebilirliği | `/reports/materials` | ManagerOrAuditor | FR-37 | 6A (sorgu), 6D (kullanım oranı modu, PL-86), 9 (CSV); PL-56 |
 | E-32 | Denetim çıktısı | `/records/audit/{id}` | ManagerOrAuditor | FR-35 | 6 (detayın yazdırma çıktısı), 9 (ayrı adres, düzeltmeler, CSV); PL-56 |
 | E-33 | Sistem ayarları ve değişiklik geçmişi | `/settings` | ManagerOrSuperAdmin | FR-55 | 9 |
+| E-34 | Makine raporu | `/reports/machine` | ManagerOrAuditor | FR-36 | 6D (PL-86) |
 
 Sistem sayfaları: 403 (`/account/access-denied`), hata sayfası, ana sayfa `/` (rolüne göre İşlerim, Yönetici panosu ya da Kullanıcılar'a yönlenir;
 Yönetici ve Denetçi Faz 6 ve 6A'da Kayıtlar'a (PL-46), Faz 6B'den itibaren Yönetici panosuna (PL-76)).
@@ -154,6 +160,12 @@ Alan listesi Brief §7.g'deki taslaktır; tablo ve kolon adları dbadmin'in kara
 | Notification, NotificationReceipt | Acil ve yeni talep bildirimi; kişi başına okundu bilgisi | BR-51; alıcı aktif Yönetici'ler | 8 |
 | Düzeltme | Hedef, orijinal değer, yeni değer, gerekçe, yapan, zaman | Orijinal korunur, zaman alanı hedef olamaz (BR-29) | 8 |
 
+Faz 6C ve 6D yeni varlık getirmez: zaman çizelgesi `CleaningEvent`'ten, makine raporu ve kullanım oranı kayıt, faz ve kayıt malzemesi satırlarından
+okunur. Malzeme birimi ve miktarı istenmedi (S-4, O-09).
+
+Faz 6E: `StepWorkInterval` (görevli başına adımda tek çalışma aralığı: başlangıç, bitiş, bitiş türü, bitiren, çalışma süresi; dolu zaman
+değişmez, silinmez). Yeni tablo, Eklemeli (PL-93). Faz 6F: `User`'a `LoginFailedCount` ve `LoginLockedUntilUtc` (ALTER, kullanıcı seçti, O-10, PL-94).
+
 ## 6. Ayar değerleri
 
 Değerler iş birimi ve BT'den gelir; plan, seed ve kodda uydurma değer kullanılmaz. Sistem geneli değerler veritabanındaki ayar tablosundadır,
@@ -165,7 +177,8 @@ Yer tutucu adı ayarın kimliğidir; dokümanlar kuralı bu adla yazar, değer a
 |---|---|---|---|---|---|
 | `<OturumSüresi>` | dakika | Sistem ayarları | 1 | 30 (son istekten sonraki işlemsizlik) | Kullanıcı, 2026-11-13 (PL-24) |
 | `<PinUzunluğu>` | hane | Sistem ayarları | 1 | 4 | Kullanıcı, 2026-11-13 (PL-24) |
-| `<PinDenemeSınırı>` | deneme | Sistem ayarları | 1 | 5 (art arda 5. hatalı denemede kilit) | Kullanıcı, 2026-11-13 (PL-24) |
+| `<PinDenemeSınırı>` | deneme | Sistem ayarları | 1 | 5 (art arda 5. hatalı denemede kilit); Faz 6F'den itibaren giriş sayacının sınırı da | Kullanıcı, 2026-11-13 (PL-24); giriş için PL-94 |
+| `<GirişKilitSüresi>` | dakika | Sistem ayarları (`LoginLockMinutes`) | 6F | 15 | Kullanıcı, 2026-11-16 (O-11, PL-94) |
 | `<AzamiMedyaBoyutu>` (fotoğraf ve video ayrı) | MB (1 MB = 1 048 576 bayt, PL-51) | Sistem ayarları | 3 | Fotoğraf 10, video 100 | Kullanıcı, 2026-11-14 (PL-47) |
 | `<AzamiKilitSüresi>` | dakika | Sistem ayarları | 3 | 120 | Kullanıcı, 2026-11-14 (PL-34) |
 | Varsayılan kilit süresi, faz minimum süresi, malzeme zorunluluğu | dakika, evet/hayır | Tip ve versiyon ekranları | 3 | Yönetici girer | İş birimi |
@@ -191,7 +204,7 @@ ekleme olarak gelir (PL-25); üç değer de geldi (PL-34, PL-47).
 | Çok dil | K-31 |
 | Personel ve vardiya bazlı süre raporu | K-36 |
 | Adım sonu sonuç, ölçüm, kanıt fotoğrafı | K-27; adımda yalnız başlat ve bitir |
-| Malzeme miktarı, tip başına izinli malzeme listesi | K-11 kararı |
+| Malzeme miktarı, tip başına izinli malzeme listesi | K-11 kararı; miktar istenmedi (S-4, O-09) |
 | Kullanıcıya tesis ya da hat ataması, kullanıcıya bağlı yönetici | K-20, K-40 |
 | Sahiplik devri, adım atlama, paralel adım, adımın ayrıca duraklatılması, kişi düzeyi mola | K-04, K-06, K-21, K-39 kararları |
 | Süper admin hesabını uygulama dışından kurtarma (komut satırı aracı) | §9 açık konu; ikinci Süper admin önerilir |
@@ -207,6 +220,8 @@ Analistin makul varsayılanları (`Decisions.md` durumu "Varsayım"; itiraz geli
 
 - PL-27: Sicil no hesap oluşturulduktan sonra değişmez; yanlış sicil noyla açılan hesap pasifleştirilir, doğrusuyla yeni hesap açılır.
 - PL-51: 1 MB = 1 048 576 bayt ve sınıra eşit dosya kabul; demo versiyonlarda yayınlayan "Kurulum verisi"; tip kodu değiştirilebilir; Denetçi taslak versiyonu göremez.
+- PL-86: Kullanıcının "iş emri" dediği kayıttır (PL-80'den beri planlı kaydın iş emri no'su var, bire bir). Zaman çizelgesi ekrandadır, yazdırma
+  çıktısı değişmez. Kullanım oranının paydası süzgece uyan Tamamlandı kayıtlardır (SH-15 ile aynı küme). Son kayıtlar listesi en çok 20 satır.
 
 ## 9. Açık konular
 
@@ -218,5 +233,9 @@ Engelleyici soru yoktur; plan 2026-11-13'te onaylandı (O-01). Aşağıdakiler i
 | Gerçek tesis, hat, makine, vardiya, malzeme listesi | İstendiğinde | İş birimi | Gelene kadar nötr demo veri (K-19, V-13) |
 | Tek Süper admin riski | Kurulumdan sonra | Kullanıcı | Tek Süper admin parolasını unutur ya da PIN'ini kilitlerse uygulama içinden açılamaz; ikinci bir Süper admin hesabı açılması önerilir |
 | Ölçek sayıları | Performans ölçümünden önce | İş birimi | K-33 |
+| Faz 6F ALTER onayı (`Users`'a iki kolon) | dbadmin uygularken | Kullanıcı | O-10'da seçildi; DbProtocol gereği uygulama anında yeniden sorulur |
+
+2026-11-16'da kapandı (O-09): S-5 (6C ve 6D bugün, sunumdan önce, önce 6C), S-1 (a) prosedür faz minimumları toplamı ile gerçekleşen ortalama net,
+S-2 sayıma dayalı kullanım oranı, S-4 miktar istenmedi (ALTER yok). S-3 2026-11-16'da kapandı (O-10): adım içi katılma Faz 6E'de. `<GirişKilitSüresi>` 15 dakika ve kapının adım bitişinde olması onaylandı (O-11).
 
 Tasarım girdisi: hava kelimeleri ve referans gelmedi; alandan türetilen öneri (net, sakin, güvenilir, sahada okunaklı) geçerlidir (PhasePlan Faz T).
