@@ -14,3 +14,4 @@ Kayıt başına tek satır; ayrıntı `Docs/Db/DB-<yıl>-<sıra>.md` dosyasında
 | [DB-2026-008](DB-2026-008.md) | Kayıt listesi süzgeçleri ve lot araması için index'ler | 6 | Eklemeli | DOĞRULANDI | AddCleaningRecordListIndexes |
 | [DB-2026-009](DB-2026-009.md) | Görevli çalışma aralığı tablosu (StepWorkIntervals), değişmezlik tetikleyicileri | 6E | Eklemeli | DOĞRULANDI | AddStepWorkIntervals |
 | [DB-2026-010](DB-2026-010.md) | Users giriş sayacı ve süreli kilit kolonları, LoginLockMinutes ayarı | 6F | ALTER (kolon ekleme) ve Eklemeli | DOĞRULANDI | AddLoginLockToUsers |
+| [DB-2026-011](DB-2026-011.md) | SNM v2 taslağı ve örnek talimat görselleri (veri ve dosya ekleme, PL-111) | - | Eklemeli | DOĞRULANDI | yok (şema değişmez) |
