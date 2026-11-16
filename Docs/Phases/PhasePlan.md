@@ -11,6 +11,7 @@
 > 2026-11-16 (kullanıcı istekleri, O-10, O-11): yeni Faz 6E (görevli girişi ve adım içi katılım; S-3 kapandı, aday Faz 10 kalktı) ve Faz 6F (operatörde PIN ile giriş, ayrı giriş sayacı ve 15 dakikalık süreli kilit), 6D'den sonra (PL-89..PL-94). Brief ve Kusur K-07, K-10 işlendi (O-11).
 > 2026-11-16 (O-14): kullanıcı Faz 7, 8 ve 9'u kapsamdan çıkardı ("faz 7 ve sonrasına gerek yok"); plan Faz 6E ve 6F ile biter. Devredilmiş kalemler PL-101.
 > 2026-11-17: Faz 6F teslim alındı; plan tamamlandı (PL-105).
+> 2026-11-17 (yeni istek, O-15): adım medyası; kullanıcı talimat medyasını kastetti, D-3 kesin, aday Faz 6G istenmedi; tespit ve D-3 "2026-11-17 kullanıcı isteği: adımlara fotoğraf ve video" bölümünde (PL-108).
 > Kimlikler: FR, NFR, BR, SC, SH, SK `Docs/Analysis/Brief.md`; E (ekran) `Docs/Analysis/Requirements.md §4`; K `Docs/Analysis/Kusur.md`; PL `Decisions.md`.
 
 ## Özet
@@ -31,6 +32,8 @@
 | 6D | Makine raporu ve malzeme kullanım oranı (Salı öncesi, 6C'den sonra) | Makine seçilerek tip başına ortalama süre, efor ve prosedür minimumuyla karşılaştırma; malzeme başına kullanım oranı | Evet | TESLİM ALINDI (tur 4, 2026-11-16) |
 | 6E | Görevli girişi ve adım içi katılım (6D'den sonra) | Sahip adımı yardımcıyı beklemeden başlatır; yardımcı katıldığı anda kendi PIN'iyle girer, erken giderse ayrılır, eforu çalıştığı süre; girişi bekleyen varken adım bitmez, "Girişi bekleniyor"; giriş aynı tablette ya da kendi cihazında. Yeni tablo (Eklemeli) | Evet | TESLİM ALINDI (tur 2, 2026-11-17) |
 | 6F | PIN ile giriş ve giriş deneme sınırı (6E'den sonra) | Operatör sicil no ve PIN ile girer; Yönetici, Denetçi, Süper admin parola ile; parola ve PIN girişinde ayrı sayaç ve süreli kilit, yönetici erken açar. `Users`'a iki kolon (ALTER) | Evet | TESLİM ALINDI (tur 2, 2026-11-17) |
+| 6G (aday) | Yürütmede adım kanıtı (fotoğraf, video) | Kullanıcı istemedi; kastedilen talimat medyası, Faz 3'te var (PL-108, O-15) | - | İSTENMEDİ |
+| D-3 | Adım medyasının bulunabilirliği (faz dışı) | Düzenleyicide medya adım kartında doğrudan; yayınlanmış versiyonda taslak yönlendirmesi; 0 bayt iletisi; detayda önizleme (PL-108..PL-110, O-15) | - | TESLİM ALINDI (2026-11-17) |
 | 7 | Talep, beklemeye alma ve yönetici panosu (Salı sonrası) | Talepler, Taleplerim, bekleme ve devam, yönetici panosu, adım sürerken mola, adım sürerken mola kişi aralıklarıyla; görevli PIN onayı Faz 6E'de karşılandı (PL-92) | Evet | KAPSAM DIŞI (O-14) |
 | 8 | Acil müdahale, bildirim ve düzeltme (Salı sonrası) | Acil ve talep bildirimleri, panoda acil, düzeltme formu | Evet | KAPSAM DIŞI (O-14) |
 | 9 | Raporlar, denetim çıktısı ve sistem ayarları (Salı sonrası) | Rapor grafikleri ve CSV, düzeltmeli denetim çıktısı adresi, Sistem ayarları ekranı, son regresyon | Evet | KAPSAM DIŞI (O-14) |
@@ -1654,6 +1657,115 @@ kapsar), "Kişileri ara" düğmesi, "Bir kişi seçin." hatası, seçici durum m
 - Run'da bekleyen ve devam eden adımda özet "Yardımcı ekle", erişilebilirlik ağacında combobox adı "Yardımcı ara", düğme "Yardımcıyı ekle"; JS kapalı yolda "Yardımcı ara" ve "Yardımcı seç".
 - 320 (%200), 360 ve 1440 px, açık ve koyu temada panel ve özet taşmasız, yatay kaydırma yok, G12 kusuru 0, konsol 0.
 - Gerileme: klavyeyle yardımcı ekleme akışı (Faz 6C K16) ve bir yardımcının katılması (Faz 6E K3) değişmeden çalışır; değişen dosyada grep tablosu 0.
+
+---
+
+## 2026-11-17 kullanıcı isteği: adımlara fotoğraf ve video (PL-108, O-15)
+
+Kullanıcı: "fazların adımlarına fotoğraf video eklenme istenmiş ama yapılamıyor ekle bu özelliği".
+
+**Doküman ne istiyor.** Tek satır, satır 16: "Bazı adımlar için fotoğraf veya video da göstermek istiyoruz. Özellikle yeni personel geldiğinde, sadece
+yazılı açıklama yerine nasıl yapılacağını görmesi faydalı olur." Bu, prosedür tanımındaki adımın **talimat medyasıdır**: yönetici ekler, operatör
+adımı yürütürken görür (FR-06). Dokümanda yürütmede kanıt fotoğrafı yükleme, adım tanımında "fotoğraf zorunlu" ya da bitişte kapı yoktur; adım sonu
+kanıt fotoğrafı K-27 ile kapsam dışıdır (varsayılan kabul, 2026-11-13).
+
+**Bugün ne var (kanıt).** Talimat medyası Faz 3'te teslim edildi (e867695, Faz 3 tur 3, K8 dahil):
+
+- Veri: `Domain/Entities/StepMedia.cs` (adım, tür, SHA-256, dosya adı, içerik türü, boyut); yayınlanmış versiyonda değişmezlik tetikleyicileri.
+- Yükleme: `POST /procedure-versions/upload-media/{stepId}` (`ProcedureVersionsController.cs:166-167`, `UploadLimitFilter`), yalnız Yönetici ve yalnız
+  taslak versiyonda. Form `Views/ProcedureVersions/Edit.cshtml`'de her adımın kapalı "Adımı düzenle" paneli içinde ("Fotoğraf ya da video ekle",
+  "Medyayı yükle"). JPEG, PNG, WebP en çok 10 MB, MP4 en çok 100 MB (PL-47).
+- Depolama: `Services/MediaStore.cs`, içerik adresli (SHA-256), kök `App_Data/Media` (`appsettings.json`), `App_Data/` gitignore'da.
+- Görüntüleme: `GET /media/{id}` (`MediaController.cs`, `RecordReaders`, önbelleksiz, aralıklı istek); yürütme ekranında `Run.cshtml:337-339`,
+  kayıt detayında `Details.cshtml:224-226` (yazdırmada gizli), `_MediaList` ve `_MediaDialog`.
+- DokumanUyumu satır 16 "Var" işareti doğrudur.
+
+**"Yapılamıyor" neden.** Kod okuması ve kullanıcının veritabanı (salt okunur):
+
+- Kullanıcının `App_Data/vaka.db`'sinde `StepMedia` satır sayısı 0, `App_Data/Media` klasörü yok: bu veritabanında hiç medya yüklenmemiş, operatör
+  ekranında hiçbir adımda medya görünmez. Faz 3 testi QA kopyasında yapılmıştı; demo verisi dosya içeremediği için medya taşımaz.
+- Yükleme yalnız taslakta ve kapalı "Adımı düzenle" panelinin içinde; yayınlanmış versiyonun ayrıntı ekranında yükleme yok (değiştirilemezlik).
+  Yer bulunması zor.
+- Kullanıcının veritabanında `PLN` v2 taslağı açık (`ProcedureVersions.Id` 7, durum Taslak, 6 adım). Kullanıcı büyük olasılıkla bu taslakta denedi.
+  Bu, SunumSenaryosu kontrol listesindeki "PLN v2 için taslak açılmamış" maddesiyle çelişir; sunumdaki "yeni taslak" adımı "tip başına tek taslak"
+  ile reddedilir, mevcut taslak kullanılır.
+- Çalışan uygulamada bir hata olup olmadığı kod okumasıyla dışlanamaz. QA hedefli yeniden üretim yapmadan "hata yok" denmez.
+
+**Karar önerisi.**
+
+1. **Hemen, kod yok (sunum için):** qa-tester kullanıcının veritabanının kopyasında akışı yeniden üretir: Yönetici, `PLN` v2 taslağı, bir adımda
+   "Adımı düzenle", JPEG ve MP4 yükleme, PIN'le yayın, Operatör'ün yeni kaydında adımda medyanın açılması, detayda görünmesi. Hata çıkarsa
+   faz dışı düzeltme D-3 (hata), çıkmazsa D-3 (bulunabilirlik, aşağıda). Sunumda medya, senaryo satır 8'deki gibi canlı yüklenir ya da sunumdan
+   önce kullanıcının kendi dosyasıyla taslağa yüklenip yayınlanır.
+2. **Düzeltme D-3 (kesin, O-15):** aşağıdaki "Düzeltme D-3" bölümü.
+3. **Aday Faz 6G:** kullanıcı istemedi (O-15); bölüm kayıt için durur, iş verilmez.
+
+**Kullanıcı kararı (O-15, 2026-11-17):** kastedilen (a) talimat medyası; "Test et ve yerini düzelt"; Faz 6G istenmedi.
+
+### Düzeltme D-3: adım medyasının bulunabilirliği (faz dışı, kesin)
+
+**Teslim yolu:** PL-74 düzeni: frontend, qa-tester hedefli ölçüm ve kullanıcının veritabanı kopyasında yeniden üretim, ayrı commit
+(`Düzeltme D-3: adım medyasının yeri`). Şema ve sunucu değişmez. QA yeniden üretimde hata bulursa düzeltmesi D-3'e eklenir; sahibi hatanın yerine
+göre (sunucu ise backend-engineer), analist kapsamı aynı gün yazar.
+
+**Kapsam (frontend-engineer):**
+
+| Yer | Bugün | Yeni |
+|---|---|---|
+| `Views/ProcedureVersions/Edit.cshtml` (faz ve adım tanımlama ekranı), adım kartı | Medya listesi ve yükleme formu kapalı "Adımı düzenle" panelinin içinde | Kullanıcı eki (O-15): "faz oluşturma ekranında tanımlanacak". Medya bölümü adım kartında, kapalı panel olmadan doğrudan görünür: başlık "Fotoğraf ve video (<sayı>)" (yokken "Fotoğraf ve video" ve "Bu adımda medya yok."), medya listesi (çıkarma dahil, `_MediaList`) ve yükleme formu; alan etiketi "Fotoğraf ya da video ekle", ipucu (biçim ve sınır) ve "Medyayı yükle" düğmesi aynen. "Adımı düzenle" panelinde yalnız başlık ve açıklama kalır. Adım eklenince sayfa yeni adımın kartına döner ve kartın medya alanı hemen kullanılabilir. Yükleme ya da çıkarma hatası kartta görünür (bugünkü `media:<adım>` anahtarı) |
+| `Views/ProcedureVersions/Details.cshtml`, yalnız Yönetici, yayınlanmış ya da arşiv versiyon | Medya için yönlendirme yok | Adımlar bölümünün üstünde bilgi kutusu: "Yayınlanmış versiyon değiştirilemez. Fotoğraf ya da video eklemek için tip ayrıntısından taslağı açın." ve bağlantı "Tip ayrıntısına git" (`/cleaning-types/details/{CleaningTypeId}`, ViewModel'de var). Denetçi görmez |
+
+QA yeniden üretiminden eklenenler (2026-11-17, PL-109; QA akışı hatasız buldu, `.qa/media/`):
+
+| # | Tür | Kalem | Sahibi |
+|---|---|---|---|
+| D3-1 | BE | `Services/StepMediaService.cs:52-54`: dosya seçilmemişken "Dosya seçin." kalır; dosya seçilmiş ama 0 bayt ise ayrı ileti "Dosya boş. İçeriği olan bir fotoğraf ya da video seçin." | backend-engineer |
+| D3-2 | FE | `Views/Records/Details.cshtml`: kayıt detayında küçük resme ya da videoya tıklayınca yürütme ekranındaki gibi önizleme açılır; sayfaya `_MediaDialog` eklenir, JS kapalıyken bağlantı `/media/{id}`'yi açmaya devam eder | frontend-engineer |
+
+Değişmeyenler: yükleme uç noktası ve form alanları, kabul edilen biçimler ve sınırlar (K-26), `_MediaList` ve `_MediaDialog`'un kendisi, yürütme ekranındaki medya gösterimi.
+
+Adım ekleme formuna dosya alanı konmaz: adım oluşunca kartında yükleme hemen açık olduğu için tek formda ekleme gerekmez, backend değişikliği
+istemez. Frontend, adım eklendikten sonra yeni kartın medya alanına ulaşmak için sunucu değişikliği gerektiğini görürse durur ve bildirir; BE kalemi
+kararı analistindir (PL-108).
+
+**QA ölçüm şartı:**
+
+- Yeniden üretim (kullanıcının veritabanının kopyası): Yönetici `PLN` v2 taslağında bir adımın kartındaki medya alanından, panel açmadan, JPEG ve MP4 yükler, başlık "Fotoğraf ve video (2)" olur; yeni bir adım ekler ve aynı sayfada o adımın kartından hemen medya yükler; PIN'le yayınlar; Operatör yeni `PLN` kaydında o adımda iki medyayı açar (video ileri sarılır); kayıt detayında görünür. GIF ve sınır üstü dosya nedenli reddedilir (Faz 3 K8 gerilemesi).
+- Yayınlanmış versiyon ayrıntısında Yönetici bilgi kutusunu ve bağlantıyı görür, bağlantı tip ayrıntısını açar; Denetçi görmez.
+- Düzenleyici ve versiyon ayrıntısı 320 (%200), 360 ve 1440 px'te açık ve koyu temada taşmasız; G12 kusuru 0; konsol 0; değişen dosyalarda grep tablosu 0.
+- Gerileme: "Adımı düzenle" ile başlık ve açıklama kaydı, adım taşıma ve çıkarma (Faz 3), JS kapalı yükleme.
+- D3-1: 0 baytlık dosyada "Dosya boş..." iletisi kartın form hata kutusunda (düzenleyicinin Faz 3 deseni, PL-110), dosyasız gönderimde "Dosya seçin."; D3-2: kayıt detayında fotoğraf ve video önizlemesi açılır, Escape ile kapanır ve odak tıklanan öğeye döner, video oynar; JS kapalı bağlantı çalışır.
+
+### Aday Faz 6G: yürütmede adım kanıtı (fotoğraf, video) (kullanıcı kararı)
+
+**Amaç:** Adımda çalışan kişi, adım sürerken telefon ya da tablet kamerasıyla kanıt fotoğrafı (isteğe göre video) yükler; kanıt kayıt detayında,
+zaman çizelgesinde ve denetim çıktısında görünür, sonradan değiştirilemez.
+
+| Konu | Öneri |
+|---|---|
+| Kim, ne zaman | Kaydın sahibi ya da adımda çalışan görevli (açık aralığı olan), yalnız adım Devam ediyorken; PIN ile (BR-48 düzeni). Bitmiş adıma yükleme yok (satır 128, 131) |
+| Tür ve sınır | İlk dilimde yalnız fotoğraf (JPEG, PNG, WebP, `<AzamiMedyaBoyutu>` fotoğraf 10 MB); video (MP4, 100 MB) ikinci dilim, kullanıcı kararı. Adım başına en çok sayı kullanıcıdan |
+| Zorunluluk ve kapı | İkinci dilim: adım tanımında "kanıt zorunlu" bayrağı; işaretli adımda kanıtsız bitirme reddedilir. Bayrak `ProcedureSteps`'e kolon ise **ALTER, kullanıcı onayı**; yeni tablo (`ProcedureStepEvidenceRules`) ise Eklemeli ama daha dağınık. Öneri ALTER, onayla |
+| Depolama | Mevcut `MediaStore` (içerik adresli, `App_Data/Media`, gitignore); aynı dosya bir kez saklanır |
+| Değiştirilemezlik | Yeni tablo `StepEvidence` (adım, yükleyen, an, SHA-256, tür, boyut, dosya adı); dolu satır değişmez ve silinmez tetikleyicisi; olay `EvidenceAdded` yükünde SHA-256, böylece hash HMAC olay zincirine girer; bütünlük doğrulaması dosyanın hash'ini de karşılaştırır |
+| Görüntüleme | Yürütme ekranında adım kartında küçük görseller; kayıt detayında adım satırında; zaman çizelgesinde "<Ad> kanıt fotoğrafı ekledi"; denetim çıktısında dosya adı, an, yükleyen ve SHA-256 (görsel yazdırılmaz) |
+| Mobil | `<input type="file" accept="image/*" capture="environment">`; JS kapalı çalışır |
+| Yetki | Yükleme `Operator` rolü, sahiplik ve aralık serviste (K-30); görüntüleme `RecordReaders`, `/media` düzeni |
+| Şema | `StepEvidence` yeni tablo: **Eklemeli**. Zorunluluk bayrağı (ikinci dilim): **ALTER**, kullanıcı onayı |
+
+**En küçük dilim (6G-1, sunuma yetişirse):** adım sürerken fotoğraf yükleme (PIN), yürütme ekranında ve kayıt detayında görüntüleme, olayda hash.
+Video, zorunluluk ve bitiş kapısı, zaman çizelgesi satırı, denetim çıktısı ve bütünlük denetimine dosya hash'i 6G-2'ye kalır.
+Ekranlar E-15 ve E-20 (değişen); yeni tablo bir; ALTER yok.
+
+**Paralel:** Evet, kullanıcı kararından sonra. Tablo yeni ve kolonları yukarıda; route `POST /records/add-evidence/{stepId}` (`AddEvidenceViewModel { CommandId, Pin, File }`),
+`RecordStepViewModel.Evidence[] { MediaId, Url, UploadedByName, UploadedAtLocal, Sha256 }`, `RecordDetailStepViewModel.Evidence[]` aynı alanlarla.
+Backend sırası: DB talebi (Eklemeli), dbadmin, servis. Dosya sınırı backend `Services/StepEvidenceService.cs` ve arayüzü, `Controllers/RecordStepsController.cs`,
+okuyucular, `EventTypes`; frontend `_Participants.cshtml` dışında adım kartı (`Run.cshtml`), `Details.cshtml`, `_EvidenceList.cshtml`, `Styles/app.css`.
+
+**Kabul kriterleri (6G-1):** sahip ve çalışan görevli adım sürerken PIN'le fotoğraf yükler, satır ve `EvidenceAdded` olayı yazılır, olay yükündeki
+SHA-256 dosyanınkiyle aynı; bekleyen ya da bitmiş adımda, ayrılmış görevlide ve sahibi olmayan Operatör'de red (403 ya da nedenli); 10 MB üstü,
+GIF ve sahte uzantı red; telefonda kamera açılır (`capture`); yürütme ekranında ve detayda görsel açılır, Süper admin 403; satır güncelleme ve silme
+tetikleyiciyle red; bütünlük "Doğrulandı"; 320, 360, 768, 1440 px açık ve koyu taşmasız, JS kapalı yükleme çalışır.
 
 ---
 

@@ -241,9 +241,10 @@ Engelleyici soru yoktur; plan 2026-11-13'te onaylandı (O-01). Aşağıdakiler i
 | Gerçek tesis, hat, makine, vardiya, malzeme listesi | İstendiğinde | İş birimi | Gelene kadar nötr demo veri (K-19, V-13) |
 | Tek Süper admin riski | Kurulumdan sonra | Kullanıcı | Tek Süper admin parolasını unutur ya da PIN'ini kilitlerse uygulama içinden açılamaz; ikinci bir Süper admin hesabı açılması önerilir |
 | Ölçek sayıları | Performans ölçümünden önce | İş birimi | K-33 |
-| Faz 6F ALTER onayı (`Users`'a iki kolon) | dbadmin uygularken | Kullanıcı | O-10'da seçildi; DbProtocol gereği uygulama anında yeniden sorulur |
 
 2026-11-16'da kapandı (O-09): S-5 (6C ve 6D bugün, sunumdan önce, önce 6C), S-1 (a) prosedür faz minimumları toplamı ile gerçekleşen ortalama net,
 S-2 sayıma dayalı kullanım oranı, S-4 miktar istenmedi (ALTER yok). S-3 2026-11-16'da kapandı (O-10): adım içi katılma Faz 6E'de. `<GirişKilitSüresi>` 15 dakika ve kapının adım bitişinde olması onaylandı (O-11).
+
+2026-11-17'de kapandı (O-15): adım medyası isteği talimat medyasıdır; D-3 bulunabilirlik düzeltmesi, yürütmede kanıt (6G) istenmedi.
 
 Tasarım girdisi: hava kelimeleri ve referans gelmedi; alandan türetilen öneri (net, sakin, güvenilir, sahada okunaklı) geçerlidir (PhasePlan Faz T).

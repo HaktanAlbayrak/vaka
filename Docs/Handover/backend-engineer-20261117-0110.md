@@ -28,3 +28,6 @@ E-30 `Durations` okunamayan süzgeçte boş süzgeç yerine bağlanan süzgeci k
 ## Ortam
 Migration `20261116214722_AddLoginLockToUsers` gerçek `App_Data/vaka.db`'ye UYGULANMADI; bu kod gerçek DB'de kolonlar yokken çalışmaz.
 Sınama kopya DB ile (`.qa/f6e/qa.db` kopyası); sınamada operatör PIN'ini ve yöneticinin PIN'ini kopyada elle eşitlemek gerekti (QA PIN'leri bilinmiyor).
+
+## D-3 (D3-1, PL-109)
+`StepMediaService.UploadAsync`: dosya yok ya da adsız "Dosya seçin."; 0 baytlık dosya "Dosya boş. İçeriği olan bir fotoğraf ya da video seçin." Anahtar `File`, hata yeri aynı.

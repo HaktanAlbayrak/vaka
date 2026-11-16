@@ -1,0 +1,71 @@
+Düzeltme D-3 ölçümü (2026-11-17). Kullanıcı DB'sinin yeni kopyası .qa/d3/vaka.db (App_Data/vaka.db, SQLite yedekleme API); kopyada yalnız Süper admin parola ve PIN özeti yazıldı, 1001, 2002, 3001 arayüzden sıfırlandı. Yayın .qa/d3/build (değişen 5 dosya repodakiyle bayt bayt aynı), Media__RootPath=.qa/d3/Media, port 5941. Test dosyaları .qa/media/files (adim.jpg 11 KB JPEG, v_vp09.mp4 24 KB MP4 (VP9), deneme.gif, buyuk.jpg 11 MB, bos.jpg 0 bayt, sahte.jpg).
+
+== Düzenleyici (PLN v2 taslağı, /procedure-versions/edit/7, 1440 px, JS açık)
+başlangıç adım 33 {"heading":"Fotoğraf ve video","empty":true,"items":0,"inputVisible":true,"inputInClosedDetails":false,"editOpen":false,"fieldErr":null,"cardBoxes":[],"focus":"BODY"}
+JPEG panel açmadan adim.jpg HTTP 302 {"heading":"Fotoğraf ve video (1)","badge":"1\nmedya","empty":false,"items":1,"inputVisible":true,"inputInClosedDetails":false,"editOpen":false,"fieldErr":null,"cardBoxes":[],"focus":"step-33"}
+MP4 panel açmadan v_vp09.mp4 HTTP 302 {"heading":"Fotoğraf ve video (2)","badge":"2\nmedya","empty":false,"items":2,"inputVisible":true,"inputInClosedDetails":false,"editOpen":false,"fieldErr":null,"cardBoxes":[],"focus":"step-33"}
+adım ekle sonrası odak {"focusId":"step-39-media-title","focusText":"Fotoğraf ve video","stepId":"step-39","title":"Adım 3:\nQA medya adımı"} adres /procedure-versions/edit/7
+yeni adıma hemen JPEG adim.jpg HTTP 302 {"heading":"Fotoğraf ve video (1)","badge":"1\nmedya","empty":false,"items":1,"inputVisible":true,"inputInClosedDetails":false,"editOpen":false,"fieldErr":null,"cardBoxes":[],"focus":"step-39"}
+GIF deneme.gif HTTP istek yok (istemci) {"heading":"Fotoğraf ve video","empty":true,"items":0,"inputVisible":true,"inputInClosedDetails":false,"editOpen":false,"fieldErr":"Bu dosya türü kabul edilmiyor. Seçici yalnız izin verilen biçimleri gösterir.","cardBoxes":[],"focus":"step-35-file"}
+11 MB buyuk.jpg HTTP istek yok (istemci) {"heading":"Fotoğraf ve video","empty":true,"items":0,"inputVisible":true,"inputInClosedDetails":false,"editOpen":false,"fieldErr":"Fotoğraf en çok 10 MB olabilir.","cardBoxes":[],"focus":"step-35-file"}
+0 bayt (D3-1) bos.jpg HTTP 200 {"heading":"Fotoğraf ve video","empty":true,"items":0,"inputVisible":true,"inputInClosedDetails":false,"editOpen":false,"fieldErr":null,"cardBoxes":["Dosya boş. İçeriği olan bir fotoğraf ya da video seçin."],"focus":"DIV"}
+içerik uyuşmuyor sahte.jpg HTTP 200 {"heading":"Fotoğraf ve video","empty":true,"items":0,"inputVisible":true,"inputInClosedDetails":false,"editOpen":false,"fieldErr":null,"cardBoxes":["Dosya içeriği uzantısıyla uyuşmuyor."],"focus":"DIV"}
+YENI_ADIM 39 konsol []
+
+== JS kapalı yükleme, D3-1 yerleşimi, gerileme
+JS kapalı deneme.gif 200 {"url":"/procedure-versions/upload-media/36","heading":"Fotoğraf ve video","box":["Dosya biçimi desteklenmiyor. İzinli biçimler: JPEG, PNG, WebP, MP4."],"inputInvalid":null,"hScroll":false}
+JS kapalı adim.jpg 200 {"url":"/procedure-versions/edit/7","heading":"Fotoğraf ve video (1)","box":[],"inputInvalid":null,"hScroll":false}
+D3-1 yerleşim {"boxInForm":true,"boxAboveInput":true,"gapPx":42,"inputAriaInvalid":null,"describedby":"step-35-file-hint","focusIsBox":true,"boxInView":true}
+adım kaydı Adım 2: Ürün kalıntısını boşalt (QA) | QA açıklama satırı.
+taşıma step-33,step-34,step-39 -> step-33,step-39,step-34 odak step-39-up
+eklenen step-40
+çıkarma sonrası var mı 0 odak phase-15
+konsol []
+23:23:03 D3-1 dosyasız gönderim 200 ['Dosya seçin.']
+23:23:03 medya [(1, 33, 'adim.jpg'), (2, 33, 'v_vp09.mp4'), (3, 39, 'adim.jpg'), (4, 36, 'adim.jpg')]
+
+== Yayın ve operatör kaydı
+23:23:12 yayınla 302 /cleaning-types/details/1 [(7, 2)]
+[]
+23:23:13 kayıt 12 [(7,)] [43, 44, 45, 46, 47, 48, 49]
+
+== Görüntüleme (operatör 2002): Run ve kayıt detayı önizleme, Escape, odak, video oynatma ve ileri sarma (currentTime 2,2 sn'ye kuruldu; 3 sn'lik video sonuna ulaştı), JS kapalı bağlantı
+1440 /records/run/12 foto {"dialog":true,"title":"adim.jpg","imgLoaded":true,"fits":true,"closedByEsc":true,"focusBack":true,"thumbLabel":"Fotoğraf önizle: adim.jpg"} | video {"dialog":true,"title":"v_vp09.mp4","played":true,"seekTo":3,"duration":3,"err":null,"fits":true,"closedByEsc":true,"focusBack":true,"thumbLabel":"Video önizle: v_vp09.mp4"} | hScroll false
+1440 /records/details/12 foto {"dialog":true,"title":"adim.jpg","imgLoaded":true,"fits":true,"closedByEsc":true,"focusBack":true,"thumbLabel":"Fotoğraf önizle: adim.jpg"} | video {"dialog":true,"title":"v_vp09.mp4","played":true,"seekTo":3,"duration":3,"err":null,"fits":true,"closedByEsc":true,"focusBack":true,"thumbLabel":"Video önizle: v_vp09.mp4"} | hScroll false
+1440 medya yanıtları ["200 /media/1 image/jpeg","206 /media/2 video/mp4","200 /media/4 image/jpeg","200 /media/3 image/jpeg"] konsol []
+360 /records/run/12 foto {"dialog":true,"title":"adim.jpg","imgLoaded":true,"fits":true,"closedByEsc":true,"focusBack":true,"thumbLabel":"Fotoğraf önizle: adim.jpg"} | video {"dialog":true,"title":"v_vp09.mp4","played":true,"seekTo":3,"duration":3,"err":null,"fits":true,"closedByEsc":true,"focusBack":true,"thumbLabel":"Video önizle: v_vp09.mp4"} | hScroll false
+360 /records/details/12 foto {"dialog":true,"title":"adim.jpg","imgLoaded":true,"fits":true,"closedByEsc":true,"focusBack":true,"thumbLabel":"Fotoğraf önizle: adim.jpg"} | video {"dialog":true,"title":"v_vp09.mp4","played":true,"seekTo":3,"duration":3,"err":null,"fits":true,"closedByEsc":true,"focusBack":true,"thumbLabel":"Video önizle: v_vp09.mp4"} | hScroll false
+360 medya yanıtları ["200 /media/1 image/jpeg","206 /media/2 video/mp4","200 /media/3 image/jpeg","200 /media/4 image/jpeg"] konsol []
+JS kapalı photo bağlantı /media/1 -> /media/1 200 image/jpeg
+JS kapalı video bağlantı /media/2 -> /media/2 200 video/mp4
+
+== Versiyon ayrıntısı bilgi kutusu (Yönetici 1001, Denetçi 3001)
+23:24:17 versiyon ayrıntısı 1001 7 200 bilgi kutusu True bağlantı [('/cleaning-types/details/1', 'Tip ayrıntısına git')] rozet 4
+23:24:17   bağlantı açılıyor /cleaning-types/details/1 200
+23:24:17 versiyon ayrıntısı 1001 1 200 bilgi kutusu True bağlantı [('/cleaning-types/details/1', 'Tip ayrıntısına git')] rozet 2
+23:24:17   bağlantı açılıyor /cleaning-types/details/1 200
+23:24:17 versiyon ayrıntısı 3001 7 200 bilgi kutusu False bağlantı [] rozet 4
+23:24:17 versiyon ayrıntısı 3001 1 200 bilgi kutusu False bağlantı [] rozet 2
+23:24:17 yeni taslak (matris için) 302 /procedure-versions/edit/8
+
+== Responsive (320, 360, 1440; açık ve koyu)
+/procedure-versions/edit/8 320 light 200 bölüm 7 | u44  20x20 | g12 [] | bilgi [] | konsol 0
+/procedure-versions/details/7 320 light 200 bölüm 0 | eval temiz | g12 [] | bilgi ["Yayınlanmış versiyon değiştirilemez. Fotoğraf ya da video ek"] | konsol 0
+/records/details/12 320 light 200 bölüm 0 | ovf TR.,TH. | g12 [] | bilgi [] | konsol 0
+/procedure-versions/edit/8 360 light 200 bölüm 7 | u44  20x20 | g12 [] | bilgi [] | konsol 0
+/procedure-versions/details/7 360 light 200 bölüm 0 | eval temiz | g12 [] | bilgi ["Yayınlanmış versiyon değiştirilemez. Fotoğraf ya da video ek"] | konsol 0
+/records/details/12 360 light 200 bölüm 0 | ovf TR.,TH. | g12 [] | bilgi [] | konsol 0
+/procedure-versions/edit/8 1440 light 200 bölüm 7 | u44  20x20 | g12 [] | bilgi [] | konsol 0
+/procedure-versions/details/7 1440 light 200 bölüm 0 | eval temiz | g12 [] | bilgi ["Yayınlanmış versiyon değiştirilemez. Fotoğraf ya da video ek"] | konsol 0
+/records/details/12 1440 light 200 bölüm 0 | eval temiz | g12 [] | bilgi [] | konsol 0
+/procedure-versions/edit/8 320 dark 200 bölüm 7 | u44  20x20 | g12 [] | bilgi [] | konsol 0
+/procedure-versions/details/7 320 dark 200 bölüm 0 | eval temiz | g12 [] | bilgi ["Yayınlanmış versiyon değiştirilemez. Fotoğraf ya da video ek"] | konsol 0
+/records/details/12 320 dark 200 bölüm 0 | ovf TR.,TH. | g12 [] | bilgi [] | konsol 0
+/procedure-versions/edit/8 360 dark 200 bölüm 7 | u44  20x20 | g12 [] | bilgi [] | konsol 0
+/procedure-versions/details/7 360 dark 200 bölüm 0 | eval temiz | g12 [] | bilgi ["Yayınlanmış versiyon değiştirilemez. Fotoğraf ya da video ek"] | konsol 0
+/records/details/12 360 dark 200 bölüm 0 | ovf TR.,TH. | g12 [] | bilgi [] | konsol 0
+/procedure-versions/edit/8 1440 dark 200 bölüm 7 | u44  20x20 | g12 [] | bilgi [] | konsol 0
+/procedure-versions/details/7 1440 dark 200 bölüm 0 | eval temiz | g12 [] | bilgi ["Yayınlanmış versiyon değiştirilemez. Fotoğraf ya da video ek"] | konsol 0
+/records/details/12 1440 dark 200 bölüm 0 | eval temiz | g12 [] | bilgi [] | konsol 0
+hücre 18 sorunlu 10
+Not: düzenleyicide 'u44 20x20' MaterialRequired onay kutusu; dokunma hedefi saran etiket 292x94 (Faz 3'ten beri). Kayıt detayında 320/360 'TR, TH' görsel olarak gizli tablo başlığı (thead position:absolute, clip rect(0)); bilinen yanlış pozitif.

@@ -49,9 +49,14 @@ public sealed class StepMediaService : IStepMediaService
             return blocked;
         }
 
-        if (upload is null || upload.Length <= 0 || string.IsNullOrWhiteSpace(upload.FileName))
+        if (upload is null || string.IsNullOrWhiteSpace(upload.FileName))
         {
             return CommandResult.Rejected(versionId, "File", "Dosya seçin.");
+        }
+
+        if (upload.Length <= 0)
+        {
+            return CommandResult.Rejected(versionId, "File", "Dosya boş. İçeriği olan bir fotoğraf ya da video seçin.");
         }
 
         var extension = Path.GetExtension(upload.FileName);

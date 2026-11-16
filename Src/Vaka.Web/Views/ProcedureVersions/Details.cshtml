@@ -29,6 +29,16 @@
 <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
     <section class="min-w-0 space-y-4" aria-labelledby="phases-title">
         <h2 id="phases-title" class="text-xl font-bold">Fazlar ve adımlar</h2>
+        @if (isManager && Model.Status != ProcedureVersionStatus.Draft)
+        {
+            <div class="notice notice-info">
+                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#info" /></svg>
+                <div class="min-w-0">
+                    <p class="break-words">Yayınlanmış versiyon değiştirilemez. Fotoğraf ya da video eklemek için tip ayrıntısından taslağı açın.</p>
+                    <a class="btn btn-secondary mt-3" href="/cleaning-types/details/@Model.CleaningTypeId" data-busy-link>Tip ayrıntısına git</a>
+                </div>
+            </div>
+        }
         @if (!Model.Phases.Any())
         {
             <partial name="_State" model='("empty", "file-text", "Bu versiyonda faz yok", "Yayınlanmış versiyonlar en az bir faz taşır. Bu kayıt tutarsız görünüyor, yöneticiye bildirin.", (string?)null, (string?)null)' />
@@ -54,6 +64,10 @@
                             <span class="step-stamp" aria-hidden="true">@step.OrderNo</span>
                             <div class="min-w-0 space-y-2">
                                 <p class="break-words font-bold"><span class="sr-only">Adım @step.OrderNo: </span>@step.Title</p>
+                                @if (step.Media.Length > 0)
+                                {
+                                    <p><span class="badge badge-muted"><svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#image" /></svg><span><span class="mono">@step.Media.Length</span><span class="sr-only"> medya</span></span></span></p>
+                                }
                                 @if (!string.IsNullOrWhiteSpace(step.Description))
                                 {
                                     <p class="whitespace-pre-line break-words text-muted">@step.Description</p>

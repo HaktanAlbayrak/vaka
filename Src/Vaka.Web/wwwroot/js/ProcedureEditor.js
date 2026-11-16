@@ -121,7 +121,7 @@ export class ProcedureEditor {
       return;
     }
     const candidates = (form.dataset.focus ?? "").split(" ").filter(Boolean);
-    const next = candidates.map((id) => document.getElementById(id)).find((element) => element && !element.disabled);
+    const next = candidates.map((id) => (id.startsWith("last-media:") ? document.querySelector(`#phase-${id.slice(11)}-steps > li:last-child [data-media-summary]`) : document.getElementById(id))).find((element) => element && !element.disabled);
     (next ?? status ?? region).focus();
   }
 }
