@@ -51,6 +51,7 @@ builder.Services.AddScoped<VakaCookieEvents>();
 builder.Services.AddScoped<ISystemSettingsReader, SystemSettingsReader>();
 builder.Services.AddScoped<IPinFormatValidator, PinFormatValidator>();
 builder.Services.AddScoped<IPinService, PinService>();
+builder.Services.AddScoped<ILoginAttemptGuard, LoginAttemptGuard>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IOpenWorkProvider, OpenWorkProvider>();
 builder.Services.AddScoped<IMachineBlockProvider, MachineBlockProvider>();

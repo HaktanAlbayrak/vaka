@@ -1,0 +1,155 @@
+K13 son regresyon kanıtı (QA kopyası, port 5901).
+
+== Uçtan uca planlı (kayıt 37, KSA) ve acil (kayıt 38) kayıt
+22:24:38 Kayıt 36 iptal (makine serbest) 302 /records/details/36 [(6, 1)]
+22:24:39 K13 planlı kayıt 37
+22:24:39 adımlar [163, 164, 165, 166]
+22:24:48 adım 1 (3, '2026-11-16 22:24:39.8624175', '2026-11-16 22:24:48.1049921', 8, 19, 0) [('2002', 0, None, '2026-11-16 22:24:39.8624175', '2026-11-16 22:24:48.1049921', 1, 8), ('2006', 0, '2026-11-16 22:24:39.7197859', '2026-11-16 22:24:39.8624175', '2026-11-16 22:24:48.1049921', 1, 8), ('2971', 0, '2026-11-16 22:24:42.9664144', '2026-11-16 22:24:42.9664144', '2026-11-16 22:24:46.0750542', 0, 3)]
+22:24:59 mola başladı 302 /breaks/current
+22:25:02 mola bitti 302 /records/run/37
+22:25:04 adım 164 (3, '2026-11-16 22:25:02.4285739', '2026-11-16 22:25:04.474509', 2, 2, 0)
+22:25:06 adım 165 (3, '2026-11-16 22:25:04.6618229', '2026-11-16 22:25:06.6806737', 2, 2, 0)
+22:25:08 adım 166 (3, '2026-11-16 22:25:06.8574151', '2026-11-16 22:25:08.8929016', 2, 2, 0)
+22:25:08 kayıt 37 [(4, 29, 3, 26, 25, '2026-11-16 22:25:08.8929016')]
+22:25:08 molalar [('2026-11-16 22:24:59.1533514', '2026-11-16 22:25:02.3168233', 1)]
+22:25:17 K13 acil kayıt 302 /records/run/38 [(2, 2)]
+22:25:19 acil adım (3, '2026-11-16 22:25:17.7418457', '2026-11-16 22:25:19.7809314', 2, 2, 0) [(4, 2, 2)]
+22:25:20 detay 37 True True True
+22:25:20 detay 38 True True True
+
+== Kayıt 37 detayında 13 soru
+22:25:33 13 soru 1 Tesis VAR T1 - Ana tesis
+22:25:33 13 soru 2 Hat ve makine VAR H1 - Hazırlık hattı | Makine | M02
+22:25:33 13 soru 3 Kaydı açan / ilk adımı başlatan VAR Kaydı açan (sorumlu) | Test Operatör 2 | 2002 | İlk adımı başlatan
+22:25:33 13 soru 4 Görevliler, katılma, ayrılma, çalışma VAR Yeni Operatör Deneme | 2971 | Eklenme | 17.11.2026 | 01:24 | Test Operatör 2 | Katılma | 17.11.2026 | 01:24 | 
+22:25:33 13 soru 5-6 Adım başlangıç/bitiş YOK 
+22:25:33 13 soru 7 Brüt, mola, net VAR Net süre | 26 | sn | Brüt
+22:25:33 13 soru 8 Efor VAR Efor
+22:25:33 13 soru 9 Malzeme VAR MLZ001
+22:25:33 13 soru 10 Lot ve SKT VAR L2027-001 | 31.03.2027
+22:25:33 13 soru 11 Tip ve versiyon VAR Kısa planlı temizlik | Prosedür versiyon
+22:25:33 13 soru 12 İş emri VAR IE-QA6F-0001
+22:25:33 13 soru 13 Tamamlanma ve durum YOK 
+22:25:33 13 soru + Bütünlük VAR Doğrulandı
+22:25:33 13 soru Zaman çizelgesi VAR Zaman çizelgesi
+22:25:33 13 soru Görevli katılma satırı VAR Yeni Operatör Deneme adıma katıldı
+22:25:33 13 soru Görevli ayrılma satırı VAR Yeni Operatör Deneme adımdan ayrıldı
+22:25:33 13 soru Birlikte başladı VAR Test Operatör 2 ve Ahmet Yılmaz birlikte adıma başladı
+22:25:33 13 soru Süre altı gerekçe VAR QA 6F regresyon
+22:25:40 arama Tamamla -> lgisi | T1-H1-M02-P2026-28 | M02 - Tartı ünitesi | Planlı | Tamamlandı | Doğrulandı | Tesis | T1 - Ana tesis | Hat | H1 - Hazırlık hattı | Makine | M0
+22:25:40 arama Tamamla -> i süresi) | 25 | sn | Fazlar ve adımlar | Faz 1: Hazırlık | Tamamlandı - süre altında | Minimum | 5 | dk | Brüt | 24 | sn | Mola | 3 | sn | Net | 21 |
+22:25:40 arama Başlangıç -> pa | Tamamlandı | Makineyi kapatınız işe başlamadan önce. | Başlangıç | 17.11.2026 | 01:24 | Test Operatör 2 | Bitiş | 17.11.2026 | 01:24 | Test Opera
+22:25:40 arama Başlangıç -> mlandı | Makine genel kontrol kapanmış olduğuna emin olun | Başlangıç | 17.11.2026 | 01:25 | Test Operatör 2 | Bitiş | 17.11.2026 | 01:25 | Test Opera
+22:25:40 arama Bitiş ->  önce. | Başlangıç | 17.11.2026 | 01:24 | Test Operatör 2 | Bitiş | 17.11.2026 | 01:24 | Test Operatör 2 | Süre | 8 | sn | Efor | 19 | sn | Görevliler
+22:25:40 arama Bitiş -> n olun | Başlangıç | 17.11.2026 | 01:25 | Test Operatör 2 | Bitiş | 17.11.2026 | 01:25 | Test Operatör 2 | Süre | 2 | sn | Efor | 2 | sn | Görevliler 
+22:25:46 özet bölümü Tesis | T1 - Ana tesis | Hat | H1 - Hazırlık hattı | Makine | M02 - Tartı ünitesi | Temizlik tipi | Kısa planlı temizlik | Prosedür versiyonu | Versiyon 2 | Versiyon içeriğini aç | İş emri | IE-QA6F-0001 | Saha defteri | T1-SD-2026-15 | Süreler | İlk adımın başlangıcından ölçülür | Net süre | 26 | sn | Brüt süre | 29 | sn | Mola | 3 | sn | Bekletme | - | Efor (kişi süresi) | 25 | sn | Fazlar ve adımlar | Faz 1: Hazırlık | Tamamlandı - süre altında | Minimum | 5 | dk | Brüt | 24 | sn | Mola | 3 | sn | Net | 21 | sn | Faz minimum sürenin altında tamamlandı | Gerekçe: QA 6F regresyon: süre ölçeği kısaltıldı. | 1. | Makine Kapa | Tamamlandı | Makineyi kapatınız işe başlamadan önce. | Başlangıç |
+22:25:53 arama Kapan -> :24 | Tamamlanma | 17.11.2026 | 01:25 | Kapanış | - | Molalar | Kayıt molaları, 1 mola | Mola | Başlangıç | Bitiş | Süre | Kapanış | Test Operatör 2 | 17.11.202
+22:25:53 arama Kapan -> ola | Mola | Başlangıç | Bitiş | Süre | Kapanış | Test Operatör 2 | 17.11.2026 | 01:24 | 17.11.2026 | 01:25 | 3 | sn | Kişi bitirdi | Test Operatör 2 | Malzemel
+22:25:53 arama Açılış -> eni Operatör Deneme | 2971 | Zamanlar | Açılış | 17.11.2026 | 01:24 | İlk adım başlangıcı | 17.11.2026 | 01:24 | Tamamlanma | 17.11.2026 | 01:25 | Kapanış | - |
+22:25:53 arama tamamlandı -> | 21 | sn | Faz minimum sürenin altında tamamlandı | Gerekçe: QA 6F regresyon: süre ölçeği kısaltıldı. | 1. | Makine Kapa | Tamamlandı | Makineyi kapatınız işe 
+22:25:53 arama tamamlandı ->  | 4 | sn | Faz minimum sürenin altında tamamlandı | Gerekçe: QA 6F regresyon: süre ölçeği kısaltıldı. | 1. | Yüzeyi sil | Tamamlandı | Başlangıç | 17.11.2026 |
+22:25:53 arama tamamlandı -> sn | 01:25 | Uyarı | Faz 1 süre altında tamamlandı | Gerekçe: QA 6F regresyon: süre ölçeği kısaltıldı. | Süre | 21 | sn | 01:25 | Test Operatör 2 adıma başladı 
+22:25:53 arama Kaydı açan -> 01:25 | Doğrulama ayrıntısı | Kişiler | Kaydı açan (sorumlu) | Test Operatör 2 | 2002 | İlk adımı başlatan | Test Operatör 2 | Yardımcılar | Ahmet Yılmaz | 2006
+
+== G10 ve raporlar
+22:26:39 G10 Süper admin /records 302 /account/access-denied?ReturnUrl=%2Frecords
+22:26:39 G10 Süper admin /dashboard 302 /account/access-denied?ReturnUrl=%2Fdashboard
+22:26:39 G10 Süper admin /my-work 302 /account/access-denied?ReturnUrl=%2Fmy-work
+22:26:39 G10 Süper admin /records/create 302 /account/access-denied?ReturnUrl=%2Frecords%2Fcreate
+22:26:39 G10 Süper admin /machine-board 302 /account/access-denied?ReturnUrl=%2Fmachine-board
+22:26:39 G10 Süper admin /reports/durations 302 /account/access-denied?ReturnUrl=%2Freports%2Fdurations
+22:26:39 G10 Süper admin /reports/machine 302 /account/access-denied?ReturnUrl=%2Freports%2Fmachine
+22:26:39 G10 Süper admin /reports/materials 302 /account/access-denied?ReturnUrl=%2Freports%2Fmaterials
+22:26:39 G10 Süper admin /facilities 302 /account/access-denied?ReturnUrl=%2Ffacilities
+22:26:39 G10 Süper admin /records/details/37 302 /account/access-denied?ReturnUrl=%2Frecords%2Fdetails%2F37
+22:26:39 G10 Süper admin /users 200 
+22:26:39 G10 Süper admin /users/edit/2 200 
+22:26:39 K13 rapor /reports/machine?machineId=2 200 satır 28 kayıt 37 Kullanım oranı 
+22:26:39 K13 rapor /reports/materials?mode=Usage&machineId=2 200 satır 3  Kullanım oranı 
+22:26:39 K13 rapor /reports/materials?mode=Usage 200 satır 3  Kullanım oranı 
+
+== Bütünlük
+22:26:48 K13 bütünlük: kayıt 38 Doğrulandı olmayan {}
+
+== Menü taraması (crawl.mjs): rol x menü ekranı x 360 ve 1440 px
+MENÜ Operatör açılış /my-work ['/my-work', '/records/create', '/machine-board', '/records']
+MENÜ Yönetici açılış /dashboard ['/dashboard', '/records', '/machine-board', '/reports/durations', '/reports/machine', '/reports/materials', '/facilities', '/machines', '/shifts', '/materials', '/cleaning-types', '/users']
+MENÜ Denetçi açılış /dashboard ['/dashboard', '/records', '/machine-board', '/reports/durations', '/reports/machine', '/reports/materials']
+MENÜ Süper admin açılış /users ['/users', '/users?page=2&status=Active']
+MENÜ Operatör+Yönetici açılış /my-work ['/my-work', '/records/create', '/dashboard', '/machine-board', '/records', '/reports/durations', '/reports/machine', '/reports/materials', '/facilities', '/machines', '/shifts', '/materials', '/cleaning-types', '/users']
+Operatör 360 /my-work 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör 360 /records/create 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör 360 /machine-board 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör 360 /records 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör 1440 /my-work 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör 1440 /records/create 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör 1440 /machine-board 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör 1440 /records 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 360 /dashboard 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 360 /records 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 360 /machine-board 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 360 /reports/durations 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 360 /reports/machine 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 360 /reports/materials 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 360 /facilities 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 360 /machines 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 360 /shifts 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 360 /materials 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 360 /cleaning-types 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 360 /users 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 1440 /dashboard 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 1440 /records 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 1440 /machine-board 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 1440 /reports/durations 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 1440 /reports/machine 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 1440 /reports/materials 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 1440 /facilities 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 1440 /machines 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 1440 /shifts 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 1440 /materials 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 1440 /cleaning-types 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Yönetici 1440 /users 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Denetçi 360 /dashboard 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Denetçi 360 /records 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Denetçi 360 /machine-board 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Denetçi 360 /reports/durations 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Denetçi 360 /reports/machine 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Denetçi 360 /reports/materials 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Denetçi 1440 /dashboard 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Denetçi 1440 /records 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Denetçi 1440 /machine-board 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Denetçi 1440 /reports/durations 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Denetçi 1440 /reports/machine 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Denetçi 1440 /reports/materials 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Süper admin 360 /users 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Süper admin 360 /users?page=2&status=Active 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Süper admin 1440 /users 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Süper admin 1440 /users?page=2&status=Active 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /my-work 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /records/create 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /dashboard 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /machine-board 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /records 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /reports/durations 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /reports/machine 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /reports/materials 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /facilities 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /machines 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /shifts 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /materials 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /cleaning-types 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 360 /users 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /my-work 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /records/create 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /dashboard 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /machine-board 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /records 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /reports/durations 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /reports/machine 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /reports/materials 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /facilities 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /machines 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /shifts 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /materials 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /cleaning-types 200 h1 1 hScroll False taşma [] konsol 0 dash False
+Operatör+Yönetici 1440 /users 200 h1 1 hScroll False taşma [] konsol 0 dash False

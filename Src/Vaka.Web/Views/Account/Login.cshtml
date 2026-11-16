@@ -1,18 +1,41 @@
-@model Vaka.Web.ViewModels.Account.LoginViewModel
+@using Vaka.Web.ViewModels.Account
+@model LoginViewModel
 @{
+    var isPin = Model.Mode == LoginMode.Pin;
+    var isLocked = Model.LockedUntilLocal.HasValue;
     ViewData["Title"] = "Giriş";
-    ViewData["Lead"] = "Sicil numaranız ve parolanızla girin.";
+    ViewData["Lead"] = isPin ? "Sicil numaranız ve PIN'inizle girin." : "Sicil numaranız ve parolanızla girin.";
     ViewData["StatusMessage"] = Model.StatusMessage;
+    var returnQuery = string.IsNullOrEmpty(Model.ReturnUrl) ? "" : "&returnUrl=" + Uri.EscapeDataString(Model.ReturnUrl);
 }
 
-<form method="post" class="panel panel-tag" data-validate data-busy-form aria-labelledby="login-title" asp-antiforgery="true">
+<form method="post" class="panel panel-tag" data-validate data-busy-form aria-labelledby="login-title" asp-antiforgery="true" autocomplete="off">
     <div class="panel-head">
         <h2 id="login-title" class="panel-title">Sicil girişi</h2>
     </div>
     <div class="panel-body space-y-5">
         <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+        <input type="hidden" name="Mode" value="@Model.Mode" />
 
-        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        <nav class="login-mode" aria-label="Giriş yöntemi">
+            <a class="login-mode-item" href="/account/login?mode=pin@(returnQuery)" aria-current="@(isPin ? "page" : null)">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#hash" /></svg>
+                <span>PIN ile</span>
+            </a>
+            <a class="login-mode-item" href="/account/login?mode=password@(returnQuery)" aria-current="@(isPin ? null : "page")">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#key-round" /></svg>
+                <span>Parola ile</span>
+            </a>
+        </nav>
+
+        @if (isLocked)
+        {
+            <div class="notice notice-danger" role="alert" tabindex="-1" data-form-summary>
+                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#lock" /></svg>
+                <p class="font-semibold">Çok sayıda hatalı giriş. Giriş <span class="font-mono">@Model.LockedUntilLocal!.Value.ToString("HH:mm")</span> saatine kadar kapalı; yöneticiniz erken açabilir.</p>
+            </div>
+        }
+        else if (!string.IsNullOrEmpty(Model.ErrorMessage))
         {
             <div class="notice notice-danger" role="alert" tabindex="-1" data-form-summary>
                 <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
@@ -21,8 +44,16 @@
         }
         <partial name="_FormSummary" model='"Giriş yapılamadı"' />
 
-        <partial name="_Field" model='("RegistryNo", "Sicil no", Model.RegistryNo, "text", "username", (string?)null, true, false)' />
-        <partial name="_Field" model='("Password", "Parola", (string?)null, "password", "current-password", (string?)null, true, false)' />
+        @if (isPin)
+        {
+            <partial name="_Field" model='("RegistryNo", "Sicil no", Model.RegistryNo, "text", "off", (string?)null, true, false)' />
+            <partial name="_PinInput" model='("Pin", "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+        }
+        else
+        {
+            <partial name="_Field" model='("RegistryNo", "Sicil no", Model.RegistryNo, "text", "username", (string?)null, true, false)' />
+            <partial name="_Field" model='("Password", "Parola", (string?)null, "password", "current-password", (string?)null, true, false)' />
+        }
 
         <button type="submit" class="btn btn-primary btn-lg btn-block" data-requires-online>
             <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#shield-check" /></svg>
@@ -31,4 +62,11 @@
     </div>
 </form>
 
-<p class="mt-5 text-sm text-muted">Parolanızı unuttuysanız yöneticinizden yeni geçici parola isteyin. Oturum işlemsizlikte kendiliğinden kapanır.</p>
+@if (isPin)
+{
+    <p class="mt-5 text-sm text-muted">PIN ile giriş operatör hesapları içindir; Yönetici, Denetçi ve Süper admin parola ile girer. İlk girişinizi parola ile yapın.</p>
+}
+else
+{
+    <p class="mt-5 text-sm text-muted">Parolanızı unuttuysanız yöneticinizden yeni geçici parola isteyin. Oturum işlemsizlikte kendiliğinden kapanır.</p>
+}

@@ -26,7 +26,7 @@ public sealed class ReportsController : Controller
     {
         var invalid = !ModelState.IsValid;
         ModelState.Clear();
-        return View(await _durations.BuildAsync(invalid ? new DurationReportFilterViewModel() : filter, invalid ? ReportMessages.InvalidFilter : null, cancellationToken));
+        return View(await _durations.BuildAsync(filter, invalid ? ReportMessages.InvalidFilter : null, cancellationToken));
     }
 
     [HttpGet]

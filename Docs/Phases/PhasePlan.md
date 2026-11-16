@@ -10,6 +10,7 @@
 > ikisi de sunumdan önce, önce 6C; malzeme miktarı istenmedi; karşılık tablosu "2026-11-16 kullanıcı istekleri" bölümünde (PL-85..PL-88).
 > 2026-11-16 (kullanıcı istekleri, O-10, O-11): yeni Faz 6E (görevli girişi ve adım içi katılım; S-3 kapandı, aday Faz 10 kalktı) ve Faz 6F (operatörde PIN ile giriş, ayrı giriş sayacı ve 15 dakikalık süreli kilit), 6D'den sonra (PL-89..PL-94). Brief ve Kusur K-07, K-10 işlendi (O-11).
 > 2026-11-16 (O-14): kullanıcı Faz 7, 8 ve 9'u kapsamdan çıkardı ("faz 7 ve sonrasına gerek yok"); plan Faz 6E ve 6F ile biter. Devredilmiş kalemler PL-101.
+> 2026-11-17: Faz 6F teslim alındı; plan tamamlandı (PL-105).
 > Kimlikler: FR, NFR, BR, SC, SH, SK `Docs/Analysis/Brief.md`; E (ekran) `Docs/Analysis/Requirements.md §4`; K `Docs/Analysis/Kusur.md`; PL `Decisions.md`.
 
 ## Özet
@@ -29,7 +30,7 @@
 | 6C | Kayıt zaman çizelgesi ve görevli seçimi (Salı öncesi) | Kayıt detayında olayların gün ve saat sırasıyla cümle olarak okunduğu zaman çizelgesi ("X ve Y birlikte adıma başladı"); görevli eklemede aktif operatörler arasından klavyeyle de kullanılan aranabilir seçim kutusu | Evet | TESLİM ALINDI (tur 2, 2026-11-16) |
 | 6D | Makine raporu ve malzeme kullanım oranı (Salı öncesi, 6C'den sonra) | Makine seçilerek tip başına ortalama süre, efor ve prosedür minimumuyla karşılaştırma; malzeme başına kullanım oranı | Evet | TESLİM ALINDI (tur 4, 2026-11-16) |
 | 6E | Görevli girişi ve adım içi katılım (6D'den sonra) | Sahip adımı yardımcıyı beklemeden başlatır; yardımcı katıldığı anda kendi PIN'iyle girer, erken giderse ayrılır, eforu çalıştığı süre; girişi bekleyen varken adım bitmez, "Girişi bekleniyor"; giriş aynı tablette ya da kendi cihazında. Yeni tablo (Eklemeli) | Evet | TESLİM ALINDI (tur 2, 2026-11-17) |
-| 6F | PIN ile giriş ve giriş deneme sınırı (6E'den sonra) | Operatör sicil no ve PIN ile girer; Yönetici, Denetçi, Süper admin parola ile; parola ve PIN girişinde ayrı sayaç ve süreli kilit, yönetici erken açar. `Users`'a iki kolon (ALTER) | Evet | BEKLİYOR (Faz 6E kapısı) |
+| 6F | PIN ile giriş ve giriş deneme sınırı (6E'den sonra) | Operatör sicil no ve PIN ile girer; Yönetici, Denetçi, Süper admin parola ile; parola ve PIN girişinde ayrı sayaç ve süreli kilit, yönetici erken açar. `Users`'a iki kolon (ALTER) | Evet | TESLİM ALINDI (tur 2, 2026-11-17) |
 | 7 | Talep, beklemeye alma ve yönetici panosu (Salı sonrası) | Talepler, Taleplerim, bekleme ve devam, yönetici panosu, adım sürerken mola, adım sürerken mola kişi aralıklarıyla; görevli PIN onayı Faz 6E'de karşılandı (PL-92) | Evet | KAPSAM DIŞI (O-14) |
 | 8 | Acil müdahale, bildirim ve düzeltme (Salı sonrası) | Acil ve talep bildirimleri, panoda acil, düzeltme formu | Evet | KAPSAM DIŞI (O-14) |
 | 9 | Raporlar, denetim çıktısı ve sistem ayarları (Salı sonrası) | Rapor grafikleri ve CSV, düzeltmeli denetim çıktısı adresi, Sistem ayarları ekranı, son regresyon | Evet | KAPSAM DIŞI (O-14) |
@@ -1554,10 +1555,10 @@ sayacında tutulur ve süreli kilide götürür; giriş ekranından kimsenin iş
 | Ekran | "PIN ile" ve "Parola ile" seçimi; cihazda son seçim kişisel veri taşımayan çerezde; çerez yoksa "PIN ile" | Saha tableti PIN'de, ofis bilgisayarı parolada kalır |
 | Giriş sayacı (onaylı, O-10) | Parola ve PIN girişi tek sayaç kullanır: `Users.LoginFailedCount`. İşlem PIN sayacından (`PinFailedCount`) ayrıdır; giriş ekranındaki deneme işlem PIN'ini kilitlemez | Kullanıcı ayrı sayacı seçti; PL-91'deki kilitleme riski kalkar |
 | Sınır | `<PinDenemeSınırı>` değeri (başlangıç 5) giriş için de geçerli; yeni sınır ayarı yok | Kullanıcının verdiği deneme sayısı; ayrı değer istenirse yeni ayar satırı |
-| Kilit (onaylı, O-11) | Art arda sınıra ulaşan hatalı girişte giriş `<GirişKilitSüresi>` (15 dakika) kapanır (`LoginLockedUntilUtc`); süre dolunca sayaç sıfırdan başlar. Yönetici (SK-9 kapsamı) ve Süper admin E-04'te "Giriş kilidini aç" ile PIN'le erken açar. Kilitliyken doğru parola ya da PIN de reddedilir: "Çok sayıda hatalı giriş. Giriş HH:mm'e kadar kapalı; yöneticiniz erken açabilir." | Süreli kilit: tek Süper admin kendini kilitlerse kimse açamazdı (Requirements §9); başkasının hesabını kilitleme etkisi süreyle sınırlı. Yalnız yönetici sıfırlaması bu yüzden önerilmez |
+| Kilit (onaylı, O-11) | Art arda sınıra ulaşan hatalı girişte giriş `<GirişKilitSüresi>` (15 dakika) kapanır (`LoginLockedUntilUtc`); süre dolunca sayaç sıfırdan başlar. Yönetici (SK-9 kapsamı) ve Süper admin E-04'te "Giriş kilidini aç" ile PIN'le erken açar. Kilitliyken doğru parola ya da PIN de reddedilir: "Çok sayıda hatalı giriş. Giriş HH:mm saatine kadar kapalı; yöneticiniz erken açabilir." (PL-104) | Süreli kilit: tek Süper admin kendini kilitlerse kimse açamazdı (Requirements §9); başkasının hesabını kilitleme etkisi süreyle sınırlı. Yalnız yönetici sıfırlaması bu yüzden önerilmez |
 | Sayılan deneme | Yanlış parola (her hesap) ve uygun hesapta yanlış PIN sayılır. PIN girişine uygun olmayan hesapta PIN doğrulanmaz ve sayılmaz. Olmayan sicil no hiçbir şey yazmaz. Başarılı giriş sayacı sıfırlar | Yönetici hesabı PIN moduyla kilitlenemez |
 | Hata metni | Yanlış sicil no, yanlış parola ya da PIN ve uygun olmayan hesap aynı metni alır: "Sicil no ya da parola hatalı." / "Sicil no ya da PIN hatalı." | Hesap varlığı sızmaz; kilit metni yalnız kilitli hesapta |
-| İlk giriş ve sıfırlama | `MustChangePassword`, `MustSetPin` doluysa ya da PIN yoksa PIN girişi reddedilir: "İlk girişinizi parola ile yapın." BR-55 aynen | Hesap tamamlanmadan PIN yoktur |
+| İlk giriş ve sıfırlama | `MustChangePassword`, `MustSetPin` doluysa ya da PIN yoksa PIN girişi reddedilir: "İlk girişinizi parola ile yapın." İşlem PIN'i kilitliyse (`PinLockedAtUtc` dolu) PIN doğrulanmadan reddedilir, sayaç değişmez: "PIN'iniz kilitli. Parola ile girin; PIN'i yöneticiniz sıfırlar." (PL-104) BR-55 aynen | Hesap tamamlanmadan PIN yoktur |
 | Paylaşılan tablet | `<OturumSüresi>`, kabukta ad ve "Kullanıcı değiştir" aynen; çıkış ve kullanıcı değiştir giriş ekranını PIN modunda, alanlar boş açar; PIN modunda iki alan `autocomplete="off"`, PIN `inputmode="numeric"` | Önceki kişinin bilgileri tablette kalmaz |
 | Saklama | Bugünkü PIN özeti (Identity `PasswordHasher`, PBKDF2, tuzlu) yeterli | Çevrimiçi deneme sayaçla sınırlı; veritabanı dosyası ele geçerse 4 haneli PIN bulunur, dosya erişimi BT denetiminde |
 
@@ -1618,6 +1619,41 @@ sayacında tutulur ve süreli kilide götürür; giriş ekranından kimsenin iş
 - Ortak: G1-G8, G10, G12; G9 uygulanmaz (komut kimlikli işlem yok), G11 uygulanmaz.
 
 **Kapsam dışı:** IP bazlı hız sınırı; kart okuyucu (K-09); giriş denemelerinin ayrı denetim günlüğü.
+
+---
+
+## Düzeltme D-2: görevli panelinin metinleri (faz dışı, Faz 6F'den sonra)
+
+**İstek (2026-11-17):** "görevleri düzenle yazısı yerine yardımcı ekle tarzı bir şey eklenebilir yada projeye uygun bir yazı" (PL-106).
+
+**Neden "yardımcı":** doküman "yardımcı personel" der (satır 37, 51, 103); sistemde adım görevlisi sahip ve yardımcılardan oluşur, kayıt detayında
+kayıt düzeyi liste "Yardımcılar" adını taşır. Panel yalnız kişi ekler: katılma, ayrılma ve listeden çıkarma kişi kartlarındadır. "Görevleri düzenle"
+panelin işini anlatmıyor ve "görev" sözcüğü sistemde başka bir şeyi (adım) çağrıştırıyor. Metin sabit kalır; görevli sayısı zaten üstteki
+"Görevliler" listesinde görünür, sayıya göre değişen başlık eklenmez.
+
+**Teslim yolu:** faz dışı düzeltme, PL-74 düzeni: frontend, qa-tester hedefli ölçüm, ayrı commit (`Düzeltme D-2: görevli paneli metinleri`).
+Backend, şema ve sunucu iletileri değişmez ("görevli" sunucu iletilerinde doğru terimdir).
+
+**Kapsam (frontend-engineer, yalnız `Views/Records/_Participants.cshtml`):**
+
+| Yer | Bugün | Yeni |
+|---|---|---|
+| Panel özeti (`summary`), ikon `users` yerine `user-plus` | Görevleri düzenle | Yardımcı ekle |
+| JS kapalı arama alanı etiketi | Kişi ara | Yardımcı ara |
+| Seçim kutusu etiketi (combobox, erişilebilir adı) | Görevli ekle | Yardımcı ara |
+| İpucu | Ad ya da sicil no parçası yazın, listeden operatörü seçin. | Ad ya da sicil no parçası yazın, listeden yardımcıyı seçin. |
+| İpucu eki (adım sürerken) | Eklenen kişi kendi PIN'iyle katılınca çalışmaya başlar. | Eklenen yardımcı kendi PIN'iyle katılınca çalışmaya başlar. |
+| JS kapalı radyo listesi `legend` | Görevli seç | Yardımcı seç |
+| Gönder düğmesi | Görevliyi ekle | Yardımcıyı ekle |
+
+Değişmeyenler: üstteki "Görevliler" listesi ve boş durum metni, kişi kartlarındaki "Adıma katıl", "Adımdan ayrıl", "Görevliyi çıkar" (sahibi de
+kapsar), "Kişileri ara" düğmesi, "Bir kişi seçin." hatası, seçici durum metinleri, sunucu iletileri.
+
+**QA hedefli ölçüm (rapor yerine kısa kayıt, PL-74 düzeni):**
+
+- Run'da bekleyen ve devam eden adımda özet "Yardımcı ekle", erişilebilirlik ağacında combobox adı "Yardımcı ara", düğme "Yardımcıyı ekle"; JS kapalı yolda "Yardımcı ara" ve "Yardımcı seç".
+- 320 (%200), 360 ve 1440 px, açık ve koyu temada panel ve özet taşmasız, yatay kaydırma yok, G12 kusuru 0, konsol 0.
+- Gerileme: klavyeyle yardımcı ekleme akışı (Faz 6C K16) ve bir yardımcının katılması (Faz 6E K3) değişmeden çalışır; değişen dosyada grep tablosu 0.
 
 ---
 

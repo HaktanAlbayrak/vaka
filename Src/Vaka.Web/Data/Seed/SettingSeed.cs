@@ -12,6 +12,7 @@ public static class SettingSeed
         new() { Id = 3, Key = SettingKeys.PinAttemptLimit, Value = 5, Unit = "deneme" },
         new() { Id = 4, Key = SettingKeys.MaxLockMinutes, Value = 120, Unit = "dakika" },
         new() { Id = 5, Key = SettingKeys.MaxPhotoMb, Value = 10, Unit = "MB" },
-        new() { Id = 6, Key = SettingKeys.MaxVideoMb, Value = 100, Unit = "MB" }
+        new() { Id = 6, Key = SettingKeys.MaxVideoMb, Value = 100, Unit = "MB" },
+        new() { Id = 7, Key = SettingKeys.LoginLockMinutes, Value = 15, Unit = "dakika" }
     };
 }

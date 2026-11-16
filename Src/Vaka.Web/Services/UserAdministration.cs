@@ -214,6 +214,28 @@ public sealed class UserAdministration : IUserAdministration
         }, cancellationToken);
     }
 
+    public async Task<CommandResult> UnlockLoginAsync(int actorId, int targetId, string? pin, CancellationToken cancellationToken)
+    {
+        return await RunExclusiveAsync(actorId, targetId, async (target, _) =>
+        {
+            if (target.LoginFailedCount == 0 && target.LoginLockedUntilUtc is null)
+            {
+                return CommandResult.Rejected(string.Empty, "Hesapta giriş kilidi yok.");
+            }
+
+            var pinFailure = await _pins.ConfirmAsync(actorId, pin, cancellationToken);
+            if (pinFailure is not null)
+            {
+                return pinFailure;
+            }
+
+            target.LoginFailedCount = 0;
+            target.LoginLockedUntilUtc = null;
+            await _db.SaveChangesAsync(cancellationToken);
+            return CommandResult.Success(targetId);
+        }, cancellationToken);
+    }
+
     public async Task<CommandResult> ResetPinAsync(int actorId, int targetId, string? pin, CancellationToken cancellationToken)
     {
         return await RunExclusiveAsync(actorId, targetId, async (_, _) =>

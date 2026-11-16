@@ -111,6 +111,13 @@ public sealed class UsersController : Controller
     }
 
     [HttpPost("{id:int}")]
+    public async Task<IActionResult> UnlockLogin(int id, [Bind(Prefix = "UnlockLogin")] UserResetViewModel model, CancellationToken cancellationToken)
+    {
+        var result = await _administration.UnlockLoginAsync(User.GetUserId(), id, model.Pin, cancellationToken);
+        return await FinishResetAsync(result, id, "UnlockLogin", "Giriş kilidi açıldı.", cancellationToken);
+    }
+
+    [HttpPost("{id:int}")]
     public async Task<IActionResult> ResetPassword(int id, [Bind(Prefix = "ResetPassword")] UserResetViewModel model, CancellationToken cancellationToken)
     {
         var result = await _administration.ResetPasswordAsync(User.GetUserId(), id, model.TemporaryPassword, model.Pin, cancellationToken);

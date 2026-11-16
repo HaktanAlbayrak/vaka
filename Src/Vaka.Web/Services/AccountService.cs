@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Vaka.Web.Authorization;
 using Vaka.Web.Data;
 
 namespace Vaka.Web.Services;
@@ -10,31 +11,113 @@ public sealed class AccountService : IAccountService
     private readonly IPinService _pins;
     private readonly IPinFormatValidator _pinFormat;
     private readonly IWriteTransactionRunner _transactions;
+    private readonly ILoginAttemptGuard _attempts;
+    private readonly ITurkeyClock _clock;
 
-    public AccountService(VakaDbContext db, ICredentialHasher hasher, IPinService pins, IPinFormatValidator pinFormat, IWriteTransactionRunner transactions)
+    public AccountService(VakaDbContext db, ICredentialHasher hasher, IPinService pins, IPinFormatValidator pinFormat, IWriteTransactionRunner transactions, ILoginAttemptGuard attempts, ITurkeyClock clock)
     {
         _db = db;
         _hasher = hasher;
         _pins = pins;
         _pinFormat = pinFormat;
         _transactions = transactions;
+        _attempts = attempts;
+        _clock = clock;
     }
 
-    public async Task<AccountState?> SignInAsync(string registryNo, string password, CancellationToken cancellationToken)
+    public async Task<SignInResult> SignInAsync(string registryNo, string password, CancellationToken cancellationToken)
     {
-        var user = await _db.Users
-            .AsNoTracking()
-            .Where(candidate => candidate.RegistryNo == registryNo)
-            .Select(candidate => new { candidate.Id, candidate.PasswordHash, candidate.IsActive })
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (user is null || !user.IsActive || !_hasher.Verify(user.PasswordHash, password))
+        var user = await FindActiveAsync(registryNo, cancellationToken);
+        if (user is null)
         {
-            return null;
+            _hasher.VerifyDecoy(password);
+            return new SignInResult(SignInStatus.Invalid);
         }
 
-        return await GetStateAsync(user.Id, cancellationToken);
+        return await AttemptAsync(user.Id, user.PasswordHash, password, cancellationToken);
     }
+
+    public async Task<SignInResult> SignInWithPinAsync(string registryNo, string pin, CancellationToken cancellationToken)
+    {
+        var user = await FindActiveAsync(registryNo, cancellationToken);
+        if (user is null || !user.OperatorOnly)
+        {
+            _hasher.VerifyDecoy(pin);
+            return new SignInResult(SignInStatus.Invalid);
+        }
+
+        if (user.MustChangePassword || user.MustSetPin || user.PinHash is null)
+        {
+            return new SignInResult(SignInStatus.PasswordRequired);
+        }
+
+        if (user.PinLocked)
+        {
+            return new SignInResult(SignInStatus.PinLocked);
+        }
+
+        return await AttemptAsync(user.Id, user.PinHash, pin, cancellationToken);
+    }
+
+    private async Task<SignInResult> AttemptAsync(int userId, string hash, string secret, CancellationToken cancellationToken)
+    {
+        var lockedUntil = await _attempts.GetLockedUntilAsync(userId, cancellationToken);
+        if (lockedUntil is not null)
+        {
+            return Locked(lockedUntil.Value);
+        }
+
+        if (!_hasher.Verify(hash, secret))
+        {
+            var lockedNow = await _attempts.RegisterFailureAsync(userId, cancellationToken);
+            return lockedNow is null ? new SignInResult(SignInStatus.Invalid) : Locked(lockedNow.Value);
+        }
+
+        await _attempts.ResetAsync(userId, cancellationToken);
+        var state = await GetStateAsync(userId, cancellationToken);
+        return state is null ? new SignInResult(SignInStatus.Invalid) : new SignInResult(SignInStatus.Success, State: state);
+    }
+
+    private SignInResult Locked(DateTime untilUtc) =>
+        new(SignInStatus.LockedUntil, _clock.ToLocal(untilUtc));
+
+    private async Task<SignInCandidate?> FindActiveAsync(string registryNo, CancellationToken cancellationToken)
+    {
+        var row = await _db.Users
+            .AsNoTracking()
+            .Where(candidate => candidate.RegistryNo == registryNo && candidate.IsActive)
+            .Select(candidate => new
+            {
+                candidate.Id,
+                candidate.PasswordHash,
+                candidate.PinHash,
+                candidate.MustChangePassword,
+                candidate.MustSetPin,
+                PinLocked = candidate.PinLockedAtUtc != null,
+                Roles = candidate.Roles.Select(role => role.Role).ToList()
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return row is null
+            ? null
+            : new SignInCandidate(
+                row.Id,
+                row.PasswordHash,
+                row.PinHash,
+                row.MustChangePassword,
+                row.MustSetPin,
+                row.PinLocked,
+                row.Roles.Count > 0 && row.Roles.All(role => role == Roles.Operator));
+    }
+
+    private sealed record SignInCandidate(
+        int Id,
+        string PasswordHash,
+        string? PinHash,
+        bool MustChangePassword,
+        bool MustSetPin,
+        bool PinLocked,
+        bool OperatorOnly);
 
     public async Task<AccountState?> GetStateAsync(int userId, CancellationToken cancellationToken)
     {

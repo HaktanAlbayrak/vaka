@@ -12,4 +12,5 @@ Kayıt başına tek satır; ayrıntı `Docs/Db/DB-<yıl>-<sıra>.md` dosyasında
 | [DB-2026-006](DB-2026-006.md) | Temizlik kaydı, faz ve adım yürütmeleri, görevliler, kayıt malzemeleri, olay günlüğü, işlenmiş komutlar, numara sayaçları, tetikleyiciler, üçüncü demo tipi | 4 | Eklemeli | DOĞRULANDI | AddCleaningRecordsAndEventLog |
 | [DB-2026-007](DB-2026-007.md) | Mola tablosu ve dördüncü demo tipi (KSA, kısa planlı temizlik) | 5 | Eklemeli | DOĞRULANDI | AddRecordBreaks |
 | [DB-2026-008](DB-2026-008.md) | Kayıt listesi süzgeçleri ve lot araması için index'ler | 6 | Eklemeli | DOĞRULANDI | AddCleaningRecordListIndexes |
-| [DB-2026-009](DB-2026-009.md) | Görevli çalışma aralığı tablosu (StepWorkIntervals), değişmezlik tetikleyicileri | 6E | Eklemeli | UYGULANDI (kopyada doğrulandı; gerçek DB bekliyor) | AddStepWorkIntervals |
+| [DB-2026-009](DB-2026-009.md) | Görevli çalışma aralığı tablosu (StepWorkIntervals), değişmezlik tetikleyicileri | 6E | Eklemeli | DOĞRULANDI | AddStepWorkIntervals |
+| [DB-2026-010](DB-2026-010.md) | Users giriş sayacı ve süreli kilit kolonları, LoginLockMinutes ayarı | 6F | ALTER (kolon ekleme) ve Eklemeli | DOĞRULANDI | AddLoginLockToUsers |

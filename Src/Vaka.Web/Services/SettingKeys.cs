@@ -6,6 +6,7 @@ public static class SettingKeys
     public const string PinLength = "PinLength";
     public const string PinAttemptLimit = "PinAttemptLimit";
     public const string MaxLockMinutes = "MaxLockMinutes";
+    public const string LoginLockMinutes = "LoginLockMinutes";
     public const string MaxPhotoMb = "MaxPhotoMb";
     public const string MaxVideoMb = "MaxVideoMb";
 }

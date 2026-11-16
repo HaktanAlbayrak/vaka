@@ -621,6 +621,19 @@
   .choice input {
     @apply mt-1 h-5 w-5 shrink-0 accent-[rgb(var(--accent))];
   }
+  .login-mode {
+    @apply grid grid-cols-2 gap-1 rounded-ui border-2 border-line-strong bg-sunken p-1;
+  }
+  .login-mode-item {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-ui border-2 border-transparent px-2 text-base font-bold text-muted transition-colors duration-150 hover:text-ink;
+  }
+  .login-mode-item[aria-current="page"] {
+    @apply border-accent bg-surface text-accent;
+  }
+  .login-mode-item:focus-visible {
+    outline: 3px solid rgb(var(--accent));
+    outline-offset: 2px;
+  }
   .pin-input {
     @apply font-mono text-2xl tracking-[0.4em];
   }

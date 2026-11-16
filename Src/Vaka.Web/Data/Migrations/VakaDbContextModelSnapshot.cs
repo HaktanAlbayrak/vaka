@@ -1117,6 +1117,13 @@ namespace Vaka.Web.Data.Migrations
                             Key = "MaxVideoMb",
                             Unit = "MB",
                             Value = 100
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Key = "LoginLockMinutes",
+                            Unit = "dakika",
+                            Value = 15
                         });
                 });
 
@@ -1138,6 +1145,14 @@ namespace Vaka.Web.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(true);
+
+                    b.Property<int>("LoginFailedCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(0);
+
+                    b.Property<DateTime?>("LoginLockedUntilUtc")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("MustChangePassword")
                         .HasColumnType("INTEGER");
@@ -1185,6 +1200,7 @@ namespace Vaka.Web.Data.Migrations
                             CreatedAtUtc = new DateTime(2026, 11, 14, 0, 0, 0, 0, DateTimeKind.Utc),
                             FullName = "Süper Admin",
                             IsActive = true,
+                            LoginFailedCount = 0,
                             MustChangePassword = true,
                             MustSetPin = true,
                             PasswordHash = "AQAAAAIAAYagAAAAEP7pSGzAxhrALT7qPx0axoziu+k8Bm98QYmCO4lubR57uLg3035M3nigzCHOMojTwA==",

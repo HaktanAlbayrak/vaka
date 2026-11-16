@@ -23,5 +23,7 @@ public interface IUserAdministration
 
     Task<CommandResult> ResetPinAsync(int actorId, int targetId, string? pin, CancellationToken cancellationToken);
 
+    Task<CommandResult> UnlockLoginAsync(int actorId, int targetId, string? pin, CancellationToken cancellationToken);
+
     Task<CommandResult> ResetPasswordAsync(int actorId, int targetId, string? temporaryPassword, string? pin, CancellationToken cancellationToken);
 }

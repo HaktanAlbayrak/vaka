@@ -17,6 +17,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.PasswordHash).IsRequired().HasMaxLength(256);
         builder.Property(u => u.PinHash).HasMaxLength(256);
         builder.Property(u => u.PinFailedCount).HasDefaultValue(0);
+        builder.Property(u => u.LoginFailedCount).HasDefaultValue(0);
         builder.Property(u => u.IsActive).HasDefaultValue(true);
 
         builder.HasIndex(u => u.RegistryNo).IsUnique();

@@ -13,6 +13,7 @@ namespace Vaka.Web.Controllers;
 public sealed class AccountController : Controller
 {
     private const string StatusKey = "StatusMessage";
+    private const string ModeCookie = "vaka-login-mode";
 
     private readonly IAccountService _accounts;
     private readonly ISystemSettingsReader _settings;
@@ -27,7 +28,7 @@ public sealed class AccountController : Controller
 
     [AllowAnonymous]
     [HttpGet]
-    public IActionResult Login(string? returnUrl, string? reason)
+    public IActionResult Login(string? returnUrl, string? reason, LoginMode? mode)
     {
         if (User.Identity?.IsAuthenticated == true)
         {
@@ -36,6 +37,7 @@ public sealed class AccountController : Controller
 
         return View(new LoginViewModel
         {
+            Mode = mode is { } requested && Enum.IsDefined(requested) ? requested : ReadModeCookie(),
             ReturnUrl = returnUrl,
             StatusMessage = SessionEndReason.Message(reason)
         });
@@ -45,22 +47,45 @@ public sealed class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel model, CancellationToken cancellationToken)
     {
+        var isPin = model.Mode == LoginMode.Pin;
+        ModelState.Remove(nameof(LoginViewModel.Mode));
+        if (isPin && string.IsNullOrEmpty(model.Pin))
+        {
+            ModelState.AddModelError(nameof(LoginViewModel.Pin), "PIN girin.");
+        }
+        else if (!isPin && string.IsNullOrEmpty(model.Password))
+        {
+            ModelState.AddModelError(nameof(LoginViewModel.Password), "Parola girin.");
+        }
+
         if (!ModelState.IsValid)
         {
-            return View(model);
+            return View(ClearSecrets(model));
         }
 
-        var state = await _accounts.SignInAsync(model.RegistryNo.Trim(), model.Password, cancellationToken);
-        if (state is null)
+        var registryNo = model.RegistryNo.Trim();
+        var result = isPin
+            ? await _accounts.SignInWithPinAsync(registryNo, model.Pin!, cancellationToken)
+            : await _accounts.SignInAsync(registryNo, model.Password, cancellationToken);
+
+        if (result.Status != SignInStatus.Success)
         {
-            model.Password = string.Empty;
-            model.ErrorMessage = "Sicil no ya da parola hatalı ya da hesap pasif.";
+            ClearSecrets(model);
+            model.LockedUntilLocal = result.LockedUntilLocal;
+            model.ErrorMessage = result.Status switch
+            {
+                SignInStatus.PinLocked => "PIN'iniz kilitli. Parola ile girin; PIN'i yöneticiniz sıfırlar.",
+                SignInStatus.PasswordRequired => "İlk girişinizi parola ile yapın.",
+                SignInStatus.Invalid => isPin ? "Sicil no ya da PIN hatalı." : "Sicil no ya da parola hatalı.",
+                _ => null
+            };
             return View(model);
         }
 
+        WriteModeCookie(model.Mode);
         await HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
-            AccountPrincipal.Create(state, CookieAuthenticationDefaults.AuthenticationScheme, AccountPrincipal.NewSessionId()),
+            AccountPrincipal.Create(result.State!, CookieAuthenticationDefaults.AuthenticationScheme, AccountPrincipal.NewSessionId()),
             VakaCookieEvents.CreateProperties(_time.GetUtcNow()));
 
         return !string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl)
@@ -169,6 +194,26 @@ public sealed class AccountController : Controller
 
         return View(nameof(Security), await BuildSecurityAsync(new ChangePasswordViewModel(), new ChangePinViewModel(), cancellationToken));
     }
+
+    private static LoginViewModel ClearSecrets(LoginViewModel model)
+    {
+        model.Password = string.Empty;
+        model.Pin = null;
+        return model;
+    }
+
+    private LoginMode ReadModeCookie() =>
+        Request.Cookies[ModeCookie] == "password" ? LoginMode.Password : LoginMode.Pin;
+
+    private void WriteModeCookie(LoginMode mode) =>
+        Response.Cookies.Append(ModeCookie, mode == LoginMode.Password ? "password" : "pin", new CookieOptions
+        {
+            HttpOnly = true,
+            SameSite = SameSiteMode.Lax,
+            Secure = Request.IsHttps,
+            IsEssential = true,
+            MaxAge = TimeSpan.FromDays(365)
+        });
 
     private async Task<FirstLoginViewModel> BuildFirstLoginAsync(AccountState state, FirstLoginViewModel posted, CancellationToken cancellationToken)
     {

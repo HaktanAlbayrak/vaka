@@ -1,0 +1,41 @@
+E-01 ve E-04 responsive matris (m.mjs): 6 genişlik x 2 tema x 10 durum = 120 hücre
+('pin-bos', 'Yöntem:1@1 Sicil no:1@2 PIN:1@3 Giriş yap:1@4', None, None) -> 12 hücre
+('parola-bos', 'Yöntem:1@1 Sicil no:1@2 Parola:1@3 Giriş yap:1@4', None, None) -> 12 hücre
+('pin-istemci-hata', 'Yöntem:1@1 Sicil no:1@2 PIN:1@3 Giriş yap:1@4', None, None) -> 12 hücre
+('pin-yonetici-ret', 'Yöntem:1@1 Bildirim:1@2 Sicil no:1@3 PIN:1@4 Giriş yap:1@5', None, None) -> 12 hücre
+('pin-ilk-giris', 'Yöntem:1@1 Bildirim:1@2 Sicil no:1@3 PIN:1@4 Giriş yap:1@5', None, None) -> 12 hücre
+('pin-kilit', 'Yöntem:1@1 Bildirim:1@2 Sicil no:1@3 PIN:1@4 Giriş yap:1@5', None, None) -> 12 hücre
+('parola-hata', 'Yöntem:1@1 Bildirim:1@2 Sicil no:1@3 Parola:1@4 Giriş yap:1@5', None, None) -> 12 hücre
+('e04-kilitli', None, None, 1) -> 12 hücre
+('e04-kilitli-acik', None, 'p.text-sm:1@1 UnlockLogin-Pin:1@2 button.btn:1@3', 1) -> 12 hücre
+('e04-sayac', None, None, None) -> 12 hücre
+hücre 120 sorunlu 0
+
+360 px açık tema ayrıntı:
+pin-bos ['RegistryNo[ac=off,im=text,v=boş,type=text]', 'Pin[ac=off,im=numeric,v=boş,type=password]'] form ac off odak BODY#    
+parola-bos ['RegistryNo[ac=username,im=text,v=boş,type=text]', 'Password[ac=current-password,im=text,v=boş,type=password]'] form ac off odak BODY#    
+pin-istemci-hata ['RegistryNo[ac=off,im=text,v=boş,type=text]', 'Pin[ac=off,im=numeric,v=boş,type=password]'] form ac off odak INPUT#RegistryNo    
+pin-yonetici-ret ['RegistryNo[ac=off,im=text,v=DOLU,type=text]', 'Pin[ac=off,im=numeric,v=boş,type=password]'] form ac off odak DIV#notice notice-danger ['Sicil no ya da PIN hatalı.']   
+pin-ilk-giris ['RegistryNo[ac=off,im=text,v=DOLU,type=text]', 'Pin[ac=off,im=numeric,v=boş,type=password]'] form ac off odak DIV#notice notice-danger ['İlk girişinizi parola ile yapın.']   
+pin-kilit ['RegistryNo[ac=off,im=text,v=DOLU,type=text]', 'Pin[ac=off,im=numeric,v=boş,type=password]'] form ac off odak DIV#notice notice-danger ['Çok sayıda hatalı giriş. Giriş 01:37 saatine kadar kapalı; yöneticiniz erken açabilir.']   
+parola-hata ['RegistryNo[ac=username,im=text,v=DOLU,type=text]', 'Password[ac=current-password,im=text,v=boş,type=password]'] form ac off odak DIV#notice notice-danger ['Sicil no ya da parola hatalı.']   
+e04-kilitli None form ac None odak None  ['Etkin@34,919', 'Giriş kilitli@116,919'] Hatalı giriş sınırı aşıldı. Giriş 01:37 saatine kadar kapalı, süre dolunca kendiliğinden açılır. {'open': False, 'summaryH': 52}
+e04-kilitli-acik None form ac None odak None  ['Etkin@34,919', 'Giriş kilitli@116,919'] Hatalı giriş sınırı aşıldı. Giriş 01:37 saatine kadar kapalı, süre dolunca kendiliğinden açılır. {'open': True, 'summaryH': 54, 'sig': 'p.text-sm:1@1 UnlockLogin-Pin:1@2 button.btn:1@3'}
+e04-sayac None form ac None odak None  ['Etkin@34,919'] Hatalı giriş sayacı: 2. Başarılı girişte sıfırlanır. 
+
+Klavye ve durumlar:
+giriş yükleniyor ["BUSY {\"prevented\":false,\"ariaBusy\":\"true\",\"disabled\":true,\"text\":\"Giriş yap\"}"]
+E-04 yanlış PIN 360 {"url":"/users/unlock-login/8","open":true,"err":"PIN hatalı.","hScroll":false} INPUT#UnlockLogin-Pin ring=true
+E-04 halkasız odak 360 ["BODY# ring=false","BODY# ring=false"] konsol []
+E-04 doğru PIN 1440 {"url":"/users/edit/8","status":["Giriş kilidi açıldı.","Giriş kilidi açıldı."],"badges":["Etkin"],"unlockForm":false}
+E-04 halkasız odak 1440 ["BODY# ring=false"] konsol []
+giriş Tab 360 light A#İçeriğe geç > BUTTON#Koyu tema > A#PIN ile > A#Parola ile > INPUT#RegistryNo > INPUT#Pin > BUTTON#PIN'i göster > BUTTON#Giriş yap > BODY#İçeriğe geç
+(halkasız)
+giriş Tab 1280 dark A#İçeriğe geç > BUTTON#Tam ekrana geç > BUTTON#Koyu tema > A#PIN ile > A#Parola ile > INPUT#RegistryNo > INPUT#Pin > BUTTON#PIN'i göster > BUTTON#Giriş yap
+
+Kontrast (AA altı öğe):
+light giriş (kilit metni) {}
+light E-04 {}
+dark giriş (kilit metni) {}
+dark E-04 {}
+Not: under44 'SelectedRoles 20x20' rol onay kutusu; dokunma hedefi onu saran etiket (.choice 292x74 px), Faz 1'den beri değişmedi, sayımdan çıkarıldı.

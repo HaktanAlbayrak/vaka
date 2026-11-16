@@ -1,0 +1,111 @@
+Faz 6F giriş kanıtı (QA kopyası .qa/f6fqa/qa.db, port 5901). Saatler UTC; ekrandaki saat Türkiye (UTC+3). cnt/sayaç satırı: (LoginFailedCount, LoginLockedUntilUtc, PinFailedCount, PinLockedAtUtc).
+
+== K1, K2, K6, K7 (k-basic)
+22:16:55 K1 2002 PIN 302 / -> 302 /my-work [] ('pin', 1826403415) (0, None, 0, None)
+22:16:55 K2 PIN modu 1001 200 None ['Sicil no ya da PIN hatalı.'] sayaç önce (0, None, 0, None) sonra (0, None, 0, None)
+22:16:55 K2 PIN modu 3001 200 None ['Sicil no ya da PIN hatalı.'] sayaç önce (0, None, 0, None) sonra (0, None, 0, None)
+22:16:55 K2 PIN modu 0001 200 None ['Sicil no ya da PIN hatalı.'] sayaç önce (0, None, 0, None) sonra (0, None, 0, None)
+22:16:56 K2 parola modu 1001 302 / [] (0, None, 0, None)
+22:16:56 K2 parola modu 3001 302 / [] (0, None, 0, None)
+22:16:56 K2 parola modu 0001 302 / [] (0, None, 0, None)
+22:16:56 K6 olmayan sicil pin 200 ['Sicil no ya da PIN hatalı.']
+22:16:56 K6 olmayan sicil password 200 ['Sicil no ya da parola hatalı.']
+22:16:56 K6 pasif 2005 pin 200 ['Sicil no ya da PIN hatalı.'] (0, None, 0, None)
+22:16:56 K6 pasif 2005 password 200 ['Sicil no ya da parola hatalı.'] (0, None, 0, None)
+22:16:56 K6 karşılaştırma yanlış PIN ['Sicil no ya da PIN hatalı.']
+22:16:57 K6 karşılaştırma yanlış parola ['Sicil no ya da parola hatalı.']
+22:16:57 K6 Users özeti (olmayan sicil ve pasif denemeleri öncesi/sonrası) dcd5b06823a40882 8daf750ab2ae1f15
+22:16:57 2002 sayaç (2 yanlış sonrası) (2, None, 0, None)
+22:16:57 K7 2901 PIN 200 ['İlk girişinizi parola ile yapın.'] (0, None, 0, None)
+22:16:57 İşlem PIN i kilitli 2004 PIN girişi 302 / [] (0, None, 5, '2026-11-16 21:02:01.1555117')
+22:17:09 K6/K2 Users tablosu özeti, olmayan sicil + pasif + uygun olmayan hesapta yanlış PIN öncesi/sonrası: 8daf750ab2ae1f15 8daf750ab2ae1f15 aynı
+['<input type="checkbox" name="SelectedRoles" id="SelectedRoles-Operator" value="Operator" />', '<input type="checkbox" name="SelectedRoles" id="SelectedRoles-Manager" value="Manager" />', '<input type="checkbox" name="SelectedRoles" id="SelectedRoles-Auditor" value="Auditor" />', '<input type="checkbox" name="SelectedRoles" id="SelectedRoles-SuperAdmin" value="SuperAdmin" />']
+22:17:28 Süper admin çoklu rollü hesap oluşturdu 302 /users 
+22:17:28 Yönetici yeni operatör oluşturdu 302 /users 
+22:17:41 K7 2970 ilk giriş öncesi PIN modu 200 ['Sicil no ya da PIN hatalı.'] (0, None, 0, None)
+22:17:41 K7 2970 parola ile 302 / -> 302 /account/first-login
+22:17:42 K7 2970 ilk giriş tamamlama 302 / 
+22:17:42 K7 2971 ilk giriş öncesi PIN modu 200 ['İlk girişinizi parola ile yapın.'] (0, None, 0, None)
+22:17:42 K7 2971 parola ile 302 / -> 302 /account/first-login
+22:17:42 K7 2971 ilk giriş tamamlama 302 / 
+22:17:42 K2 çoklu rol (Operatör+Yönetici) PIN modu 2970 200 ['Sicil no ya da PIN hatalı.'] sayaç (0, None, 0, None) -> (0, None, 0, None)
+22:17:42 K2 çoklu rol parola modu 2970 302 /
+22:17:42 2971 ilk giriş sonrası PIN 302 / []
+22:17:53 K7 1001, 2001 PIN sıfırladı 302 /users/edit/3 [(1, 1)]
+22:17:53 K7 PIN i sıfırlanmış 2001 PIN modu 200 ['İlk girişinizi parola ile yapın.'] (0, None, 0, None)
+
+== K3, K4 (k3k4)
+22:18:17 K3 başlangıç 2006 (0, None, 0, None)
+22:18:18 K3 yanlış PIN 1 istemci UTC 22:18:17.918 ['Sicil no ya da PIN hatalı.'] (1, None, 0, None)
+22:18:18 K3 yanlış PIN 2 istemci UTC 22:18:18.042 ['Sicil no ya da PIN hatalı.'] (2, None, 0, None)
+22:18:18 K3 yanlış PIN 3 istemci UTC 22:18:18.159 ['Sicil no ya da PIN hatalı.'] (3, None, 0, None)
+22:18:18 K3 yanlış PIN 4 istemci UTC 22:18:18.268 ['Sicil no ya da PIN hatalı.'] (4, None, 0, None)
+22:18:18 K3 yanlış PIN 5 istemci UTC 22:18:18.374 ['Çok sayıda hatalı giriş. Giriş 01:33 saatine kadar kapalı; yöneticiniz erken açabilir.'] (5, '2026-11-16 22:33:18.4752084', 0, None)
+22:18:18 K3 kilit bitişi 2026-11-16 22:33:18.4752084 - son deneme ~ 22:18:18 = fark sn 900.1
+22:18:18 K3 kilitliyken doğru PIN 200 None ['Çok sayıda hatalı giriş. Giriş 01:33 saatine kadar kapalı; yöneticiniz erken açabilir.'] (5, '2026-11-16 22:33:18.4752084', 0, None)
+22:18:18 K3 kilitliyken doğru parola 200 None ['Çok sayıda hatalı giriş. Giriş 01:33 saatine kadar kapalı; yöneticiniz erken açabilir.'] (5, '2026-11-16 22:33:18.4752084', 0, None)
+22:18:18 K3 beklenen yerel saat 01:33
+22:18:19 K4 1002 (Yönetici) 5 yanlış parola ['Çok sayıda hatalı giriş. Giriş 01:33 saatine kadar kapalı; yöneticiniz erken açabilir.'] (5, '2026-11-16 22:33:19.0695838', 0, None)
+22:18:19 K4 1001 -> /users/edit/10 (başka Yönetici, kilitli) 302 http://127.0.0.1:5901/account/access-denied?ReturnUrl=%2Fusers%2Fedit%2F10 açma formu yok False
+22:18:19 K4 1001 elle POST unlock-login/10 302 http://127.0.0.1:5901/account/access-denied?ReturnUrl=%2Fusers%2Funlock-login%2F10 (5, '2026-11-16 22:33:19.0695838', 0, None)
+22:18:19 K4 1001 -> /users/edit/1 (Süper admin) 302 http://127.0.0.1:5901/account/access-denied?ReturnUrl=%2Fusers%2Fedit%2F1
+22:18:19 K4 1001 elle POST unlock-login/1 302 http://127.0.0.1:5901/account/access-denied?ReturnUrl=%2Fusers%2Funlock-login%2F1
+22:18:19 K4 1001 -> /users/edit/8 (Operatör, kilitli) 200 açma formu
+22:18:19 K4 Yönetici operatör kilidini açtı 302 /users/edit/8 (0, None, 0, None) ['Giriş kilidi açıldı.']
+22:18:19 K4 açılan 2006 hemen PIN ile 302 / (0, None, 0, None)
+22:18:20 K4 1001 5 yanlış parola ['Çok sayıda hatalı giriş. Giriş 01:33 saatine kadar kapalı; yöneticiniz erken açabilir.'] (5, '2026-11-16 22:33:20.0193289', 0, None)
+22:18:20 K4 kilitli 1001 doğru parola 200 ['Çok sayıda hatalı giriş. Giriş 01:33 saatine kadar kapalı; yöneticiniz erken açabilir.']
+22:18:20 K4 Süper admin -> /users/edit/2 200 açma formu True
+22:18:20 K4 Süper admin yanlış PIN ile açma 200 None ['\n            '] (5, '2026-11-16 22:33:20.0193289', 0, None) 0001 işlem sayacı [(1,)]
+22:18:20 K4 Süper admin doğru PIN ile açtı 302 /users/edit/2 (0, None, 0, None)
+22:18:20 K4 1001 hemen girdi 302 / (0, None, 0, None)
+22:18:20 K4 Süper admin -> /users/edit/10 (1002 kilitli) 200 açma formu
+
+== K5 (k5)
+22:18:31 K5 QA kopyası: LoginLockMinutes = 1 [(1,)]
+22:18:31 K5 2971 5 yanlış PIN ['Çok sayıda hatalı giriş. Giriş 01:19 saatine kadar kapalı; yöneticiniz erken açabilir.'] (5, '2026-11-16 22:19:31.9355721', 0, None)
+22:18:31 K5 süre dolmadan doğru PIN 200 ['Çok sayıda hatalı giriş. Giriş 01:19 saatine kadar kapalı; yöneticiniz erken açabilir.']
+22:19:37 K5 66 sn sonra, sayaç (5, '2026-11-16 22:19:31.9355721', 0, None)
+22:19:38 K5 süre dolduktan sonra bir yanlış PIN 200 ['Sicil no ya da PIN hatalı.'] (1, None, 0, None)
+22:19:38 K5 doğru PIN 302 / [] (0, None, 0, None)
+22:19:38 K5 ayar geri 15 [(15,)]
+
+== K8, K9 HTTP (k8k9)
+22:20:16 K8 çerezsiz GET /account/login: PIN seçili mi True
+22:20:16 K8 3001 parola ile giriş 302 /
+22:20:16   Set-Cookie /account/login .AspNetCore.Antiforgery.ayl5... path=/;samesite=strict;httponly
+22:20:16   Set-Cookie /account/login?mode=password vaka-login-mode=password... max-age=31536000;path=/;samesite=lax;httponly
+22:20:16   Set-Cookie /account/login?mode=password .AspNetCore.Cookies=CfDJ8NaY... path=/;samesite=lax;httponly
+22:20:16 K8 çıkış (Kullanıcı değiştir aynı form /account/logout) 302 /account/login?reason=signed-out&mode=Pin
+22:20:16 K8 çıkış sonrası sayfa: PIN seçili True alanlar ['RegistryNo', 'Pin'] değer dolu? False
+22:20:16 K8 aynı tarayıcı, mode yok: son seçim (parola) hatırlandı mı True
+22:20:16   Set-Cookie /records .AspNetCore.Cookies=CfDJ8NaY... path=/;samesite=lax;httponly
+22:20:16   Set-Cookie /account/logout .AspNetCore.Cookies=... expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;samesite=lax;httponly
+22:20:16 K9 2002 pin yetki {'/my-work': 200, '/records/create': 200, '/users': 302, '/reports/durations': 302, '/records': 200} auth çerez öznitelikleri ['path=/;samesite=strict;httponly', 'path=/;samesite=lax;httponly']
+22:20:16 K9 2002 password yetki {'/my-work': 200, '/records/create': 200, '/users': 302, '/reports/durations': 302, '/records': 200} auth çerez öznitelikleri ['path=/;samesite=strict;httponly', 'path=/;samesite=lax;httponly']
+
+== K8 JS kapalı ve K14 (tarayıcı)
+K8 JS kapalı ilk açılış: PIN ile* Parola ile | alanlar RegistryNo=boş,Pin=boş
+K8 JS kapalı 'Parola ile': /account/login?mode=password PIN ile Parola ile* | alanlar RegistryNo=boş,Password=boş
+K8 JS kapalı parola girişi -> /dashboard
+K8 JS kapalı çıkış -> /account/login?reason=signed-out&mode=Pin PIN ile* Parola ile | alanlar RegistryNo=boş,Pin=boş
+K8 aynı tarayıcı, mode yok: PIN ile Parola ile* | alanlar RegistryNo=boş,Password=boş
+K8 JS kapalı PIN girişi -> /my-work
+K14 checkVisibility var | giriş açılış odak BODY | boş gönderim RegistryNo | sunucu hatası notice notice-danger | Run Bitir yanlış PIN odak pin-finish-160 görünümde=true | hata []
+K14 checkVisibility SİLİNDİ | giriş açılış odak BODY | boş gönderim RegistryNo | sunucu hatası notice notice-danger | Run Bitir yanlış PIN odak pin-finish-160 görünümde=true | hata []
+
+== Yanıt süresi (VerifyDecoy etkisi)
+22:21:48 Süre (ms) olmayan sicil medyan 71.4 aralık 68.8 - 77.9
+22:21:48 Süre (ms) uygun olmayan (1001) medyan 68.6 aralık 66.0 - 75.5
+22:21:48 Süre (ms) uygun, yanlış PIN (2971) medyan 73.5 aralık 67.2 - 75.7
+22:21:48 Süre (ms) uygun, doğru PIN (2971) medyan 72.8 aralık 64.4 - 76.7
+22:21:48 2971 sayaç (0, None, 0, None)
+
+== G5, G5a
+22:27:21 G5 belirteçsiz POST /account/login 400
+22:27:21 G5 belirteçsiz POST /users/unlock-login/8 400
+22:27:21 G5a /account/login?mode=pin POST form 1 belirteç!=1 []
+22:27:21 G5a /account/login?mode=password POST form 1 belirteç!=1 []
+22:27:21 G5a /users/edit/8 POST form 6 belirteç!=1 []
+22:27:21 G5a /users/edit/4 POST form 6 belirteç!=1 []
+22:27:21 2002 sayaç (belirteçsiz deneme yazmadı mı) (0, None, 0, None)

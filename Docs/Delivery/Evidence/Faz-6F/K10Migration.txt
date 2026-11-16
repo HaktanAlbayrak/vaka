@@ -1,0 +1,7 @@
+K10 migration ve Guard kanıtı
+
+Guard.mjs'e dotnet ef database update girdisi verildi:
+{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"ALTER onayı gerekli: 20261116214722_AddLoginLockToUsers.cs (migrationBuilder.AddColumn) mevcut tabloyu değiştiriyor. DB kaydında (Docs/Db) onay satırı olmalı."}}
+
+Up() (satır 12-34): AddColumn<int> LoginFailedCount, AddColumn<DateTime> LoginLockedUntilUtc, InsertData SystemSettings. Drop* yalnız Down() (satır 35 sonrası).
+Kopyaya uygulama sonrası: satır sayısı değişen tablolar [('__EFMigrationsHistory', 7, 8), ('SystemSettings', 6, 7)]; Users 61 satır, LoginFailedCount toplamı 0, LoginLockedUntilUtc dolu 0; SystemSettings (7, 'LoginLockMinutes', 15, 'dakika'); integrity_check ok; foreign_key_check boş.

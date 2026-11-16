@@ -13,6 +13,7 @@
     var openPin = path.Contains("/reset-pin/");
     var openPassword = path.Contains("/reset-password/");
     var openActivate = path.Contains("/activate/");
+    var openUnlock = path.Contains("/unlock-login/");
 
     var roleOrder = new[] { Roles.Operator, Roles.Manager, Roles.Auditor, Roles.SuperAdmin };
     var shownRoles = roleOrder.Where(role => Model.AvailableRoles.Contains(role) || Model.SelectedRoles.Contains(role)).ToList();
@@ -112,7 +113,23 @@
                     {
                         <partial name="_Badge" model='"user.firstlogin"' />
                     }
+                    @if (Model.LoginLockedUntilLocal.HasValue)
+                    {
+                        <span class="badge badge-danger"><svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#lock" /></svg><span>Giriş kilitli</span></span>
+                    }
                 </div>
+                @if (Model.LoginLockedUntilLocal.HasValue)
+                {
+                    <p class="px-4 pb-4 text-sm text-muted md:px-5 md:pb-5">
+                        Hatalı giriş sınırı aşıldı. Giriş <span class="font-mono">@Model.LoginLockedUntilLocal.Value.ToString("HH:mm")</span> saatine kadar kapalı, süre dolunca kendiliğinden açılır.
+                    </p>
+                }
+                else if (Model.LoginFailedCount > 0)
+                {
+                    <p class="px-4 pb-4 text-sm text-muted md:px-5 md:pb-5">
+                        Hatalı giriş sayacı: <span class="font-mono">@Model.LoginFailedCount</span>. Başarılı girişte sıfırlanır.
+                    </p>
+                }
                 @if (Model.MustChangePassword || Model.MustSetPin)
                 {
                     <p class="px-4 pb-4 text-sm text-muted md:px-5 md:pb-5">
@@ -122,6 +139,26 @@
                     </p>
                 }
             </section>
+
+            @if (Model.CanUnlockLogin)
+            {
+                <details class="panel disclosure" open="@openUnlock">
+                    <summary>
+                        <span>Giriş kilidini aç</span>
+                        <svg class="icon disclosure-chevron" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                    </summary>
+                    <form method="post" action="/users/unlock-login/@Model.Id" asp-antiforgery="true" class="space-y-5 p-4 md:p-5" data-validate data-busy-form>
+                        <p class="text-sm text-muted">Hatalı giriş sayacı sıfırlanır ve kullanıcı hemen girebilir.</p>
+                        <div class="max-w-xs">
+                            <partial name="_PinInput" model='("UnlockLogin-Pin", "PIN", "verify", (int?)null, "UnlockLogin.Pin", (string?)null)' />
+                        </div>
+                        <button type="submit" class="btn btn-secondary" data-requires-online>
+                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#lock-open" /></svg>
+                            Giriş kilidini aç
+                        </button>
+                    </form>
+                </details>
+            }
 
             @if (Model.CanResetPin)
             {

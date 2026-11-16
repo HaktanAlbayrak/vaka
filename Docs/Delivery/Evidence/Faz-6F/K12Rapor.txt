@@ -1,0 +1,9 @@
+K12 E-30 okunamayan süzgeç ve geçerli süzgeçte 6E ile karşılaştırma (6E yayını .qa/f6e/t2/build, aynı DB'nin kopyası, port 5902)
+22:20:55 K12 /reports/durations?from=abc&machineId=1 200 ({'facilityId': [('1', 'T1 - Ana tesis')], 'lineId': [('1', 'H1 - Hazırlık hattı')], 'machineId': [('1', 'M01 - Karıştırıcı')], 'from': ''}, 'Rapor hazırlanamadı Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. </div', 0)
+22:20:55 K12 /reports/machine?from=abc&machineId=1 200 ({'facilityId': [('1', 'T1 - Ana tesis')], 'lineId': [('1', 'H1 - Hazırlık hattı')], 'machineId': [('1', 'M01 - Karıştırıcı')], 'from': ''}, 'Rapor hazırlanamadı Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. <p class="', 0)
+22:20:55 K12 /reports/materials?mode=Usage&from=abc&machineId=1 200 ({'facilityId': [('1', 'T1 - Ana tesis')], 'lineId': [('1', 'H1 - Hazırlık hattı')], 'machineId': [('1', 'M01 - Karıştırıcı')], 'from': ''}, 'Rapor hazırlanamadı Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. </', 0)
+22:20:55 K12 /reports/durations?machineId=1 200 ({'facilityId': [('1', 'T1 - Ana tesis')], 'lineId': [('1', 'H1 - Hazırlık hattı')], 'machineId': [('1', 'M01 - Karıştırıcı')], 'from': ''}, '-', 24)
+22:20:56 K12 /reports/durations 200 ({'facilityId': [], 'lineId': [], 'machineId': [], 'from': ''}, '-', 27)
+22:21:18 K12 geçerli süzgeç 6E ile aynı mı /reports/durations?machineId=1 True 61543 61543
+22:21:19 K12 geçerli süzgeç 6E ile aynı mı /reports/durations True 70624 70624
+22:21:19 K12 geçerli süzgeç 6E ile aynı mı /reports/durations?kind=Planned&facilityId=1 True 63094 63094

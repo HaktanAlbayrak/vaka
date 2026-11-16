@@ -26,6 +26,12 @@ public sealed class UserFormViewModel
 
     public bool MustSetPin { get; set; }
 
+    public DateTime? LoginLockedUntilLocal { get; set; }
+
+    public int LoginFailedCount { get; set; }
+
+    public bool CanUnlockLogin { get; set; }
+
     public bool CanResetPin { get; set; }
 
     public bool CanResetPassword { get; set; }
@@ -43,6 +49,9 @@ public sealed class UserFormViewModel
 
     [ValidateNever]
     public UserResetViewModel ResetPassword { get; set; } = new();
+
+    [ValidateNever]
+    public UserResetViewModel UnlockLogin { get; set; } = new();
 
     [ValidateNever]
     public UserResetViewModel Activate { get; set; } = new();

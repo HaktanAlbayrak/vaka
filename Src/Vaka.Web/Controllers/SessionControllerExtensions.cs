@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Vaka.Web.Services;
+using Vaka.Web.ViewModels.Account;
 
 namespace Vaka.Web.Controllers;
 
@@ -11,7 +12,7 @@ public static class SessionControllerExtensions
     public static async Task<IActionResult> SignOutToLoginAsync(this Controller controller, string reason)
     {
         await controller.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return controller.RedirectToAction("Login", "Account", new { reason });
+        return controller.RedirectToAction("Login", "Account", new { reason, mode = LoginMode.Pin });
     }
 
     /// <summary>Alan adı verilen önekle birleşir; alana bağlı olmayan hata boş anahtarla eklenir.</summary>

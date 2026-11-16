@@ -10,11 +10,15 @@ public sealed class UserDirectory : IUserDirectory
 
     private readonly VakaDbContext _db;
     private readonly IOpenWorkProvider _openWork;
+    private readonly ITurkeyClock _clock;
+    private readonly TimeProvider _time;
 
-    public UserDirectory(VakaDbContext db, IOpenWorkProvider openWork)
+    public UserDirectory(VakaDbContext db, IOpenWorkProvider openWork, ITurkeyClock clock, TimeProvider time)
     {
         _db = db;
         _openWork = openWork;
+        _clock = clock;
+        _time = time;
     }
 
     public async Task<UserListViewModel> ListAsync(
@@ -107,7 +111,9 @@ public sealed class UserDirectory : IUserDirectory
                 user.IsActive,
                 IsPinLocked = user.PinLockedAtUtc != null,
                 user.MustChangePassword,
-                user.MustSetPin
+                user.MustSetPin,
+                user.LoginFailedCount,
+                user.LoginLockedUntilUtc
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -122,6 +128,7 @@ public sealed class UserDirectory : IUserDirectory
         }
 
         var block = await UserQueries.GetDeactivateBlockAsync(_db, actorId, target.Id, target.IsActive, cancellationToken);
+        var lockActive = target.LoginLockedUntilUtc > _time.GetUtcNow().UtcDateTime;
         return LookupResult<UserFormViewModel>.Found(new UserFormViewModel
         {
             Id = target.Id,
@@ -134,6 +141,9 @@ public sealed class UserDirectory : IUserDirectory
             IsPinLocked = target.IsPinLocked,
             MustChangePassword = target.MustChangePassword,
             MustSetPin = target.MustSetPin,
+            LoginFailedCount = target.LoginFailedCount,
+            LoginLockedUntilLocal = lockActive ? _clock.ToLocal(target.LoginLockedUntilUtc!.Value) : null,
+            CanUnlockLogin = lockActive,
             CanResetPin = true,
             CanResetPassword = true,
             CanDeactivate = block is null,

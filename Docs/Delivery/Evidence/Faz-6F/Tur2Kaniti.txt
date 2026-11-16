@@ -1,0 +1,36 @@
+Faz 6F tur 2 kanıtı (2026-11-17). Yayın .qa/f6fqa/t2/build (çalışma ağacı kopyası; AccountService.cs, AccountController.cs, SignInResult.cs, ILoginAttemptGuard.cs repodakiyle bayt bayt aynı). DB .qa/f6fqa/qa.db'nin yeni kopyası .qa/f6fqa/t2/qa.db, port 5911. Sayaç: (LoginFailedCount, LoginLockedUntilUtc, PinFailedCount, PinLockedAtUtc).
+
+== B1: işlem PIN'i arayüzden kilitlendi (2971, /account/security PIN değiştir formunda 5 yanlış mevcut PIN), sonra PIN modu ve parola
+22:40:09 başlangıç 2971 (0, None, 0, None)
+22:40:13 2971 kilitsiz PIN girişi (K1 gerilemesi) 302 / [] (0, None, 0, None)
+22:40:14 işlem formu (PIN değiştir) yanlış mevcut PIN 1 200  ['\n            '] (0, None, 1, None)
+22:40:14 işlem formu (PIN değiştir) yanlış mevcut PIN 2 200  ['\n            '] (0, None, 2, None)
+22:40:14 işlem formu (PIN değiştir) yanlış mevcut PIN 3 200  ['\n            '] (0, None, 3, None)
+22:40:14 işlem formu (PIN değiştir) yanlış mevcut PIN 4 200  ['\n            '] (0, None, 4, None)
+22:40:14 işlem formu (PIN değiştir) yanlış mevcut PIN 5 302 /account/login?reason=pin-locked&mode=Pin [] (0, None, 5, '2026-11-16 22:40:14.8215952')
+22:40:14 B1 işlem PIN i kilitli 2971 PIN modu doğru PIN 200 None ["PIN'iniz kilitli. Parola ile girin; PIN'i yöneticiniz sıfırlar."] kilit saati görünür mü False (0, None, 5, '2026-11-16 22:40:14.8215952')
+22:40:15 B1 işlem PIN i kilitli 2971 PIN modu yanlış PIN 200 None ["PIN'iniz kilitli. Parola ile girin; PIN'i yöneticiniz sıfırlar."] kilit saati görünür mü False (0, None, 5, '2026-11-16 22:40:14.8215952')
+22:40:15 B1 sayaçlar önce (0, None, 5, '2026-11-16 22:40:14.8215952') sonra (0, None, 5, '2026-11-16 22:40:14.8215952') Users özeti aynı True
+22:40:15 B1 2971 parola ile 302 / []
+
+== Gerileme
+22:40:26 B1 6E den kilitli 2004 PIN modu 200 ["PIN'iniz kilitli. Parola ile girin; PIN'i yöneticiniz sıfırlar."] (0, None, 5, '2026-11-16 21:02:01.1555117')
+22:40:26 K1 kilitsiz 2002 PIN 302 / [] (0, None, 0, None)
+22:40:27 K3 2002 5 yanlış PIN ['Çok sayıda hatalı giriş. Giriş 01:55 saatine kadar kapalı; yöneticiniz erken açabilir.'] (5, '2026-11-16 22:55:27.057622', 0, None)
+22:40:27 K3 kilitliyken doğru PIN 200 ['Çok sayıda hatalı giriş. Giriş 01:55 saatine kadar kapalı; yöneticiniz erken açabilir.']
+22:40:27 K3 kilitliyken doğru parola 200 ['Çok sayıda hatalı giriş. Giriş 01:55 saatine kadar kapalı; yöneticiniz erken açabilir.']
+22:40:27 K7 PIN i sıfırlanmış 2001 200 ['İlk girişinizi parola ile yapın.'] (0, None, 0, None)
+22:40:27 K7 2901 200 ['İlk girişinizi parola ile yapın.']
+22:40:27 Yönetici / olmayan sicil PIN modu 1001 200 ['Sicil no ya da PIN hatalı.']
+22:40:27 Yönetici / olmayan sicil PIN modu 9999 200 ['Sicil no ya da PIN hatalı.']
+22:40:27 Users özeti değişmedi True
+
+== Arayüz (320, 360, 1440; açık ve koyu): metin, taşma, kenar farkı, odak, konsol
+light 320 {"text":"PIN'iniz kilitli. Parola ile girin; PIN'i yöneticiniz sıfırlar.","hScroll":false,"noticeEdge":[0,0],"innerOvf":false,"overflowing":0,"focus":"notice notice-danger","pin":"boş","sicil":"2971","emdash":false,"h1":1} konsol []
+light 360 {"text":"PIN'iniz kilitli. Parola ile girin; PIN'i yöneticiniz sıfırlar.","hScroll":false,"noticeEdge":[0,0],"innerOvf":false,"overflowing":0,"focus":"notice notice-danger","pin":"boş","sicil":"2971","emdash":false,"h1":1} konsol []
+light 1440 {"text":"PIN'iniz kilitli. Parola ile girin; PIN'i yöneticiniz sıfırlar.","hScroll":false,"noticeEdge":[0,0],"innerOvf":false,"overflowing":0,"focus":"notice notice-danger","pin":"boş","sicil":"2971","emdash":false,"h1":1} konsol []
+dark 320 {"text":"PIN'iniz kilitli. Parola ile girin; PIN'i yöneticiniz sıfırlar.","hScroll":false,"noticeEdge":[0,0],"innerOvf":false,"overflowing":0,"focus":"notice notice-danger","pin":"boş","sicil":"2971","emdash":false,"h1":1} konsol []
+dark 360 {"text":"PIN'iniz kilitli. Parola ile girin; PIN'i yöneticiniz sıfırlar.","hScroll":false,"noticeEdge":[0,0],"innerOvf":false,"overflowing":0,"focus":"notice notice-danger","pin":"boş","sicil":"2971","emdash":false,"h1":1} konsol []
+dark 1440 {"text":"PIN'iniz kilitli. Parola ile girin; PIN'i yöneticiniz sıfırlar.","hScroll":false,"noticeEdge":[0,0],"innerOvf":false,"overflowing":0,"focus":"notice notice-danger","pin":"boş","sicil":"2971","emdash":false,"h1":1} konsol []
+
+Ekran görüntüsü .qa/f6fqa/t2/pinkilitli-360-light.png (kanıt sınırı nedeniyle repoya alınmadı).

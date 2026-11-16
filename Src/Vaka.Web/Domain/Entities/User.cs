@@ -11,6 +11,8 @@ public class User
     public bool MustSetPin { get; set; }
     public int PinFailedCount { get; set; }
     public DateTime? PinLockedAtUtc { get; set; }
+    public int LoginFailedCount { get; set; }
+    public DateTime? LoginLockedUntilUtc { get; set; }
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAtUtc { get; set; }
 
