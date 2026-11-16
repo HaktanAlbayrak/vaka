@@ -38,6 +38,7 @@ Her faz kendi commit'iyle teslim edilir; teslim raporu aynı commit'te `Docs/Del
 
 | Tarih | Commit | Değişiklik |
 |---|---|---|
+| 2026-11-17 | 2f0d2f1 | Düzeltme D-3: talimat fotoğrafı ve videosu adım kartında panel açmadan eklenir, kayıt detayında önizleme ([rapor](Docs/Delivery/Duzeltme-D3-Teslim.md)) |
 | 2026-11-17 | 6400bdd | Düzeltme D-2: görevli panelinde "Görevleri düzenle" yerine "Yardımcı ekle" ve yardımcı terimiyle metinler ([rapor](Docs/Delivery/Duzeltme-D2-Teslim.md)) |
 | 2026-11-17 | 6b0fc76 | Faz 6F: operatör PIN ile girer, giriş deneme sınırı ve 15 dakikalık kilit, yönetici kilidi açar; son regresyon |
 | 2026-11-17 | aa929cf | Faz 6E: görevli kendi PIN'iyle adıma katılır ve ayrılır, girişi bekleyen varken adım bitmez, efor kişi çalışma sürelerinden |
