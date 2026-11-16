@@ -211,4 +211,18 @@ public interface IDurationCalculator
     /// Faz ve adım ortalamaları aynı tip versiyonunun kayıtları içinde alınır; farklı versiyonlar ayrı satırdır. Toplam long ile alınır, taşma olmaz.
     /// </remarks>
     int CalculateAverage(IReadOnlyList<int> values);
+
+    /// <summary>
+    /// Kaydın planlanan minimum süresi, saniye (SH-18, PL-85).
+    /// Planlanan minimum = Σ kaydın <c>RecordPhases.MinDurationSecondsSnapshot</c> dolu değerleri; hiçbiri dolu değilse boş
+    /// </summary>
+    /// <remarks>Acil kaydın fazlarında minimum yoktur, sonuç boştur. Anlık değer kullanılır; prosedür sonradan değişse de kayıt etkilenmez.</remarks>
+    int? CalculateRecordPlannedMinimum(IReadOnlyList<int?> phaseMinimumSnapshots);
+
+    /// <summary>
+    /// Plan farkı, saniye (SH-19, PL-85).
+    /// Plan farkı = ortalama net süre (SH-15) - ortalama planlanan minimum (SH-15 ile alınmış SH-18 değerleri)
+    /// </summary>
+    /// <remarks>Pozitif fark ortalamanın planlanan minimumdan uzun sürdüğünü, negatif fark kısa sürdüğünü gösterir.</remarks>
+    int CalculatePlanVariance(int averageNetSeconds, int averagePlannedMinimumSeconds);
 }

@@ -122,6 +122,8 @@ builder.Services.AddScoped<IEmergencyForm, EmergencyForm>();
 builder.Services.AddScoped<IReportOptions, ReportOptions>();
 builder.Services.AddScoped<IDurationReportReader, DurationReportReader>();
 builder.Services.AddScoped<IMaterialTraceReader, MaterialTraceReader>();
+builder.Services.AddScoped<IMaterialUsageReader, MaterialUsageReader>();
+builder.Services.AddScoped<IMachineReportReader, MachineReportReader>();
 
 var app = builder.Build();
 

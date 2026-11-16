@@ -1,0 +1,93 @@
+Faz 6D Tur 2 - yeniden denetim ölçümleri (Release .qa/f6d/build2, port 5798, DB .qa/f6d/qa.db, Chromium oturum f6d, Yönetici 1001)
+
+== B1 ve B3: dört ekran x hatasız boşaltma ve hata girdileri (verify_b1.py) ==
+Sütunlar: seçenek sayısı/seçili değer ('-' seçili yok); tablo = çizilen veri tablosu sayısı.
+== E-34
+  &facilityId=2&machineId=1                     200 hata: -                                                              tesis 2/2    hat 1/-    makine 1/-    tablo 0 
+  &facilityId=1&lineId=2&machineId=1            200 hata: -                                                              tesis 2/1    hat 2/2    makine 2/-    tablo 0 
+  &facilityId=2&lineId=1                        200 hata: -                                                              tesis 2/2    hat 1/-    makine 1/-    tablo 0 
+  &machineId=999                                200 hata: Seçilen makine bulunamadı ya da hatta ait değil.               tesis 2/-    hat 0/-    makine 0/-    tablo 0 
+  &lineId=999                                   200 hata: Seçilen hat bulunamadı ya da tesise ait değil.                 tesis 2/-    hat 0/-    makine 0/-    tablo 0 
+  &facilityId=999                               200 hata: Seçilen tesis bulunamadı.                                      tesis 2/-    hat 0/-    makine 0/-    tablo 0 
+  &from=2026-11-16&to=2026-11-15&machineId=1    200 hata: Bitiş tarihi başlangıç tarihinden önce olamaz.                 tesis 2/1    hat 2/1    makine 2/1    tablo 0 
+  &machineId=1                                  200 hata: -                                                              tesis 2/1    hat 2/1    makine 2/1    tablo 3 
+  &machineId=1&from=abc                         200 hata: Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontro tesis 2/1    hat 2/1    makine 2/1    tablo 0 
+== E-30
+  &facilityId=2&machineId=1                     200 hata: -                                                              tesis 2/2    hat 1/-    makine 1/-    tablo 0 
+  &facilityId=1&lineId=2&machineId=1            200 hata: -                                                              tesis 2/1    hat 2/2    makine 2/-    tablo 3 
+  &facilityId=2&lineId=1                        200 hata: -                                                              tesis 2/2    hat 1/-    makine 1/-    tablo 0 
+  &machineId=999                                200 hata: Seçilen makine bulunamadı ya da hatta ait değil.               tesis 2/-    hat 0/-    makine 0/-    tablo 0 
+  &lineId=999                                   200 hata: Seçilen hat bulunamadı ya da tesise ait değil.                 tesis 2/-    hat 0/-    makine 0/-    tablo 0 
+  &facilityId=999                               200 hata: Seçilen tesis bulunamadı.                                      tesis 2/-    hat 0/-    makine 0/-    tablo 0 
+  &from=2026-11-16&to=2026-11-15&machineId=1    200 hata: Bitiş tarihi başlangıç tarihinden önce olamaz.                 tesis 2/1    hat 2/1    makine 2/1    tablo 0 
+  &machineId=1                                  200 hata: -                                                              tesis 2/1    hat 2/1    makine 2/1    tablo 3 
+  &machineId=1&from=abc                         200 hata: Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontro tesis 2/-    hat 0/-    makine 0/-    tablo 0 
+== E-31 Usage
+  &facilityId=2&machineId=1                     200 hata: -                                                              tesis 2/2    hat 1/-    makine 1/-    tablo 0 mod Malzeme izlenebilirliği
+  &facilityId=1&lineId=2&machineId=1            200 hata: -                                                              tesis 2/1    hat 2/2    makine 2/-    tablo 0 mod Malzeme izlenebilirliği
+  &facilityId=2&lineId=1                        200 hata: -                                                              tesis 2/2    hat 1/-    makine 1/-    tablo 0 mod Malzeme izlenebilirliği
+  &machineId=999                                200 hata: Seçilen makine bulunamadı ya da hatta ait değil.               tesis 2/-    hat 0/-    makine 0/-    tablo 0 mod Malzeme izlenebilirliği
+  &lineId=999                                   200 hata: Seçilen hat bulunamadı ya da tesise ait değil.                 tesis 2/-    hat 0/-    makine 0/-    tablo 0 mod Malzeme izlenebilirliği
+  &facilityId=999                               200 hata: Seçilen tesis bulunamadı.                                      tesis 2/-    hat 0/-    makine 0/-    tablo 0 mod Malzeme izlenebilirliği
+  &from=2026-11-16&to=2026-11-15&machineId=1    200 hata: Bitiş tarihi başlangıç tarihinden önce olamaz.                 tesis 2/1    hat 2/1    makine 2/1    tablo 0 mod Malzeme izlenebilirliği
+  &machineId=1                                  200 hata: -                                                              tesis 2/1    hat 2/1    makine 2/1    tablo 1 mod Malzeme izlenebilirliği
+  &machineId=1&from=abc                         200 hata: Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontro tesis 2/1    hat 2/1    makine 2/1    tablo 0 mod Malzeme izlenebilirliği
+== E-31 Machine
+  &facilityId=2&machineId=1                     200 hata: -                                                              tesis yok    hat yok    makine 5/-    tablo 0 mod Malzeme izlenebilirliği
+  &facilityId=1&lineId=2&machineId=1            200 hata: -                                                              tesis yok    hat yok    makine 5/-    tablo 0 mod Malzeme izlenebilirliği
+  &facilityId=2&lineId=1                        200 hata: -                                                              tesis yok    hat yok    makine 5/-    tablo 0 mod Malzeme izlenebilirliği
+  &machineId=999                                200 hata: Seçilen makine bulunamadı ya da hatta ait değil.               tesis yok    hat yok    makine 5/-    tablo 0 mod Malzeme izlenebilirliği
+  &lineId=999                                   200 hata: -                                                              tesis yok    hat yok    makine 5/-    tablo 0 mod Malzeme izlenebilirliği
+  &facilityId=999                               200 hata: -                                                              tesis yok    hat yok    makine 5/-    tablo 0 mod Malzeme izlenebilirliği
+  &from=2026-11-16&to=2026-11-15&machineId=1    200 hata: Bitiş tarihi başlangıç tarihinden önce olamaz.                 tesis yok    hat yok    makine 5/1    tablo 0 mod Malzeme izlenebilirliği
+  &machineId=1                                  200 hata: -                                                              tesis yok    hat yok    makine 5/1    tablo 1 mod Malzeme izlenebilirliği
+  &machineId=1&from=abc                         200 hata: Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontro tesis yok    hat yok    makine 5/1    tablo 0 mod Malzeme izlenebilirliği
+== B3 mod düğmesi (aria-current) ve hata
+/reports/materials?mode=Usage&from=abc&machineId=1 200 etkin mod ['Usage'] hata True usage-machine seçili ['1', '1']
+/reports/materials?mode=Machine&from=abc&machineId=1 200 etkin mod ['Machine'] hata True usage-machine seçili ['1']
+/reports/materials?mode=Usage&machineId=abc&facilityId=1 200 etkin mod ['Usage'] hata True usage-machine seçili ['1']
+/reports/materials?mode=Lot&from=abc 200 etkin mod ['Lot'] hata True usage-machine seçili []
+
+== B2: 320 px kullanım oranı kartı ==
+Çip sağ kenarı 290 px = kart iç sağ kenarı 290 px, çip 46 px yükseklikte iki satıra kırılıyor. Matris: 320 ve 360 px açık ve koyu, makine 2 ve E-31 malzeme tablosunda kart kusuru 0, hücre taşma 0.
+
+== B7: E-30 süzgeç düğmeleri ==
+{'w': 1280, 'scheme': 'light', 'btnTops': [426], 'btnH': [48], 'firstBtnLeftFromInner': 0, 'lastBtnRightFromInner': 705, 'gapBelowFields': 16, 'fieldRows': [268, 362], 'firstFieldLeft': 0}
+{'w': 1440, 'scheme': 'light', 'btnTops': [426], 'btnH': [48], 'firstBtnLeftFromInner': 0, 'lastBtnRightFromInner': 865, 'gapBelowFields': 16, 'fieldRows': [268, 362], 'firstFieldLeft': 0}
+{'w': 1280, 'scheme': 'dark', 'btnTops': [426], 'btnH': [48], 'firstBtnLeftFromInner': 0, 'lastBtnRightFromInner': 705, 'gapBelowFields': 16, 'fieldRows': [268, 362], 'firstFieldLeft': 0}
+{'w': 1440, 'scheme': 'dark', 'btnTops': [426], 'btnH': [48], 'firstBtnLeftFromInner': 0, 'lastBtnRightFromInner': 865, 'gapBelowFields': 16, 'fieldRows': [268, 362], 'firstFieldLeft': 0}
+
+== A1: /records, uzun adlı kayıt (Şükrüye İnceoğlu Karamustafapaşalıoğulları) ==
+over = Ayrıntı düğmesinin sağ kenarı - panel iç sağ kenarı (pozitif = kırpılıyor); clipped = kırpılan satır sayısı; centerHit/rightEdgeHit = elementFromPoint düğmeye düşüyor mu
+{'w': 1280, 'scheme': 'light', 'table': 1032, 'panelInner': 964, 'rows': 25, 'clipped': 25, 'maxOver': 56, 'longRow': {'over': 56, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': False}
+{'w': 1300, 'scheme': 'light', 'table': 1032, 'panelInner': 984, 'rows': 25, 'clipped': 25, 'maxOver': 36, 'longRow': {'over': 36, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': False}
+{'w': 1366, 'scheme': 'light', 'table': 1050, 'panelInner': 1050, 'rows': 25, 'clipped': 0, 'maxOver': -12, 'longRow': {'over': -12, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': True}
+{'w': 1440, 'scheme': 'light', 'table': 1124, 'panelInner': 1124, 'rows': 25, 'clipped': 0, 'maxOver': -12, 'longRow': {'over': -12, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': True}
+{'w': 1280, 'scheme': 'dark', 'table': 1032, 'panelInner': 964, 'rows': 25, 'clipped': 25, 'maxOver': 56, 'longRow': {'over': 56, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': False}
+{'w': 1300, 'scheme': 'dark', 'table': 1032, 'panelInner': 984, 'rows': 25, 'clipped': 25, 'maxOver': 36, 'longRow': {'over': 36, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': False}
+{'w': 1366, 'scheme': 'dark', 'table': 1050, 'panelInner': 1050, 'rows': 25, 'clipped': 0, 'maxOver': -12, 'longRow': {'over': -12, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': True}
+{'w': 1440, 'scheme': 'dark', 'table': 1124, 'panelInner': 1124, 'rows': 25, 'clipped': 0, 'maxOver': -12, 'longRow': {'over': -12, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': True}
+1280 px sütun genişlikleri: Kayıt no 169, Makine ve yer 197 (max 320), Sahip 188 (max 192), Durum 154 (rozetler alt alta), Açılış 108, Net süre 81, İşlem 136; toplam 1033 > panel içi 964.
+
+== Gerileme: hesap karşılaştırması ==
+toplam sapma 0
+toplam sapma 0
+toplam sapma 0
+(makine raporu 13, kullanım oranı 13, E-30 makine satırı ve bağlantı 5 süzgeç; SQLite ile)
+
+== Gerileme: JS kapalı (K10, K12, E-30) ==
+E-34/E-31 figText Ortalama net s�re Ortalama net Planlanan minimumun alt�nda Planlanan minimum Acil m�dahale Acil, 1 tamamland� 1 dk 45 sn planlanan minimum yok K�sa planl� temizlik Planl�, 3 tamamland� 7 sa 3 dk 39 sn min 3 dk 20 sn Planl� temizlik Planl�, 1 tamamland� 2 dk 46 sn min 25 dk Minimumun alt�nda
+E-34/E-31 afterFacility {'url': '?facilityId=1&lineId=&machineId=&from=&to=&kind=', 'lines': ['T�m hatlar', 'H1 - Haz�rl�k hatt�', 'H2 - Dolum hatt�'], 'machines': ['Makine se�in', 'M01 - Kar��t�r�c�', 'M02 - Tart� �nitesi', 'M01 - Dolum makinesi', 'M02 - Etiketleme makinesi']}
+E-34/E-31 afterLine {'url': '?facilityId=1&lineId=2&machineId=&from=&to=&kind=', 'machines': ['Makine se�in', 'M01 - Dolum makinesi', 'M02 - Etiketleme makinesi']}
+E-34/E-31 afterMachine {'url': '?facilityId=1&lineId=2&machineId=3&from=&to=&kind=', 'h2': ['T1-H2-M01 - Dolum makinesi', 'Tip ba��na ortalama', 'Son kay�tlar', 'Malzeme kullan�m oran�']}
+E-34/E-31 usage {'url': '?mode=Usage&from=&to=&cleaningTypeId=&facilityId=1&lineId=&machineId=', 'lines': 2, 'machines': 4, 'rows': 2}
+E-30 figs [{'cap': 'Kay�t say�s�', 'bars': 7, 'hatch': 0, 'below': 0}, {'cap': 'Ortalama s�re Net Mola', 'bars': 5, 'hatch': 0, 'below': 0}, {'cap': 'Ortalama net s�re Ortalama net Ortalamas', 'bars': 8, 'hatch': 7, 'below': 7}]
+E-30 f1 {'q': '?from=&to=&kind=&cleaningTypeId=&facilityId=1&lineId=&machineId=', 'lines': 2, 'machines': 4}
+E-30 f2 {'q': '?from=&to=&kind=&cleaningTypeId=&facilityId=2&lineId=2&machineId=3', 'alert': 0, 'lines': ['T�m hatlar', 'H1 - Depo hatt�'], 'selLine': '', 'selMachine': '', 'h2': ['Kay�t durumlar�', 'Filtreye uyan tamamlanm�� kay�t yok']}
+
+== Matris (154 hücre: 11 adres x 320/360/640/768/1024/1280/1440/1920, açık ve koyu, 1920 reduced-motion) ==
+t2a 88 hücre
+1280x800-light /records ["overflowing['TABLE.data-table.table-stack', 'THEAD', 'TR', 'TH', 'TBODY', 'TR', 'TD.cell-action', 'A.btn.btn-secondary']", "tbl0 tablo {'minRowH': 87, 'wrapScroll': True, 'tableOvf': True}"]
+1280x800-dark /records ["overflowing['TABLE.data-table.table-stack', 'THEAD', 'TR', 'TH', 'TBODY', 'TR', 'TD.cell-action', 'A.btn.btn-secondary']", "tbl0 tablo {'minRowH': 87, 'wrapScroll': True, 'tableOvf': True}"]
+t2b 66 hücre
+kusurlu hücre 2

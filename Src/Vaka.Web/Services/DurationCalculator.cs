@@ -203,5 +203,19 @@ public sealed class DurationCalculator : IDurationCalculator
         return ticks;
     }
 
+    /// <summary>
+    /// Kaydın planlanan minimum süresi, saniye (SH-18, PL-85).
+    /// Planlanan minimum = Σ kaydın <c>RecordPhases.MinDurationSecondsSnapshot</c> dolu değerleri; hiçbiri dolu değilse boş
+    /// </summary>
+    public int? CalculateRecordPlannedMinimum(IReadOnlyList<int?> phaseMinimumSnapshots) =>
+        phaseMinimumSnapshots.Any(value => value is not null) ? phaseMinimumSnapshots.Sum(value => value ?? 0) : null;
+
+    /// <summary>
+    /// Plan farkı, saniye (SH-19, PL-85).
+    /// Plan farkı = ortalama net süre (SH-15) - ortalama planlanan minimum (SH-15 ile alınmış SH-18 değerleri)
+    /// </summary>
+    public int CalculatePlanVariance(int averageNetSeconds, int averagePlannedMinimumSeconds) =>
+        averageNetSeconds - averagePlannedMinimumSeconds;
+
     private static int WholeSeconds(TimeSpan span) => (int)Math.Floor(span.TotalSeconds);
 }

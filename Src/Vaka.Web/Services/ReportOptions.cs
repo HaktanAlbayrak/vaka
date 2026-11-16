@@ -54,6 +54,34 @@ public sealed class ReportOptions : IReportOptions
             .Select(type => new SelectOptionViewModel { Id = type.Id, Label = type.Name })
             .ToArrayAsync(cancellationToken);
 
+    public async Task<(int? FacilityId, int? LineId, int? MachineId)> ReconcileSelectionAsync(int? facilityId, int? lineId, int? machineId, CancellationToken cancellationToken)
+    {
+        if (facilityId is { } facility && lineId is { } line
+            && await _db.ProductionLines.AnyAsync(item => item.Id == line && item.FacilityId != facility, cancellationToken))
+        {
+            return (facilityId, null, null);
+        }
+
+        if (machineId is not { } machine)
+        {
+            return (facilityId, lineId, null);
+        }
+
+        var parents = await _db.Machines
+            .AsNoTracking()
+            .Where(item => item.Id == machine)
+            .Select(item => new { item.ProductionLineId, item.Line.FacilityId })
+            .FirstOrDefaultAsync(cancellationToken);
+        if (parents is null)
+        {
+            return (facilityId, lineId, machineId);
+        }
+
+        return (lineId is { } selectedLine && parents.ProductionLineId != selectedLine) || (facilityId is { } selectedFacility && parents.FacilityId != selectedFacility)
+            ? (facilityId, lineId, null)
+            : (facilityId ?? parents.FacilityId, lineId ?? parents.ProductionLineId, machine);
+    }
+
     public async Task<string?> FindInvalidSelectionAsync(int? facilityId, int? lineId, int? machineId, int? cleaningTypeId, CancellationToken cancellationToken)
     {
         if (facilityId is { } facility && !await _db.Facilities.AnyAsync(item => item.Id == facility, cancellationToken))

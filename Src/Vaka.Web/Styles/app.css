@@ -629,6 +629,9 @@
   .table-stack td {
     overflow-wrap: break-word;
   }
+  .table-stack td.wrap-anywhere {
+    overflow-wrap: anywhere;
+  }
   .table-stack td::before {
     content: none;
   }

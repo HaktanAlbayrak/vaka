@@ -5,7 +5,8 @@ using Vaka.Web.ViewModels.Records;
 namespace Vaka.Web.ViewModels.Reports;
 
 /// <summary>
-/// Lot modunda <c>MaterialLotId</c>, makine modunda <c>MachineId</c> sorguyu çalıştırır. <c>HasResult</c> sorgu çalıştıysa true olur
+/// Lot modunda <c>MaterialLotId</c>, makine modunda <c>MachineId</c> sorguyu çalıştırır; kullanım oranı modunda sorgu seçimsiz çalışır
+/// (süzgeç tarih, tesis, hat, makine, tip). <c>HasResult</c> sorgu çalıştıysa true olur
 /// (boş sonuç ile sorgu yapılmadı ayrımı için). JS kapalıyken lot önce <c>LotQuery</c> ile aranır, <c>LotOptions</c> o aramanın sonucudur.
 /// Faz 8'de düzeltilmiş işareti (<c>IsCorrected</c>) eklenir.
 /// </summary>
@@ -18,6 +19,12 @@ public sealed class MaterialTraceViewModel
     public int? MaterialLotId { get; set; }
 
     public int? MachineId { get; set; }
+
+    public int? FacilityId { get; set; }
+
+    public int? LineId { get; set; }
+
+    public int? CleaningTypeId { get; set; }
 
     public DateOnly? From { get; set; }
 
@@ -41,4 +48,13 @@ public sealed class MaterialTraceViewModel
     public SelectOptionViewModel[] Machines { get; set; } = [];
 
     public SelectOptionViewModel[] ModeOptions { get; set; } = [];
+
+    public SelectOptionViewModel[] Facilities { get; set; } = [];
+
+    public SelectOptionViewModel[] Lines { get; set; } = [];
+
+    public SelectOptionViewModel[] CleaningTypes { get; set; } = [];
+
+    /// <summary>Kullanım oranı modunda sorgu hatasızsa dolar; seçim gerekmez.</summary>
+    public MaterialUsageViewModel? Usage { get; set; }
 }

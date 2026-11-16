@@ -1,0 +1,150 @@
+Faz 6D - Responsive, G11 ve kenar ölçümleri (playwright-cli, Chromium, oturum f6d, Yönetici 1001)
+Matris: 11 adres x 14 hücre = 154 hücre (360/768/1024/1280/1440/1920 açık ve koyu; 1920 koyu reduced-motion; 320 ve 640 = %200 yakınlaştırma).
+Adresler: /reports/machine (boş), ?machineId=1, 2, 3, 4 (kullanımdan kaldırılmış, kayıtsız), tarih hatası, Tamamlandı kaydı olmayan süzgeç, /reports/materials?mode=Usage (dolu, boş tip 5, malzemesiz makine 3), /reports/durations.
+Not: kart modunda görsel olarak gizli thead/caption (sr-only) taşma sayımından çıkarıldı (Faz 6C ile aynı yöntem).
+
+== Kusurlu hücreler (summ.py) ==
+a 66 hücre
+1280x800-light /reports/durations ["g12['form düğme üst 332/388']"]
+1280x800-dark /reports/durations ["g12['form düğme üst 332/388']"]
+320x640-light /reports/machine?machineId=2 ["g12['hücre taşma SKT geçmiş 2']", "tbl2 ['taşma span.chip 2.0']"]
+320x640-light /reports/materials?mode=Usage ["g12['hücre taşma SKT geçmiş 2']", "tbl0 ['taşma span.chip 2.0']"]
+b 88 hücre
+kusurlu hücre 4
+
+== G11 imzaları ==
+/reports/machine?machineId=1 | Tip başına ortalama
+    320x640, 360x800, 640x800 -> ['Baş[Tip|-] Gövde[Brüt ve mola:1@1 Net:1@1 Efor:1@2 Planlanan min.:1@2 Plan farkı:1@3 Süre altı faz:1@3] Ayak[yok]']
+    768x1024, 1024x768 -> ['Baş[Tip|-] Gövde[Brüt ve mola:1@1 Net:1@1 Efor:1@1 Planlanan min.:1@2 Plan farkı:1@2 Süre altı faz:1@2] Ayak[yok]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 67 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 67 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+/reports/machine?machineId=1 | Son kayıtlar
+    360x800 -> ['Baş[Kayıt no|Durum(alt satır)] Gövde[Tip:tam@1 Açılış:1@2 Süreler:1@2] Ayak[İşlem(1)]', 'Baş[Kayıt no|Durum] Gövde[Tip:tam@1 Açılış:1@2 Süreler:1@2] Ayak[İşlem(1)]']
+    640x800, 768x1024, 1024x768 -> ['Baş[Kayıt no|Durum] Gövde[Tip:tam@1 Açılış:1@2 Süreler:1@2] Ayak[İşlem(1)]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 86 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 86 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+    320x640 -> ['Baş[Kayıt no|Durum(alt satır)] Gövde[Tip:tam@1 Açılış:1@2 Süreler:1@2] Ayak[İşlem(1)]']
+/reports/machine?machineId=1 | Malzeme kullanım oranı
+    320x640, 360x800, 640x800 -> ['Baş[Malzeme|-] Gövde[Kayıt:1@1 Kullanım oranı:1@1 Lot:1@2 SKT geçmiş:1@2] Ayak[yok]']
+    768x1024, 1024x768 -> ['Baş[Malzeme|-] Gövde[Kayıt:1@1 Kullanım oranı:1@1 Lot:1@1 SKT geçmiş:1@2] Ayak[yok]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 63 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 63 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+/reports/machine?machineId=2 | Tip başına ortalama
+    320x640, 360x800, 640x800 -> ['Baş[Tip|-] Gövde[Brüt ve mola:1@1 Net:1@1 Efor:1@2 Planlanan min.:1@2 Plan farkı:1@3 Süre altı faz:1@3] Ayak[yok]']
+    768x1024, 1024x768 -> ['Baş[Tip|-] Gövde[Brüt ve mola:1@1 Net:1@1 Efor:1@1 Planlanan min.:1@2 Plan farkı:1@2 Süre altı faz:1@2] Ayak[yok]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 67 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 67 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+/reports/machine?machineId=2 | Son kayıtlar
+    360x800, 640x800, 768x1024, 1024x768 -> ['Baş[Kayıt no|Durum] Gövde[Tip:tam@1 Açılış:1@2 Süreler:1@2] Ayak[İşlem(1)]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 86 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 86 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+    320x640 -> ['Baş[Kayıt no|Durum(alt satır)] Gövde[Tip:tam@1 Açılış:1@2 Süreler:1@2] Ayak[İşlem(1)]']
+/reports/machine?machineId=2 | Malzeme kullanım oranı
+    320x640, 360x800, 640x800 -> ['Baş[Malzeme|-] Gövde[Kayıt:1@1 Kullanım oranı:1@1 Lot:1@2 SKT geçmiş:1@2] Ayak[yok]']
+    768x1024, 1024x768 -> ['Baş[Malzeme|-] Gövde[Kayıt:1@1 Kullanım oranı:1@1 Lot:1@1 SKT geçmiş:1@2] Ayak[yok]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 63 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 63 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+/reports/machine?machineId=3 | Tip başına ortalama
+    320x640, 360x800, 640x800 -> ['Baş[Tip|-] Gövde[Brüt ve mola:1@1 Net:1@1 Efor:1@2 Planlanan min.:1@2 Plan farkı:1@3 Süre altı faz:1@3] Ayak[yok]']
+    768x1024, 1024x768 -> ['Baş[Tip|-] Gövde[Brüt ve mola:1@1 Net:1@1 Efor:1@1 Planlanan min.:1@2 Plan farkı:1@2 Süre altı faz:1@2] Ayak[yok]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 67 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 67 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+/reports/machine?machineId=3 | Son kayıtlar
+    360x800 -> ['Baş[Kayıt no|Durum(alt satır)] Gövde[Tip:tam@1 Açılış:1@2 Süreler:1@2] Ayak[İşlem(1)]', 'Baş[Kayıt no|Durum] Gövde[Tip:tam@1 Açılış:1@2 Süreler:1@2] Ayak[İşlem(1)]']
+    640x800, 768x1024, 1024x768 -> ['Baş[Kayıt no|Durum] Gövde[Tip:tam@1 Açılış:1@2 Süreler:1@2] Ayak[İşlem(1)]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 86 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 86 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+    320x640 -> ['Baş[Kayıt no|Durum(alt satır)] Gövde[Tip:tam@1 Açılış:1@2 Süreler:1@2] Ayak[İşlem(1)]']
+/reports/machine?machineId=1&kind=1&from=2026-11-16 | Tip başına ortalama
+    320x640, 360x800, 640x800 -> ['Baş[Tip|-] Gövde[Brüt ve mola:1@1 Net:1@1 Efor:1@2 Planlanan min.:1@2 Plan farkı:1@3 Süre altı faz:1@3] Ayak[yok]']
+    768x1024, 1024x768 -> ['Baş[Tip|-] Gövde[Brüt ve mola:1@1 Net:1@1 Efor:1@1 Planlanan min.:1@2 Plan farkı:1@2 Süre altı faz:1@2] Ayak[yok]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 67 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 67 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+/reports/machine?machineId=1&kind=1&from=2026-11-16 | Son kayıtlar
+    320x640, 360x800 -> ['Baş[Kayıt no|Durum(alt satır)] Gövde[Tip:tam@1 Açılış:1@2 Süreler:1@2] Ayak[İşlem(1)]']
+    640x800, 768x1024, 1024x768 -> ['Baş[Kayıt no|Durum] Gövde[Tip:tam@1 Açılış:1@2 Süreler:1@2] Ayak[İşlem(1)]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 86 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 86 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+/reports/materials?mode=Usage | Malzeme kullanım oranı
+    320x640, 360x800, 640x800 -> ['Baş[Malzeme|-] Gövde[Kayıt:1@1 Kullanım oranı:1@1 Lot:1@2 SKT geçmiş:1@2] Ayak[yok]']
+    768x1024, 1024x768 -> ['Baş[Malzeme|-] Gövde[Kayıt:1@1 Kullanım oranı:1@1 Lot:1@1 SKT geçmiş:1@2] Ayak[yok]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 63 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 63 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+/reports/durations | Makine bazında ortalama
+    320x640, 360x800, 640x800 -> ['Baş[Makine ve tip|-] Gövde[Kayıt:1@1 Brüt:1@1 Mola:1@2 Net:1@2 Efor:1@3] Ayak[İşlem(1)]']
+    768x1024, 1024x768 -> ['Baş[Makine ve tip|-] Gövde[Kayıt:1@1 Brüt:1@1 Mola:1@1 Net:1@2 Efor:1@2] Ayak[İşlem(1)]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 69 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 69 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+/reports/durations | Faz bazında ortalama net süre
+    320x640, 360x800, 640x800 -> ['Baş[Tip, versiyon ve faz|-] Gövde[Asgari süre:1@1 Kayıt:1@1 Ort. net:1@2 Süre altı:1@2] Ayak[yok]']
+    768x1024, 1024x768 -> ['Baş[Tip, versiyon ve faz|-] Gövde[Asgari süre:1@1 Kayıt:1@1 Ort. net:1@1 Süre altı:1@2] Ayak[yok]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 67 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 67 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+/reports/durations | En uzun süren adımlar
+    320x640, 360x800, 640x800 -> ['Baş[Adım ve tip|-] Gövde[Faz:1@1 Kayıt:1@1 Ort. süre:1@2 En uzun:1@2] Ayak[yok]']
+    768x1024, 1024x768 -> ['Baş[Adım ve tip|-] Gövde[Faz:1@1 Kayıt:1@1 Ort. süre:1@1 En uzun:1@2] Ayak[yok]']
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 67 px, kapsayıcı köşe 10px, başlık zemini rgb(224, 230, 234)
+    1280x800, 1440x900, 1920x1080 -> tablo, satır en az 67 px, kapsayıcı köşe 10px, başlık zemini rgb(31, 40, 49)
+
+== Ön tur 1: Son kayıtlar 1280-1440, makine 1 (21 sa 7 dk 3 sn kaydı), açık/koyu ==
+1280 açık type-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 7 | hScroll False ['7sa3dk39sn']
+1280 açık recent-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 24 | hücre taşma 0 | kırpılma 0 | sütun 6 | hScroll False ['Net 21sa7dk3sn Efor 3dk25sn Planlanan min. 6dk']
+1280 açık material-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 5 | hScroll False []
+1300 açık type-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 7 | hScroll False ['7sa3dk39sn']
+1300 açık recent-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 27 | hücre taşma 0 | kırpılma 0 | sütun 6 | hScroll False ['Net 21sa7dk3sn Efor 3dk25sn Planlanan min. 6dk']
+1300 açık material-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 5 | hScroll False []
+1366 açık type-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 7 | hScroll False ['7sa3dk39sn']
+1366 açık recent-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 37 | hücre taşma 0 | kırpılma 0 | sütun 6 | hScroll False ['Net 21sa7dk3sn Efor 3dk25sn Planlanan min. 6dk']
+1366 açık material-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 5 | hScroll False []
+1440 açık type-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 7 | hScroll False ['7sa3dk39sn']
+1440 açık recent-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 48 | hücre taşma 0 | kırpılma 0 | sütun 6 | hScroll False ['Net 21sa7dk3sn Efor 3dk25sn Planlanan min. 6dk']
+1440 açık material-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 5 | hScroll False []
+1280 koyu type-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 7 | hScroll False ['7sa3dk39sn']
+1280 koyu recent-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 24 | hücre taşma 0 | kırpılma 0 | sütun 6 | hScroll False ['Net 21sa7dk3sn Efor 3dk25sn Planlanan min. 6dk']
+1280 koyu material-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 5 | hScroll False []
+1300 koyu type-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 7 | hScroll False ['7sa3dk39sn']
+1300 koyu recent-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 27 | hücre taşma 0 | kırpılma 0 | sütun 6 | hScroll False ['Net 21sa7dk3sn Efor 3dk25sn Planlanan min. 6dk']
+1300 koyu material-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 5 | hScroll False []
+1366 koyu type-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 7 | hScroll False ['7sa3dk39sn']
+1366 koyu recent-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 37 | hücre taşma 0 | kırpılma 0 | sütun 6 | hScroll False ['Net 21sa7dk3sn Efor 3dk25sn Planlanan min. 6dk']
+1366 koyu material-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 5 | hScroll False []
+1440 koyu type-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 7 | hScroll False ['7sa3dk39sn']
+1440 koyu recent-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 48 | hücre taşma 0 | kırpılma 0 | sütun 6 | hScroll False ['Net 21sa7dk3sn Efor 3dk25sn Planlanan min. 6dk']
+1440 koyu material-title tablo sol/sağ 0 0 | ilk hücre içerik sol 12 | son hücre içerik sağ 12 | hücre taşma 0 | kırpılma 0 | sütun 5 | hScroll False []
+
+İşlem sütunu karşılaştırması (1280/1440, düğme sağ boşluğu): 
+/reports/machine?machineId=1 1280 Son kayıtlar sol 12 düğme sağ 24 hizalama left
+/reports/machine?machineId=1 1440 Son kayıtlar sol 12 düğme sağ 48 hizalama left
+/reports/durations 1280 Makine bazında ortalama sol 12 düğme sağ 35 hizalama left
+/reports/durations 1440 Makine bazında ortalama sol 12 düğme sağ 71 hizalama left
+/records 1280  sol 12 düğme sağ -56 hizalama left
+/records 1440  sol 12 düğme sağ 12 hizalama left
+/machines 1280  sol 12 düğme sağ 148 hizalama left
+/machines 1440  sol 12 düğme sağ 214 hizalama left
+/reports/materials?mode=Machine&machineId=1 1280 T1-H1-M01 - Karıştırıcı sol 12 düğme sağ 37 hizalama left
+/reports/materials?mode=Machine&machineId=1 1440 T1-H1-M01 - Karıştırıcı sol 12 düğme sağ 64 hizalama left
+
+== JS kapalı (K10, K12) ==
+svg [{'w': 12, 'h': 12, 'rects': 1, 'lines': 0, 'hatch': 0}, {'w': 12, 'h': 12, 'rects': 2, 'lines': 0, 'hatch': 1}, {'w': 12, 'h': 12, 'rects': 0, 'lines': 1, 'hatch': 0}, {'w': 0, 'h': 0, 'rects': 1, 'lines': 0, 'hatch': 0}, {'w': 693, 'h': 20, 'rects': 2, 'lines': 0, 'hatch': 0}, {'w': 718, 'h': 20, 'rects': 2, 'lines': 1, 'hatch': 0}, {'w': 720, 'h': 20, 'rects': 3, 'lines': 1, 'hatch': 1}, {'w': 16, 'h': 16, 'rects': 0, 'lines': 0, 'hatch': 0}]
+figText Ortalama net süre Ortalama net Planlanan minimumun altında Planlanan minimum Acil müdahale Acil, 1 tamamlandı 1 dk 45 sn planlanan minimum yok Kısa planlı temizlik Planlı, 3 tamamlandı 7 sa 3 dk 39 sn min 3 dk 20 sn Planlı temizlik Planlı, 1 tamamlandı 2 dk 46 sn min 25 dk Minimumun altında
+skeletonVisible block/false
+tablesVisible 3
+before {'lines': 0, 'machines': 0}
+afterFacility {'url': '?facilityId=1&lineId=&machineId=&from=&to=&kind=', 'lines': ['Tüm hatlar', 'H1 - Hazırlık hattı', 'H2 - Dolum hattı'], 'machines': ['Makine seçin', 'M01 - Karıştırıcı', 'M02 - Tartı ünitesi', 'M01 - Dolum makinesi', 'M02 - Etiketleme makinesi']}
+afterLine {'url': '?facilityId=1&lineId=2&machineId=&from=&to=&kind=', 'machines': ['Makine seçin', 'M01 - Dolum makinesi', 'M02 - Etiketleme makinesi']}
+afterMachine {'url': '?facilityId=1&lineId=2&machineId=3&from=&to=&kind=', 'h2': ['T1-H2-M01 - Dolum makinesi', 'Tip başına ortalama', 'Son kayıtlar', 'Malzeme kullanım oranı']}
+afterFacility2 {'url': '?facilityId=2&lineId=2&machineId=3&from=&to=&kind=', 'alert': ' Bağlantı yok. Kayıt, onay ve kullanıcı değiştirme yapılamaz. Bağlantı gelince bu uyarı kapanır, işlemi yeniden yapın. ', 'lines': ['Tüm hatlar', 'H1 - Depo hattı'], 'machines': ['Makine seçin', 'M01 - Depo asansörü'], 'state': ['Bir makine seçin']}
+usage {'url': '?mode=Usage&from=&to=&cleaningTypeId=&facilityId=1&lineId=&machineId=', 'lines': 2, 'machines': 4, 'rows': 2}
+
+== Yükleniyor durumu (gönderim engellenerek) ==
+"{\"/reports/machine?machineId=1\":{\"skelHidden\":false,\"skelH\":357,\"text\":\"Yükleniyor…\",\"role\":\"status\",\"targetHidden\":true,\"formBusy\":\"true\",\"btnDisabled\":true,\"hScroll\":false},\"/reports/materials?mode=Usage\":{\"skelHidden\":false,\"skelH\":357,\"text\":\"Yükleniyor…\",\"role\":\"status\",\"targetHidden\":true,\"formBusy\":\"true\",\"btnDisabled\":true,\"hScroll\":false}}"
+
+== Reduced-motion: hareketli öğe ==
+"{\"reduce\":{\"n\":0,\"sample\":[]},\"normalAnimations\":[]}"
+
+== Klavye turu ==
+/reports/machine?machineId=1@1440 {'first': {'tag': 'A', 'txt': 'İçeriğe geç', 'ring': True, 'covered': False, 'inMain': False, 'h': 48}, 'noRing': ['from', 'to', 'from', 'to'], 'covered': [], 'body': 1, 'mainOrder': ['Tüm tesisler T1 - Ana tesis T2', 'Tüm hatlar H1 - Hazırlık hattı', 'Makine seçin M01 - Karıştırıcı', 'from', 'from', 'from', 'from', 'to', 'to', 'to', 'to', 'Planlı ve acil Planlı Acil', 'Raporla', 'Temizle', 'T1-H1-M01-P2026-7 kaydının ayr', 'T1-H1-M01-A2026-6 kaydının ayr', 'T1-H1-M01-P2026-5 kaydının ayr', 'T1-H1-M01-P2026-4 kaydının ayr']}
+/reports/machine?machineId=2@360 {'first': {'tag': 'A', 'txt': 'İçeriğe geç', 'ring': True, 'covered': False, 'inMain': False, 'h': 48}, 'noRing': ['from', 'to', 'from', 'to'], 'covered': [], 'body': 1, 'mainOrder': ['Tüm tesisler T1 - Ana tesis T2', 'Tüm hatlar H1 - Hazırlık hattı', 'Makine seçin M01 - Karıştırıcı', 'from', 'from', 'from', 'from', 'to', 'to', 'to', 'to', 'Planlı ve acil Planlı Acil', 'Raporla', 'Temizle', 'T1-H1-M02-P2026-24 kaydının ay', 'T1-H1-M02-P2026-23 kaydının ay', 'T1-H1-M02-P2026-22 kaydının ay', 'T1-H1-M02-P2026-21 kaydının ay']}
+/reports/materials?mode=Usage@768 {'first': {'tag': 'A', 'txt': 'İçeriğe geç', 'ring': True, 'covered': False, 'inMain': False, 'h': 48}, 'noRing': ['usage-from', 'usage-to', 'usage-from', 'usage-to', 'usage-from', 'usage-to'], 'covered': [], 'body': 2, 'mainOrder': ['Lota göre', 'Makineye göre', 'Kullanım oranı', 'usage-from', 'usage-from', 'usage-from', 'usage-from', 'usage-to', 'usage-to', 'usage-to', 'usage-to', 'Tüm tipler Acil müdahale Kısa ', 'Tüm tesisler T1 - Ana tesis T2', 'Tüm hatlar', 'Tüm makineler', 'Sorgula', 'Temizle', 'Lota göre']}
+skipThenTab facilityId
+Tarih alanında 4. Tab takvim düğmesine gider; :focus-visible düşer, Chromium kendi halkasını çizer (date-*.png). /reports/durations ve /records ile aynı davranış.

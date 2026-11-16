@@ -28,6 +28,7 @@ public sealed class DurationReportReader : IDurationReportReader
     public async Task<DurationReportViewModel> BuildAsync(DurationReportFilterViewModel filter, string? inputError, CancellationToken cancellationToken)
     {
         await _timeouts.ApplyAsync(TimeoutScope.Everything, cancellationToken);
+        (filter.FacilityId, filter.LineId, filter.MachineId) = await _options.ReconcileSelectionAsync(filter.FacilityId, filter.LineId, filter.MachineId, cancellationToken);
 
         var problem = inputError
             ?? (filter.From > filter.To ? ReportMessages.InvalidRange : null)
@@ -46,7 +47,7 @@ public sealed class DurationReportReader : IDurationReportReader
         return new DurationReportViewModel
         {
             Filter = filter,
-            ByMachine = await ReadByMachineAsync(completed, cancellationToken),
+            ByMachine = await ReadByMachineAsync(completed, filter, cancellationToken),
             ByPhase = await ReadByPhaseAsync(completed, cancellationToken),
             LongestSteps = await ReadLongestStepsAsync(completed, cancellationToken),
             StatusCounts = await ReadStatusCountsAsync(records, cancellationToken),
@@ -112,7 +113,7 @@ public sealed class DurationReportReader : IDurationReportReader
         return records;
     }
 
-    private async Task<MachineDurationRowViewModel[]> ReadByMachineAsync(IQueryable<CleaningRecord> completed, CancellationToken cancellationToken)
+    private async Task<MachineDurationRowViewModel[]> ReadByMachineAsync(IQueryable<CleaningRecord> completed, DurationReportFilterViewModel filter, CancellationToken cancellationToken)
     {
         var rows = await completed
             .Select(record => new
@@ -133,6 +134,7 @@ public sealed class DurationReportReader : IDurationReportReader
             .Select(group => new MachineDurationRowViewModel
             {
                 MachineLabel = group.First().MachineLabel,
+                MachineReportUrl = MachineReportLinks.For(group.Key.MachineId, filter.From, filter.To, filter.Kind),
                 CleaningTypeName = group.First().TypeName,
                 RecordCount = group.Count(),
                 AvgGrossSeconds = _calculator.CalculateAverage([.. group.Select(row => row.Gross)]),

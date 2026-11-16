@@ -49,6 +49,7 @@
         if (User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Auditor))
         {
             navItems.Add(("Raporlar", "Süre ve efor", "chart-column", "/reports/durations", "report-durations"));
+            navItems.Add(("Raporlar", "Makine raporu", "factory", "/reports/machine", "report-machine"));
             navItems.Add(("Raporlar", "Malzeme izlenebilirliği", "route", "/reports/materials", "report-materials"));
         }
         if (User.IsInRole(Roles.Manager))

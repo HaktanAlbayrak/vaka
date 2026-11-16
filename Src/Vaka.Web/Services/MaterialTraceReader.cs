@@ -12,14 +12,16 @@ public sealed class MaterialTraceReader : IMaterialTraceReader
     private readonly IRecordTimeouts _timeouts;
     private readonly ILotCatalog _lots;
     private readonly IReportOptions _options;
+    private readonly IMaterialUsageReader _usage;
     private readonly ITurkeyClock _clock;
 
-    public MaterialTraceReader(VakaDbContext db, IRecordTimeouts timeouts, ILotCatalog lots, IReportOptions options, ITurkeyClock clock)
+    public MaterialTraceReader(VakaDbContext db, IRecordTimeouts timeouts, ILotCatalog lots, IReportOptions options, IMaterialUsageReader usage, ITurkeyClock clock)
     {
         _db = db;
         _timeouts = timeouts;
         _lots = lots;
         _options = options;
+        _usage = usage;
         _clock = clock;
     }
 
@@ -28,6 +30,11 @@ public sealed class MaterialTraceReader : IMaterialTraceReader
         await _timeouts.ApplyAsync(TimeoutScope.Everything, cancellationToken);
 
         var modeValid = Enum.IsDefined(request.Mode);
+        if (request.Mode is MaterialTraceMode.Usage or MaterialTraceMode.Machine)
+        {
+            (request.FacilityId, request.LineId, request.MachineId) = await _options.ReconcileSelectionAsync(request.FacilityId, request.LineId, request.MachineId, cancellationToken);
+        }
+
         var mode = modeValid ? request.Mode : MaterialTraceMode.Lot;
         var model = new MaterialTraceViewModel
         {
@@ -35,13 +42,22 @@ public sealed class MaterialTraceReader : IMaterialTraceReader
             LotQuery = request.LotQuery?.Trim(),
             MaterialLotId = request.MaterialLotId,
             MachineId = request.MachineId,
+            FacilityId = request.FacilityId,
+            LineId = request.LineId,
+            CleaningTypeId = request.CleaningTypeId,
             From = request.From,
             To = request.To,
-            Machines = await _options.ListAllMachinesAsync(cancellationToken),
+            Machines = mode == MaterialTraceMode.Usage
+                ? await _options.ListMachinesAsync(request.FacilityId, request.LineId, cancellationToken)
+                : await _options.ListAllMachinesAsync(cancellationToken),
+            Facilities = mode == MaterialTraceMode.Usage ? await _options.ListFacilitiesAsync(cancellationToken) : [],
+            Lines = mode == MaterialTraceMode.Usage ? await _options.ListLinesAsync(request.FacilityId, cancellationToken) : [],
+            CleaningTypes = mode == MaterialTraceMode.Usage ? await _options.ListCleaningTypesAsync(cancellationToken) : [],
             ModeOptions =
             [
                 new SelectOptionViewModel { Id = (int)MaterialTraceMode.Lot, Label = "Lota göre" },
-                new SelectOptionViewModel { Id = (int)MaterialTraceMode.Machine, Label = "Makineye göre" }
+                new SelectOptionViewModel { Id = (int)MaterialTraceMode.Machine, Label = "Makineye göre" },
+                new SelectOptionViewModel { Id = (int)MaterialTraceMode.Usage, Label = "Kullanım oranı" }
             ]
         };
 
@@ -62,6 +78,11 @@ public sealed class MaterialTraceReader : IMaterialTraceReader
         {
             model.ErrorMessage = unknown;
         }
+        else if (mode == MaterialTraceMode.Usage
+            && await _options.FindInvalidSelectionAsync(model.FacilityId, model.LineId, model.MachineId, model.CleaningTypeId, cancellationToken) is { } unknownSelection)
+        {
+            model.ErrorMessage = unknownSelection;
+        }
         else if (mode == MaterialTraceMode.Lot && model.MaterialLotId is { } lotId
             && !await _db.MaterialLots.AnyAsync(item => item.Id == lotId, cancellationToken))
         {
@@ -78,6 +99,22 @@ public sealed class MaterialTraceReader : IMaterialTraceReader
                 model.HasResult = true;
                 model.SelectedLotLabel = await ReadLotLabelAsync(selectedLot, cancellationToken);
                 model.LotUsages = await ReadLotUsagesAsync(selectedLot, model, cancellationToken);
+            }
+        }
+        else if (mode == MaterialTraceMode.Usage)
+        {
+            if (model.ErrorMessage is null)
+            {
+                model.HasResult = true;
+                model.Usage = await _usage.ReadAsync(new MaterialUsageFilter
+                {
+                    From = model.From,
+                    To = model.To,
+                    FacilityId = model.FacilityId,
+                    LineId = model.LineId,
+                    MachineId = model.MachineId,
+                    CleaningTypeId = model.CleaningTypeId
+                }, cancellationToken);
             }
         }
         else if (model.ErrorMessage is null && model.MachineId is { } selectedMachine)

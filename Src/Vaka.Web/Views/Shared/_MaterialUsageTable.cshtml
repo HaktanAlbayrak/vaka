@@ -1,0 +1,39 @@
+@using Vaka.Web.ViewModels.Reports
+@* Malzeme kullanım oranı tablosu; makine raporu ve E-31 kullanım oranı modu ortak kullanır. Oran, malzemenin en az bir lotuyla yer aldığı Tamamlandı kayıt sayısının tüm Tamamlandı kayıtlara oranıdır. *@
+@model (MaterialUsageRowViewModel[] Rows, string Caption)
+<table class="data-table table-stack">
+    <caption class="sr-only">@Model.Caption</caption>
+    <thead>
+        <tr>
+            <th scope="col">Malzeme</th>
+            <th scope="col" class="text-right">Kayıt</th>
+            <th scope="col" class="text-right">Kullanım oranı</th>
+            <th scope="col" class="text-right">Lot</th>
+            <th scope="col" class="text-right">SKT geçmiş</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in Model.Rows)
+        {
+            <tr>
+                <td data-label="" class="stack-lead break-words">
+                    <span class="font-semibold">@row.MaterialName</span>
+                    <span class="mono mt-0.5 block text-xs text-muted">@row.MaterialCode</span>
+                </td>
+                <td data-label="Kayıt" class="num whitespace-nowrap">@row.RecordCount</td>
+                <td data-label="Kullanım oranı" class="num whitespace-nowrap font-bold">%@row.UsageRatePercent.ToString("0.0")</td>
+                <td data-label="Lot" class="num whitespace-nowrap">@row.LotCount</td>
+                <td data-label="SKT geçmiş" class="num xl:whitespace-nowrap">
+                    @if (row.ExpiredUseCount > 0)
+                    {
+                        <span class="chip max-w-full"><svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>@row.ExpiredUseCount kullanım</span>
+                    }
+                    else
+                    {
+                        <span>0</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

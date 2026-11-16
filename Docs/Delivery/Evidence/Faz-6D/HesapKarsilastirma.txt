@@ -1,0 +1,84 @@
+Faz 6D - Hesap karşılaştırması (QA kopyası .qa/f6d/qa.db, sunucu 127.0.0.1:5797, Release)
+Betikler: .qa/f6d/j/verify.py, verify_usage.py, verify_dur.py. Beklenen değerler doğrudan SQLite sorgusundan, sayfa değerleri sunucu HTML'inden.
+Karşılaştırılan: tip satırı (kayıt, Tamamlandı, ort. brüt, mola, net, efor, planlanan min., plan farkı, süre altı/değerlendirilen faz), durum sayıları, son kayıtlar (no, durum, açılış, net, efor, planlanan min., bağlantı), malzeme (payda, kayıt, oran, lot, SKT geçmiş).
+
+== /reports/machine x SQLite (Yönetici 1001; Denetçi 3001 aynı sonuç) ==
+/reports/machine?machineId=1 200 tip 3 son 7 payda 5 malzeme 2 OK
+/reports/machine?machineId=2 200 tip 2 son 20 payda 4 malzeme 2 OK
+/reports/machine?machineId=3 200 tip 1 son 2 payda 1 malzeme 0 OK
+/reports/machine?machineId=4 200 kayıt yok OK | boş durum: False
+/reports/machine?machineId=5 200 kayıt yok OK | boş durum: False
+/reports/machine?machineId=1&kind=1 200 tip 2 son 6 payda 4 malzeme 2 OK
+/reports/machine?machineId=1&kind=2 200 tip 1 son 1 payda 1 malzeme 1 OK
+/reports/machine?machineId=2&kind=1 200 tip 2 son 20 payda 4 malzeme 2 OK
+/reports/machine?machineId=1&from=2026-11-16 200 tip 2 son 2 payda 1 malzeme 1 OK
+/reports/machine?machineId=1&to=2026-11-15 200 tip 2 son 5 payda 4 malzeme 2 OK
+/reports/machine?machineId=1&from=2026-11-15&to=2026-11-15 200 tip 2 son 5 payda 4 malzeme 2 OK
+/reports/machine?machineId=2&from=2026-11-16&to=2026-11-16 200 tip 2 son 20 payda 4 malzeme 2 OK
+/reports/machine?machineId=3&kind=1 200 tip 1 son 2 payda 1 malzeme 0 OK
+toplam sapma 0
+
+== Tip satırları (sayfadan okunan) ==
+  tip ['Acil müdahale 1 kayıt, 1 tamamlandı', 'Brüt 1 dk 45 sn Mola 0 sn', '1 dk 45 sn', '1 dk 45 sn', '-', '-', '-']
+  tip ['Kısa planlı temizlik 1 kayıt, 0 tamamlandı', '-', '-', '-', '-', '-', '-']
+  tip ['Kısa planlı temizlik 15 kayıt, 4 tamamlandı', 'Brüt 1 dk 21 sn Mola 10 sn', '1 dk 10 sn', '1 dk 28 sn', '6 dk', '-4 dk 50 sn', '6 / 8 faz']
+  tip ['Kısa planlı temizlik 2 kayıt, 1 tamamlandı', 'Brüt 41 dk 28 sn Mola 40 dk', '1 dk 28 sn', '1 dk 28 sn', '2 dk', '-32 sn', '1 / 2 faz']
+  tip ['Kısa planlı temizlik 3 kayıt, 3 tamamlandı', 'Brüt 7 sa 6 dk 30 sn Mola 2 dk 51 sn', '7 sa 3 dk 39 sn', '2 dk 26 sn', '3 dk 20 sn', '+7 sa 19 sn', '2 / 6 faz']
+  tip ['Kısa planlı temizlik 4 kayıt, 3 tamamlandı', 'Brüt 7 sa 6 dk 30 sn Mola 2 dk 51 sn', '7 sa 3 dk 39 sn', '2 dk 26 sn', '3 dk 20 sn', '+7 sa 19 sn', '2 / 6 faz']
+  tip ['Planlı temizlik 2 kayıt, 1 tamamlandı', 'Brüt 2 dk 46 sn Mola 0 sn', '2 dk 46 sn', '1 dk 44 sn', '25 dk', '-22 dk 14 sn', '3 / 3 faz']
+  tip ['Planlı temizlik 9 kayıt, 0 tamamlandı', '-', '-', '-', '-', '-', '-']
+
+== Elle hesap (K4, K5): Tamamlandı kayıtlar, faz 'min/net/BelowMinimum', SH-18 toplamı ==
+Makine 1
+   (7, 'T1-H1-M01-A2026-6', 'ACL', 1, 4, 105, 'null/105/0', None)
+   (4, 'T1-H1-M01-P2026-3', 'KSA', 1, 4, 136, '60/68/0 60/68/0', 120)
+   (5, 'T1-H1-M01-P2026-4', 'KSA', 1, 4, 98, '60/30/1 60/68/0', 120)
+   (6, 'T1-H1-M01-P2026-5', 'KSA', 2, 4, 76023, '60/86/0 300/74/1', 360)
+   (2, 'T1-H1-M01-P2026-2', 'PLN', 1, 4, 166, '300/87/1 900/32/1 300/14/1', 1500)
+  SQL K5: [('KSA', 6, 2), ('PLN', 3, 3)]
+  SQL ort.: [('ACL', 1, 1, 105, 0, 105, 105), ('KSA', 4, 3, 25590, 171, 25419, 146), ('PLN', 2, 1, 166, 0, 166, 104)]
+Makine 2
+   (8, 'T1-H1-M02-P2026-1', 'KSA', 2, 4, 190, '60/70/0 300/98/1', 360)
+   (13, 'T1-H1-M02-P2026-4', 'KSA', 2, 4, 30, '60/0/1 300/30/1', 360)
+   (14, 'T1-H1-M02-P2026-5', 'KSA', 2, 4, 62, '60/62/0 300/0/1', 360)
+   (15, 'T1-H1-M02-P2026-6', 'KSA', 2, 4, 0, '60/0/1 300/0/1', 360)
+  SQL K5: [('KSA', 8, 6)]
+  SQL ort.: [('KSA', 15, 4, 81, 10, 70, 88), ('PLN', 9, 0, None, None, None, None)]
+Makine 1 KSA: SH-18 = 120, 120, 360 -> ort. floor(600/3) = 200 sn = 3 dk 20 sn; ort. net floor((136+98+76023)/3) = 25419 sn; SH-19 = 25419 - 200 = 25219 sn = +7 sa 0 dk 19 sn (sayfa "+7 sa 19 sn"). Süre altı 2 / 6.
+Makine 1 PLN: SH-18 = 300+900+300 = 1500 sn = 25 dk; net 166; SH-19 = -1334 sn = -22 dk 14 sn. Süre altı 3 / 3.
+Makine 1 ACL: faz minimumu yok -> planlanan min. "-", plan farkı "-", değerlendirilen faz 0 -> "-".
+Makine 2 KSA: SH-18 = 360 x 4 -> 6 dk; ort. net floor(282/4) = 70 sn; SH-19 = -290 sn = -4 dk 50 sn. Süre altı 6 / 8.
+
+== /reports/materials?mode=Usage x SQLite ==
+/reports/materials?mode=Usage 200 payda 10 malzemeli 6 [('Yüzey dezenfektanı', 'MLZ001', 5, '%50,0', 3, 1), ('Kimyasal temizleyici', 'MLZ002', 2, '%20,0', 1, 0)] OK
+/reports/materials?mode=Usage&cleaningTypeId=4 200 payda 8 malzemeli 4 [('Yüzey dezenfektanı', 'MLZ001', 3, '%37,5', 3, 1), ('Kimyasal temizleyici', 'MLZ002', 2, '%25,0', 1, 0)] OK
+/reports/materials?mode=Usage&lineId=1&cleaningTypeId=4 200 payda 7 malzemeli 4 [('Yüzey dezenfektanı', 'MLZ001', 3, '%42,9', 3, 1), ('Kimyasal temizleyici', 'MLZ002', 2, '%28,6', 1, 0)] OK
+/reports/materials?mode=Usage&facilityId=1 200 payda 10 malzemeli 6 [('Yüzey dezenfektanı', 'MLZ001', 5, '%50,0', 3, 1), ('Kimyasal temizleyici', 'MLZ002', 2, '%20,0', 1, 0)] OK
+/reports/materials?mode=Usage&machineId=1 200 payda 5 malzemeli 4 [('Yüzey dezenfektanı', 'MLZ001', 4, '%80,0', 2, 0), ('Kimyasal temizleyici', 'MLZ002', 1, '%20,0', 1, 0)] OK
+/reports/materials?mode=Usage&machineId=2 200 payda 4 malzemeli 2 [('Yüzey dezenfektanı', 'MLZ001', 1, '%25,0', 2, 1), ('Kimyasal temizleyici', 'MLZ002', 1, '%25,0', 1, 0)] OK
+/reports/materials?mode=Usage&machineId=3 200 payda 1 malzemeli 0 [] OK
+/reports/materials?mode=Usage&from=2026-11-15&to=2026-11-15 200 payda 5 malzemeli 3 [('Yüzey dezenfektanı', 'MLZ001', 3, '%60,0', 2, 0), ('Kimyasal temizleyici', 'MLZ002', 1, '%20,0', 1, 0)] OK
+/reports/materials?mode=Usage&from=2026-11-16 200 payda 5 malzemeli 3 [('Yüzey dezenfektanı', 'MLZ001', 2, '%40,0', 3, 1), ('Kimyasal temizleyici', 'MLZ002', 1, '%20,0', 1, 0)] OK
+/reports/materials?mode=Usage&facilityId=1&lineId=2 200 payda 1 malzemeli 0 [] OK
+/reports/materials?mode=Usage&cleaningTypeId=2 200 payda 1 malzemeli 1 [('Yüzey dezenfektanı', 'MLZ001', 1, '%100,0', 2, 0)] OK
+/reports/materials?mode=Usage&cleaningTypeId=5 200 payda 0 malzemeli 0 [] OK
+/reports/materials?mode=Usage&from=2026-12-01 200 payda 0 malzemeli 0 [] OK
+toplam sapma 0
+
+== /reports/durations makine satırı x makine raporu tip satırı (aynı süzgeç) ve bağlantı ==
+(yok) T1-H1-M01 - Kar&#x131;&#x15F /reports/machine?MachineId=1 dur ['1', '1 dk 45 sn', '0 sn', '1 dk 45 sn', '1 dk 45 sn'] mak ['1', '1 dk 45 sn', '0 sn', '1 dk 45 sn', '1 dk 45 sn'] OK
+(yok) T1-H1-M01 - Kar&#x131;&#x15F /reports/machine?MachineId=1 dur ['3', '7 sa 6 dk 30 sn', '2 dk 51 sn', '7 sa 3 dk 39 sn', '2 dk 26 sn'] mak ['3', '7 sa 6 dk 30 sn', '2 dk 51 sn', '7 sa 3 dk 39 sn', '2 dk 26 sn'] OK
+(yok) T1-H1-M01 - Kar&#x131;&#x15F /reports/machine?MachineId=1 dur ['1', '2 dk 46 sn', '0 sn', '2 dk 46 sn', '1 dk 44 sn'] mak ['1', '2 dk 46 sn', '0 sn', '2 dk 46 sn', '1 dk 44 sn'] OK
+(yok) T1-H1-M02 - Tart&#x131; &#xF /reports/machine?MachineId=2 dur ['4', '1 dk 21 sn', '10 sn', '1 dk 10 sn', '1 dk 28 sn'] mak ['4', '1 dk 21 sn', '10 sn', '1 dk 10 sn', '1 dk 28 sn'] OK
+(yok) T1-H2-M01 - Dolum makinesi /reports/machine?MachineId=3 dur ['1', '41 dk 28 sn', '40 dk', '1 dk 28 sn', '1 dk 28 sn'] mak ['1', '41 dk 28 sn', '40 dk', '1 dk 28 sn', '1 dk 28 sn'] OK
+&kind=1 T1-H1-M01 - Kar&#x131;&#x15F /reports/machine?MachineId=1&Kind=1 dur ['3', '7 sa 6 dk 30 sn', '2 dk 51 sn', '7 sa 3 dk 39 sn', '2 dk 26 sn'] mak ['3', '7 sa 6 dk 30 sn', '2 dk 51 sn', '7 sa 3 dk 39 sn', '2 dk 26 sn'] OK
+&kind=1 T1-H1-M01 - Kar&#x131;&#x15F /reports/machine?MachineId=1&Kind=1 dur ['1', '2 dk 46 sn', '0 sn', '2 dk 46 sn', '1 dk 44 sn'] mak ['1', '2 dk 46 sn', '0 sn', '2 dk 46 sn', '1 dk 44 sn'] OK
+&kind=1 T1-H1-M02 - Tart&#x131; &#xF /reports/machine?MachineId=2&Kind=1 dur ['4', '1 dk 21 sn', '10 sn', '1 dk 10 sn', '1 dk 28 sn'] mak ['4', '1 dk 21 sn', '10 sn', '1 dk 10 sn', '1 dk 28 sn'] OK
+&kind=1 T1-H2-M01 - Dolum makinesi /reports/machine?MachineId=3&Kind=1 dur ['1', '41 dk 28 sn', '40 dk', '1 dk 28 sn', '1 dk 28 sn'] mak ['1', '41 dk 28 sn', '40 dk', '1 dk 28 sn', '1 dk 28 sn'] OK
+&kind=2 T1-H1-M01 - Kar&#x131;&#x15F /reports/machine?MachineId=1&Kind=2 dur ['1', '1 dk 45 sn', '0 sn', '1 dk 45 sn', '1 dk 45 sn'] mak ['1', '1 dk 45 sn', '0 sn', '1 dk 45 sn', '1 dk 45 sn'] OK
+&from=2026-11-15&to=2026-11-15 T1-H1-M01 - Kar&#x131;&#x15F /reports/machine?MachineId=1&From=2026-11-15&To=2026-11-15 dur ['3', '7 sa 6 dk 30 sn', '2 dk 51 sn', '7 sa 3 dk 39 sn', '2 dk 26 sn'] mak ['3', '7 sa 6 dk 30 sn', '2 dk 51 sn', '7 sa 3 dk 39 sn', '2 dk 26 sn'] OK
+&from=2026-11-15&to=2026-11-15 T1-H1-M01 - Kar&#x131;&#x15F /reports/machine?MachineId=1&From=2026-11-15&To=2026-11-15 dur ['1', '2 dk 46 sn', '0 sn', '2 dk 46 sn', '1 dk 44 sn'] mak ['1', '2 dk 46 sn', '0 sn', '2 dk 46 sn', '1 dk 44 sn'] OK
+&from=2026-11-15&to=2026-11-15 T1-H2-M01 - Dolum makinesi /reports/machine?MachineId=3&From=2026-11-15&To=2026-11-15 dur ['1', '41 dk 28 sn', '40 dk', '1 dk 28 sn', '1 dk 28 sn'] mak ['1', '41 dk 28 sn', '40 dk', '1 dk 28 sn', '1 dk 28 sn'] OK
+&from=2026-11-16 T1-H1-M01 - Kar&#x131;&#x15F /reports/machine?MachineId=1&From=2026-11-16 dur ['1', '1 dk 45 sn', '0 sn', '1 dk 45 sn', '1 dk 45 sn'] mak ['1', '1 dk 45 sn', '0 sn', '1 dk 45 sn', '1 dk 45 sn'] OK
+&from=2026-11-16 T1-H1-M02 - Tart&#x131; &#xF /reports/machine?MachineId=2&From=2026-11-16 dur ['4', '1 dk 21 sn', '10 sn', '1 dk 10 sn', '1 dk 28 sn'] mak ['4', '1 dk 21 sn', '10 sn', '1 dk 10 sn', '1 dk 28 sn'] OK
+toplam sapma 0

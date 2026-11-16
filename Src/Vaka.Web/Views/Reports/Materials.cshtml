@@ -3,10 +3,12 @@
 @model MaterialTraceViewModel
 @{
     ViewData["Title"] = "Malzeme izlenebilirliği";
-    ViewData["Lead"] = "Bir lotun hangi kayıtlarda kullanıldığını ya da bir makinede hangi malzemelerin kullanıldığını sorgulayın.";
+    ViewData["Lead"] = "Bir lotun hangi kayıtlarda kullanıldığını, bir makinede hangi malzemelerin kullanıldığını ya da malzemelerin tamamlanan temizliklerde hangi oranda kullanıldığını sorgulayın.";
     ViewData["NavKey"] = "report-materials";
 
     var isLot = Model.Mode == MaterialTraceMode.Lot;
+    var isUsage = Model.Mode == MaterialTraceMode.Usage;
+    var isMachine = Model.Mode == MaterialTraceMode.Machine;
     var fromText = Model.From?.ToString("yyyy-MM-dd") ?? "";
     var toText = Model.To?.ToString("yyyy-MM-dd") ?? "";
     var hasRange = Model.From is not null || Model.To is not null;
@@ -34,7 +36,8 @@
 
 <nav class="mb-5 flex flex-wrap gap-2" aria-label="Sorgu türü">
     <a class="btn @(isLot ? "btn-primary" : "btn-secondary")" href="/reports/materials?mode=Lot" aria-current="@(isLot ? "page" : null)">@ModeText(MaterialTraceMode.Lot, "Lota göre")</a>
-    <a class="btn @(isLot ? "btn-secondary" : "btn-primary")" href="/reports/materials?mode=Machine" aria-current="@(isLot ? null : "page")">@ModeText(MaterialTraceMode.Machine, "Makineye göre")</a>
+    <a class="btn @(isMachine ? "btn-primary" : "btn-secondary")" href="/reports/materials?mode=Machine" aria-current="@(isMachine ? "page" : null)">@ModeText(MaterialTraceMode.Machine, "Makineye göre")</a>
+    <a class="btn @(isUsage ? "btn-primary" : "btn-secondary")" href="/reports/materials?mode=Usage" aria-current="@(isUsage ? "page" : null)">@ModeText(MaterialTraceMode.Usage, "Kullanım oranı")</a>
 </nav>
 
 @if (isLot)
@@ -107,6 +110,81 @@
         </div>
     </section>
 }
+else if (isUsage)
+{
+    <form method="get" action="/reports/materials" class="panel mb-5" aria-label="Kullanım oranı süzgeci" data-busy-form>
+        <input type="hidden" name="mode" value="Usage" />
+        <div class="grid gap-4 p-4 sm:grid-cols-2 md:p-5 xl:grid-cols-3">
+            <div class="field">
+                <label class="field-label" for="usage-from">Açılış, başlangıç</label>
+                <input id="usage-from" name="from" type="date" class="input" value="@fromText" autocomplete="off" />
+            </div>
+            <div class="field">
+                <label class="field-label" for="usage-to">Açılış, bitiş</label>
+                <input id="usage-to" name="to" type="date" class="input" value="@toText" autocomplete="off" />
+            </div>
+            <div class="field">
+                <label class="field-label" for="usage-type">Temizlik tipi</label>
+                <div class="select-wrap">
+                    <select id="usage-type" name="cleaningTypeId" class="input">
+                        <option value="">Tüm tipler</option>
+                        @foreach (var type in Model.CleaningTypes)
+                        {
+                            <option value="@type.Id" selected="@(type.Id == Model.CleaningTypeId)">@type.Label</option>
+                        }
+                    </select>
+                    <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                </div>
+            </div>
+            <div class="field">
+                <label class="field-label" for="usage-facility">Tesis</label>
+                <div class="select-wrap">
+                    <select id="usage-facility" name="facilityId" class="input">
+                        <option value="">Tüm tesisler</option>
+                        @foreach (var facility in Model.Facilities)
+                        {
+                            <option value="@facility.Id" selected="@(facility.Id == Model.FacilityId)">@facility.Label</option>
+                        }
+                    </select>
+                    <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                </div>
+            </div>
+            <div class="field">
+                <label class="field-label" for="usage-line">Hat</label>
+                <div class="select-wrap">
+                    <select id="usage-line" name="lineId" class="input">
+                        <option value="">Tüm hatlar</option>
+                        @foreach (var line in Model.Lines)
+                        {
+                            <option value="@line.Id" selected="@(line.Id == Model.LineId)">@line.Label</option>
+                        }
+                    </select>
+                    <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                </div>
+            </div>
+            <div class="field">
+                <label class="field-label" for="usage-machine">Makine</label>
+                <div class="select-wrap">
+                    <select id="usage-machine" name="machineId" class="input">
+                        <option value="">Tüm makineler</option>
+                        @foreach (var machine in Model.Machines)
+                        {
+                            <option value="@machine.Id" selected="@(machine.Id == Model.MachineId)">@machine.Label</option>
+                        }
+                    </select>
+                    <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+                </div>
+            </div>
+            <div class="flex flex-wrap items-end gap-2 sm:col-span-2 xl:col-span-3">
+                <button type="submit" class="btn btn-primary min-h-12 max-sm:w-full">
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#funnel" /></svg>
+                    Sorgula
+                </button>
+                <a class="btn btn-secondary min-h-12 max-sm:w-full" href="/reports/materials?mode=Usage">Temizle</a>
+            </div>
+        </div>
+    </form>
+}
 else
 {
     <form method="get" action="/reports/materials" class="panel mb-5" aria-label="Makine sorgusu" data-busy-form>
@@ -146,7 +224,7 @@ else
 <partial name="_ListSkeleton" />
 
 <div data-loading-target>
-    @if (!queried)
+    @if (!queried && !isUsage)
     {
         <partial name="_State" model='("empty", "route", isLot ? "Bir lot seçin" : "Bir makine seçin", isLot ? "Lotu bulup seçtiğinizde kullanıldığı kayıtlar makine, tarih ve durumla listelenir." : "Makineyi seçtiğinizde orada kullanılan malzemeler ve lotlar tarih sırasıyla listelenir.", (string?)null, (string?)null)' />
     }
@@ -200,6 +278,36 @@ else
                         }
                     </tbody>
                 </table>
+            </section>
+        }
+    }
+    else if (isUsage)
+    {
+        var usage = Model.Usage;
+        var hasUsageFilter = hasRange || Model.FacilityId is not null || Model.LineId is not null || Model.MachineId is not null || Model.CleaningTypeId is not null;
+        if (usage is null)
+        {
+            <partial name="_State" model='("empty", "chart-column", "Süzgeci seçip sorgulayın", "Tamamlanan temizliklerde her malzemenin hangi oranda kullanıldığı burada listelenir.", (string?)null, (string?)null)' />
+        }
+        else if (usage.CompletedRecordCount == 0)
+        {
+            <partial name="_State" model='("empty", "search", "Tamamlanan kayıt yok", hasUsageFilter ? "Süzgece uyan Tamamlandı kayıt yok. Süzgeci genişletin." : "Henüz tamamlanmış kayıt yok. Kayıtlar tamamlandıkça oranlar burada görünür.", hasUsageFilter ? "Süzgeçleri temizle" : null, hasUsageFilter ? "/reports/materials?mode=Usage" : null)' />
+        }
+        else
+        {
+            <section class="panel" aria-labelledby="usage-rate-title">
+                <div class="panel-head">
+                    <h2 id="usage-rate-title" class="panel-title">Malzeme kullanım oranı</h2>
+                    <p class="text-sm text-muted">Oran, <span class="mono font-bold">@usage.CompletedRecordCount</span> Tamamlandı kayıt üzerinden hesaplanır. <span class="mono font-bold">@usage.RecordsWithMaterialCount</span> kayıtta malzeme girilmiş.</p>
+                </div>
+                @if (usage.Rows.Length == 0)
+                {
+                    <p class="p-4 text-muted md:p-5">Bu kayıtlarda malzeme kullanılmamış.</p>
+                }
+                else
+                {
+                    <partial name="_MaterialUsageTable" model='(usage.Rows, "Malzeme başına kayıt sayısı, kullanım oranı, lot sayısı ve SKT geçmiş kullanım sayısı")' />
+                }
             </section>
         }
     }

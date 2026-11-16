@@ -157,8 +157,7 @@
                         <th scope="col">Makine ve yer</th>
                         <th scope="col">Sahip</th>
                         <th scope="col">Durum</th>
-                        <th scope="col">Açılış</th>
-                        <th scope="col" class="text-right">Net süre</th>
+                        <th scope="col" class="text-right">Açılış ve net süre</th>
                         <th scope="col">İşlem</th>
                     </tr>
                 </thead>
@@ -167,7 +166,7 @@
                     {
                         <tr>
                             <td data-label="" class="stack-lead"><span class="record-no text-sm xl:whitespace-nowrap">@item.RecordNo</span>@if (!string.IsNullOrEmpty(item.FieldBookRef)){<span class="mono mt-0.5 block text-xs text-muted">@item.FieldBookRef</span>}</td>
-                            <td data-label="Makine ve yer" class="stack-wide xl:max-w-md break-words">
+                            <td data-label="Makine ve yer" class="stack-wide wrap-anywhere xl:max-w-xs">
                                 <span class="font-semibold">@item.MachineLabel</span>
                                 <span class="mt-0.5 block text-sm text-muted">@item.FacilityName, @item.LineName. @item.CleaningTypeName, versiyon @item.VersionNo</span>
                                 @if (item.HasBelowMinimum || item.HasExpiredMaterial)
@@ -184,23 +183,16 @@
                                     </span>
                                 }
                             </td>
-                            <td data-label="Sahip" class="xl:max-w-[12rem] break-words">@item.OwnerName</td>
+                            <td data-label="Sahip" class="wrap-anywhere xl:max-w-[12rem]">@item.OwnerName</td>
                             <td data-label="Durum" class="stack-badge">
-                                <div class="flex flex-wrap items-center justify-end gap-2">
+                                <div class="flex flex-wrap items-center justify-end gap-2 xl:flex-col xl:items-start xl:gap-1">
                                     <partial name="_Badge" model='"CleaningTypeKind." + item.Kind' />
                                     <partial name="_Badge" model='"RecordStatus." + item.Status' />
                                 </div>
                             </td>
-                            <td data-label="Açılış"><partial name="_Moment" model='(item.OpenedAtLocal, DateTime.MinValue)' /></td>
-                            <td data-label="Net süre" class="num whitespace-nowrap">
-                                @if (item.NetSeconds is { } net)
-                                {
-                                    <partial name="_Duration" model="DurationFormatter.Format(net)" />
-                                }
-                                else
-                                {
-                                    <span aria-label="Net süre yok">-</span>
-                                }
+                            <td data-label="Açılış ve net süre" class="num">
+                                <span class="block xl:whitespace-nowrap"><span class="font-sans text-xs text-muted">Açılış </span><partial name="_Moment" model='(item.OpenedAtLocal, DateTime.MinValue)' /></span>
+                                <span class="block xl:whitespace-nowrap"><span class="font-sans text-xs text-muted">Net süre </span>@if (item.NetSeconds is { } net){<partial name="_Duration" model="DurationFormatter.Format(net)" />}else{<span aria-label="Net süre yok">-</span>}</span>
                             </td>
                             <td data-label="İşlem" class="cell-action">
                                 <a class="btn btn-secondary" href="@item.Url" data-busy-link aria-label="@item.RecordNo kaydının ayrıntısı">

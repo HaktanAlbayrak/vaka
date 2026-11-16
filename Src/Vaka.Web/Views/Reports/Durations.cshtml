@@ -128,7 +128,7 @@
                 <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
             </div>
         </div>
-        <div class="flex flex-wrap items-end gap-2">
+        <div class="flex flex-wrap items-end gap-2 sm:col-span-2 xl:col-span-4">
             <button type="submit" class="btn btn-primary min-h-12">
                 <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#funnel" /></svg>
                 Raporla
@@ -185,6 +185,7 @@
                         <th scope="col" class="text-right">Mola</th>
                         <th scope="col" class="text-right">Net</th>
                         <th scope="col" class="text-right">Efor</th>
+                        <th scope="col">İşlem</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -200,6 +201,12 @@
                             <td data-label="Mola" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(row.AvgBreakSeconds)" /></td>
                             <td data-label="Net" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(row.AvgNetSeconds)" /></td>
                             <td data-label="Efor" class="num whitespace-nowrap"><partial name="_Duration" model="DurationFormatter.Format(row.AvgEffortSeconds)" /></td>
+                            <td data-label="İşlem" class="cell-action">
+                                <a class="btn btn-secondary" href="@row.MachineReportUrl" data-busy-link aria-label="@row.MachineLabel makine raporu">
+                                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#chart-column" /></svg>
+                                    Makine raporu
+                                </a>
+                            </td>
                         </tr>
                     }
                 </tbody>

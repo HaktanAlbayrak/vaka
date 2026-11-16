@@ -1,0 +1,120 @@
+Faz 6D Tur 3 - B8 yeniden denetimi (Release .qa/f6d/build3, port 5799, DB .qa/f6d/qa.db, Chromium oturum f6d, Yönetici 1001)
+
+== B8: /records 1280-1440, açık ve koyu (25 satır, uzun adlı satır dahil) ==
+over = Ayrıntı sağ kenarı - panel iç sağ kenarı (negatif = içeride); clipped = kırpılan satır; centerHit/rightEdgeHit = elementFromPoint düğmeye düşüyor mu
+{'w': 1280, 'scheme': 'light', 'table': 964, 'panelInner': 964, 'rows': 25, 'clipped': 0, 'maxOver': -12, 'longRow': {'over': -12, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': True}
+{'w': 1300, 'scheme': 'light', 'table': 984, 'panelInner': 984, 'rows': 25, 'clipped': 0, 'maxOver': -12, 'longRow': {'over': -12, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': True}
+{'w': 1366, 'scheme': 'light', 'table': 1050, 'panelInner': 1050, 'rows': 25, 'clipped': 0, 'maxOver': -12, 'longRow': {'over': -12, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': True}
+{'w': 1440, 'scheme': 'light', 'table': 1124, 'panelInner': 1124, 'rows': 25, 'clipped': 0, 'maxOver': -12, 'longRow': {'over': -12, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': True}
+{'w': 1280, 'scheme': 'dark', 'table': 964, 'panelInner': 964, 'rows': 25, 'clipped': 0, 'maxOver': -12, 'longRow': {'over': -12, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': True}
+{'w': 1300, 'scheme': 'dark', 'table': 984, 'panelInner': 984, 'rows': 25, 'clipped': 0, 'maxOver': -12, 'longRow': {'over': -12, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': True}
+{'w': 1366, 'scheme': 'dark', 'table': 1050, 'panelInner': 1050, 'rows': 25, 'clipped': 0, 'maxOver': -12, 'longRow': {'over': -12, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': True}
+{'w': 1440, 'scheme': 'dark', 'table': 1124, 'panelInner': 1124, 'rows': 25, 'clipped': 0, 'maxOver': -12, 'longRow': {'over': -12, 'btnW': 112}, 'hScroll': False, 'centerHit': True, 'rightEdgeHit': True}
+
+== 1280/1300/1440 sütun genişlikleri, hücre taşma, birleşik sütun hizası ==
+{'w': 1280, 'panelInner': 964, 'table': 964, 'ths': ['Kay�t no', 'Makine ve yer', 'Sahip', 'Durum', 'A��l�� ve net s�re', '��lem'], 'cur': [169, 226, 90, 154, 190, 136], 'cellOverflow': [], 'childClip': [], 'combinedRights': [1098, 1098], 'headerRight': 1098}
+{'w': 1300, 'panelInner': 984, 'table': 984, 'ths': ['Kay�t no', 'Makine ve yer', 'Sahip', 'Durum', 'A��l�� ve net s�re', '��lem'], 'cur': [169, 235, 100, 154, 190, 136], 'cellOverflow': [], 'childClip': [], 'combinedRights': [1118, 1118], 'headerRight': 1118}
+{'w': 1440, 'panelInner': 1124, 'table': 1124, 'ths': ['Kay�t no', 'Makine ve yer', 'Sahip', 'Durum', 'A��l�� ve net s�re', '��lem'], 'cur': [169, 303, 173, 154, 190, 136], 'cellOverflow': [], 'childClip': [], 'combinedRights': [1258, 1258], 'headerRight': 1258}
+
+== Kart modu: 'Açılış ve net süre' hücresi ==
+spans = hücredeki iki satırın metni, sağ kenarı ve genişliği (görünür kutu); time.mono öğesi matris ölçümünde kart iç kenarını 360 px'te 23,6 px, 320 px'te 43,6 px aşıyor
+{'scheme': 'light', 'w': 320, 'cardInnerRight': 290, 'tdLeft': 168, 'tdRight': 290, 'tdW': 122, 'label': '"A��l�� ve net s�re"', 'align': 'left', 'spans': [{'text': 'A��l�� 16.11.2026 21:55', 'right': 290, 'w': 122}, {'text': 'Net s�re -', 'right': 290, 'w': 122}], 'trOverflow': 'visible', 'hScroll': True, 'sw': 334}
+{'scheme': 'dark', 'w': 320, 'cardInnerRight': 290, 'tdLeft': 168, 'tdRight': 290, 'tdW': 122, 'label': '"A��l�� ve net s�re"', 'align': 'left', 'spans': [{'text': 'A��l�� 16.11.2026 21:55', 'right': 290, 'w': 122}, {'text': 'Net s�re -', 'right': 290, 'w': 122}], 'trOverflow': 'visible', 'hScroll': True, 'sw': 334}
+{'scheme': 'light', 'w': 360, 'cardInnerRight': 330, 'tdLeft': 188, 'tdRight': 330, 'tdW': 142, 'label': '"A��l�� ve net s�re"', 'align': 'left', 'spans': [{'text': 'A��l�� 16.11.2026 21:55', 'right': 330, 'w': 142}, {'text': 'Net s�re -', 'right': 330, 'w': 142}], 'trOverflow': 'visible', 'hScroll': False, 'sw': 360}
+{'scheme': 'dark', 'w': 360, 'cardInnerRight': 330, 'tdLeft': 188, 'tdRight': 330, 'tdW': 142, 'label': '"A��l�� ve net s�re"', 'align': 'left', 'spans': [{'text': 'A��l�� 16.11.2026 21:55', 'right': 330, 'w': 142}, {'text': 'Net s�re -', 'right': 330, 'w': 142}], 'trOverflow': 'visible', 'hScroll': False, 'sw': 360}
+{'scheme': 'light', 'w': 768, 'cardInnerRight': 726, 'tdLeft': 275, 'tdRight': 493, 'tdW': 217, 'label': '"A��l�� ve net s�re"', 'align': 'left', 'spans': [{'text': 'A��l�� 16.11.2026 21:55', 'right': 493, 'w': 217}, {'text': 'Net s�re -', 'right': 493, 'w': 217}], 'trOverflow': 'visible', 'hScroll': False, 'sw': 768}
+{'scheme': 'dark', 'w': 768, 'cardInnerRight': 726, 'tdLeft': 275, 'tdRight': 493, 'tdW': 217, 'label': '"A��l�� ve net s�re"', 'align': 'left', 'spans': [{'text': 'A��l�� 16.11.2026 21:55', 'right': 493, 'w': 217}, {'text': 'Net s�re -', 'right': 493, 'w': 217}], 'trOverflow': 'visible', 'hScroll': False, 'sw': 768}
+
+== Matris (84 hücre: /records, arama, sayfa 2, /machines, /materials, /reports/machine?machineId=2 x 320/360/768/1024/1280/1300/1366/1440/1920) ==
+360x800-light /records ["tbl0 ['taşma time.mono 23.6']"]
+360x800-light /records?query=L2026-001 ["tbl0 ['taşma time.mono 23.6']"]
+360x800-light /records?page=2 ["tbl0 ['taşma time.mono 23.6']"]
+360x800-light /machines ["small['showRetired 20x20']"]
+360x800-light /materials ["small['showInactive 20x20']"]
+360x800-dark /records ["tbl0 ['taşma time.mono 23.6']"]
+360x800-dark /records?query=L2026-001 ["tbl0 ['taşma time.mono 23.6']"]
+360x800-dark /records?page=2 ["tbl0 ['taşma time.mono 23.6']"]
+360x800-dark /machines ["small['showRetired 20x20']"]
+360x800-dark /materials ["small['showInactive 20x20']"]
+768x1024-light /machines ["small['showRetired 20x20']"]
+768x1024-light /materials ["small['showInactive 20x20']"]
+768x1024-dark /machines ["small['showRetired 20x20']"]
+768x1024-dark /materials ["small['showInactive 20x20']"]
+1024x768-light /machines ["small['showRetired 20x20']"]
+1024x768-light /materials ["small['showInactive 20x20']"]
+1024x768-dark /machines ["small['showRetired 20x20']"]
+1024x768-dark /materials ["small['showInactive 20x20']"]
+320x640-light /records ["overflowing['TIME.mono', 'SPAN.whitespace-nowrap', 'TIME.mono', 'SPAN.whitespace-nowrap', 'TIME.mono', 'SPAN.whitespace-nowrap', 'TIME.mono', 'SPAN.whitespace-nowrap']", 'hScroll 334', "tbl0 ['taşma time.mono 43.6']"]
+320x640-light /records?query=L2026-001 ["overflowing['TIME.mono', 'SPAN.whitespace-nowrap', 'TIME.mono', 'SPAN.whitespace-nowrap']", 'hScroll 334', "tbl0 ['taşma time.mono 43.6']"]
+320x640-light /records?page=2 ["overflowing['TIME.mono', 'SPAN.whitespace-nowrap', 'TIME.mono', 'SPAN.whitespace-nowrap', 'TIME.mono', 'SPAN.whitespace-nowrap', 'TIME.mono', 'SPAN.whitespace-nowrap']", 'hScroll 334', "tbl0 ['taşma time.mono 43.6']"]
+320x640-light /machines ["small['showRetired 20x20']"]
+320x640-light /materials ["small['showInactive 20x20']"]
+t3a 42 hücre
+1280x800-light /machines ["small['showRetired 20x20']"]
+1280x800-light /materials ["small['showInactive 20x20']"]
+1280x800-dark /machines ["small['showRetired 20x20']"]
+1280x800-dark /materials ["small['showInactive 20x20']"]
+1300x800-light /machines ["small['showRetired 20x20']"]
+1300x800-light /materials ["small['showInactive 20x20']"]
+1366x800-dark /machines ["small['showRetired 20x20']"]
+1366x800-dark /materials ["small['showInactive 20x20']"]
+1440x900-light /machines ["small['showRetired 20x20']"]
+1440x900-light /materials ["small['showInactive 20x20']"]
+1440x900-dark /machines ["small['showRetired 20x20']"]
+1440x900-dark /materials ["small['showInactive 20x20']"]
+1920x1080-light /machines ["small['showRetired 20x20']"]
+1920x1080-light /materials ["small['showInactive 20x20']"]
+t3b 42 hücre
+kusurlu hücre 37
+Not: /machines ve /materials 'showRetired'/'showInactive' onay kutusu 20x20 px; .table-stack ile ilgisiz, Faz 2'den kalma, tur 1 ve 2'de bu ekranlar ölçülmedi.
+
+== Liste araması ve sayfalama ==
+/records 200 toplam/sayfa ('33', '1') satır 25 ['T1-H1-M02-P2026-24', 'T1-H1-M02-P2026-23'] sayfalama ['/records?page=2&mineOnly=false'] birleşik hücre/etiket (25, 25, 25) 
+/records?page=2 200 toplam/sayfa ('33', '2') satır 8 ['T1-H1-M02-P2026-1', 'T1-H1-M01-A2026-6'] sayfalama ['/records?page=1&mineOnly=false'] birleşik hücre/etiket (8, 8, 8) 
+/records?query=IE-QA6D-0001 200 toplam/sayfa ('1', '1') satır 1 ['T1-H1-M02-P2026-4'] sayfalama [] birleşik hücre/etiket (1, 1, 1) 
+/records?query=T1-H1-M01-P2026-5 200 toplam/sayfa ('1', '1') satır 1 ['T1-H1-M01-P2026-5'] sayfalama [] birleşik hücre/etiket (1, 1, 1) 
+/records?query=L2026-001 200 toplam/sayfa ('2', '1') satır 2 ['T1-H1-M02-P2026-4', 'T1-H1-M02-P2026-2'] sayfalama [] birleşik hücre/etiket (2, 2, 2) 
+/records?query=zzzz 200 toplam/sayfa None satır 0 [] sayfalama [] birleşik hücre/etiket (0, 0, 0) boş
+/records?page=2&status=6 200 toplam/sayfa ('20', '1') satır 20 ['T1-H1-M02-P2026-24', 'T1-H1-M02-P2026-23'] sayfalama [] birleşik hücre/etiket (20, 20, 20) 
+/records?machineId=2&page=2 200 toplam/sayfa ('24', '1') satır 24 ['T1-H1-M02-P2026-24', 'T1-H1-M02-P2026-23'] sayfalama [] birleşik hücre/etiket (24, 24, 24) 
+DB toplam 33 İptal 20 makine2 24
+
+==================================================================
+Tur 4 - B10 yeniden denetimi (Release .qa/f6d/build4, port 5800, DB .qa/f6d/qa.db, Yönetici 1001; yalnız /records)
+Değişiklik: Records/Index.cshtml:194-195 'block whitespace-nowrap' -> 'block xl:whitespace-nowrap'. Derleme 0/0, CSS bayt bayt aynı (73960).
+
+== Satır bazında ölçüm (25 satır sayfa 1, 8 satır sayfa 2; açık ve koyu) ==
+overflowCells = içeriği hücre ya da kart iç kenarı dışına çıkan hücre; maxOver = en büyük aşım px (0 = kenara değiyor, negatif = içeride); innerLabels = iç etiket sayısı/görünen; ayrinti* = görünmeyen ya da sol, orta, sağ noktadan tıklanmayan düğme sayısı
+{'u': '/records', 'scheme': 'light', 'w': 320, 'rows': 25, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '50/50', 'hScroll': False, 'sw': 320, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'light', 'w': 360, 'rows': 25, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '50/50', 'hScroll': False, 'sw': 360, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'light', 'w': 768, 'rows': 25, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '50/50', 'hScroll': False, 'sw': 768, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'light', 'w': 1024, 'rows': 25, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '50/50', 'hScroll': False, 'sw': 1024, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'light', 'w': 1280, 'rows': 25, 'mode': 'tablo', 'overflowCells': 0, 'maxOver': -12, 'innerLabels': '50/50', 'hScroll': False, 'sw': 1280, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'light', 'w': 1300, 'rows': 25, 'mode': 'tablo', 'overflowCells': 0, 'maxOver': -12, 'innerLabels': '50/50', 'hScroll': False, 'sw': 1300, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'light', 'w': 1440, 'rows': 25, 'mode': 'tablo', 'overflowCells': 0, 'maxOver': -12, 'innerLabels': '50/50', 'hScroll': False, 'sw': 1440, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'dark', 'w': 320, 'rows': 25, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '50/50', 'hScroll': False, 'sw': 320, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'dark', 'w': 360, 'rows': 25, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '50/50', 'hScroll': False, 'sw': 360, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'dark', 'w': 768, 'rows': 25, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '50/50', 'hScroll': False, 'sw': 768, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'dark', 'w': 1024, 'rows': 25, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '50/50', 'hScroll': False, 'sw': 1024, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'dark', 'w': 1280, 'rows': 25, 'mode': 'tablo', 'overflowCells': 0, 'maxOver': -12, 'innerLabels': '50/50', 'hScroll': False, 'sw': 1280, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'dark', 'w': 1300, 'rows': 25, 'mode': 'tablo', 'overflowCells': 0, 'maxOver': -12, 'innerLabels': '50/50', 'hScroll': False, 'sw': 1300, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records', 'scheme': 'dark', 'w': 1440, 'rows': 25, 'mode': 'tablo', 'overflowCells': 0, 'maxOver': -12, 'innerLabels': '50/50', 'hScroll': False, 'sw': 1440, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'light', 'w': 320, 'rows': 8, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '16/16', 'hScroll': False, 'sw': 320, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'light', 'w': 360, 'rows': 8, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '16/16', 'hScroll': False, 'sw': 360, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'light', 'w': 768, 'rows': 8, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '16/16', 'hScroll': False, 'sw': 768, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'light', 'w': 1024, 'rows': 8, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '16/16', 'hScroll': False, 'sw': 1024, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'light', 'w': 1280, 'rows': 8, 'mode': 'tablo', 'overflowCells': 0, 'maxOver': -12, 'innerLabels': '16/16', 'hScroll': False, 'sw': 1280, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'light', 'w': 1300, 'rows': 8, 'mode': 'tablo', 'overflowCells': 0, 'maxOver': -12, 'innerLabels': '16/16', 'hScroll': False, 'sw': 1300, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'light', 'w': 1440, 'rows': 8, 'mode': 'tablo', 'overflowCells': 0, 'maxOver': -12, 'innerLabels': '16/16', 'hScroll': False, 'sw': 1440, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'dark', 'w': 320, 'rows': 8, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '16/16', 'hScroll': False, 'sw': 320, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'dark', 'w': 360, 'rows': 8, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '16/16', 'hScroll': False, 'sw': 360, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'dark', 'w': 768, 'rows': 8, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '16/16', 'hScroll': False, 'sw': 768, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'dark', 'w': 1024, 'rows': 8, 'mode': 'kart', 'overflowCells': 0, 'maxOver': 0, 'innerLabels': '16/16', 'hScroll': False, 'sw': 1024, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'dark', 'w': 1280, 'rows': 8, 'mode': 'tablo', 'overflowCells': 0, 'maxOver': -12, 'innerLabels': '16/16', 'hScroll': False, 'sw': 1280, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'dark', 'w': 1300, 'rows': 8, 'mode': 'tablo', 'overflowCells': 0, 'maxOver': -12, 'innerLabels': '16/16', 'hScroll': False, 'sw': 1300, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+{'u': '/records?page=2', 'scheme': 'dark', 'w': 1440, 'rows': 8, 'mode': 'tablo', 'overflowCells': 0, 'maxOver': -12, 'innerLabels': '16/16', 'hScroll': False, 'sw': 1440, 'ayrintiNotVisible': 0, 'ayrintiNotClickable': 0}
+
+== Mekanik eval matrisi (32 hücre: /records ve sayfa 2 x 320/360/640/768/1024/1280/1300/1440, açık ve koyu) ==
+t4 32 hücre
+kusurlu hücre 0
+G11: 320 ve 360 Baş[Kayıt no|Durum(alt satır)] Gövde[Makine ve yer:tam@1 Sahip:1@2 Açılış ve net süre:1@2] Ayak[İşlem]; 640, 768, 1024 Baş[Kayıt no|Durum] Gövde[aynı] Ayak[İşlem]; 1280-1440 tablo, satır en az 85 px, kapsayıcı 10 px, tablo panelden geniş değil. Konsol 0.

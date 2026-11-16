@@ -15,4 +15,6 @@ public sealed class MachineDurationRowViewModel
     public int AvgNetSeconds { get; set; }
 
     public int AvgEffortSeconds { get; set; }
+
+    public string MachineReportUrl { get; set; } = string.Empty;
 }

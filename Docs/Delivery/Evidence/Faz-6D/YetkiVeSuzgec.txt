@@ -1,0 +1,49 @@
+Faz 6D - Yetki matrisi ve süzgeç doğrulaması (HTTP, .qa/f6d/j/roles.py ve verify_err.py)
+Kullanıcılar: Operatör 2004, Yönetici 1001, Denetçi 3001, Süper admin 0001 (yalnız SuperAdmin). 403 = 302 /account/access-denied > 403 (projenin düzeni).
+
+Operatör 2004 giriş 302 /
+Yönetici 1001 giriş 302 /
+Denetçi 3001 giriş 302 /
+Süper admin 0001 giriş 302 /
+oturumsuz | /reports/machine 302 /account/login | /reports/machine?machineId=1 302 /account/login | /reports/materials?mode=Usage 302 /account/login | /reports/materials?mode=Usage&machineId=2 302 /account/login | /reports/durations 302 /account/login
+Operatör 2004 | /reports/machine 302>access-denied 403 | /reports/machine?machineId=1 302>access-denied 403 | /reports/materials?mode=Usage 302>access-denied 403 | /reports/materials?mode=Usage&machineId=2 302>access-denied 403 | /reports/durations 302>access-denied 403
+   menü: Makine raporu False | Süre ve efor False | Malzeme izlenebilirliği False
+Yönetici 1001 | /reports/machine 200  | /reports/machine?machineId=1 200  | /reports/materials?mode=Usage 200  | /reports/materials?mode=Usage&machineId=2 200  | /reports/durations 200 
+   menü: Makine raporu True | Süre ve efor True | Malzeme izlenebilirliği True
+Denetçi 3001 | /reports/machine 200  | /reports/machine?machineId=1 200  | /reports/materials?mode=Usage 200  | /reports/materials?mode=Usage&machineId=2 200  | /reports/durations 200 
+   menü: Makine raporu True | Süre ve efor True | Malzeme izlenebilirliği True
+Süper admin 0001 | /reports/machine 302>access-denied 403 | /reports/machine?machineId=1 302>access-denied 403 | /reports/materials?mode=Usage 302>access-denied 403 | /reports/materials?mode=Usage&machineId=2 302>access-denied 403 | /reports/durations 302>access-denied 403
+   menü: Makine raporu False | Süre ve efor False | Malzeme izlenebilirliği False
+POST /reports/machine yönetici (405, None)
+POST /reports/machine oturumsuz (405, None)
+
+== Süzgeç ve hata durumları (/reports/machine, E-30 ve E-31 karşılaştırması) ==
+(yok) 200 | hata: - | boş "Bir makine seçin": True | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': []} hat {'n': 0, 'sel': []} makine {'n': 0, 'sel': []} tür {'n': 2, 'sel': []} from  to 
+?machineId=1&from=2026-11-16&to=2026-11-15 200 | hata: Bitiş tarihi başlangıç tarihinden önce olamaz. | boş "Bir makine seçin": False | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': ['1']} hat {'n': 2, 'sel': ['1']} makine {'n': 2, 'sel': ['1']} tür {'n': 2, 'sel': []} from 2026-11-16 to 2026-11-15
+?machineId=1&kind=9 200 | hata: Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | boş "Bir makine seçin": False | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': ['1']} hat {'n': 2, 'sel': ['1']} makine {'n': 2, 'sel': ['1']} tür {'n': 2, 'sel': []} from  to 
+?machineId=1&from=abc 200 | hata: Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | boş "Bir makine seçin": False | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': ['1']} hat {'n': 2, 'sel': ['1']} makine {'n': 2, 'sel': ['1']} tür {'n': 2, 'sel': []} from  to 
+?machineId=999 200 | hata: Seçilen makine bulunamadı ya da hatta ait değil. | boş "Bir makine seçin": False | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': []} hat {'n': 0, 'sel': []} makine {'n': 0, 'sel': []} tür {'n': 2, 'sel': []} from  to 
+?facilityId=999 200 | hata: Seçilen tesis bulunamadı. | boş "Bir makine seçin": False | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': []} hat {'n': 0, 'sel': []} makine {'n': 0, 'sel': []} tür {'n': 2, 'sel': []} from  to 
+?lineId=999 200 | hata: Seçilen hat bulunamadı ya da tesise ait değil. | boş "Bir makine seçin": False | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': []} hat {'n': 0, 'sel': []} makine {'n': 0, 'sel': []} tür {'n': 2, 'sel': []} from  to 
+?facilityId=1&lineId=999 200 | hata: Seçilen hat bulunamadı ya da tesise ait değil. | boş "Bir makine seçin": False | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': ['1']} hat {'n': 2, 'sel': []} makine {'n': 0, 'sel': []} tür {'n': 2, 'sel': []} from  to 
+?facilityId=2&machineId=1 200 | hata: - | boş "Bir makine seçin": True | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': ['2']} hat {'n': 1, 'sel': []} makine {'n': 1, 'sel': []} tür {'n': 2, 'sel': []} from  to 
+?facilityId=1&lineId=2&machineId=1 200 | hata: - | boş "Bir makine seçin": True | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': ['1']} hat {'n': 2, 'sel': ['2']} makine {'n': 2, 'sel': []} tür {'n': 2, 'sel': []} from  to 
+?lineId=3&machineId=1 200 | hata: - | boş "Bir makine seçin": True | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': []} hat {'n': 0, 'sel': []} makine {'n': 1, 'sel': []} tür {'n': 2, 'sel': []} from  to 
+?facilityId=2&lineId=1 200 | hata: - | boş "Bir makine seçin": True | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': ['2']} hat {'n': 1, 'sel': []} makine {'n': 1, 'sel': []} tür {'n': 2, 'sel': []} from  to 
+?machineId=abc 200 | hata: Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | boş "Bir makine seçin": False | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': []} hat {'n': 0, 'sel': []} makine {'n': 0, 'sel': []} tür {'n': 2, 'sel': []} from  to 
+?facilityId=1&lineId=1&machineId=1&from=2026-11-16&to=2026-11-15 200 | hata: Bitiş tarihi başlangıç tarihinden önce olamaz. | boş "Bir makine seçin": False | tablo: 0 | başlık: False | tesis {'n': 2, 'sel': ['1']} hat {'n': 2, 'sel': ['1']} makine {'n': 2, 'sel': ['1']} tür {'n': 2, 'sel': []} from 2026-11-16 to 2026-11-15
+?machineId=1&kind=2&from=2026-11-16&to=2026-11-16 200 | hata: - | boş "Bir makine seçin": False | tablo: 3 | başlık: True | tesis {'n': 2, 'sel': ['1']} hat {'n': 2, 'sel': ['1']} makine {'n': 2, 'sel': ['1']} tür {'n': 2, 'sel': ['2']} from 2026-11-16 to 2026-11-16
+?machineId=5 200 | hata: - | boş "Bir makine seçin": False | tablo: 0 | başlık: True | tesis {'n': 2, 'sel': ['2']} hat {'n': 1, 'sel': ['3']} makine {'n': 1, 'sel': ['5']} tür {'n': 2, 'sel': []} from  to 
+?machineId=4 200 | hata: - | boş "Bir makine seçin": False | tablo: 0 | başlık: True | tesis {'n': 2, 'sel': ['1']} hat {'n': 2, 'sel': ['2']} makine {'n': 2, 'sel': ['4']} tür {'n': 2, 'sel': []} from  to 
+--- E-30 aynı uyuşmazlık
+?facilityId=2&machineId=1 200 Seçilen makine bulunamadı ya da hatta ait değil.
+?facilityId=1&lineId=2&machineId=1 200 Seçilen makine bulunamadı ya da hatta ait değil.
+?from=2026-11-16&to=2026-11-15&machineId=1 200 Bitiş tarihi başlangıç tarihinden önce olamaz.
+--- E-31 Usage hata
+&from=2026-11-16&to=2026-11-15 200 | hata: Bitiş tarihi başlangıç tarihinden önce olamaz. | tablo 0 | makine ['id="usage-machine"'] False
+&facilityId=999 200 | hata: Seçilen tesis bulunamadı. | tablo 0 | makine ['id="usage-machine"'] False
+&machineId=999 200 | hata: Seçilen makine bulunamadı ya da hatta ait değil. | tablo 0 | makine ['id="usage-machine"'] False
+&cleaningTypeId=999 200 | hata: Seçilen temizlik tipi bulunamadı. | tablo 0 | makine ['id="usage-machine"'] False
+&facilityId=2&machineId=1 200 | hata: - | tablo 0 | makine ['id="usage-machine"'] False
+&from=abc 200 | hata: Süzgeç değerlerinden biri okunamadı. Tarih ve seçimleri kontrol edin. | tablo 0 | makine [] False
+&lineId=3&machineId=1 200 | hata: - | tablo 0 | makine ['id="usage-machine"'] False

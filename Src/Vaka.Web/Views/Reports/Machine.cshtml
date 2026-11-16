@@ -1,0 +1,338 @@
+@using Vaka.Web.Services
+@using Vaka.Web.ViewModels.Reports
+@inject IDurationFormatter DurationFormatter
+@model MachineReportViewModel
+@{
+    ViewData["Title"] = "Makine raporu";
+    ViewData["Lead"] = "Bir makinedeki temizliklerin tip başına ortalama süresi, eforu ve prosedürün planladığı minimum süreyle farkı.";
+    ViewData["NavKey"] = "report-machine";
+
+    var filter = Model.Filter;
+    var fromText = filter.From?.ToString("yyyy-MM-dd") ?? "";
+    var toText = filter.To?.ToString("yyyy-MM-dd") ?? "";
+    var kindValue = (int?)filter.Kind;
+    var machine = Model.Machine;
+    var hasFilter = filter.From is not null || filter.To is not null || filter.Kind is not null;
+    var hasRecords = Model.StatusCounts.Any(item => item.Count > 0);
+    var chartRows = Model.ByType.Where(row => row.AvgNetSeconds is not null).ToArray();
+
+    string Text(int seconds) => string.Join(" ", DurationFormatter.Format(seconds).Select(part => part.Value + " " + part.Unit));
+
+    var typeChart = (
+        "type-chart", "Ortalama net süre",
+        "Ortalama net=chart-1;Planlanan minimumun altında=chart-1-hatch",
+        chartRows.Select(row =>
+        {
+            var net = row.AvgNetSeconds!.Value;
+            var below = row.AvgPlannedMinSeconds is { } min && net < min;
+            return (row.CleaningTypeName, row.KindLabel + ", " + row.CompletedCount + " tamamlandı",
+                (double)net, below ? "chart-1-hatch" : "chart-1", 0.0, "chart-1",
+                row.AvgPlannedMinSeconds is { } planned ? (double)planned : -1.0,
+                Text(net), row.AvgPlannedMinSeconds is { } shown ? "min " + Text(shown) : "planlanan minimum yok",
+                below ? "Minimumun altında" : "");
+        }).ToArray(),
+        "Planlanan minimum");
+
+    string Sign(int seconds) => seconds < 0 ? "-" : seconds > 0 ? "+" : "";
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="notice notice-danger mb-5" role="alert" tabindex="-1" data-form-summary>
+        <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+        <div class="min-w-0">
+            <p class="font-semibold">Rapor hazırlanamadı</p>
+            <p class="mt-0.5 text-sm">@Model.ErrorMessage</p>
+            <p class="mt-0.5 text-sm">Süzgeçleri kontrol edip raporu yeniden oluşturun.</p>
+        </div>
+    </div>
+}
+
+<form method="get" action="/reports/machine" class="panel mb-5" aria-label="Makine raporu süzgeci" data-busy-form>
+    <div class="grid gap-4 p-4 sm:grid-cols-2 md:p-5 xl:grid-cols-3">
+        <div class="field">
+            <label class="field-label" for="facilityId">Tesis</label>
+            <div class="select-wrap">
+                <select id="facilityId" name="facilityId" class="input">
+                    <option value="">Tüm tesisler</option>
+                    @foreach (var facility in Model.FacilityOptions)
+                    {
+                        <option value="@facility.Id" selected="@(facility.Id == filter.FacilityId)">@facility.Label</option>
+                    }
+                </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
+        </div>
+        <div class="field">
+            <label class="field-label" for="lineId">Hat</label>
+            <div class="select-wrap">
+                <select id="lineId" name="lineId" class="input">
+                    <option value="">Tüm hatlar</option>
+                    @foreach (var line in Model.LineOptions)
+                    {
+                        <option value="@line.Id" selected="@(line.Id == filter.LineId)">@line.Label</option>
+                    }
+                </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
+        </div>
+        <div class="field sm:col-span-2 xl:col-span-1">
+            <label class="field-label" for="machineId">Makine</label>
+            <div class="select-wrap">
+                <select id="machineId" name="machineId" class="input">
+                    <option value="">Makine seçin</option>
+                    @foreach (var option in Model.MachineOptions)
+                    {
+                        <option value="@option.Id" selected="@(option.Id == filter.MachineId)">@option.Label</option>
+                    }
+                </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
+        </div>
+        <div class="field">
+            <label class="field-label" for="from">Açılış, başlangıç</label>
+            <input id="from" name="from" type="date" class="input" value="@fromText" autocomplete="off" />
+        </div>
+        <div class="field">
+            <label class="field-label" for="to">Açılış, bitiş</label>
+            <input id="to" name="to" type="date" class="input" value="@toText" autocomplete="off" />
+        </div>
+        <div class="field">
+            <label class="field-label" for="kind">Tür</label>
+            <div class="select-wrap">
+                <select id="kind" name="kind" class="input">
+                    <option value="">Planlı ve acil</option>
+                    @foreach (var option in Model.KindOptions)
+                    {
+                        <option value="@option.Id" selected="@(option.Id == kindValue)">@option.Label</option>
+                    }
+                </select>
+                <svg class="icon select-arrow" aria-hidden="true"><use href="/lib/icons/Icons.svg#chevron-down" /></svg>
+            </div>
+        </div>
+        <div class="flex flex-wrap items-end gap-2 sm:col-span-2 xl:col-span-3">
+            <button type="submit" class="btn btn-primary min-h-12 max-sm:w-full">
+                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#funnel" /></svg>
+                Raporla
+            </button>
+            <a class="btn btn-secondary min-h-12 max-sm:w-full" href="/reports/machine">Temizle</a>
+        </div>
+        <p class="field-hint sm:col-span-2 xl:col-span-3">Tesis ya da hattı değiştirdikten sonra Raporla'ya basın; hat ve makine seçenekleri ona göre yenilenir.</p>
+    </div>
+</form>
+
+<partial name="_ListSkeleton" />
+
+<div data-loading-target class="space-y-5">
+    @if (machine is null)
+    {
+        if (string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <partial name="_State" model='("empty", "factory", "Bir makine seçin", "Makineyi seçip Raporla dediğinizde tip başına ortalama süre, efor ve planlanan minimumla fark burada görünür.", (string?)null, (string?)null)' />
+        }
+    }
+    else
+    {
+        <section class="panel" aria-labelledby="machine-title">
+            <div class="panel-head">
+                <div class="min-w-0">
+                    <h2 id="machine-title" class="panel-title break-words">@machine.Label</h2>
+                    <p class="mt-0.5 break-words text-sm text-muted">@machine.LineLabel, @machine.FacilityLabel</p>
+                </div>
+                @if (machine.RetiredAtLocal is { } retired)
+                {
+                    <span class="badge badge-muted"><svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#ban" /></svg><span>Kullanımdan kaldırıldı <span class="mono">@retired.ToString("dd.MM.yyyy")</span></span></span>
+                }
+            </div>
+            @if (!hasRecords)
+            {
+                <p class="p-4 text-muted md:p-5">Seçilen süzgeçle bu makinede kayıt yok.</p>
+            }
+            else
+            {
+                <dl class="kv grid-cols-2 p-4 md:grid-cols-4 md:p-5 xl:grid-cols-6">
+                    @foreach (var item in Model.StatusCounts)
+                    {
+                        <div><dt>@item.StatusLabel</dt><dd class="mono text-xl font-bold">@item.Count</dd></div>
+                    }
+                </dl>
+            }
+        </section>
+
+        @if (!hasRecords)
+        {
+            <partial name="_State" model='("empty", "search", "Bu makinede kayıt yok", hasFilter ? "Tarih aralığını genişletin ya da türü kaldırın." : "Makinede henüz temizlik kaydı açılmamış.", hasFilter ? "Süzgeçleri temizle" : null, hasFilter ? "/reports/machine?machineId=" + filter.MachineId : null)' />
+        }
+        else
+        {
+            <section class="panel" aria-labelledby="type-title">
+                <div class="panel-head">
+                    <h2 id="type-title" class="panel-title">Tip başına ortalama</h2>
+                    <p class="text-sm text-muted">Ortalamalara yalnız Tamamlandı kayıtlar girer.</p>
+                </div>
+                @if (chartRows.Length > 0)
+                {
+                    <div class="border-b-2 border-line p-4 md:p-5 max-xl:border-b-0 max-xl:px-0"><partial name="_BarChart" model="typeChart" /></div>
+                }
+                else
+                {
+                    <p class="border-b-2 border-line p-4 text-muted md:p-5">Tamamlanan kayıt yok, ortalama hesaplanamadı.</p>
+                }
+                <table class="data-table table-stack">
+                    <caption class="sr-only">Temizlik tipi başına kayıt sayısı, ortalama brüt, mola, net süre, efor, planlanan minimum ve plan farkı</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Tip</th>
+                            <th scope="col" class="text-right">Brüt ve mola</th>
+                            <th scope="col" class="text-right">Net</th>
+                            <th scope="col" class="text-right">Efor</th>
+                            <th scope="col" class="text-right">Planlanan min.</th>
+                            <th scope="col" class="text-right">Plan farkı</th>
+                            <th scope="col" class="text-right">Süre altı faz</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model.ByType)
+                        {
+                            <tr>
+                                <td data-label="" class="stack-lead break-words">
+                                    <span class="font-semibold">@row.CleaningTypeName</span>
+                                    <span class="mt-0.5 block text-sm font-normal text-muted"><span class="mono font-bold">@row.RecordCount</span> kayıt, <span class="mono font-bold">@row.CompletedCount</span> tamamlandı</span>
+                                </td>
+                                <td data-label="Brüt ve mola" class="num">
+                                    @if (row.AvgGrossSeconds is { } gross && row.AvgBreakSeconds is { } brk)
+                                    {
+                                        <span class="block whitespace-nowrap"><span class="font-sans text-xs text-muted">Brüt </span><partial name="_Duration" model="DurationFormatter.Format(gross)" /></span>
+                                        <span class="block whitespace-nowrap"><span class="font-sans text-xs text-muted">Mola </span><partial name="_Duration" model="DurationFormatter.Format(brk)" /></span>
+                                    }
+                                    else
+                                    {
+                                        <span aria-label="Ortalama yok">-</span>
+                                    }
+                                </td>
+                                <td data-label="Net" class="num whitespace-nowrap">
+                                    @if (row.AvgNetSeconds is { } net)
+                                    {
+                                        <partial name="_Duration" model="DurationFormatter.Format(net)" />
+                                    }
+                                    else
+                                    {
+                                        <span aria-label="Ortalama yok">-</span>
+                                    }
+                                </td>
+                                <td data-label="Efor" class="num whitespace-nowrap">
+                                    @if (row.AvgEffortSeconds is { } effort)
+                                    {
+                                        <partial name="_Duration" model="DurationFormatter.Format(effort)" />
+                                    }
+                                    else
+                                    {
+                                        <span aria-label="Ortalama yok">-</span>
+                                    }
+                                </td>
+                                <td data-label="Planlanan min." class="num whitespace-nowrap">
+                                    @if (row.AvgPlannedMinSeconds is { } planned)
+                                    {
+                                        <partial name="_Duration" model="DurationFormatter.Format(planned)" />
+                                    }
+                                    else
+                                    {
+                                        <span aria-label="Planlanan minimum yok">-</span>
+                                    }
+                                </td>
+                                <td data-label="Plan farkı" class="num whitespace-nowrap">
+                                    @if (row.PlanVarianceSeconds is { } variance)
+                                    {
+                                        <span class="mono font-bold">@Sign(variance)</span><partial name="_Duration" model="DurationFormatter.Format(Math.Abs(variance))" />
+                                    }
+                                    else
+                                    {
+                                        <span aria-label="Plan farkı yok">-</span>
+                                    }
+                                </td>
+                                <td data-label="Süre altı faz" class="num whitespace-nowrap">
+                                    @if (row.EvaluatedPhaseCount == 0)
+                                    {
+                                        <span aria-label="Değerlendirilen faz yok">-</span>
+                                    }
+                                    else if (row.BelowMinimumPhaseCount > 0)
+                                    {
+                                        <span class="chip"><svg class="icon h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#triangle-alert" /></svg>@row.BelowMinimumPhaseCount / @row.EvaluatedPhaseCount faz</span>
+                                    }
+                                    else
+                                    {
+                                        <span>0 / @row.EvaluatedPhaseCount faz</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="panel" aria-labelledby="recent-title">
+                <div class="panel-head">
+                    <h2 id="recent-title" class="panel-title">Son kayıtlar</h2>
+                    <p class="text-sm text-muted">En çok 20 kayıt, yeniden eskiye.</p>
+                </div>
+                <table class="data-table table-stack">
+                    <caption class="sr-only">Makinenin son kayıtları</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Kayıt no</th>
+                            <th scope="col">Tip</th>
+                            <th scope="col">Açılış</th>
+                            <th scope="col">Durum</th>
+                            <th scope="col" class="text-right">Süreler</th>
+                            <th scope="col">İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Recent)
+                        {
+                            <tr>
+                                <td data-label="" class="stack-lead"><span class="record-no text-sm xl:whitespace-nowrap">@item.RecordNo</span></td>
+                                <td data-label="Tip" class="stack-wide break-words">
+                                    <span class="font-semibold">@item.CleaningTypeName</span>
+                                    <span class="mt-0.5 block text-sm text-muted">@item.KindLabel</span>
+                                </td>
+                                <td data-label="Açılış"><partial name="_Moment" model='(item.OpenedAtLocal, DateTime.MinValue)' /></td>
+                                <td data-label="Durum" class="stack-badge"><partial name="_Badge" model='"record|" + item.StatusLabel' /></td>
+                                <td data-label="Süreler" class="num">
+                                    <span class="block whitespace-nowrap"><span class="font-sans text-xs text-muted">Net </span>@if (item.NetSeconds is { } netSeconds){<partial name="_Duration" model="DurationFormatter.Format(netSeconds)" />}else{<span aria-label="Süre yok">-</span>}</span>
+                                    <span class="block whitespace-nowrap"><span class="font-sans text-xs text-muted">Efor </span>@if (item.EffortSeconds is { } effortSeconds){<partial name="_Duration" model="DurationFormatter.Format(effortSeconds)" />}else{<span aria-label="Efor yok">-</span>}</span>
+                                    <span class="block whitespace-nowrap"><span class="font-sans text-xs text-muted">Planlanan min. </span>@if (item.PlannedMinSeconds is { } plannedSeconds){<partial name="_Duration" model="DurationFormatter.Format(plannedSeconds)" />}else{<span aria-label="Planlanan minimum yok">-</span>}</span>
+                                </td>
+                                <td data-label="İşlem" class="cell-action">
+                                    <a class="btn btn-secondary" href="@item.Url" data-busy-link aria-label="@item.RecordNo kaydının ayrıntısı">
+                                        <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#file-text" /></svg>
+                                        Ayrıntı
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="panel" aria-labelledby="material-title">
+                <div class="panel-head">
+                    <h2 id="material-title" class="panel-title">Malzeme kullanım oranı</h2>
+                    <p class="text-sm text-muted">Oran, <span class="mono font-bold">@Model.CompletedRecordCount</span> Tamamlandı kayıt üzerinden hesaplanır.</p>
+                </div>
+                @if (Model.CompletedRecordCount == 0)
+                {
+                    <p class="p-4 text-muted md:p-5">Tamamlanan kayıt yok, oran hesaplanamadı.</p>
+                }
+                else if (Model.Materials.Length == 0)
+                {
+                    <p class="p-4 text-muted md:p-5">Tamamlanan kayıtlarda malzeme kullanılmamış.</p>
+                }
+                else
+                {
+                    <partial name="_MaterialUsageTable" model='(Model.Materials, "Makinede malzeme başına kayıt sayısı, kullanım oranı, lot sayısı ve SKT geçmiş kullanım sayısı")' />
+                }
+            </section>
+        }
+    }
+</div>
