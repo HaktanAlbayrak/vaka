@@ -1,3 +1,5 @@
+import { focusFirstError } from "./FocusFirst.js";
+
 const OfflineText = "İşlem yapılmadı, bağlantı yok. Bağlantı gelince aynı düğmeyle yeniden deneyin, işlem tek kez yapılır.";
 
 export class CommandForm {
@@ -75,8 +77,7 @@ export class CommandForm {
     current.replaceChildren(...[...main.childNodes].map((node) => document.importNode(node, true)));
     document.title = title;
     document.dispatchEvent(new CustomEvent("vaka:content"));
-    const focus = current.querySelector('[aria-invalid="true"]') ?? current.querySelector("[data-form-summary]") ?? current;
-    focus.focus();
+    if (!focusFirstError(current, this.form.getAttribute("action"))) current.focus();
   }
 
   fail(text) {

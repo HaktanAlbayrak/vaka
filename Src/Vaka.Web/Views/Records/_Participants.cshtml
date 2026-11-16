@@ -1,4 +1,8 @@
+@using Vaka.Web.Authorization
+@using Vaka.Web.Services
 @using Vaka.Web.ViewModels.Records
+@inject IDurationFormatter DurationFormatter
+@inject ISystemSettingsReader Settings
 @model (RecordRunViewModel Run, RecordStepViewModel Step)
 @{
     var run = Model.Run;
@@ -9,18 +13,186 @@
     var pendingOption = pending is null ? null : run.ParticipantOptions.FirstOrDefault(option => option.UserId == pending.ParticipantUserId);
     var open = filtering || pending is not null;
     var options = filtering ? run.ParticipantOptions : Array.Empty<ParticipantOptionViewModel>();
+    var stepStarted = step.Status is StepStatus.InProgress or StepStatus.Completed;
+    var sessionUserId = AccountPrincipal.TryGetUserId(User, out var currentUserId) ? currentUserId : (int?)null;
+    const string LengthKey = "Vaka.PinLength";
+    if (Context.Items[LengthKey] is not int pinLength)
+    {
+        pinLength = await Settings.GetValueAsync(SettingKeys.PinLength, Context.RequestAborted);
+        Context.Items[LengthKey] = pinLength;
+    }
+
+    (string Label, string Icon, string Tone) Look(StepParticipantViewModel person) => person.State switch
+    {
+        ParticipantState.Pending when person.IsOwner && !stepStarted => ("Başlatınca çalışır", "play", "badge-outline"),
+        ParticipantState.Pending => ("Girişi bekleniyor", "hourglass", "badge-warn"),
+        ParticipantState.Confirmed => ("Katılacak", "user-check", "badge-outline"),
+        ParticipantState.Working when step.Status == StepStatus.Completed => ("Çalıştı", "check", "badge-ok"),
+        ParticipantState.Working => ("Çalışıyor", "play", "badge-solid"),
+        _ => ("Ayrıldı", "arrow-left", "badge-muted"),
+    };
+
+    void PinField(string id, string label, string hint)
+    {
+        <div class="field" data-field data-pin>
+            <label class="field-label" for="@id">@label</label>
+            <div class="relative">
+                <input id="@id" name="Pin" class="input pin-input pr-14" type="password" inputmode="numeric" pattern="[0-9]*"
+                       autocomplete="off" spellcheck="false" required maxlength="@pinLength"
+                       aria-describedby="@(id)-hint" data-pin-input />
+                <button type="button" class="icon-btn field-reveal" data-pin-reveal aria-pressed="false" aria-label="PIN'i göster">
+                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#eye" /></svg>
+                </button>
+            </div>
+            <p id="@(id)-hint" class="field-hint">@hint</p>
+        </div>
+    }
 }
-<div class="space-y-3">
+<div class="space-y-3 max-md:-ml-14">
     @if (step.Participants.Length == 0)
     {
         <p class="text-sm text-muted">Bu adıma görevli eklenmedi. Adım bitince efor yazılmaz.</p>
     }
     else
     {
-        <ul class="flex flex-wrap gap-2" aria-label="Görevliler">
+        <ul class="grid grid-cols-1 gap-3" aria-label="Görevliler">
             @foreach (var person in step.Participants)
             {
-                <li class="chip break-words"><span class="min-w-0">@person.FullName <span class="mono text-xs text-muted">@person.RegistryNo</span>@(person.IsOwner ? ", sahip" : "")</span></li>
+                var (stateLabel, stateIcon, stateTone) = Look(person);
+                var forSelf = sessionUserId == person.UserId;
+                var proxyHint = forSelf ? "Kendi PIN'inizi girin." : $"Bu PIN {person.FullName} adına girilir; {person.FullName} kendisi girsin.";
+                var failedHere = run.PendingParticipant is { } failed && failed.StepId == step.Id && failed.ParticipantUserId == person.UserId && !string.IsNullOrEmpty(run.ErrorMessage);
+                var quiet = person.State == ParticipantState.Pending && person.IsOwner && !stepStarted;
+                <li class="step-person scroll-mt-24" id="@(stepKey)-p@(person.UserId)" data-state="@(quiet ? "Idle" : person.State.ToString())">
+                    <p class="step-person-name font-semibold">@person.FullName <span class="mono text-sm font-normal text-muted">@person.RegistryNo</span>@(person.IsOwner ? ", sahip" : "")</p>
+                    <p>
+                        <span class="badge @stateTone"><svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#@stateIcon" /></svg><span>@stateLabel</span></span>
+                    </p>
+                    <p class="flex flex-wrap gap-x-3 gap-y-0.5 text-sm text-muted">
+                        @switch (person.State)
+                        {
+                            case ParticipantState.Pending when person.IsOwner && !stepStarted:
+                                <span>Adım başlayınca girişsiz çalışmaya başlar.</span>
+                                break;
+                            case ParticipantState.Pending when step.Status == StepStatus.InProgress:
+                                <span>Kendi PIN'iyle katılınca çalışma süresi başlar.</span>
+                                break;
+                            case ParticipantState.Pending:
+                                <span>Adım başlamadan ya da başladıktan sonra kendi PIN'iyle katılır.</span>
+                                break;
+                            case ParticipantState.Confirmed:
+                                if (person.JoinedAtLocal is { } confirmedAt)
+                                {
+                                    <span>Onayladı <partial name="_Moment" model='(confirmedAt, run.OpenedAtLocal)' /></span>
+                                }
+                                <span>Adım başlayınca çalışır.</span>
+                                break;
+                            default:
+                                if (person.JoinedAtLocal is { } joinedAt)
+                                {
+                                    <span>Katıldı <partial name="_Moment" model='(joinedAt, run.OpenedAtLocal)' /></span>
+                                }
+                                if (person.LeftAtLocal is { } leftAt)
+                                {
+                                    <span>Ayrıldı <partial name="_Moment" model='(leftAt, run.OpenedAtLocal)' /></span>
+                                }
+                                if (person.WorkSeconds is { } workSeconds)
+                                {
+                                    <span>Çalışma <partial name="_Duration" model="DurationFormatter.Format(workSeconds)" /></span>
+                                }
+                                break;
+                        }
+                    </p>
+
+                    @if (!person.CanJoin && !person.CanLeave && !string.IsNullOrEmpty(person.BlockedReason))
+                    {
+                        <p class="flex items-start gap-2 text-sm font-semibold">
+                            <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#info" /></svg>
+                            <span class="min-w-0 break-words">@person.BlockedReason</span>
+                        </p>
+                    }
+
+                    @if (failedHere)
+                    {
+                        <div class="notice notice-danger scroll-mt-24" role="alert" tabindex="-1" data-form-summary data-focus-first>
+                            <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
+                            <div class="min-w-0">
+                                <p class="font-semibold">İşlem yapılmadı</p>
+                                <p class="mt-0.5 break-words text-sm">@run.ErrorMessage</p>
+                            </div>
+                        </div>
+                    }
+
+                    @if (person.CanJoin)
+                    {
+                        <details class="tool" open="@failedHere">
+                            <summary aria-label="Adıma katıl: @person.FullName">
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-check" /></svg>
+                                Adıma katıl
+                            </summary>
+                            <form method="post" action="/records/join-step/@step.Id#@(stepKey)-p@(person.UserId)" class="tool-body space-y-3" data-validate data-command-form asp-antiforgery="true">
+                                <input type="hidden" name="CommandId" value="@run.CommandId" />
+                                <input type="hidden" name="ParticipantUserId" value="@person.UserId" />
+                                <p class="break-words text-sm">@person.FullName adıma katılır. Katılma anı sunucu saatiyle yazılır.</p>
+                                @{ PinField("pin-join-" + step.Id + "-" + person.UserId, person.FullName + " PIN'i", proxyHint); }
+                                <div class="notice notice-danger" role="alert" data-command-status hidden>
+                                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                                    <p class="font-semibold" data-command-message></p>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-check" /></svg>
+                                    Adıma katıl
+                                </button>
+                            </form>
+                        </details>
+                    }
+                    @if (person.CanLeave)
+                    {
+                        <details class="tool" open="@failedHere">
+                            <summary aria-label="Adımdan ayrıl: @person.FullName">
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-left" /></svg>
+                                Adımdan ayrıl
+                            </summary>
+                            <form method="post" action="/records/leave-step/@step.Id#@(stepKey)-p@(person.UserId)" class="tool-body space-y-3" data-validate data-command-form asp-antiforgery="true">
+                                <input type="hidden" name="CommandId" value="@run.CommandId" />
+                                <input type="hidden" name="ParticipantUserId" value="@person.UserId" />
+                                <p class="break-words text-sm">@person.FullName adımdan ayrılır. Aynı adıma yeniden katılamaz.</p>
+                                @{ PinField("pin-leave-" + step.Id + "-" + person.UserId, person.FullName + " PIN'i", proxyHint); }
+                                <div class="notice notice-danger" role="alert" data-command-status hidden>
+                                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                                    <p class="font-semibold" data-command-message></p>
+                                </div>
+                                <button type="submit" class="btn btn-secondary btn-lg">
+                                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#arrow-left" /></svg>
+                                    Adımdan ayrıl
+                                </button>
+                            </form>
+                        </details>
+                    }
+                    @if (person.CanRemove)
+                    {
+                        <details class="tool tool-danger" open="@failedHere">
+                            <summary aria-label="@person.FullName görevlisini bu adımdan çıkarmak için aç">
+                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-x" /></svg>
+                                Listeden çıkar
+                            </summary>
+                            <form method="post" action="/records/remove-participant/@step.Id#@(stepKey)-p@(person.UserId)" class="tool-body space-y-3" data-validate data-command-form asp-antiforgery="true">
+                                <input type="hidden" name="CommandId" value="@run.CommandId" />
+                                <input type="hidden" name="ParticipantUserId" value="@person.UserId" />
+                                <p class="break-words text-sm">@person.FullName henüz katılmadı, listeden çıkarılır. Onay için kendi PIN'inizi girin.</p>
+                                <partial name="_PinInput" model='("pin-remove-person-" + step.Id + "-" + person.UserId, "PIN", "verify", (int?)null, "Pin", (string?)null)' />
+                                <div class="notice notice-danger" role="alert" data-command-status hidden>
+                                    <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
+                                    <p class="font-semibold" data-command-message></p>
+                                </div>
+                                <button type="submit" class="btn btn-danger btn-lg">
+                                    <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-x" /></svg>
+                                    Görevliyi çıkar
+                                </button>
+                            </form>
+                        </details>
+                    }
+                </li>
             }
         </ul>
     }
@@ -33,30 +205,6 @@
                 Görevleri düzenle
             </summary>
             <div class="tool-body space-y-5">
-                @foreach (var person in step.Participants)
-                {
-                    <details class="tool tool-danger">
-                        <summary aria-label="@person.FullName görevlisini bu adımdan çıkarmak için aç">
-                            <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-x" /></svg>
-                            @person.FullName çıkar
-                        </summary>
-                        <form method="post" action="/records/remove-participant/@step.Id" class="tool-body space-y-3" data-validate data-command-form asp-antiforgery="true">
-                            <input type="hidden" name="CommandId" value="@run.CommandId" />
-                            <input type="hidden" name="ParticipantUserId" value="@person.UserId" />
-                            <p class="text-sm">@person.FullName bu adımdan çıkarılır. Onay için PIN'inizi girin.</p>
-                            <partial name="_PinInput" model='("pin-remove-person-" + step.Id + "-" + person.UserId, "PIN", "verify", (int?)null, "Pin", (string?)null)' />
-                            <div class="notice notice-danger" role="alert" data-command-status hidden>
-                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#wifi-off" /></svg>
-                                <p class="font-semibold" data-command-message></p>
-                            </div>
-                            <button type="submit" class="btn btn-danger btn-lg">
-                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#user-x" /></svg>
-                                Görevliyi çıkar
-                            </button>
-                        </form>
-                    </details>
-                }
-
                 <form method="get" action="/records/run/@run.Id" class="field" data-people-nojs>
                     <input type="hidden" name="stepId" value="@step.Id" />
                     <label class="field-label" for="@(stepKey)-people">Kişi ara</label>
@@ -81,7 +229,7 @@
                                 <div class="skeleton h-14 w-full"></div>
                                 <div class="skeleton h-14 w-full"></div>
                             </div>
-                            <p id="@(stepKey)-hint" class="field-hint">Ad ya da sicil no parçası yazın, listeden operatörü seçin.</p>
+                            <p id="@(stepKey)-hint" class="field-hint">Ad ya da sicil no parçası yazın, listeden operatörü seçin.@(step.Status == StepStatus.InProgress ? " Eklenen kişi kendi PIN'iyle katılınca çalışmaya başlar." : "")</p>
                             <p id="@(stepKey)-status" class="field-hint" role="status" data-people-status></p>
                         </div>
                         <div class="space-y-2" data-people-js>

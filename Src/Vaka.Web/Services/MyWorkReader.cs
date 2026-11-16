@@ -85,9 +85,14 @@ public sealed class MyWorkReader : IMyWorkReader
                 && item.Step.Phase.Record.OwnerUserId != userId
                 && (item.Step.Status == StepStatus.Waiting || item.Step.Status == StepStatus.InProgress)
                 && (item.Step.Phase.Record.Status == RecordStatus.Opened || item.Step.Phase.Record.Status == RecordStatus.InProgress))
-            .OrderBy(item => item.Step.Phase.Record.OpenedAtUtc).ThenBy(item => item.Step.Phase.ProcedurePhase.OrderNo).ThenBy(item => item.Step.ProcedureStep.OrderNo)
             .Select(item => new
             {
+                StepId = item.RecordStepId,
+                Awaiting = item.WorkInterval == null && !item.IsWorking
+                    && (item.Step.Status == StepStatus.InProgress || item.ConfirmedAtUtc == null),
+                OpenedAtUtc = item.Step.Phase.Record.OpenedAtUtc,
+                PhaseOrder = item.Step.Phase.ProcedurePhase.OrderNo,
+                StepOrder = item.Step.ProcedureStep.OrderNo,
                 RecordId = item.Step.Phase.CleaningRecordId,
                 item.Step.Phase.Record.RecordNo,
                 Machine = item.Step.Phase.Record.MachineCodeSnapshot + " - " + item.Step.Phase.Record.MachineNameSnapshot,
@@ -96,8 +101,12 @@ public sealed class MyWorkReader : IMyWorkReader
             })
             .ToListAsync(cancellationToken);
 
-        return [.. rows.Select(row => new AssignedStepViewModel
+        return [.. rows
+            .OrderByDescending(row => row.Awaiting).ThenBy(row => row.OpenedAtUtc).ThenBy(row => row.PhaseOrder).ThenBy(row => row.StepOrder)
+            .Select(row => new AssignedStepViewModel
         {
+            StepId = row.StepId,
+            AwaitingMyEntry = row.Awaiting,
             RecordId = row.RecordId,
             RecordNo = row.RecordNo,
             MachineLabel = row.Machine,

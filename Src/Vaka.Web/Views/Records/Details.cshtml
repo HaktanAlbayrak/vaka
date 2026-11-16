@@ -259,9 +259,28 @@
                                                     <ul class="mt-1 divide-y divide-line">
                                                         @foreach (var person in step.Participants)
                                                         {
-                                                            <li class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 py-1.5">
-                                                                <span class="min-w-0 break-words font-semibold">@person.FullName <span class="mono text-sm font-normal text-muted">@person.RegistryNo</span></span>
-                                                                <span class="min-w-0 break-words text-sm text-muted">Ekleyen @person.AddedByName, eklendi <partial name="_Moment" model='(person.AddedAtLocal, reference)' />@if (person.ConfirmedAtLocal is { } confirmedAt){<text>, onay </text><partial name="_Moment" model='(confirmedAt, reference)' />}</span>
+                                                            <li class="space-y-1 py-2">
+                                                                <p class="min-w-0 break-words font-semibold [overflow-wrap:anywhere]">@person.FullName <span class="mono text-sm font-normal text-muted">@person.RegistryNo</span></p>
+                                                                <dl class="kv grid-cols-2 xl:grid-cols-4">
+                                                                    <div>
+                                                                        <dt>Eklenme</dt>
+                                                                        <dd><partial name="_Moment" model='(person.AddedAtLocal, reference)' /><span class="block font-normal text-muted">@person.AddedByName</span></dd>
+                                                                    </div>
+                                                                    @if (person.HasInterval)
+                                                                    {
+                                                                        <div><dt>Katılma</dt><dd>@if (person.JoinedAtLocal is { } joined){<partial name="_Moment" model='(joined, reference)' />}else{<span>-</span>}</dd></div>
+                                                                        <div><dt>Ayrılma</dt><dd>@if (person.LeftAtLocal is { } left){<partial name="_Moment" model='(left, reference)' />}else{<span class="font-normal text-muted">Adım bitişine kadar</span>}</dd></div>
+                                                                        <div><dt>Çalışma</dt><dd>@if (person.WorkSeconds is { } worked){<partial name="_Duration" model="DurationFormatter.Format(worked)" />}else{<span>-</span>}</dd></div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="col-span-2 xl:col-span-3"><dt>Çalışma</dt><dd><text>Adım boyunca</text>@if (person.WorkSeconds is { } whole){<text>, </text><partial name="_Duration" model="DurationFormatter.Format(whole)" />}</dd></div>
+                                                                    }
+                                                                </dl>
+                                                                @if (person.ConfirmedAtLocal is { } confirmedAt)
+                                                                {
+                                                                    <p class="text-sm text-muted">İlk giriş onayı <partial name="_Moment" model='(confirmedAt, reference)' /></p>
+                                                                }
                                                             </li>
                                                         }
                                                     </ul>

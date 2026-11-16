@@ -34,6 +34,7 @@ public class VakaDbContext : DbContext
     public DbSet<ProcessedCommand> ProcessedCommands => Set<ProcessedCommand>();
     public DbSet<NumberSequence> NumberSequences => Set<NumberSequence>();
     public DbSet<RecordBreak> RecordBreaks => Set<RecordBreak>();
+    public DbSet<StepWorkInterval> StepWorkIntervals => Set<StepWorkInterval>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

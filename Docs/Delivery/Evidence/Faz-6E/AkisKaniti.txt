@@ -1,0 +1,208 @@
+Faz 6E akış kanıtı (QA kopyası .qa/f6e/qa.db, port 5871). Saatler UTC. Kişiler: X=2002 (Id 4), Y=2004 IŞIL ÖZGÜR (Id 7, PIN 6E testinde değiştirildi), Z=2003 Şükrüye İnceoğlu Karamustafapaşalıoğulları (Id 6), 2006 Ahmet Yılmaz (Id 8), 2001 Test Operatör 1 (Id 3).
+parts satırı: (sicil, IsWorking, ConfirmedAtUtc, aralık başlangıcı, aralık bitişi, EndKind 0=Left 1=StepFinished 2=Interrupted, WorkSeconds). stepinfo: (Status, başlangıç, bitiş, DurationSeconds, EffortSeconds, BreakSeconds).
+
+===== log-a1 =====
+20:53:30 kayıt A 34
+20:53:31 adımlar [152, 153, 154, 155, 156, 157]
+20:53:31 K7 Z başlamadan katılıyor (X tableti)
+20:53:31 A1.1 Z durumu: id="step-152"> | 1.1 | Makineyi durdur ve enerjiyi kes | Hazır | Test Operatör 2 | 2002 | , sahip | Başlatınca çalışır | Adım başlayınca girişsiz çalışmaya başlar. | Listeden çıkar | Test Operatör 2 henüz katılmadı, listeden çıkarılır. Onay için kendi PIN'inizi girin. | PIN | Kendi PIN'inizi girin. | Görevliyi çıkar | Şükrüye İnceoğlu Karamustafapaşalıoğulları | 2003 | Katılacak | Adım başlayınca 
+20:53:31 parts [('2002', 0, None, None, None, None, None), ('2003', 0, '2026-11-16 20:53:31.4318087', None, None, None, None)]
+20:53:31 parts after start [('2002', 1, None, '2026-11-16 20:53:31.8036522', None, None, None), ('2003', 1, '2026-11-16 20:53:31.4318087', '2026-11-16 20:53:31.8036522', None, None, None)]
+20:53:31 olay (5, 'StepStarted', 4, '{"StepId":152,"Title":"Makineyi durdur ve enerjiyi kes","FirstStep":true,"FieldBookRef":"T1-SD-2026-13","ParticipantUserIds":[4,6]}', '2026-11-16 20:53:31.8036522')
+20:53:51 A1.1 adım (3, '2026-11-16 20:53:31.8036522', '2026-11-16 20:53:51.1962788', 19, 38, 0)
+20:53:51 parts [('2002', 0, None, '2026-11-16 20:53:31.8036522', '2026-11-16 20:53:51.1962788', 1, 19), ('2003', 0, '2026-11-16 20:53:31.4318087', '2026-11-16 20:53:31.8036522', '2026-11-16 20:53:51.1962788', 1, 19)]
+20:53:51 olay (6, 'StepFinished', 4, '{"StepId":152,"DurationSeconds":19,"EffortSeconds":38,"BreakSeconds":0,"ParticipantUserIds":[4,6],"ParticipantWorkSeconds":[19,19]}', '2026-11-16 20:53:51.1962788')
+20:54:04 A1.2 (3, '2026-11-16 20:53:51.4340165', '2026-11-16 20:54:04.3197717', 12, 12, 0) [('2002', 0, None, '2026-11-16 20:53:51.4340165', '2026-11-16 20:54:04.3197717', 1, 12)]
+20:54:04 faz2 adımları [154, 155, 156]
+
+
+===== log-a2 =====
+20:54:29 Y PIN değişimi 302 /account/security 
+20:54:46 K1 adım (2, '2026-11-16 20:54:46.8723987', None, None, None, 0)
+20:54:46 K1 parts [('2002', 1, None, '2026-11-16 20:54:46.8723987', None, None, None), ('2004', 0, None, None, None, None, None)]
+20:54:46 K1 olay (11, 'StepStarted', 4) {"StepId":154,"Title":"Y\u00FCzeyi dezenfektanla sil","FirstStep":false,"FieldBookRef":"T1-SD-2026-13","ParticipantUserIds":[4]}
+20:54:46 K1 panel id="step-154"> | 2.1 | Yüzeyi dezenfektanla sil | Devam ediyor | 0 | sn | Başladı | 23:54 | Test Operatör 2 | 2002 | , sahip | Çalışıyor | Katıldı | 23:54 | Adımda çalışan son kişi ayrılamaz. Adımı bitirin. | IŞIL ÖZGÜR | 2004 | Girişi bekleniyor | Kendi PIN'iyle katılınca çalışma süresi başlar. | Adıma katıl | IŞIL ÖZGÜR adıma katılır. Katılma anı sunucu saatiyle yazılır. | IŞIL ÖZGÜR PIN'i | Bu PIN IŞIL ÖZGÜR adına girilir; IŞIL ÖZGÜR kendisi girsin. | Adıma katıl | Listeden çıkar | IŞIL ÖZGÜR henüz katılmadı, listeden çıkarılır. Onay için kendi PIN'inizi girin. | PIN | Kendi PIN'inizi girin. | Görevliyi çıkar | Görevleri düzenle | Kişi ara | Kişileri ara | Görevli ekle | Ad ya da sicil no
+20:54:46 K2 elle bitir POST 200 None ['İşlem yapılmadı', 'Adıma katıl\r\n                                ']
+20:54:46 K2 sonraki adım başlat POST 200 None ['İşlem yapılmadı', 'Adıma katıl\r\n                                ']
+20:54:46 K2 yeni olay [] 2
+20:55:10 K3 sahibin PIN i ile katıl
+20:55:10   sayaç Y [(1,)] X [(0,)]
+20:55:10 K3 yanlış PIN 0000
+20:55:11   sayaç Y [(2,)] X [(0,)]
+20:55:11 K3 doğru PIN
+20:55:11   katılma t0+24.4 sayaç Y [(0,)]
+20:55:11 K3 parts [('2002', 1, None, '2026-11-16 20:54:46.8723987', None, None, None), ('2004', 1, '2026-11-16 20:55:11.1623065', '2026-11-16 20:55:11.1623065', None, None, None)]
+20:55:11 K3 olay (12, 'ParticipantJoined', 7) {"StepId":154,"ParticipantUserId":7,"SessionUserId":4,"BeforeStart":false} 2026-11-16 20:55:11.1623065
+20:55:46 K5 adım (3, '2026-11-16 20:54:46.8723987', '2026-11-16 20:55:46.7970907', 59, 94, 0)
+20:55:46 K5 parts [('2002', 0, None, '2026-11-16 20:54:46.8723987', '2026-11-16 20:55:46.7970907', 1, 59), ('2004', 0, '2026-11-16 20:55:11.1623065', '2026-11-16 20:55:11.1623065', '2026-11-16 20:55:46.7970907', 1, 35)]
+20:55:46 K5 olay (13, 'StepFinished', 4) {"StepId":154,"DurationSeconds":59,"EffortSeconds":94,"BreakSeconds":0,"ParticipantUserIds":[4,7],"ParticipantWorkSeconds":[59,35]}
+20:56:04 A2.2 parts [('2002', 1, None, '2026-11-16 20:56:03.9965521', None, None, None), ('2004', 0, None, None, None, None, None), ('2003', 0, None, None, None, None, None)]
+20:57:14 2001 mola bitir 302 /records/run/9 
+20:57:14 35 parts [('2001', 0, None, None, None, None, None), ('2004', 0, None, None, None, None, None)]
+20:57:14 Y kayıt 9 formları ['/records/join-step/35#step-35-p7', '/records/start-step/35']
+20:57:14 K10b Y (A2.2 de girişsiz) kayıt 9 adım 35 başlattı: 302 /records/run/9 (2, '2026-11-16 20:57:14.3727045') [('2001', 1, None, '2026-11-16 20:57:14.3727045', None, None, None), ('2004', 1, '2026-11-16 20:57:14.3727045', '2026-11-16 20:57:14.3727045', None, None, None)]
+20:57:14   olay (7, 'StepStarted', 7) {"StepId":35,"Title":"Makine Kontrol","FirstStep":false,"FieldBookRef":"T1-SD-2026-6","ParticipantUserIds":[3,7]}
+20:57:14 K10 A2.2 panel Y: 2004 | Girişi bekleniyor | Kendi PIN'iyle katılınca çalışma süresi başlar. | IŞIL ÖZGÜR başka kayıtta devam eden adımda çalışıyor. | Listeden çıkar | IŞIL ÖZGÜR henüz katılmadı, listeden çıkarılır. Onay için kendi PIN'inizi girin. | PIN | Kendi PIN'i
+20:57:14 K10 elle katıl POST (meşgul Y) 200 None ['IŞIL ÖZGÜR başka kayıtta devam eden adımda çalışıyor.'] yeni olay []
+20:57:22 Y adım 35 bitir 200 None (2, '2026-11-16 20:57:14.3727045', None, None, None, 0) [('2001', 1, None, '2026-11-16 20:57:14.3727045', None, None, None), ('2004', 1, '2026-11-16 20:57:14.3727045', '2026-11-16 20:57:14.3727045', None, None, None)]
+20:57:28 Y adım 35 bitir 302 /records/run/9 (3, '2026-11-16 20:57:14.3727045', '2026-11-16 20:57:28.354801', 13, 26, 0) [('2001', 0, None, '2026-11-16 20:57:14.3727045', '2026-11-16 20:57:28.354801', 1, 13), ('2004', 0, '2026-11-16 20:57:14.3727045', '2026-11-16 20:57:14.3727045', '2026-11-16 20:57:28.354801', 1, 13)]
+20:57:46 K4 parts [('2002', 1, None, '2026-11-16 20:56:03.9965521', None, None, None), ('2004', 1, '2026-11-16 20:57:45.7771904', '2026-11-16 20:57:45.7771904', None, None, None), ('2003', 0, None, None, None, None, None)]
+20:57:46 K4 olay (17, 'ParticipantJoined', 7) {"StepId":155,"ParticipantUserId":7,"SessionUserId":7,"BeforeStart":false}
+20:58:04 K8 X girişsiz Z yi çıkardı 302 /records/run/34 [('2002', 1, None, '2026-11-16 20:56:03.9965521', None, None, None), ('2004', 1, '2026-11-16 20:57:45.7771904', '2026-11-16 20:57:45.7771904', None, None, None)]
+20:58:04 K8 katılmış Y yi çıkarma POST 200 None ['IŞIL ÖZGÜR adıma katıldı, listeden çıkarılamaz.']
+20:58:07 K6 Y kendi PIN iyle ayrıldı 302 /records/run/34?stepId=155 [('2002', 1, None, '2026-11-16 20:56:03.9965521', None, None, None), ('2004', 0, '2026-11-16 20:57:45.7771904', '2026-11-16 20:57:45.7771904', '2026-11-16 20:58:07.610103', 0, 21)]
+20:58:07 K6 Y yeniden katılma POST 200 None ['IŞIL ÖZGÜR adımdan ayrıldı, aynı adıma yeniden katılamaz.']
+20:58:07 K6 son çalışan X ayrılma POST 200 None ['Adımda çalışan son kişi ayrılamaz. Adımı bitirin.']
+20:58:07 K6 panel X id="step-155"> | 2.2 | Temas parçalarını sök ve yıka | Devam ediyor | 2 | dk | 3 | sn | Başladı | 23:56 | Test Operatör 2 | 2002 | , sahip | Çalışıyor | Katıldı | 23:56 | Adımda çalışan son kişi ayrılamaz. Adımı bitirin. | IŞIL ÖZGÜR | 2004 | Ayrıldı | Katıldı | 23:57 | Ayrıldı | 23:58 | Çalışma | 21 | sn | Görevleri düzenle | Kişi ara | Kişileri ara | Görevli ekle | Ad ya da sicil no parçası yazın, listeden operatörü seçin. Eklenen kişi kendi PIN'iyle katılınca çalışmaya başlar. | Seçilen kişi: | Değiştir | Bu kişinin kendi açık kaydı var. Yine de ekleyebilirsiniz. | Görevli seç | Önce kişi a
+20:58:09 A2.2 adım (3, '2026-11-16 20:56:03.9965521', '2026-11-16 20:58:09.7042724', 125, 146, 0) [('2002', 0, None, '2026-11-16 20:56:03.9965521', '2026-11-16 20:58:09.7042724', 1, 125), ('2004', 0, '2026-11-16 20:57:45.7771904', '2026-11-16 20:57:45.7771904', '2026-11-16 20:58:07.610103', 0, 21)]
+20:58:09 olay (18, 'ParticipantRemoved', 4) {"StepId":155,"ParticipantUserId":6,"RemovedByUserId":4}
+20:58:09 olay (19, 'ParticipantLeft', 7) {"StepId":155,"ParticipantUserId":7,"SessionUserId":7,"WorkSeconds":21}
+20:58:09 olay (20, 'StepFinished', 4) {"StepId":155,"DurationSeconds":125,"EffortSeconds":146,"BreakSeconds":0,"ParticipantUserIds":[4,7],"ParticipantWorkSeconds":[125,21]}
+20:58:22 K9 eklenen Z [('2002', 1, None, '2026-11-16 20:58:19.8562904', None, None, None), ('2003', 0, None, None, None, None, None)]
+20:58:22 K2/K9 bitirme kapısı POST 200 None ["Girişi bekleniyor: Şükrüye İnceoğlu Karamustafapaşalıoğulları. Kişi kendi PIN'iyle katılsın ya da sahip listeden çıkarsın."]
+20:58:22 K9 panel kapı ["Girişi bekleniyor: Şükrüye İnceoğlu Karamustafapaşalıoğulları. Kişi kendi PIN'iyle katılsın ya da sahip listeden çıkarsın."]
+20:58:32 A2.3 adım (3, '2026-11-16 20:58:19.8562904', '2026-11-16 20:58:32.0897439', 12, 16, 0) [('2002', 0, None, '2026-11-16 20:58:19.8562904', '2026-11-16 20:58:32.0897439', 1, 12), ('2003', 0, '2026-11-16 20:58:28.0680105', '2026-11-16 20:58:28.0680105', '2026-11-16 20:58:32.0897439', 1, 4)]
+20:58:32 olay (21, 'StepStarted', 4) {"StepId":156,"Title":"Par\u00E7alar\u0131 yerine tak","FirstStep":false,"FieldBookRef":"T1-SD-2026-13","ParticipantUserIds":[4]}
+20:58:32 olay (22, 'ParticipantAdded', 4) {"StepId":156,"ParticipantUserId":6,"AddedByUserId":4}
+20:58:32 olay (23, 'ParticipantJoined', 6) {"StepId":156,"ParticipantUserId":6,"SessionUserId":4,"BeforeStart":false}
+20:58:32 olay (24, 'StepFinished', 4) {"StepId":156,"DurationSeconds":12,"EffortSeconds":16,"BreakSeconds":0,"ParticipantUserIds":[4,6],"ParticipantWorkSeconds":[12,4]}
+20:58:32 olay (25, 'PhaseCompleted', 4) {"PhaseId":78,"Status":4,"GrossSeconds":225,"BreakSeconds":0,"NetSeconds":225,"BelowMinimum":true,"Reason":"QA 6E: s\u00FCre \u00F6l\u00E7e\u011Fi k\u0131salt\u0131ld\u0131."}
+
+
+===== log-a3 =====
+20:58:50 A3.1 parts [('2002', 0, None, None, None, None, None), ('2001', 0, None, None, None, None, None), ('2006', 0, None, None, None, None, None), ('2003', 0, None, None, None, None, None), ('2004', 0, None, None, None, None, None)]
+20:58:50 Z yanlış PIN 1 200 ['PIN hatalı.'] [(1, 0)] X sayaç [(0,)]
+20:58:50 Z yanlış PIN 2 200 ['PIN hatalı.'] [(2, 0)] X sayaç [(0,)]
+20:58:50 Z yanlış PIN 3 200 ['PIN hatalı.'] [(3, 0)] X sayaç [(0,)]
+20:58:50 Z yanlış PIN 4 200 ['PIN hatalı.'] [(4, 0)] X sayaç [(0,)]
+20:58:50 Z yanlış PIN 5 200 ['PIN kilitlendi.'] [(5, 1)] X sayaç [(0,)]
+20:58:50 Z yanlış PIN 6 200 ["Şükrüye İnceoğlu Karamustafapaşalıoğulları PIN'i kilitli. Yöneticiye başvurun."] [(5, 1)] X sayaç [(0,)]
+20:58:50 2001 mola formu [('/breaks/start/9', ['CommandId', 'Pin', '__RequestVerificationToken'])]
+20:58:59 2001 mola başlattı 302 /breaks/current
+20:58:59 A3.1 başladı (2, '2026-11-16 20:58:59.8460246') [('2002', 1, None, '2026-11-16 20:58:59.8460246', None, None, None), ('2001', 0, None, None, None, None, None), ('2006', 0, None, None, None, None, None), ('2003', 0, None, None, None, None, None), ('2004', 0, None, None, None, None, None)]
+20:58:59 K10 panel Test Operatör 1 -> Test Operatör 1 | 2001 | Girişi bekleniyor | Kendi PIN'iyle katılınca çalışma süresi başlar. | Test Operatör 1 molada. Mola bitince katılabilir. | Listeden çıkar | Test Operatör 1 henüz katılmadı, listeden çıkarılır. Onay için kendi PIN'inizi girin. | PIN | Ke
+20:58:59 K10 panel Ahmet Yılmaz -> Ahmet Yılmaz | 2006 | Girişi bekleniyor | Kendi PIN'iyle katılınca çalışma süresi başlar. | Ahmet Yılmaz başka kayıtta devam eden adımda çalışıyor. | Listeden çıkar | Ahmet Yılmaz henüz katılmadı, listeden çıkarılır. Onay için kendi PIN'inizi girin. | PIN | Ke
+20:58:59 K10 panel Şükrüye İnceoğlu Karamustafapaşalıoğulları -> Şükrüye İnceoğlu Karamustafapaşalıoğulları | 2003 | Girişi bekleniyor | Kendi PIN'iyle katılınca çalışma süresi başlar. | Şükrüye İnceoğlu Karamustafapaşalıoğulları PIN'i kilitli. Yöneticiye başvurun. | Listeden çıkar | Şükrüye İnceoğlu Karamustafapaşalıoğulla
+20:58:59 K10 panel IŞIL ÖZGÜR -> IŞIL ÖZGÜR | 2004 | Girişi bekleniyor | Kendi PIN'iyle katılınca çalışma süresi başlar. | Adıma katıl | IŞIL ÖZGÜR adıma katılır. Katılma anı sunucu saatiyle yazılır. | IŞIL ÖZGÜR PIN'i | Bu PIN IŞIL ÖZGÜR adına girilir; IŞIL ÖZGÜR kendisi girsin. | Adıma katı
+20:58:59 K10 elle katıl POST uid 3 200 ['Test Operatör 1 molada. Mola bitince katılabilir.']
+20:58:59 K10 elle katıl POST uid 8 200 ['Ahmet Yılmaz başka kayıtta devam eden adımda çalışıyor.']
+20:58:59 K10 elle katıl POST uid 6 200 ["Şükrüye İnceoğlu Karamustafapaşalıoğulları PIN'i kilitli. Yöneticiye başvurun."]
+20:58:59 K10 yeni olay []
+20:59:19 K11 2006 Y adına katıl 403 None
+20:59:19 K11 2006 X adına ayrıl 403 None
+20:59:19 K11 G9 iki istek (302, '/records/run/34?stepId=157') (302, '/records/run/34?stepId=157') []
+20:59:19 K11 yeni olaylar [(31, 'ParticipantJoined', 7, '{"StepId":157,"ParticipantUserId":7,"SessionUserId":4,"BeforeStart":false}')]
+20:59:19 parts [('2002', 1, None, '2026-11-16 20:58:59.8460246', None, None, None), ('2001', 0, None, None, None, None, None), ('2006', 0, None, None, None, None, None), ('2003', 0, None, None, None, None, None), ('2004', 1, '2026-11-16 20:59:19.5399797', '2026-11-16 20:59:19.5399797', None, None, None)]
+21:04:48 K12 yarıda kapatma 302 /records/details/34 
+21:04:48 K12 adım (4, '2026-11-16 20:58:59.8460246', '2026-11-16 21:04:48.8904688', 349, 678, 0)
+21:04:48 K12 parts [('2002', 0, None, '2026-11-16 20:58:59.8460246', '2026-11-16 21:04:48.8904688', 2, 349), ('2001', 0, None, None, None, None, None), ('2006', 0, None, None, None, None, None), ('2003', 0, None, None, None, None, None), ('2004', 0, '2026-11-16 20:59:19.5399797', '2026-11-16 20:59:19.5399797', '2026-11-16 21:04:48.8904688', 2, 329)]
+21:04:48 K12 kayıt [(7, 2, None, None, None)]
+21:04:48 K12 olay (32, 'StepInterrupted', 2) {"StepId":157,"DurationSeconds":349,"EffortSeconds":678,"BreakSeconds":0,"ParticipantUserIds":[4,7],"ParticipantWorkSeconds":[349,329]}
+21:04:48 K12 olay (33, 'RecordAborted', 2) {"Reason":"QA 6E K12: Y \u00E7al\u0131\u015F\u0131rken kay\u0131t yar\u0131da kapat\u0131ld\u0131.","ClosureKind":2,"InterruptedStepId":157}
+21:04:48 Kayıt eforu = adım eforları toplamı? [(984,)]
+21:04:49 K11 kesilmiş adıma katılma POST 200 None ['Kayıt bu durumda görevli işlemi yapılamaz.']
+21:04:49 K11 bitmiş adım 156 katılma POST 200 None ['Kayıt bu durumda görevli işlemi yapılamaz.']
+21:04:49 yeni olay []
+
+
+===== log-k14 =====
+21:05:16 K14 adım eforu/süresi değişen (Faz 6E öncesi satırlar): [(35, (None, None), (26, 13))]
+21:05:16 K14 kayıt efor/net/brüt değişen: []
+21:05:16 K14 bütünlük Doğrulandı olmayan: {} toplam 34
+21:05:16 K14 kayıt 8 "Adım boyunca" sayısı 6
+21:05:16 adım 38 (2, '2026-11-16 17:41:40.5525225', None, None, None, 0) [('2006', 1, None, None, None, None, None)]
+21:05:24 2006 sayaç önce [(4,)]
+21:05:25 eski adım 38 bitir 302 /records/run/10 (3, '2026-11-16 17:41:40.5525225', '2026-11-16 21:05:24.9067633', 12224, 12224, 0) [('2006', 0, None, '2026-11-16 17:41:40.5525225', '2026-11-16 21:05:24.9067633', 1, 12224)]
+21:05:25 olay (5, 'StepFinished', 8) {"StepId":38,"DurationSeconds":12224,"EffortSeconds":12224,"BreakSeconds":0,"ParticipantUserIds":[8],"ParticipantWorkSeconds":[12224]}
+21:05:25 kayıt 10 bütünlük (200, ['Doğrulandı'])
+21:05:25 detay 10 ilk görevli Görevliler | Ahmet Yılmaz | 2006 | Eklenme | 16.11.2026 | 20:41 | Ahmet Yılmaz | Katılma | 16.11.2026 | 20:41 | Ayrılma | Adım bitişine kadar | Çalışma | 3 | sa | 23 | dk | 44 | sn | 2. | Makine Kontrol | Bekliyor | Makine genel kontrol kapanmış olduğuna emin olun
+21:05:42 K14 acil açılış 302 /records/run/35 
+21:05:42 acil kayıt 35 [(2, 2)]
+21:05:42 adımlar [158] [(2, '2026-11-16 21:05:42.7601582')] [('2002', 1, None, '2026-11-16 21:05:42.7601582', None, None, None)]
+21:05:42 olay (1, 'RecordOpened', 4) {"RecordNo":"T1-H1-M02-A2026-26","Kind":"Emergency","MachineId":2,"CleaningTypeId":2,"ProcedureVersionId":2,"VersionNo":1,"Description":"QA 6E: acil a\u00E7\u0131l\u0131\u015F gerilemesi.","MaterialLo
+21:05:42 olay (2, 'StepStarted', 4) {"StepId":158,"Title":"M\u00FCdahaleyi yap ve durumu yaz","FirstStep":true,"FieldBookRef":null,"ParticipantUserIds":[4]}
+21:05:52 acil adım bitir 302 /records/run/35 (3, '2026-11-16 21:05:42.7601582', '2026-11-16 21:05:52.6600846', 9, 9, 0) [('2002', 0, None, '2026-11-16 21:05:42.7601582', '2026-11-16 21:05:52.6600846', 1, 9)] [(4, 9, 9)]
+21:05:52 kayıt 35 bütünlük (200, ['Doğrulandı'])
+
+
+===== log-k17 =====
+21:06:03 K17 kayıt 36
+21:06:03 formlar ['/records/add-participant/159', '/records/start-step/159', '/records/add-participant/160', '/records/add-participant/161', '/records/add-participant/162', '/records/add-material/36']
+21:06:03 adımlar [159, 160, 161, 162]
+21:06:03 2006 sayaç [(0, None)]
+21:06:24 K17 JS kapalı adım 159 (3, '2026-11-16 21:06:21.1315488', '2026-11-16 21:06:23.9787848', 2, 4, 0) [('2002', 0, None, '2026-11-16 21:06:21.1315488', '2026-11-16 21:06:23.9787848', 1, 2), ('2006', 0, '2026-11-16 21:06:21.4568023', '2026-11-16 21:06:21.4568023', '2026-11-16 21:06:23.7809767', 0, 2)]
+21:06:24 olay (1, 'RecordOpened', 4) {"RecordNo":"T1-H1-M02-P2026-27","MachineId":2,"CleaningTypeId":4,"ProcedureVersionId":5,"VersionNo":2,"LockMinutes":90,"LockExpiresAtUtc":"2026-11-16T22:36:03.
+21:06:24 olay (2, 'ParticipantAdded', 4) {"StepId":159,"ParticipantUserId":8,"AddedByUserId":4}
+21:06:24 olay (3, 'StepStarted', 4) {"StepId":159,"Title":"Makine Kapa","FirstStep":true,"FieldBookRef":"T1-SD-2026-14","ParticipantUserIds":[4]}
+21:06:24 olay (4, 'ParticipantJoined', 8) {"StepId":159,"ParticipantUserId":8,"SessionUserId":4,"BeforeStart":false}
+21:06:24 olay (5, 'ParticipantLeft', 8) {"StepId":159,"ParticipantUserId":8,"SessionUserId":4,"WorkSeconds":2}
+21:06:24 olay (6, 'StepFinished', 4) {"StepId":159,"DurationSeconds":2,"EffortSeconds":4,"BreakSeconds":0,"ParticipantUserIds":[4,8],"ParticipantWorkSeconds":[2,2]}
+21:06:33 K11 bitmiş adım 159 (kayıt açık) katılma POST 200 None ['Adım bitti, görevli işlemi yapılamaz.']
+21:06:33 K11 bitmiş adım 159 sahip katılma POST 200 None ['Adım bitti, görevli işlemi yapılamaz.']
+21:06:33 yeni olay []
+21:10:53 160 (2, '2026-11-16 21:10:53.3694105') [('2002', 1, None, '2026-11-16 21:10:53.3694105', None, None, None), ('2006', 0, None, None, None, None, None), ('2003', 0, None, None, None, None, None)]
+
+
+===== log-k15 =====
+ÇİZELGE 53 | Şükrüye İnceoğlu Karamustafapaşalıoğulları adıma katılacağını onayladı | Faz 1 / Adım 1 | - Makineyi durdur ve enerjiyi kes | Cihazdaki oturum: Test Operatör 2
+ÇİZELGE 53 | Test Operatör 2 ve Şükrüye İnceoğlu Karamustafapaşalıoğulları birlikte adıma başladı | Faz 1 / Adım 1 | - Makineyi durdur ve enerjiyi kes | Saha referansı T1-SD-2026-13
+ÇİZELGE 53 | Test Operatör 2 adımı bitirdi | Faz 1 / Adım 1 | - Makineyi durdur ve enerjiyi kes | Görevliler: Test Operatör 2 (19 sn), Şükrüye İnceoğlu Karamustafapaşalıoğulları (19 sn) | Süre | 19 | sn | Efor | 38 | sn
+ÇİZELGE 54 | Test Operatör 2 adımı bitirdi | Faz 1 / Adım 2 | - Ürün kalıntısını boşalt | Süre | 12 | sn | Efor | 12 | sn
+ÇİZELGE 55 | IŞIL ÖZGÜR adıma katıldı | Faz 2 / Adım 1 | - Yüzeyi dezenfektanla sil | Cihazdaki oturum: Test Operatör 2
+ÇİZELGE 55 | Test Operatör 2 adımı bitirdi | Faz 2 / Adım 1 | - Yüzeyi dezenfektanla sil | Görevliler: Test Operatör 2 (59 sn), IŞIL ÖZGÜR (35 sn) | Süre | 59 | sn | Efor | 1 | dk | 34 | sn
+ÇİZELGE 57 | IŞIL ÖZGÜR adıma katıldı | Faz 2 / Adım 2 | - Temas parçalarını sök ve yıka
+ÇİZELGE 58 | IŞIL ÖZGÜR adımdan ayrıldı | Faz 2 / Adım 2 | - Temas parçalarını sök ve yıka | Süre | 21 | sn
+ÇİZELGE 58 | Test Operatör 2 adımı bitirdi | Faz 2 / Adım 2 | - Temas parçalarını sök ve yıka | Görevliler: Test Operatör 2 (2 dk 5 sn), IŞIL ÖZGÜR (21 sn) | Süre | 2 | dk | 5 | sn | Efor | 2 | dk | 26 | sn
+ÇİZELGE 58 | Şükrüye İnceoğlu Karamustafapaşalıoğulları adıma katıldı | Faz 2 / Adım 3 | - Parçaları yerine tak | Cihazdaki oturum: Test Operatör 2
+ÇİZELGE 58 | Test Operatör 2 adımı bitirdi | Faz 2 / Adım 3 | - Parçaları yerine tak | Görevliler: Test Operatör 2 (12 sn), Şükrüye İnceoğlu Karamustafapaşalıoğulları (4 sn) | Süre | 12 | sn | Efor | 16 | sn
+ÇİZELGE 59 | IŞIL ÖZGÜR adıma katıldı | Faz 3 / Adım 1 | - Yüzeyi gözle kontrol et ve onayla | Cihazdaki oturum: Test Operatör 2 | 17.11.2026 | 00:04 | Adım kesildi | Faz 3 / Adım 1 | - Yüzeyi gözle kontrol et ve onayla | Süre | 5 | dk | 
+ÇİZELGE id="timeline-title" class="mb-1 text-xl font-bold">Zaman çizelgesi | Olay günlüğünün okunur hali, 33 satır. Kanıt değeri aşağıdaki günlüktedir. | 16.11.2026 | 23:53 | Test Operatör 2 kaydı açtı | Kayıt no T1-H1-M02-P2026-25, iş em
+ÇİZELGE 04 | Adım kesildi | Faz 3 / Adım 1 | - Yüzeyi gözle kontrol et ve onayla | Süre | 5 | dk | 49 | sn | Efor | 11 | dk | 18 | sn
+DETAY 2.2 Görevliler | Test Operatör 2 | 2002 | Eklenme | 16.11.2026 | 23:53 | Test Operatör 2 | Katılma | 16.11.2026 | 23:56 | Ayrılma | Adım bitişine kadar | Çalışma | 2 | dk | 5 | sn | IŞIL ÖZGÜR | 2004 | Eklenme | 16.11.2026 | 23:56 | Test Operatör 2 | Katılma | 16.11.2026 | 23:57 | Ayrılma | 16.11.2026 | 23:58 | Çalışma | <span clas
+
+
+===== log-sql =====
+SH-02: EffortSeconds = Σ WorkSeconds (aralığı olan biten adımlar)
+ adım 35 süre 13 efor 26 Σkişi 26 kişi 2 mola 0 OK
+ adım 38 süre 12224 efor 12224 Σkişi 12224 kişi 1 mola 0 OK
+ adım 152 süre 19 efor 38 Σkişi 38 kişi 2 mola 0 OK
+ adım 153 süre 12 efor 12 Σkişi 12 kişi 1 mola 0 OK
+ adım 154 süre 59 efor 94 Σkişi 94 kişi 2 mola 0 OK
+ adım 155 süre 125 efor 146 Σkişi 146 kişi 2 mola 0 OK
+ adım 156 süre 12 efor 16 Σkişi 16 kişi 2 mola 0 OK
+ adım 157 süre 349 efor 678 Σkişi 678 kişi 2 mola 0 OK
+ adım 158 süre 9 efor 9 Σkişi 9 kişi 1 mola 0 OK
+ adım 159 süre 2 efor 4 Σkişi 4 kişi 2 mola 0 OK
+SH-02a: WorkSeconds = floor(min(ayrılma, adım bitişi) - max(katılma, adım başlangıcı)) - mola (molasız adımlar)
+ aralık 1 adım 152 2002 tür 1 yazılı 19 hesap 19 OK
+ aralık 2 adım 152 2003 tür 1 yazılı 19 hesap 19 OK
+ aralık 3 adım 153 2002 tür 1 yazılı 12 hesap 12 OK
+ aralık 4 adım 154 2002 tür 1 yazılı 59 hesap 59 OK
+ aralık 5 adım 154 2004 tür 1 yazılı 35 hesap 35 OK
+ aralık 6 adım 155 2002 tür 1 yazılı 125 hesap 125 OK
+ aralık 7 adım 35 2001 tür 1 yazılı 13 hesap 13 OK
+ aralık 8 adım 35 2004 tür 1 yazılı 13 hesap 13 OK
+ aralık 9 adım 155 2004 tür 0 yazılı 21 hesap 21 OK
+ aralık 10 adım 156 2002 tür 1 yazılı 12 hesap 12 OK
+ aralık 11 adım 156 2003 tür 1 yazılı 4 hesap 4 OK
+ aralık 12 adım 157 2002 tür 2 yazılı 349 hesap 349 OK
+ aralık 13 adım 157 2004 tür 2 yazılı 329 hesap 329 OK
+ aralık 14 adım 38 2006 tür 1 yazılı 12224 hesap 12224 OK
+ aralık 15 adım 158 2002 tür 1 yazılı 9 hesap 9 OK
+ aralık 16 adım 159 2002 tür 1 yazılı 2 hesap 2 OK
+ aralık 17 adım 159 2006 tür 0 yazılı 2 hesap 2 OK
+fark sayısı 0
+SC-32 (adım 154): süre [(59, 94)] kişi [('2002', 59), ('2004', 35)]
+Son bütünlük: kayıt 36 Doğrulandı olmayan: {}
+
+===== log-k2b (kayıt 36) =====
+21:13:24 K2 elle bitir POST (adım 160, girişi bekleyen 2006 ve 2003) 200 ["Girişi bekleniyor: Ahmet Yılmaz, Şükrüye İnceoğlu Karamustafapaşalıoğulları. Kişi kendi PIN'iyle katılsın ya da sahip listeden çıkarsın."]
+21:13:24 K2 sonraki adım 161 başlat POST 200 ['Kayıtta devam eden bir adım var. Önce onu bitirin.']
+21:13:24 K2 yeni olay [] adım 160 durum 2
+
+===== Sapma doğrulaması: ayrılmış kişi adımı bitiremez (kayıt 36 adım 160) =====
+21:16:30 2003 çıkarıldı 302
+21:16:32 parts [('2002', 1, None, '2026-11-16 21:10:53.3694105', None, None, None), ('2006', 0, '2026-11-16 21:16:30.8401681', '2026-11-16 21:16:30.8401681', '2026-11-16 21:16:32.9532104', 0, 2)]
+21:16:32 2006 sayfasında bitir formu var mı False
+21:16:33 ayrılmış 2006 elle bitir POST 403 None []
+21:16:33 yeni olay [] 2

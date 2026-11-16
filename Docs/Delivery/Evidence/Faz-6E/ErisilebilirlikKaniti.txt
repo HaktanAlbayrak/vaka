@@ -1,0 +1,44 @@
+Erişilebilirlik, klavye ve odak kanıtı (QA kopyası, port 5871, Chromium/Playwright 1.61).
+
+== Klavye turu (kbd.mjs): ilk Tab, odak durağı sayısı, kart özetleri, halka/örtme sorunu. 'BODY'ye düştü' yalnız son duraktan sonra sayfa sonundaki doğal dönüş. Kayıt 36 devam eden adım (girişi bekleyen kişiler), kayıt 34 yarıda kapatılmış.
+2002 /records/run/36 360 light ilk: A||İçeriğe geç||12|-68 (atlama) odak: 14 kart-summary: 3 sorun: ["BODY'ye düştü @14"]
+2002 /records/run/36 1280 dark ilk: A||İçeriğe geç||12|-68 (atlama) odak: 16 kart-summary: 3 sorun: ["BODY'ye düştü @16"]
+2006 /records/run/36 768 light ilk: A||İçeriğe geç||12|-68 (atlama) odak: 12 kart-summary: 1 sorun: ["BODY'ye düştü @12"]
+2004 /my-work 360 dark ilk: A||İçeriğe geç||12|-68 (atlama) odak: 11 kart-summary: 0 sorun: ["BODY'ye düştü @11"]
+2003 /records/run/34 1440 light ilk: A||İçeriğe geç||12|-68 (atlama) odak: 13 kart-summary: 0 sorun: ["BODY'ye düştü @13"]
+1001 /records/details/34 360 light ilk: A||İçeriğe geç||12|-65 (atlama) odak: 13 kart-summary: 0 sorun: ["BODY'ye düştü @12"]
+1001 /records/details/34 1440 dark ilk: A||İçeriğe geç||12|-68 (atlama) odak: 22 kart-summary: 0 sorun: ["BODY'ye düştü @22"]
+
+== K16 (k16b.mjs): her döngü 'açık: hata kimliği sayısı/hata görünür  kapalı: sayı/görünür'; 4 döngü. Görevli seçici kayıt 36 adım 160, kapatma kişi seçimi (2901) ve PIN boşken gönderimle.
+görevli seçici önce[/true/chosen:false] | açık:1/true kapalı:0/false | önce[/true/chosen:false] | açık:1/true kapalı:0/false | önce[/true/chosen:false] | açık:1/true kapalı:0/false | önce[/true/chosen:false] | açık:1/true kapalı:0/false  son liste: step-160-hint step-160-status
+/users/create önce[-] | açık:1/true kapalı:0/false | önce[-] | açık:1/true kapalı:0/false | önce[-] | açık:1/true kapalı:0/false | önce[-] | açık:1/true kapalı:0/false  son liste: RegistryNo-hint
+/materials/create önce[-] | açık:1/true kapalı:0/false | önce[-] | açık:1/true kapalı:0/false | önce[-] | açık:1/true kapalı:0/false | önce[-] | açık:1/true kapalı:0/false  son liste: Code-hint
+konsol hata []
+
+== Ön tur 7, kart hata kutusu (err7.mjs, Y'nin 'Adımdan ayrıl' formuna yanlış PIN; ölçüm sırasında alınan çıktı)
+JS true 360 {"url":"/records/run/34","box":"İşlem yapılmadı PIN hatalı.","boxTop":470,"inView":true,"detailsOpen":true,"focus":"DIV (hata kutusu) notice notice-danger scroll-mt","topError":true,"hScroll":false,"scrollY":2461} konsol []
+JS true 1280 {"url":"/records/run/34","box":"İşlem yapılmadı PIN hatalı.","boxTop":506,"inView":true,"detailsOpen":true,"focus":"DIV (hata kutusu) notice notice-danger scroll-mt","topError":true,"hScroll":false,"scrollY":1823} konsol []
+JS false 360 {"url":"/records/leave-step/157#step-157-p7","box":"İşlem yapılmadı PIN hatalı.","boxTop":287,"inView":true,"detailsOpen":true,"focus":"BODY ","topError":true,"hScroll":false,"scrollY":2620} konsol []
+JS false 1280 {"url":"/records/leave-step/157#step-157-p7","box":"İşlem yapılmadı PIN kilitlendi.","boxTop":287,"inView":true,"detailsOpen":true,"focus":"BODY ","topError":true,"hScroll":false,"scrollY":2042} konsol []
+
+== Ortak odak seçicisi gerilemesi (App.js, CommandForm.js [data-focus-first]); focusreg.mjs
+giriş yanlış parola odak: DIV# notice notice-danger | Sicil no ya da parola hatalı ya da hesap pasif.
+users/create boş gönderim (istemci) odak: INPUT#RegistryNo input
+materials/create boş gönderim (istemci) odak: INPUT#Code input
+run adım bitir yanlış PIN (JS, CommandForm) odak: BODY
+
+== B1 karşılaştırması: kayıt 10 adım 38, 2006 oturumu, 360 px, JS açık, "Adımı bitir" yanlış PIN (focusreg2.mjs)
+Faz 6E (port 5871): {"fin":{"top":376,"err":"PIN hatalı. vis true"},"invalid":["pin-add-person-38(kapalı details)","pin-finish-38","pin-remove-person-39-8(kapalı details)",...],"summary":["İşlem yapılmadı PIN hatalı. top-1170"],"focus":"BODY#","scrollY":1336}
+Faz 6D QA yayını .qa/f6d/build4 (port 5872, aynı DB'nin 6E öncesi kopyası): {"fin":{"top":376,"err":"PIN hatalı. vis true"},"invalid":["pin-finish-38","pin-remove-person-39-8(kapalı details)",...],"summary":["İşlem yapılmadı PIN hatalı. top-995"],"focus":"INPUT#pin-finish-38","scrollY":1161}
+JS kapalı (6E): ilk aria-invalid yine pin-add-person-38 (kapalı details), odak BODY, sayfa en üstte, üst bildirim görünür (top 166).
+
+== K17 JS kapalı tam akış (nojs.mjs, 360 px, kayıt 36 adım 159)
+0 başlangıç: sahip kartı data-state Idle, kenarlık rgb(202,210,216) (çizgi rengi)
+1 ekleme sonrası (JS kapalı arama + radyo): 2006 "Girişi bekleniyor", kenarlık warn
+2 başlatma sonrası: "Adımı bitir (pasif)", uyarı "Girişi bekleniyor: Ahmet Yılmaz. Kişi kendi PIN'iyle katılsın ya da sahip listeden çıkarsın."
+3 katılma sonrası: 2006 Çalışıyor, adres /records/run/36?stepId=159#step-159-p8
+4 ayrılma sonrası: 2006 Ayrıldı, Çalışma 2 sn
+5 bitirme sonrası: adım Tamamlandı; StepFinished efor 4 = 2 + 2. Her adımda yatay kaydırma yok.
+
+== Kontrast (contrast.mjs, 1440 px, tüm details açık): kişi kartı, İşlerim kartı, bildirim, detay kv ve çizelge metinlerinde AA altı öğe açık ve koyu temada 0 (/records/run/34, /my-work, /records/details/34).
+== Reduced-motion: canlı nokta animasyonu (live-pulse) reduce açıkken 0, kapalıyken 2 çalışan animasyon.

@@ -66,7 +66,7 @@ public sealed class RecordTimelineBuilder : IRecordTimelineBuilder
                 var finished = ParticipantNames(item, names, item.ActorUserId);
                 entry.Kind = TimelineEntryKind.StepFinished;
                 entry.Title = $"{actor} adımı bitirdi";
-                entry.Detail = finished.Length >= 2 ? $"Görevliler: {string.Join(", ", finished)}" : null;
+                entry.Detail = finished.Length >= 2 ? $"Görevliler: {string.Join(", ", finished.Select((name, index) => WorkText(name, item.Numbers("ParticipantWorkSeconds"), index)))}" : null;
                 entry.DurationSeconds = item.Number("DurationSeconds");
                 entry.EffortSeconds = item.Number("EffortSeconds");
                 break;
@@ -132,6 +132,20 @@ public sealed class RecordTimelineBuilder : IRecordTimelineBuilder
                 entry.Title = $"{actor} görevli çıkardı: {User(item.Number("ParticipantUserId"))}";
                 break;
 
+            case EventTypes.ParticipantJoined:
+                var joined = User(item.Number("ParticipantUserId"));
+                entry.Kind = TimelineEntryKind.ParticipantJoined;
+                entry.Title = item.Flag("BeforeStart") == true ? $"{joined} adıma katılacağını onayladı" : $"{joined} adıma katıldı";
+                entry.Detail = SessionDetail(item, names);
+                break;
+
+            case EventTypes.ParticipantLeft:
+                entry.Kind = TimelineEntryKind.ParticipantLeft;
+                entry.Title = $"{User(item.Number("ParticipantUserId"))} adımdan ayrıldı";
+                entry.Detail = SessionDetail(item, names);
+                entry.DurationSeconds = item.Number("WorkSeconds");
+                break;
+
             case EventTypes.RecordCancelled:
             case EventTypes.RecordAborted:
                 var cancelled = item.EventType == EventTypes.RecordCancelled;
@@ -152,6 +166,16 @@ public sealed class RecordTimelineBuilder : IRecordTimelineBuilder
 
         return entry;
     }
+
+    private static string WorkText(string name, int[]? seconds, int index) =>
+        seconds is not null && index < seconds.Length ? $"{name} ({Minutes(seconds[index])})" : name;
+
+    private static string Minutes(int seconds) => seconds < 60 ? $"{seconds} sn" : $"{seconds / 60} dk {seconds % 60} sn";
+
+    private static string? SessionDetail(ParsedEvent item, TimelineNames names) =>
+        item.Number("SessionUserId") is { } session && session != item.Number("ParticipantUserId")
+            ? $"Cihazdaki oturum: {names.Users.GetValueOrDefault(session) ?? $"Kullanıcı {session}"}"
+            : null;
 
     private static string[] ParticipantNames(ParsedEvent item, TimelineNames names, int? fallbackUserId)
     {

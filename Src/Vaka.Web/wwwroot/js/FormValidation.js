@@ -37,11 +37,19 @@ export class FormValidation {
         error.className = "field-error";
         error.textContent = field.dataset.requiredMessage || "Bu alanı doldurun.";
         (field.closest("[data-field], .field") || field.parentElement).appendChild(error);
-        field.setAttribute("aria-describedby", `${field.getAttribute("aria-describedby") || ""} ${errorId}`.trim());
       }
+      this.describe(field, errorId, true);
     } else {
       field.removeAttribute("aria-invalid");
       if (error) error.remove();
+      this.describe(field, errorId, false);
     }
+  }
+
+  describe(field, errorId, present) {
+    const ids = (field.getAttribute("aria-describedby") || "").split(" ").filter((id) => id && id !== errorId);
+    if (present) ids.push(errorId);
+    if (ids.length) field.setAttribute("aria-describedby", ids.join(" "));
+    else field.removeAttribute("aria-describedby");
   }
 }

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Vaka.Web.Data;
+using Vaka.Web.Domain.Entities;
 using Vaka.Web.ViewModels.Procedures;
 using Vaka.Web.ViewModels.Records;
 
@@ -54,7 +55,20 @@ public sealed class RecordPhaseReader : IRecordPhaseReader
                         step.DurationSeconds,
                         step.EffortSeconds,
                         Participants = step.Participants.OrderBy(item => item.Id)
-                            .Select(item => new { item.UserId, item.User.FullName, item.User.RegistryNo, AddedByName = item.AddedBy.FullName, item.ConfirmedAtUtc }).ToList()
+                            .Select(item => new
+                            {
+                                item.UserId,
+                                item.User.FullName,
+                                item.User.RegistryNo,
+                                AddedByName = item.AddedBy.FullName,
+                                item.ConfirmedAtUtc,
+                                item.IsWorking,
+                                HasInterval = item.WorkInterval != null,
+                                IntervalStartedAtUtc = item.WorkInterval == null ? null : (DateTime?)item.WorkInterval.StartedAtUtc,
+                                IntervalEndedAtUtc = item.WorkInterval == null ? null : item.WorkInterval.EndedAtUtc,
+                                IntervalEndKind = item.WorkInterval == null ? null : item.WorkInterval.EndKind,
+                                IntervalWorkSeconds = item.WorkInterval == null ? null : item.WorkInterval.WorkSeconds
+                            }).ToList()
                     }).ToList()
             })
             .ToListAsync(cancellationToken);
@@ -109,13 +123,23 @@ public sealed class RecordPhaseReader : IRecordPhaseReader
                     EffortSeconds = step.EffortSeconds,
                     Participants =
                     [
-                        .. step.Participants.Select(item => new RecordDetailParticipantViewModel
+                        .. step.Participants.Select(item =>
                         {
-                            FullName = item.FullName,
-                            RegistryNo = item.RegistryNo,
-                            AddedByName = item.AddedByName,
-                            AddedAtLocal = _clock.ToLocal(addedAt.GetValueOrDefault((step.Id, item.UserId), openedAtUtc)),
-                            ConfirmedAtLocal = Local(item.ConfirmedAtUtc)
+                            var finished = step.Status is StepStatus.Completed or StepStatus.Interrupted;
+                            var wholeStep = !item.HasInterval && (item.IsWorking || (finished && !step.Participants.Any(other => other.HasInterval)));
+                            var left = item.IntervalEndKind == StepIntervalEndKind.Left;
+                            return new RecordDetailParticipantViewModel
+                            {
+                                FullName = item.FullName,
+                                RegistryNo = item.RegistryNo,
+                                AddedByName = item.AddedByName,
+                                AddedAtLocal = _clock.ToLocal(addedAt.GetValueOrDefault((step.Id, item.UserId), openedAtUtc)),
+                                ConfirmedAtLocal = Local(item.ConfirmedAtUtc),
+                                HasInterval = !wholeStep,
+                                JoinedAtLocal = Local(item.IntervalStartedAtUtc),
+                                LeftAtLocal = left ? Local(item.IntervalEndedAtUtc) : null,
+                                WorkSeconds = item.HasInterval ? item.IntervalWorkSeconds : (!wholeStep && finished ? 0 : null)
+                            };
                         })
                     ]
                 })

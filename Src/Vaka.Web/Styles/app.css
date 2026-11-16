@@ -384,6 +384,37 @@
   .record-no {
     @apply font-mono text-base font-bold tracking-tight tabular-nums;
   }
+  .step-person {
+    @apply min-w-0 space-y-2 rounded-card border-2 border-line bg-surface p-3;
+  }
+  .step-person[data-state="Working"] {
+    @apply border-accent;
+  }
+  .step-person[data-state="Pending"] {
+    @apply border-warn;
+  }
+  .step-person .badge > span {
+    @apply whitespace-nowrap;
+  }
+  .step-person-name {
+    @apply break-words;
+    overflow-wrap: anywhere;
+  }
+  .step-person .btn,
+  .step-person .tool > summary {
+    @apply min-h-12 w-full min-w-0 whitespace-normal px-2 text-center text-base;
+  }
+  .step-person .btn {
+    @apply gap-1.5;
+  }
+  .step-person .field-label,
+  .step-person .field-hint,
+  .step-person .tool > summary {
+    overflow-wrap: anywhere;
+  }
+  .step-person .tool-body {
+    @apply p-2 md:p-4;
+  }
   .chip {
     @apply inline-flex items-center gap-1.5 rounded-ui border border-line-strong bg-sunken px-2 py-0.5 text-sm font-semibold;
   }

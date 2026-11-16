@@ -1,0 +1,8 @@
+K13: tetikleyici ve unique denetimi, .qa/f6e/qa.db dosyasının ayrı kopyası .qa/f6e/k13.db üzerinde (her deneme geri alındı).
+aralık sayısı 13 örnek (1, 160, '2026-11-16 20:53:31.8036522', '2026-11-16 20:53:51.1962788')
+RET dolu StartedAtUtc değiştir -> Çalışma aralığının zamanı değiştirilemez.
+RET dolu EndedAtUtc değiştir -> Çalışma aralığının zamanı değiştirilemez.
+RET satır sil -> Çalışma aralığı silinemez.
+RET aynı kişiye ikinci aralık -> UNIQUE constraint failed: StepWorkIntervals.StepParticipantId
+KABUL WorkSeconds güncelle (izinli mi)
+[('CREATE INDEX "IX_StepWorkIntervals_EndedByUserId" ON "StepWorkIntervals" ("EndedByUserId")',), ('CREATE UNIQUE INDEX "IX_StepWorkIntervals_StepParticipantId" ON "StepWorkIntervals" ("StepParticipantId")',), ('CREATE TRIGGER "TR_StepWorkIntervals_NoTimeChange" BEFORE UPDATE ON "StepWorkIntervals" FOR EACH ROW WHEN (OLD."StartedAtUtc" IS NOT NULL AND NEW."StartedAtUtc" IS NOT OLD."StartedAtUtc") OR (OLD."EndedAtUtc" IS NOT NULL AND NEW."EndedAtUtc" IS NOT OLD."EndedAtUtc") BEGIN SELECT RAISE(ABORT, \'Çalışma aralığının zamanı değiştirilemez.\'); END',), ('CREATE TRIGGER "TR_StepWorkIntervals_NoDelete" BEFORE DELETE ON "StepWorkIntervals" FOR EACH ROW BEGIN SELECT RAISE(ABORT, \'Çalışma aralığı silinemez.\'); END',)]

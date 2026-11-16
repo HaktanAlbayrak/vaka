@@ -1,0 +1,98 @@
+Faz 6E tur 2 kanıtı (2026-11-17). Yayın .qa/f6e/t2/build (çalışma ağacı kopyası .qa/f6e/t2/src; FocusFirst.js, App.js, CommandForm.js, _Timeline.cshtml repodakiyle bayt bayt aynı). Her soğuk denemede .qa/f6e/t2/base.db (= .qa/f6e/qa.db kopyası) yeniden kopyalandı ve sunucu yeniden başlatıldı; port 5881. Kayıt 36 adım 160 devam ediyor, sahip 2002, ekleme paneli açık.
+Alanlar: jsBoundAtSubmit = gönderim anında FormValidation bağlı mı; focus = odaktaki öğe; pinInView = pin-finish-160 görünümde; fieldError = alan hatası; notices = üst bildirim ve konumu; invalidCount = aria-invalid alan sayısı.
+
+== B1: 5 soğuk başlatma x (360, 360, 1440); 1-3 'load' bekleyerek, 4-5 'commit' sonrası hemen
+== soğuk deneme 1 (load)
+başladı PID 15808
+{"w":360,"mode":"load","noCV":false,"jsBoundAtSubmit":true,"ms":2069,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":376,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1947"],"addPanel":true,"invalidCount":4,"console":0}
+{"w":360,"mode":"load","noCV":false,"jsBoundAtSubmit":true,"ms":1212,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":376,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1947"],"addPanel":true,"invalidCount":4,"console":0}
+{"w":1440,"mode":"load","noCV":false,"jsBoundAtSubmit":true,"ms":1264,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":596,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1299"],"addPanel":true,"invalidCount":4,"console":0}
+durdu 15808
+== soğuk deneme 2 (load)
+başladı PID 31036
+{"w":360,"mode":"load","noCV":false,"jsBoundAtSubmit":true,"ms":2443,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":376,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1947"],"addPanel":true,"invalidCount":4,"console":0}
+{"w":360,"mode":"load","noCV":false,"jsBoundAtSubmit":true,"ms":1214,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":376,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1947"],"addPanel":true,"invalidCount":4,"console":0}
+{"w":1440,"mode":"load","noCV":false,"jsBoundAtSubmit":true,"ms":1661,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":596,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1299"],"addPanel":true,"invalidCount":4,"console":0}
+durdu 31036
+== soğuk deneme 3 (load)
+başladı PID 28328
+{"w":360,"mode":"load","noCV":false,"jsBoundAtSubmit":true,"ms":2710,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":376,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1947"],"addPanel":true,"invalidCount":4,"console":0}
+{"w":360,"mode":"load","noCV":false,"jsBoundAtSubmit":true,"ms":1269,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":376,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1947"],"addPanel":true,"invalidCount":4,"console":0}
+{"w":1440,"mode":"load","noCV":false,"jsBoundAtSubmit":true,"ms":1305,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":596,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1299"],"addPanel":true,"invalidCount":4,"console":0}
+durdu 28328
+== soğuk deneme 4 (commit)
+başladı PID 38092
+{"w":360,"mode":"commit","noCV":false,"jsBoundAtSubmit":true,"ms":2784,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":376,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1947"],"addPanel":true,"invalidCount":4,"console":0}
+{"w":360,"mode":"commit","noCV":false,"jsBoundAtSubmit":true,"ms":1208,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":376,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1947"],"addPanel":true,"invalidCount":4,"console":0}
+{"w":1440,"mode":"commit","noCV":false,"jsBoundAtSubmit":true,"ms":1255,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":596,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1299"],"addPanel":true,"invalidCount":4,"console":0}
+durdu 38092
+== soğuk deneme 5 (commit)
+başladı PID 1680
+{"w":360,"mode":"commit","noCV":false,"jsBoundAtSubmit":true,"ms":2261,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":376,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1947"],"addPanel":true,"invalidCount":4,"console":0}
+{"w":360,"mode":"commit","noCV":false,"jsBoundAtSubmit":true,"ms":1192,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":376,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1947"],"addPanel":true,"invalidCount":4,"console":0}
+{"w":1440,"mode":"commit","noCV":false,"jsBoundAtSubmit":true,"ms":1271,"url":"/records/run/36","focus":"INPUT#pin-finish-160","pinTop":596,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1299"],"addPanel":true,"invalidCount":4,"console":0}
+durdu 1680
+
+== B1 yarış: soğuk başlatma, CPU x6, gecikme 400 ms; düğme DOM'a gelir gelmez gönderim (JS bağlanmadan, yerel POST)
+== yarış denemesi 1 (soğuk)
+{"w":360,"jsBoundAtSubmit":false,"url":"/records/finish-step/160","focus":"INPUT#pin-finish-160","fieldError":"PIN hatalı.","pinInView":true,"notices":1,"console":[]}
+durdu 11952
+== yarış denemesi 2 (soğuk)
+{"w":360,"jsBoundAtSubmit":false,"url":"/records/finish-step/160","focus":"INPUT#pin-finish-160","fieldError":"PIN hatalı.","pinInView":true,"notices":1,"console":[]}
+durdu 19688
+== yarış denemesi 3 (soğuk)
+{"w":360,"jsBoundAtSubmit":false,"url":"/records/finish-step/160","focus":"INPUT#pin-finish-160","fieldError":"PIN hatalı.","pinInView":true,"notices":1,"console":[]}
+durdu 12236
+
+== checkVisibility olmayan tarayıcı benzetimi (Element.prototype.checkVisibility silindi)
+{"w":360,"mode":"load","noCV":true,"jsBoundAtSubmit":true,"ms":2161,"url":"/records/run/36","focus":"BODY#","pinTop":376,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1947"],"addPanel":true,"invalidCount":4,"console":[]}
+{"w":1440,"mode":"load","noCV":true,"jsBoundAtSubmit":true,"ms":1240,"url":"/records/run/36","focus":"BODY#","pinTop":596,"pinInView":true,"fieldError":"PIN hatalı.","notices":["İşlem yapılmadı PIN hatalı. top-1299"],"addPanel":true,"invalidCount":4,"console":[]}
+{"noCV":false,"focus":"DIV.notice notice-danger","errors":[]}
+{"noCV":true,"focus":"BODY.","errors":["TypeError: element.checkVisibility is not a function"]}
+
+== Gerileme: Katıl yanlış PIN (2001, kayıt 36 adım 160) ve /users/deactivate/11 (Yönetici 1001)
+Katıl yanlış PIN 360 {"focus":"DIV (karttaki hata kutusu)","box":"İşlem yapılmadı PIN hatalı.","inView":true,"top":470,"detailsOpen":true} konsol []
+Katıl yanlış PIN 1440 {"focus":"DIV (karttaki hata kutusu)","box":"İşlem yapılmadı PIN hatalı.","inView":true,"top":502,"detailsOpen":true} konsol []
+users/deactivate boş PIN 360 {"url":"/users/deactivate/11","focus":"INPUT#Pin[Pin]","top":407,"inView":true,"error":"Bu alanı doldurun.","describedby":"Pin-hint Pin-error"} konsol []
+users/deactivate boş PIN 1440 {"url":"/users/deactivate/11","focus":"INPUT#Pin[Pin]","top":359,"inView":true,"error":"Bu alanı doldurun.","describedby":"Pin-hint Pin-error"} konsol []
+users/deactivate yanlış PIN (sunucu) 360 {"url":"/users/deactivate/11","focus":"INPUT#Pin ","inView":true} konsol []
+
+== B3: zaman çizelgesi satırları
+34 ÇİZELGE 23:53 | Test Operatör 2 adımı bitirdi | Faz 1 / Adım 1 | - Makineyi durdur ve enerjiyi kes | Görevliler: Test Operatör 2 (19 sn), Şükrüye İnceoğlu Karamustafapaşalıoğulları (19 sn) | Süre | 19 | sn | Efor | 38 | sn
+34 ÇİZELGE 23:54 | Test Operatör 2 adımı bitirdi | Faz 1 / Adım 2 | - Ürün kalıntısını boşalt | Süre | 12 | sn | Efor | 12 | sn
+34 ÇİZELGE 23:55 | Test Operatör 2 adımı bitirdi | Faz 2 / Adım 1 | - Yüzeyi dezenfektanla sil | Görevliler: Test Operatör 2 (59 sn), IŞIL ÖZGÜR (35 sn) | Süre | 59 | sn | Efor | 1 | dk | 34 | sn
+34 ÇİZELGE 23:58 | IŞIL ÖZGÜR adımdan ayrıldı | Faz 2 / Adım 2 | - Temas parçalarını sök ve yıka | Çalışma | 21 | sn
+34 ÇİZELGE 23:58 | Test Operatör 2 adımı bitirdi | Faz 2 / Adım 2 | - Temas parçalarını sök ve yıka | Görevliler: Test Operatör 2 (2 dk 5 sn), IŞIL ÖZGÜR (21 sn) | Süre | 2 | dk | 5 | sn | Efor | 2 | dk | 26 | sn
+34 ÇİZELGE 23:58 | Test Operatör 2 adımı bitirdi | Faz 2 / Adım 3 | - Parçaları yerine tak | Görevliler: Test Operatör 2 (12 sn), Şükrüye İnceoğlu Karamustafapaşalıoğulları (4 sn) | Süre | 12 | sn | Efor | 16 | sn
+34 ÇİZELGE 00:04 | Adım kesildi | Faz 3 / Adım 1 | - Yüzeyi gözle kontrol et ve onayla | Süre | 5 | dk | 49 | sn | Efor | 11 | dk | 18 | sn
+36 ÇİZELGE 00:06 | Ahmet Yılmaz adımdan ayrıldı | Faz 1 / Adım 1 | - Makine Kapa | Cihazdaki oturum: Test Operatör 2 | Çalışma | 2 | sn
+36 ÇİZELGE 00:06 | Test Operatör 2 adımı bitirdi | Faz 1 / Adım 1 | - Makine Kapa | Görevliler: Test Operatör 2 (2 sn), Ahmet Yılmaz (2 sn) | Süre | 2 | sn | Efor | 4 | sn
+36 ÇİZELGE 00:16 | Ahmet Yılmaz adımdan ayrıldı | Faz 1 / Adım 2 | - Makine Kontrol | Çalışma | 2 | sn
+
+== Eval ve konsol (360 ve 1440, açık ve koyu, 24 hücre)
+2002 /records/run/36 360 l 200 |  | kart [] | kırılma [] | kapı [(0, 0)] | konsol []
+2002 /records/run/36#open 360 l 200 |  | kart [] | kırılma [] | kapı [(0, 0)] | konsol []
+2002 /records/run/36 1440 l 200 |  | kart [] | kırılma [] | kapı [(0, 0)] | konsol []
+2002 /records/run/36#open 1440 l 200 |  | kart [] | kırılma [] | kapı [(0, 0)] | konsol []
+2002 /records/run/36 360 d 200 |  | kart [] | kırılma [] | kapı [(0, 0)] | konsol []
+2002 /records/run/36#open 360 d 200 |  | kart [] | kırılma [] | kapı [(0, 0)] | konsol []
+2002 /records/run/36 1440 d 200 |  | kart [] | kırılma [] | kapı [(0, 0)] | konsol []
+2002 /records/run/36#open 1440 d 200 |  | kart [] | kırılma [] | kapı [(0, 0)] | konsol []
+1001 /records/details/34 360 l 200 | overflowing=['TR.', 'TH.'] | kart [] | kırılma [] | kapı [] | konsol []
+1001 /records/details/36 360 l 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+1001 /users/deactivate/11 360 l 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+1001 /records/details/34 1440 l 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+1001 /records/details/36 1440 l 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+1001 /users/deactivate/11 1440 l 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+1001 /records/details/34 360 d 200 | overflowing=['TR.', 'TH.'] | kart [] | kırılma [] | kapı [] | konsol []
+1001 /records/details/36 360 d 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+1001 /users/deactivate/11 360 d 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+1001 /records/details/34 1440 d 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+1001 /records/details/36 1440 d 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+1001 /users/deactivate/11 1440 d 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+2004 /my-work 360 l 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+2004 /my-work 1440 l 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+2004 /my-work 360 d 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+2004 /my-work 1440 d 200 |  | kart [] | kırılma [] | kapı [] | konsol []
+hücre 24 sorunlu 2
+Detayda 360 px TR, TH: kart modunda görsel olarak gizli başlık satırı (tur 1 ile aynı yanlış pozitif).

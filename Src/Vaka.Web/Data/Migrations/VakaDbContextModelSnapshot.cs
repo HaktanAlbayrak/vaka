@@ -1012,6 +1012,40 @@ namespace Vaka.Web.Data.Migrations
                     b.ToTable("StepParticipants", (string)null);
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.StepWorkInterval", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("EndKind")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("EndedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("EndedByUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("StepParticipantId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("WorkSeconds")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EndedByUserId");
+
+                    b.HasIndex("StepParticipantId")
+                        .IsUnique();
+
+                    b.ToTable("StepWorkIntervals", (string)null);
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.SystemSetting", b =>
                 {
                     b.Property<int>("Id")
@@ -1518,6 +1552,24 @@ namespace Vaka.Web.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.StepWorkInterval", b =>
+                {
+                    b.HasOne("Vaka.Web.Domain.Entities.User", "EndedBy")
+                        .WithMany()
+                        .HasForeignKey("EndedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Vaka.Web.Domain.Entities.StepParticipant", "Participant")
+                        .WithOne("WorkInterval")
+                        .HasForeignKey("Vaka.Web.Domain.Entities.StepWorkInterval", "StepParticipantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EndedBy");
+
+                    b.Navigation("Participant");
+                });
+
             modelBuilder.Entity("Vaka.Web.Domain.Entities.UserRole", b =>
                 {
                     b.HasOne("Vaka.Web.Domain.Entities.User", "User")
@@ -1592,6 +1644,11 @@ namespace Vaka.Web.Data.Migrations
             modelBuilder.Entity("Vaka.Web.Domain.Entities.RecordStep", b =>
                 {
                     b.Navigation("Participants");
+                });
+
+            modelBuilder.Entity("Vaka.Web.Domain.Entities.StepParticipant", b =>
+                {
+                    b.Navigation("WorkInterval");
                 });
 
             modelBuilder.Entity("Vaka.Web.Domain.Entities.User", b =>

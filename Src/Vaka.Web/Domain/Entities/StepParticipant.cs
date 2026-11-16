@@ -12,4 +12,5 @@ public class StepParticipant
     public RecordStep Step { get; set; } = null!;
     public User User { get; set; } = null!;
     public User AddedBy { get; set; } = null!;
+    public StepWorkInterval? WorkInterval { get; set; }
 }

@@ -6,6 +6,7 @@
 > Bu belgenin yetkili olduğu konular: rol ve yetki matrisi (§3), ekran envanteri (§4), veri varlıkları listesi (§5), ayar değerleri (§6).
 > 2026-11-16: kullanıcı istekleri (zaman çizelgesi, aranabilir görevli seçimi, makine raporu, malzeme kullanım oranı) işlendi, onaylandı (O-09; PL-85..PL-88); karşılık tablosu
 > ve sorular PhasePlan "2026-11-16 kullanıcı istekleri" bölümünde.
+> 2026-11-16 (O-14): Faz 7, 8 ve 9 kapsam dışı; aşağıda bu fazlara bağlı ekran, işlem, varlık ve konular "kapsam dışı (O-14)" işaretlidir.
 > 2026-11-16 ikinci istekler işlendi (O-10, O-11; PL-89..PL-94; PhasePlan Faz 6E, 6F): görevli girişi ve adım içi katılım, operatörde PIN ile giriş, ayrı giriş sayacı.
 
 ## 1. Amaç
@@ -51,7 +52,7 @@ Gösterim: **E** yapar; **S** salt okunur görür; **-** erişemez (403, menüde
 | Kullanıcı ekleme, düzenleme, rol verme | - | E | - | E | SK-9: Yönetici yalnız Operatör ve Denetçi hesabı ve rolü; kendi rolünü kimse değiştiremez |
 | Kullanıcı pasifleştirme ve yeniden etkinleştirme | - | E, PIN | - | E, PIN | BR-36 açık iş; SK-9 kapsam; kendini ve son aktif Süper admin'i pasifleştirme yok |
 | PIN sıfırlama, parola sıfırlama, giriş kilidini açma | - | E, PIN | - | E, PIN | BR-49; SK-9 kapsam; giriş kilidini açma Faz 6F (PL-94) |
-| Sistem ayarları | - | E, PIN | - | E, PIN | FR-55, PL-18 |
+| Sistem ayarları ekranı (kapsam dışı, O-14; değerler veritabanında) | - | E, PIN | - | E, PIN | FR-55, PL-18 |
 | Tesis, hat, makine, vardiya tanımları | - | E | - | - | FR-01, FR-49, BR-54 |
 | Makineyi kullanımdan kaldırma | - | E | - | - | BR-35 |
 | Malzeme ve lot tanımları | - | E | - | - | FR-08 |
@@ -68,25 +69,25 @@ Gösterim: **E** yapar; **S** salt okunur görür; **-** erişemez (403, menüde
 | Görevli ekleme ve çıkarma | E, PIN | - | - | - | Yalnız sahip, adım başlamadan (SK-2); Faz 6E'den itibaren adım sürerken de eklenir, çıkarma yalnız hiç katılmamış kişide (PL-93); aday listesi yalnız aktif operatörler, adımda zaten görevli olanlar hariç; liste uç noktası `/records/people` yalnız sahibe (PL-88) |
 | Adıma katılma ve ayrılma (Faz 6E öncesi: katılımı onaylama) | E, PIN | - | - | - | Kişinin kendi PIN'i (SK-4); aynı tablette (oturum sahibin) ya da kendi oturumunda; adım başlamadan ya da sürerken, bittikten sonra değil; sahip dışında girişi bekleyen kişi varken adım bitirilemez; yönetici başkası adına giremez (PL-93) |
 | Adım başlatma ve bitirme | E, PIN | - | - | - | Sahip ya da adımın görevlisi (SK-1); kayıtta açık mola yokken (BR-39) |
-| Mola başlatma | E, PIN | - | - | - | Sahip ya da o anki adımın görevlisi; iki adım arasında ya da adım sürerken; başlatan başka kayıtta devam eden adımda değil (SK-6, BR-38) |
+| Mola başlatma | E, PIN | - | - | - | Sahip ya da o anki adımın görevlisi; iki adım arasında (adım sürerken mola kapsam dışı, O-14); başlatan başka kayıtta devam eden adımda değil (SK-6, BR-38) |
 | Molayı bitirme | E, PIN | E, PIN, gerekçe | - | - | Operatörde yalnız başlatan (SK-6) |
 | Kayıt listesi | S | S | S | - | Operatörde varsayılan filtre "benim kayıtlarım" (K-17) |
 | Kayıt detayı (13 soru, olay günlüğü, bütünlük rozeti) | S | S | S | - | FR-31 |
 | Kayıt zaman çizelgesi (E-20 içinde) | S | S | S | - | Olay günlüğünden türer, yeni olay yok (PL-85, Faz 6C) |
 | Bütünlük doğrulama ekranı | - | S | S | - | FR-32 |
 | Yönetici panosu | - | S | S | - | İÖ-07 |
-| Talep açma ve geri çekme | E, PIN | - | - | - | Talebi yalnız sahip açar, yalnız açan geri çeker (SK-5) |
-| Taleplerim | E | - | - | - | FR-43 |
-| Talepler listesi | - | E | S | - | FR-44 |
-| Talep onayı ve reddi | - | E, PIN | - | - | BR-42, K-40 |
-| Doğrudan müdahale: iptal, yarıda kapatma, beklemeye alma | - | E, PIN, gerekçe | - | - | BR-27, BR-43 |
-| Beklemedeki kaydı devam ettirme | E, PIN | - | - | - | Yalnız sahip (SK-7) |
+| Talep açma ve geri çekme (kapsam dışı, O-14) | E, PIN | - | - | - | Talebi yalnız sahip açar, yalnız açan geri çeker (SK-5) |
+| Taleplerim (kapsam dışı, O-14) | E | - | - | - | FR-43 |
+| Talepler listesi (kapsam dışı, O-14) | - | E | S | - | FR-44 |
+| Talep onayı ve reddi (kapsam dışı, O-14) | - | E, PIN | - | - | BR-42, K-40 |
+| Doğrudan müdahale: iptal, yarıda kapatma (beklemeye alma kapsam dışı, O-14) | - | E, PIN, gerekçe | - | - | BR-27, BR-43 |
+| Beklemedeki kaydı devam ettirme (kapsam dışı, O-14) | E, PIN | - | - | - | Yalnız sahip (SK-7) |
 | Acil müdahale açma | E, PIN | - | - | - | BR-50 |
-| Bildirimler | - | E | - | - | BR-51 |
-| Düzeltme | - | E, PIN, gerekçe | - | - | BR-29 |
+| Bildirimler (kapsam dışı, O-14) | - | E | - | - | BR-51 |
+| Düzeltme (kapsam dışı, O-14) | - | E, PIN, gerekçe | - | - | BR-29 |
 | Süre ve efor raporu, malzeme izlenebilirliği | - | S | S | - | FR-36, FR-37, BR-34 |
 | Makine raporu, malzeme kullanım oranı | - | S | S | - | PL-85, PL-86 (Faz 6D) |
-| Denetim çıktısı ve CSV | - | S | S | - | FR-35 |
+| Denetim çıktısı (detayın yazdırma görünümü); CSV kapsam dışı (O-14) | - | S | S | - | FR-35 |
 
 ## 4. Ekran envanteri
 
@@ -115,24 +116,26 @@ Route'lar taslaktır; kesin liste ve ViewModel alanları PhasePlan sözleşmeler
 | E-19 | Kayıtlar | `/records` | RecordReaders | FR-38 | 6 |
 | E-20 | Kayıt detayı | `/records/details/{id}` | RecordReaders | FR-31, FR-34 | 6; 6C (zaman çizelgesi, PL-85); 6E (kişi aralıkları ve çalışma süresi, çizelgede katılma ve ayrılma, PL-93) |
 | E-21 | Bütünlük doğrulama | `/records/integrity/{id}` | ManagerOrAuditor | FR-32 | 6 |
-| E-22 | Yönetici panosu | `/dashboard` | ManagerOrAuditor | İÖ-07 | 6B (özet, aktif, süre altı, son tamamlanan, son 7 gün; PL-76), 7 (SH-16, bekleme, talepler), 8 (acil) |
-| E-23 | Talep formu (E-15 ve E-20 içinde) | `/requests/create` | Operator | FR-43 | 7 |
-| E-24 | Taleplerim | `/requests/mine` | Operator | FR-43 | 7 |
-| E-25 | Talepler ve karar | `/requests`, `/requests/decide/{id}` | Manager (Auditor salt okunur liste) | FR-44 | 7 |
-| E-26 | Müdahale formu (iptal, yarıda kapatma, beklemeye alma, mola bitirme) | `/interventions/create`, `/interventions/end-break/{id}` | Manager | FR-28, BR-40 | 6 (iptal, yarıda kapatma, mola bitirme), 7 (beklemeye alma); PL-46 |
+| E-22 | Yönetici panosu | `/dashboard` | ManagerOrAuditor | İÖ-07 | 6B (özet, aktif, süre altı, son tamamlanan, son 7 gün; PL-76); SH-16, bekleme, talepler ve acil bölümleri kapsam dışı (O-14) |
+| E-23 | Talep formu (E-15 ve E-20 içinde) | `/requests/create` | Operator | FR-43 | kapsam dışı (O-14) |
+| E-24 | Taleplerim | `/requests/mine` | Operator | FR-43 | kapsam dışı (O-14) |
+| E-25 | Talepler ve karar | `/requests`, `/requests/decide/{id}` | Manager (Auditor salt okunur liste) | FR-44 | kapsam dışı (O-14) |
+| E-26 | Müdahale formu (iptal, yarıda kapatma, beklemeye alma, mola bitirme) | `/interventions/create`, `/interventions/end-break/{id}` | Manager | FR-28, BR-40 | 6 (iptal, yarıda kapatma, mola bitirme), beklemeye alma kapsam dışı (O-14); PL-46 |
 | E-27 | Acil müdahale | `/emergencies/create` | Operator | FR-51 | 6A (PL-56) |
-| E-28 | Bildirimler | `/notifications` | Manager | FR-52 | 8 |
-| E-29 | Düzeltme | `/corrections/create` | Manager | BR-29 | 8 |
-| E-30 | Süre ve efor raporu | `/reports/durations` | ManagerOrAuditor | FR-21, FR-36, FR-40 | 6A (tablo), 6B (grafik, PL-78), 9 (CSV); PL-56 |
-| E-31 | Malzeme izlenebilirliği | `/reports/materials` | ManagerOrAuditor | FR-37 | 6A (sorgu), 6D (kullanım oranı modu, PL-86), 9 (CSV); PL-56 |
-| E-32 | Denetim çıktısı | `/records/audit/{id}` | ManagerOrAuditor | FR-35 | 6 (detayın yazdırma çıktısı), 9 (ayrı adres, düzeltmeler, CSV); PL-56 |
-| E-33 | Sistem ayarları ve değişiklik geçmişi | `/settings` | ManagerOrSuperAdmin | FR-55 | 9 |
+| E-28 | Bildirimler | `/notifications` | Manager | FR-52 | kapsam dışı (O-14) |
+| E-29 | Düzeltme | `/corrections/create` | Manager | BR-29 | kapsam dışı (O-14) |
+| E-30 | Süre ve efor raporu | `/reports/durations` | ManagerOrAuditor | FR-21, FR-36, FR-40 | 6A (tablo), 6B (grafik, PL-78); CSV kapsam dışı (O-14); PL-56 |
+| E-31 | Malzeme izlenebilirliği | `/reports/materials` | ManagerOrAuditor | FR-37 | 6A (sorgu), 6D (kullanım oranı modu, PL-86); CSV kapsam dışı (O-14); PL-56 |
+| E-32 | Denetim çıktısı | `/records/audit/{id}` | ManagerOrAuditor | FR-35 | 6 (detayın yazdırma çıktısı); ayrı adres, düzeltmeler ve CSV kapsam dışı (O-14); PL-56 |
+| E-33 | Sistem ayarları ve değişiklik geçmişi | `/settings` | ManagerOrSuperAdmin | FR-55 | kapsam dışı (O-14) |
 | E-34 | Makine raporu | `/reports/machine` | ManagerOrAuditor | FR-36 | 6D (PL-86) |
 
 Sistem sayfaları: 403 (`/account/access-denied`), hata sayfası, ana sayfa `/` (rolüne göre İşlerim, Yönetici panosu ya da Kullanıcılar'a yönlenir;
 Yönetici ve Denetçi Faz 6 ve 6A'da Kayıtlar'a (PL-46), Faz 6B'den itibaren Yönetici panosuna (PL-76)).
 
-Salı (2026-11-17) takvimi: Faz 3, 4, 5, 6 ve 6A Salı'dan önce, Faz 7, 8 ve 9 sonra (O-03, O-04); ekran envanteri ve rol matrisi değişmedi.
+Salı (2026-11-17) takvimi: Faz 3, 4, 5, 6 ve 6A Salı'dan önce (O-03, O-04). 2026-11-16'da Faz 7, 8 ve 9 kapsamdan çıktı (O-14): E-23, E-24, E-25, E-28,
+E-29, E-33 yapılmayacak; E-22, E-26, E-30, E-31 ve E-32'nin bu fazlara bağlı kısımları da. İş birimi dokümanının beklentileri Faz 3-6A'da (ve 6B'de) karşılandı;
+`Docs/Local/DokumanUyumu.md`'de Faz 7-9'a bağlı satırların (41-43 bildirim, 64 grafik, 91 SH-16, 93-94 talep) doküman kısmı "Var"dır, sonraya kalanlar doküman dışıdır (PL-101).
 
 ## 5. Veri varlıkları
 
@@ -155,10 +158,10 @@ Alan listesi Brief §7.g'deki taslaktır; tablo ve kolon adları dbadmin'in kara
 | İşlenmiş komut | Komut kimliği ve ilk sonuç | Aynı komut ikinci etki üretmez (BR-33) | 4 |
 | NumberSequence | Kayıt no, saha referansı ve iş emri no sayaçları | Makine-yıl ve tesis-yıl kapsamı (BR-08, BR-09); iş emri no tesis-yıl (PL-80, Faz 6B, şema değişmez) | 4 |
 | RecordBreak | Mola: başlatan, başladığı anda devam eden adım (boş olabilir), zamanlar, kapanış türü, gerekçe | Kayıtta ve kişide tek açık mola (BR-40) | 5 |
-| RecordRequest | Talep: tür, gerekçe, durum, karar veren, karar notu | Kayıtta tek bekleyen talep (BR-41) | 7 |
-| RecordHold | Bekleme aralıkları | Kayıtta tek açık bekleme | 7 |
-| Notification, NotificationReceipt | Acil ve yeni talep bildirimi; kişi başına okundu bilgisi | BR-51; alıcı aktif Yönetici'ler | 8 |
-| Düzeltme | Hedef, orijinal değer, yeni değer, gerekçe, yapan, zaman | Orijinal korunur, zaman alanı hedef olamaz (BR-29) | 8 |
+| RecordRequest | Talep: tür, gerekçe, durum, karar veren, karar notu | Kayıtta tek bekleyen talep (BR-41) | kapsam dışı (O-14) |
+| RecordHold | Bekleme aralıkları | Kayıtta tek açık bekleme | kapsam dışı (O-14) |
+| Notification, NotificationReceipt | Acil ve yeni talep bildirimi; kişi başına okundu bilgisi | BR-51; alıcı aktif Yönetici'ler | kapsam dışı (O-14) |
+| Düzeltme | Hedef, orijinal değer, yeni değer, gerekçe, yapan, zaman | Orijinal korunur, zaman alanı hedef olamaz (BR-29) | kapsam dışı (O-14) |
 
 Faz 6C ve 6D yeni varlık getirmez: zaman çizelgesi `CleaningEvent`'ten, makine raporu ve kullanım oranı kayıt, faz ve kayıt malzemesi satırlarından
 okunur. Malzeme birimi ve miktarı istenmedi (S-4, O-09).
@@ -185,7 +188,7 @@ Yer tutucu adı ayarın kimliğidir; dokümanlar kuralı bu adla yazar, değer a
 | Tesis, hat, makine kodları ve vardiyalar | - | Tanım ekranları ya da seed | 2 | Nötr demo veri | İş birimi (K-19) |
 | Olay özeti anahtarı | - | Yapılandırma anahtarı `EventChain:HmacKey`; Development'ta user-secrets, üretimde ortam değişkeni; veritabanı, ayar dosyası ve repo dışında | 4 | Salı demosu için geliştirme anahtarı; üretim anahtarı sonra | Kullanıcı, 2026-11-14 (PL-48); üretim anahtarı BT (K-23) |
 
-Sistem ayarları ekranı Faz 9'da gelir (PL-17); o zamana kadar değerler seed'den okunur, QA farklı değeri QA kopyasındaki ayar tablosunda dener.
+Sistem ayarları ekranı kapsam dışıdır (O-14; önceki plan Faz 9, PL-17); değerler seed'den okunur, değişiklik BT tarafından veritabanında yapılır, QA farklı değeri QA kopyasındaki ayar tablosunda dener.
 Değişikliğin etkisi PL-18'dedir. Faz 1'den sonra kalan satırlar (`<AzamiKilitSüresi>`, iki `<AzamiMedyaBoyutu>` satırı) Faz 3'te seed
 ekleme olarak gelir (PL-25); üç değer de geldi (PL-34, PL-47).
 
@@ -208,7 +211,12 @@ ekleme olarak gelir (PL-25); üç değer de geldi (PL-34, PL-47).
 | Kullanıcıya tesis ya da hat ataması, kullanıcıya bağlı yönetici | K-20, K-40 |
 | Sahiplik devri, adım atlama, paralel adım, adımın ayrıca duraklatılması, kişi düzeyi mola | K-04, K-06, K-21, K-39 kararları |
 | Süper admin hesabını uygulama dışından kurtarma (komut satırı aracı) | §9 açık konu; ikinci Süper admin önerilir |
-| İÖ-01..İÖ-06, İÖ-08, İÖ-10 | Brief §11; istenirse Faz 9'dan sonra |
+| İÖ-01..İÖ-06, İÖ-08, İÖ-10 | Brief §11 |
+| Talep akışı, beklemeye alma, adım sürerken mola (K-39), panoda vardiyası bitmiş iş (SH-16), bildirim, düzeltme, CSV, ayrı denetim çıktısı adresi, Sistem ayarları ekranı, kalıcı oturum iptali | O-14, PL-101 (Faz 7, 8, 9 kapsam dışı) |
+
+O-14 ile tümü ya da bir kısmı kapsam dışı kalan Brief kimlikleri: FR-43, FR-44, FR-45, FR-52, FR-55 (ekran; değerler veritabanında okunur);
+FR-23, FR-28, FR-41 ve FR-42'nin bekleme ve adım sürerken mola kısımları; BR-29, BR-41..BR-44, BR-51; BR-38'in adım sürerken hali; SH-05, SH-10, SH-16.
+Brief metni değiştirilmedi; bu liste geçerli kapsamı belirler.
 
 ## 8. Varsayımlar
 

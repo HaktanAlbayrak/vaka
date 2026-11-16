@@ -176,7 +176,7 @@ public sealed class EmergencyOpener : IEmergencyOpener
         var loaded = await _db.LoadRecordForStepAsync(firstStepId, cancellationToken)
             ?? throw new InvalidOperationException("Yeni açılan acil kayıt işlem içinde bulunamadı.");
         var first = loaded.OrderedSteps()[0];
-        var failure = await _applier.CheckParticipantsAsync(first, cancellationToken)
+        var failure = await _applier.CheckParticipantsAsync(first, ownerUserId, ownerUserId, cancellationToken)
             ?? await _applier.ApplyAsync(loaded, first, true, ownerUserId, commandId, now, cancellationToken);
         if (failure is not null)
         {

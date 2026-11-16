@@ -13,4 +13,9 @@ public sealed class AssignedStepViewModel
     public string OwnerName { get; set; } = string.Empty;
 
     public string Url { get; set; } = string.Empty;
+
+    public int StepId { get; set; }
+
+    /// <summary>Kişi adımın listesinde ama girişini yapmamış; kart listede öne çıkar.</summary>
+    public bool AwaitingMyEntry { get; set; }
 }

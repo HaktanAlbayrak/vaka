@@ -49,7 +49,11 @@ public sealed class RecordStepViewModel
 
     public string? CannotStartReason { get; set; }
 
+    /// <summary>Bitirme kapısı doluysa <c>Girişi bekleniyor: ...</c> metnini de taşır.</summary>
     public string? CannotFinishReason { get; set; }
+
+    /// <summary>Sahip dışında girişini yapmamış kişilerin adları; boşsa kapı açık.</summary>
+    public string[] PendingNames { get; set; } = [];
 
     public bool CanManageParticipants { get; set; }
 }

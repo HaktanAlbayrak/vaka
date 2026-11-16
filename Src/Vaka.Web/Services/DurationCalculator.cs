@@ -140,7 +140,23 @@ public sealed class DurationCalculator : IDurationCalculator
     public int CalculateStepDuration(DateTimeOffset start, DateTimeOffset end, int stepBreakSeconds) =>
         Math.Max(0, WholeSeconds(end - start) - stepBreakSeconds);
 
-    public int CalculateStepEffort(int durationSeconds, int participantCount) => checked(durationSeconds * participantCount);
+    /// <summary>
+    /// Kişinin adımdaki çalışma süresi, saniye (SH-02a, O-11).
+    /// Kişi başlangıcı = en geç (katılma anı, adım başlangıcı); kişi bitişi = en erken (ayrılma anı, adım bitişi)
+    /// Çalışma = (Kişi bitişi - Kişi başlangıcı) - Σ kesişen kapanmış kayıt molası; saniyeye aşağı yuvarlanır, 0'ın altına inmez
+    /// </summary>
+    public int CalculateParticipantWork(DateTimeOffset stepStart, DateTimeOffset stepEnd, DateTimeOffset joinedAt, DateTimeOffset? leftAt, IReadOnlyList<BreakSpan> breaks)
+    {
+        var start = joinedAt > stepStart ? joinedAt : stepStart;
+        var end = leftAt is { } left && left < stepEnd ? left : stepEnd;
+        return Math.Max(0, WholeSeconds(end - start) - OverlapSeconds(start, end, breaks, null));
+    }
+
+    /// <summary>
+    /// Adım eforu, saniye (SH-02, O-11).
+    /// Efor = Σ adımdaki kişilerin SH-02a çalışma süreleri
+    /// </summary>
+    public int CalculateStepEffort(IReadOnlyList<int> participantWorkSeconds) => checked(participantWorkSeconds.Sum());
 
     public int CalculatePhaseGross(DateTimeOffset firstStepStart, DateTimeOffset lastStepEnd) =>
         Math.Max(0, WholeSeconds(lastStepEnd - firstStepStart));

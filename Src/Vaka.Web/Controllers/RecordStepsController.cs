@@ -104,13 +104,29 @@ public sealed class RecordStepsController : Controller
         return await RespondAsync(stepId, result, model.CommandId, null, cancellationToken);
     }
 
+    [HttpPost("{stepId:int}")]
+    public async Task<IActionResult> JoinStep(int stepId, JoinStepViewModel model, CancellationToken cancellationToken)
+    {
+        var result = await _participants.JoinAsync(stepId, User.GetUserId(), new JoinStepRequest(model.CommandId, model.ParticipantUserId, model.Pin), cancellationToken);
+        var pending = new PendingParticipantViewModel { StepId = stepId, ParticipantUserId = model.ParticipantUserId };
+        return await RespondAsync(stepId, result, model.CommandId, pending, cancellationToken, stepId);
+    }
+
+    [HttpPost("{stepId:int}")]
+    public async Task<IActionResult> LeaveStep(int stepId, LeaveStepViewModel model, CancellationToken cancellationToken)
+    {
+        var result = await _participants.LeaveAsync(stepId, User.GetUserId(), new LeaveStepRequest(model.CommandId, model.ParticipantUserId, model.Pin), cancellationToken);
+        var pending = new PendingParticipantViewModel { StepId = stepId, ParticipantUserId = model.ParticipantUserId };
+        return await RespondAsync(stepId, result, model.CommandId, pending, cancellationToken, stepId);
+    }
+
     // Ret her zaman 200 görünümdür (PL-62); yönlendirme yalnız başarı ve molada olan kişi içindir (BR-39).
-    private async Task<IActionResult> RespondAsync(int stepId, CommandResult result, Guid commandId, PendingParticipantViewModel? pending, CancellationToken cancellationToken)
+    private async Task<IActionResult> RespondAsync(int stepId, CommandResult result, Guid commandId, PendingParticipantViewModel? pending, CancellationToken cancellationToken, int? returnStepId = null)
     {
         switch (result.Status)
         {
             case CommandStatus.Succeeded:
-                return RedirectToAction("Run", "Records", new { id = result.EntityId });
+                return RedirectToAction("Run", "Records", new { id = result.EntityId, stepId = returnStepId });
             case CommandStatus.NotFound:
                 return NotFound();
             case CommandStatus.Forbidden:

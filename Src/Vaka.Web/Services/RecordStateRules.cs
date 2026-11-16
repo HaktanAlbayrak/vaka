@@ -89,7 +89,11 @@ public static class RecordStateRules
         found.User(label + "başlatan", step.StartedByUserId, started?.ActorUserId, started?.Sequence ?? 0);
         if (started is not null)
         {
-            found.Users(label + "görevliler", step.ParticipantUserIds, started.Numbers("ParticipantUserIds"), started.Sequence);
+            var joinedLater = events
+                .Where(item => item.EventType == EventTypes.ParticipantJoined && item.Number("StepId") == step.Id && item.Flag("BeforeStart") == false)
+                .Select(item => item.Number("ParticipantUserId"))
+                .OfType<int>();
+            found.Users(label + "çalışan görevliler", step.ParticipantUserIds, started.Numbers("ParticipantUserIds") is { } startedIds ? [.. startedIds.Union(joinedLater)] : null, started.Sequence);
         }
 
         found.Moment(label + "bitiş anı", step.EndedAtUtc, ended?.OccurredAtUtc, ended?.Sequence ?? 0);

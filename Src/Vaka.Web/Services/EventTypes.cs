@@ -12,6 +12,8 @@ public static class EventTypes
     public const string RecordCompleted = "RecordCompleted";
     public const string ParticipantAdded = "ParticipantAdded";
     public const string ParticipantRemoved = "ParticipantRemoved";
+    public const string ParticipantJoined = "ParticipantJoined";
+    public const string ParticipantLeft = "ParticipantLeft";
     public const string BreakStarted = "BreakStarted";
     public const string BreakEnded = "BreakEnded";
     public const string StepInterrupted = "StepInterrupted";

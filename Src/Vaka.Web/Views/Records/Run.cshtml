@@ -43,6 +43,8 @@
         : Model.PendingParticipant is { } pendingPerson
             ? Model.Phases.FirstOrDefault(phase => phase.Steps.Any(step => step.Id == pendingPerson.StepId))?.Id
             : null;
+    var errorInStep = !string.IsNullOrEmpty(Model.ErrorMessage) && Model.PendingParticipant is { } failed
+        && Model.Phases.Any(phase => phase.Steps.Any(step => step.Id == failed.StepId && step.Participants.Any(person => person.UserId == failed.ParticipantUserId)));
     string ActionId(string kind, int stepId) => "pin-" + kind + "-" + stepId;
 }
 
@@ -50,7 +52,7 @@
     <div class="min-w-0 space-y-5">
         @if (!string.IsNullOrEmpty(Model.ErrorMessage))
         {
-            <div class="notice notice-danger" role="alert" tabindex="-1" data-form-summary>
+            <div class="notice notice-danger" role="alert" tabindex="-1" @(errorInStep ? "data-step-error" : "data-form-summary")>
                 <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#circle-alert" /></svg>
                 <div class="min-w-0">
                     <p class="font-semibold">İşlem yapılmadı</p>
@@ -385,7 +387,7 @@
                                             </dl>
                                         }
 
-                                        @if ((!isLocked || step.CanManageParticipants) && step.Status != StepStatus.Interrupted)
+                                        @if ((!isLocked || step.CanManageParticipants || step.Participants.Any(person => person.CanJoin || person.CanLeave || !string.IsNullOrEmpty(person.BlockedReason))) && step.Status != StepStatus.Interrupted)
                                         {
                                             <partial name="_Participants" model="(Model, step)" />
                                         }
@@ -397,7 +399,10 @@
                                                 <span>@step.CannotStartReason</span>
                                             </p>
                                         }
-                                        @if (isRunning && !step.CanFinish && !string.IsNullOrEmpty(step.CannotFinishReason))
+                                        @if (isRunning && !step.CanFinish && step.PendingNames.Length > 0)
+                                        {
+                                        }
+                                        else if (isRunning && !step.CanFinish && !string.IsNullOrEmpty(step.CannotFinishReason))
                                         {
                                             <p class="flex items-start gap-2 text-sm font-semibold">
                                                 <svg class="icon mt-0.5 h-4 w-4" aria-hidden="true"><use href="/lib/icons/Icons.svg#info" /></svg>
@@ -420,6 +425,19 @@
                                                 Adımı başlat
                                             </button>
                                         </form>
+                                    }
+                                    else if (isRunning && !step.CanFinish && step.PendingNames.Length > 0 && !isCompleted)
+                                    {
+                                        <div class="run-action">
+                                            <div class="notice notice-warn" id="finish-gate-@step.Id" role="status">
+                                                <svg class="icon mt-0.5" aria-hidden="true"><use href="/lib/icons/Icons.svg#hourglass" /></svg>
+                                                <p class="min-w-0 break-words text-sm font-semibold">@(string.IsNullOrEmpty(step.CannotFinishReason) ? "Girişi bekleniyor: " + string.Join(", ", step.PendingNames) + "." : step.CannotFinishReason)</p>
+                                            </div>
+                                            <button type="button" class="btn btn-primary btn-lg" disabled aria-describedby="finish-gate-@step.Id">
+                                                <svg class="icon" aria-hidden="true"><use href="/lib/icons/Icons.svg#check" /></svg>
+                                                Adımı bitir
+                                            </button>
+                                        </div>
                                     }
                                     else if (isRunning && step.CanFinish && !isCompleted)
                                     {

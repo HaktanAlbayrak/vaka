@@ -15,7 +15,7 @@ public sealed class RecordDetailReader : IRecordDetailReader
     private readonly IDurationCalculator _calculator;
     private readonly ITurkeyClock _clock;
     private readonly TimeProvider _time;
-    private readonly IRecordTimelineBuilder _timeline;
+    private readonly IRecordEventReader _eventReader;
 
     public RecordDetailReader(
         VakaDbContext db,
@@ -26,7 +26,7 @@ public sealed class RecordDetailReader : IRecordDetailReader
         IDurationCalculator calculator,
         ITurkeyClock clock,
         TimeProvider time,
-        IRecordTimelineBuilder timeline)
+        IRecordEventReader eventReader)
     {
         _db = db;
         _timeouts = timeouts;
@@ -36,7 +36,7 @@ public sealed class RecordDetailReader : IRecordDetailReader
         _calculator = calculator;
         _clock = clock;
         _time = time;
-        _timeline = timeline;
+        _eventReader = eventReader;
     }
 
     public async Task<LookupResult<RecordDetailViewModel>> GetAsync(int recordId, RecordViewer viewer, CancellationToken cancellationToken)
@@ -94,7 +94,7 @@ public sealed class RecordDetailReader : IRecordDetailReader
         var canSeeProcedure = isManager || viewer.Roles.Contains(Roles.Auditor);
         var isActive = row.Status is RecordStatus.Opened or RecordStatus.InProgress or RecordStatus.OnHold;
         var openBreak = breaks.Open;
-        var events = await ReadEventsAsync(recordId, cancellationToken);
+        var events = await _eventReader.ReadAsync(recordId, cancellationToken);
 
         var model = new RecordDetailViewModel
         {
@@ -265,47 +265,5 @@ public sealed class RecordDetailReader : IRecordDetailReader
             EnteredByName = row.EnteredByName,
             EnteredAtLocal = _clock.ToLocal(row.EnteredAtUtc)
         })];
-    }
-
-    private async Task<(RecordDetailEventViewModel[] Events, RecordTimelineDayViewModel[] Timeline)> ReadEventsAsync(int recordId, CancellationToken cancellationToken)
-    {
-        var rows = await _db.CleaningEvents
-            .AsNoTracking()
-            .Where(item => item.CleaningRecordId == recordId)
-            .OrderBy(item => item.Sequence)
-            .Select(item => new { item.Sequence, item.EventType, item.PayloadJson, item.ActorUserId, ActorName = item.Actor == null ? null : item.Actor.FullName, item.OccurredAtUtc })
-            .ToListAsync(cancellationToken);
-
-        var parsed = rows.Select(row => ParsedEvent.From(row.Sequence, row.EventType, row.ActorUserId, row.OccurredAtUtc, row.PayloadJson)).ToList();
-        var userIds = parsed
-            .SelectMany(item => (item.Numbers("ParticipantUserIds") ?? []).Append(item.Number("ParticipantUserId") ?? 0).Append(item.ActorUserId ?? 0))
-            .Where(id => id != 0)
-            .Distinct()
-            .ToArray();
-        var users = await _db.Users.AsNoTracking().Where(user => userIds.Contains(user.Id)).ToDictionaryAsync(user => user.Id, user => user.FullName, cancellationToken);
-        var stepRows = await _db.RecordSteps
-            .AsNoTracking()
-            .Where(step => step.Phase.CleaningRecordId == recordId)
-            .Select(step => new { step.Id, step.ProcedureStep.Title, PhaseOrder = step.Phase.ProcedurePhase.OrderNo, StepOrder = step.ProcedureStep.OrderNo })
-            .ToListAsync(cancellationToken);
-        var steps = stepRows.ToDictionary(step => step.Id, step => step.Title);
-        var stepLabels = stepRows.ToDictionary(step => step.Id, step => $"Faz {step.PhaseOrder} / Adım {step.StepOrder} - {step.Title}");
-        var phaseRows = await _db.RecordPhases
-            .AsNoTracking()
-            .Where(phase => phase.CleaningRecordId == recordId)
-            .Select(phase => new { phase.Id, phase.ProcedurePhase.OrderNo })
-            .ToListAsync(cancellationToken);
-        var phaseOrders = phaseRows.ToDictionary(phase => phase.Id, phase => phase.OrderNo);
-
-        string LocalText(DateTime utc) => _clock.ToLocal(utc).ToString("dd.MM.yyyy HH:mm:ss");
-        var events = rows.Select((row, index) => new RecordDetailEventViewModel
-        {
-            Sequence = row.Sequence,
-            OccurredAtLocal = _clock.ToLocal(row.OccurredAtUtc),
-            ActorName = row.ActorName ?? "Sistem",
-            EventLabel = RecordEventText.Label(row.EventType),
-            Summary = RecordEventText.Summary(parsed[index], users, steps, LocalText)
-        }).ToArray();
-        return (events, _timeline.Build(parsed, new TimelineNames(users, stepLabels, phaseOrders)));
     }
 }

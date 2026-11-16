@@ -13,6 +13,8 @@
             TimelineEntryKind.MaterialRemoved => ("package", "neutral"),
             TimelineEntryKind.ParticipantAdded => ("user-plus", "neutral"),
             TimelineEntryKind.ParticipantRemoved => ("user-x", "neutral"),
+            TimelineEntryKind.ParticipantJoined => ("user-check", "accent"),
+            TimelineEntryKind.ParticipantLeft => ("arrow-left", "neutral"),
             TimelineEntryKind.StepStarted => ("play", "accent"),
             TimelineEntryKind.StepFinished => ("check", "ok"),
             TimelineEntryKind.StepInterrupted => ("octagon-alert", "warn"),
@@ -72,7 +74,7 @@
                                     <dl class="tl-meta">
                                         @if (entry.DurationSeconds is { } seconds)
                                         {
-                                            <div><dt>Süre</dt><dd><partial name="_Duration" model="DurationFormatter.Format(seconds)" /></dd></div>
+                                            <div><dt>@(entry.Kind == TimelineEntryKind.ParticipantLeft ? "Çalışma" : "Süre")</dt><dd><partial name="_Duration" model="DurationFormatter.Format(seconds)" /></dd></div>
                                         }
                                         @if (entry.EffortSeconds is { } effort)
                                         {

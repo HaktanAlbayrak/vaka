@@ -9,6 +9,7 @@
 > 2026-11-16 (kullanıcı istekleri, onaylandı O-09): yeni Faz 6C (kayıt zaman çizelgesi, aranabilir görevli seçimi), Faz 6D (makine raporu, malzeme kullanım oranı),
 > ikisi de sunumdan önce, önce 6C; malzeme miktarı istenmedi; karşılık tablosu "2026-11-16 kullanıcı istekleri" bölümünde (PL-85..PL-88).
 > 2026-11-16 (kullanıcı istekleri, O-10, O-11): yeni Faz 6E (görevli girişi ve adım içi katılım; S-3 kapandı, aday Faz 10 kalktı) ve Faz 6F (operatörde PIN ile giriş, ayrı giriş sayacı ve 15 dakikalık süreli kilit), 6D'den sonra (PL-89..PL-94). Brief ve Kusur K-07, K-10 işlendi (O-11).
+> 2026-11-16 (O-14): kullanıcı Faz 7, 8 ve 9'u kapsamdan çıkardı ("faz 7 ve sonrasına gerek yok"); plan Faz 6E ve 6F ile biter. Devredilmiş kalemler PL-101.
 > Kimlikler: FR, NFR, BR, SC, SH, SK `Docs/Analysis/Brief.md`; E (ekran) `Docs/Analysis/Requirements.md §4`; K `Docs/Analysis/Kusur.md`; PL `Decisions.md`.
 
 ## Özet
@@ -27,11 +28,11 @@
 | 6B | Yönetici ana sayfası, rapor grafikleri ve arayüz iyileştirmeleri | Yönetici ve Denetçi ana sayfası (pano, kısmi), süre raporunda grafikler, ayırt edilir kart listeleri, yumuşak köşeler, sabit logo ve alt blokla kayan menü, yumuşak menü geçişi, tam ekran düğmesi, isteğe bağlı iş emri no (boşsa sistem atar) | Evet | TESLİM ALINDI (tur 2, 2026-11-16) |
 | 6C | Kayıt zaman çizelgesi ve görevli seçimi (Salı öncesi) | Kayıt detayında olayların gün ve saat sırasıyla cümle olarak okunduğu zaman çizelgesi ("X ve Y birlikte adıma başladı"); görevli eklemede aktif operatörler arasından klavyeyle de kullanılan aranabilir seçim kutusu | Evet | TESLİM ALINDI (tur 2, 2026-11-16) |
 | 6D | Makine raporu ve malzeme kullanım oranı (Salı öncesi, 6C'den sonra) | Makine seçilerek tip başına ortalama süre, efor ve prosedür minimumuyla karşılaştırma; malzeme başına kullanım oranı | Evet | TESLİM ALINDI (tur 4, 2026-11-16) |
-| 6E | Görevli girişi ve adım içi katılım (6D'den sonra) | Sahip adımı yardımcıyı beklemeden başlatır; yardımcı katıldığı anda kendi PIN'iyle girer, erken giderse ayrılır, eforu çalıştığı süre; girişi bekleyen varken adım bitmez, "Girişi bekleniyor"; giriş aynı tablette ya da kendi cihazında. Yeni tablo (Eklemeli) | Evet | BEKLİYOR (Faz 6D kapısı) |
+| 6E | Görevli girişi ve adım içi katılım (6D'den sonra) | Sahip adımı yardımcıyı beklemeden başlatır; yardımcı katıldığı anda kendi PIN'iyle girer, erken giderse ayrılır, eforu çalıştığı süre; girişi bekleyen varken adım bitmez, "Girişi bekleniyor"; giriş aynı tablette ya da kendi cihazında. Yeni tablo (Eklemeli) | Evet | TESLİM ALINDI (tur 2, 2026-11-17) |
 | 6F | PIN ile giriş ve giriş deneme sınırı (6E'den sonra) | Operatör sicil no ve PIN ile girer; Yönetici, Denetçi, Süper admin parola ile; parola ve PIN girişinde ayrı sayaç ve süreli kilit, yönetici erken açar. `Users`'a iki kolon (ALTER) | Evet | BEKLİYOR (Faz 6E kapısı) |
-| 7 | Talep, beklemeye alma ve yönetici panosu (Salı sonrası) | Talepler, Taleplerim, bekleme ve devam, yönetici panosu, adım sürerken mola, adım sürerken mola kişi aralıklarıyla; görevli PIN onayı Faz 6E'de karşılandı (PL-92) | Evet | BEKLİYOR |
-| 8 | Acil müdahale, bildirim ve düzeltme (Salı sonrası) | Acil ve talep bildirimleri, panoda acil, düzeltme formu | Evet | BEKLİYOR |
-| 9 | Raporlar, denetim çıktısı ve sistem ayarları (Salı sonrası) | Rapor grafikleri ve CSV, düzeltmeli denetim çıktısı adresi, Sistem ayarları ekranı, son regresyon | Evet | BEKLİYOR |
+| 7 | Talep, beklemeye alma ve yönetici panosu (Salı sonrası) | Talepler, Taleplerim, bekleme ve devam, yönetici panosu, adım sürerken mola, adım sürerken mola kişi aralıklarıyla; görevli PIN onayı Faz 6E'de karşılandı (PL-92) | Evet | KAPSAM DIŞI (O-14) |
+| 8 | Acil müdahale, bildirim ve düzeltme (Salı sonrası) | Acil ve talep bildirimleri, panoda acil, düzeltme formu | Evet | KAPSAM DIŞI (O-14) |
+| 9 | Raporlar, denetim çıktısı ve sistem ayarları (Salı sonrası) | Rapor grafikleri ve CSV, düzeltmeli denetim çıktısı adresi, Sistem ayarları ekranı, son regresyon | Evet | KAPSAM DIŞI (O-14) |
 | 10 (aday) | Adım sürerken katılma ve malzeme miktarı | Kapandı: konu A Faz 6E'ye alındı (S-3, O-10), konu B istenmedi (S-4, O-09) | - | KAPANDI |
 
 Durum değerleri: BEKLİYOR, GELİŞTİRMEDE, QA'DA, İADE, TESLİM ALINDI. Faz 0 QA'sız analiz fazıdır, kullanıcı onayıyla TAMAMLANDI olur.
@@ -55,6 +56,7 @@ Salı öncesine alındı, yer açmak için kullanıcının kendi iki eki (K-39 a
   sunumda gösterilir; yeni geliştirme istemez.
 - 2026-11-16 ikinci istekler (PL-89, O-10): Faz 6E ve Faz 6F, Faz 6D'nin faz kapısından sonra sırayla; hedef sunumdan önce, yetişmezse
   durulmaz, Faz 7'den önce tamamlanır. Faz 6C ve 6D'nin sırası ve kapsamı değişmez.
+- 2026-11-16 (O-14): Faz 7, 8 ve 9 kapsam dışı; son faz Faz 6F. Bu bölümdeki "Salı'dan sonra Faz 7, 8, 9" ifadeleri geçersizdir.
 
 ### Faz sayısı neden arttı
 
@@ -1531,11 +1533,10 @@ QA kopyada: sahip X (`2002`), aktif operatörler Y ve Z, PIN'i kilitli bir opera
 
 - Ortak: G1-G10, G12; G5a `_Participants.cshtml` formlarında yeniden sayılır.
 
-**Kapsam dışı:** Aynı adıma yeniden katılma; sahibin başkası adına ayrılma işaretlemesi (ayrılmayan kişinin aralığı adım sonuna uzar; düzeltme Faz 8);
-adım sürerken mola (Faz 7; mola kişi aralıklarından SH-02a ile düşülür); yöneticinin başkası adına giriş yapması.
+**Kapsam dışı:** Aynı adıma yeniden katılma; sahibin başkası adına ayrılma işaretlemesi (ayrılmayan kişinin aralığı adım sonuna uzar; düzeltme ekranı yok, O-14);
+adım sürerken mola (kapsam dışı, O-14; SH-02a mola terimini taşır, bugün iki adım arası molada adımla kesişen mola 0); yöneticinin başkası adına giriş yapması.
 
-**Etkilenen fazlar:** Faz 7 kalem 7 (adım sürerken mola kişi aralığı ile kesişir; görevli PIN onayı bu fazla karşılandı, K24, K25 kalkar);
-Faz 8 PL-09 görevli düzeltmesi aralıkları da kapsar; Faz 9 CSV'ye kişi çalışma süresi kolonu.
+**Etkilenen fazlar:** yok; Faz 7, 8 ve 9 kapsam dışı (O-14). Adım sürerken mola, görevli düzeltmesi ve CSV yapılmayacak (PL-101).
 
 ---
 
@@ -1565,7 +1566,7 @@ sayacında tutulur ve süreli kilide götürür; giriş ekranından kimsenin iş
 - Sınıf: ALTER (mevcut tabloya kolon) ve Eklemeli (seed ekleme).
 - `Users` tablosuna `LoginFailedCount INTEGER NOT NULL DEFAULT 0` ve `LoginLockedUntilUtc TEXT NULL` (UTC an). Entity `User`'a aynı adlı iki özellik.
 - Mevcut satırlar: varsayılanla `0` ve `NULL` alır; veri `UPDATE` yok, index yok. SQLite'ta `ADD COLUMN` tabloyu yeniden kurmaz; `Down` yalnız geri alma.
-- Ayar tablosuna `LoginLockMinutes` satırı (`<GirişKilitSüresi>`, birim dakika), seed değeri `15` (kullanıcı, O-11); Sistem ayarları ekranında (Faz 9) değişir.
+- Ayar tablosuna `LoginLockMinutes` satırı (`<GirişKilitSüresi>`, birim dakika), seed değeri `15` (kullanıcı, O-11). Sistem ayarları ekranı kapsam dışı (O-14); değer yalnız seed ya da veritabanından değişir.
 
 **Başlama şartı:** Faz 6E commit'i ve DB talebine dbadmin uygulama anında kullanıcı onayı (`<GirişKilitSüresi>` 15 dakika, O-11).
 
@@ -1577,6 +1578,8 @@ sayacında tutulur ve süreli kilide götürür; giriş ekranından kimsenin iş
 | 2 | BE | `ILoginAttemptGuard` (giriş sayacı ve süreli kilit; kilit bitişi formülü XML yorumunda: `Kilit bitişi = sınıra ulaşan hatalı denemenin sunucu anı + <GirişKilitSüresi>`); `IAccountService.SignInAsync` (parola) ve `SignInWithPinAsync` bu servisi kullanır; PIN doğrulaması işlem sayacına yazmayan ayrı yol (`ICredentialHasher` ile); sonuç `SignInResult { Status: Success, Invalid, LockedUntil, PasswordRequired, LockedUntilLocal?, State? }` | backend-engineer |
 | 3 | BE | `AccountController.Login`: `Mode`'a göre yol ve doğrulama; giriş modu çerezi `vaka-login-mode` (`pin` ya da `password`, HttpOnly, SameSite=Lax, 1 yıl). `UsersController.UnlockLogin` (PIN, SK-9 kapsamı) | backend-engineer |
 | 4 | FE | `Views/Account/Login.cshtml`: mod seçimi (JS kapalı çalışır), PIN modunda sicil no ve PIN alanı, altta "PIN ile giriş operatör hesapları içindir; Yönetici, Denetçi ve Süper admin parola ile girer."; kilit metni; hata yerleri D-1 düzeninde. E-04 kullanıcı formunda giriş kilidi durumu ve "Giriş kilidini aç" (PIN) | frontend-engineer |
+| 5 | BE | Devreden küçük düzeltme (PL-98, PL-101): E-30'da okunamayan süzgeç değerinde (`from=abc&machineId=1`) bağlanabilen alanlar korunur, okunamayan boş kalır; E-34 ve E-31 düzeni (`ReportsController.Durations` ya da `DurationReportReader`) | backend-engineer |
+| 6 | FE | Faz 6E'den devreden B4 (PL-103): `wwwroot/js/FocusFirst.js` `checkVisibility()` yoksa yedek yol (`getClientRects().length > 0` ve kapalı `details` atlanır); giriş ekranında konsol hatası olmaz | frontend-engineer |
 
 **Paralel:** Evet. Gerekçe: kolonlar ve route'lar yazılı, dosyalar ayrık. Backend sırası: DB talebi, kullanıcı onayı, dbadmin, servisler.
 
@@ -1593,7 +1596,7 @@ sayacında tutulur ve süreli kilide götürür; giriş ekranından kimsenin iş
 
 **Dosya sınırı:** dbadmin `Domain/Entities/User.cs`, `Data/`; backend `Services/AccountService.cs`, `Services/IAccountService.cs`, `Services/LoginAttemptGuard.cs`,
 `Services/ILoginAttemptGuard.cs`, `Services/SignInResult.cs`, `Services/SettingKeys.cs`, kullanıcı yönetimi servisi, `Controllers/AccountController.cs`, `Controllers/UsersController.cs`,
-`ViewModels/Account/LoginViewModel.cs`, `ViewModels/Account/LoginMode.cs`, `ViewModels/Users/UserFormViewModel.cs`, `Program.cs`; frontend `Views/Account/Login.cshtml`, `Views/Users/` kullanıcı formu, `Styles/app.css`.
+`ViewModels/Account/LoginViewModel.cs`, `ViewModels/Account/LoginMode.cs`, `ViewModels/Users/UserFormViewModel.cs`, `Program.cs`, `Controllers/ReportsController.cs` ve `Services/DurationReportReader.cs` (yalnız kalem 5); frontend `wwwroot/js/FocusFirst.js` (yalnız kalem 6), `Views/Account/Login.cshtml`, `Views/Users/` kullanıcı formu, `Styles/app.css`.
 
 **Kabul kriterleri**
 
@@ -1608,6 +1611,9 @@ sayacında tutulur ve süreli kilide götürür; giriş ekranından kimsenin iş
 - [ ] K9: PIN ile açılan oturum parola oturumuyla aynı rollere ve `<OturumSüresi>`'ne sahiptir (gerileme).
 - [ ] K10: Migration yalnız iki `AddColumn` ve `LoginLockMinutes` = 15 ayar seed'ini içerir; mevcut kullanıcı satırları `0` ve `NULL` alır; Guard onay istemi çıkar ve onay DB kaydına işlenir.
 - [ ] K11: Giriş ekranı ve E-04 360, 768, 1024, 1440 px'te açık ve koyu temada yatay kaydırmasız; hata alanın hata yerinde; G12 hizalama kusuru 0; konsol 0 hata.
+- [ ] K12: E-30 `from=abc&machineId=1` hata metnini gösterir, tesis, hat ve makine seçili kalır (E-34 ve E-31 ile aynı); geçerli süzgeçte rapor değişmez (PL-101).
+- [ ] K13: Son regresyon (Faz 9'dan, PL-101): planın son fazı olduğu için QA tüm ekranlarda kısa gerileme turu yapar. Her rolün menüsündeki her ekran 360 ve 1440 px'te açılır (200 ya da beklenen 403), yatay kaydırma yok, konsol 0; Süper admin yalnız kendi ekranlarını görür (G10). Uçtan uca bir planlı kayıt (açma, malzeme, iki görevli, mola, süre altı gerekçe, tamamlanma) ve bir acil kayıt arayüzden yürütülür; detayda 13 soru, zaman çizelgesi ve "Doğrulandı" rozeti; makine raporu ve kullanım oranı açılır. Sunum hazırlığı kayıtlarının bütünlüğü QA kopyasında "Doğrulandı" kalır.
+- [ ] K14: Faz 6E B4: `checkVisibility` kaldırılmış (QA betikle `Element.prototype.checkVisibility` silinmiş) sayfada giriş ekranı konsol hatasız açılır, Run'da yanlış PIN sonrası odak `pin-finish-N`'e gider.
 
 - Ortak: G1-G8, G10, G12; G9 uygulanmaz (komut kimlikli işlem yok), G11 uygulanmaz.
 
@@ -1621,7 +1627,9 @@ S-3 "evet" ile yanıtlandı ve konu A (adım içi katılma ve ayrılma) Faz 6E'y
 
 ---
 
-## Faz 7: Talep, beklemeye alma ve yönetici panosu (Salı sonrası)
+## Faz 7: Talep, beklemeye alma ve yönetici panosu (KAPSAM DIŞI, O-14)
+
+> **KAPSAM DIŞI (O-14, 2026-11-16).** Kullanıcı: "faz 7 ve sonrasına gerek yok". Bu bölüm kayıt için durur, iş verilmez. Devredilmiş kalemlerin kararı PL-101.
 
 **Amaç:** Sahibin yöneticiye gerekçeli talep açması, yöneticinin talepleri karara bağlaması, kaydın beklemeye alınıp devam ettirilmesi ve
 yöneticinin aktif işleri tek ekranda görmesi. Faz 5'ten ertelenen adım sürerken mola (K-39) ve görevli PIN onayı (K-10) da bu fazdadır (PL-57). Görevli PIN onayı (kalem 7'nin K-10 bölümü, kalem 8'in görevli paneli kısmı, K24, K25) Faz 6E'de karşılanır ve buradan kalkar; adım sürerken mola kişi aralıklarından SH-02a ile düşülür (PL-92, PL-93).
@@ -1700,7 +1708,9 @@ backend `Controllers/RequestsController.cs`, `Controllers/DashboardController.cs
 
 ---
 
-## Faz 8: Acil müdahale, bildirim ve düzeltme (Salı sonrası)
+## Faz 8: Acil müdahale, bildirim ve düzeltme (KAPSAM DIŞI, O-14)
+
+> **KAPSAM DIŞI (O-14, 2026-11-16).** Kullanıcı: "faz 7 ve sonrasına gerek yok". Bu bölüm kayıt için durur, iş verilmez. Devredilmiş kalemlerin kararı PL-101.
 
 **Amaç:** Operatörün acil müdahaleyi tek ekrandan açıp başlatması, yöneticilerin bildirim alması ve yöneticinin yanlış bilgiyi orijinali koruyarak düzeltmesi.
 Takvim: Salı sonrası (O-03). Faz 6A'ya taşınanlar (PL-56): acil açma servisi (kalem 2), E-27, `/emergencies/*` sözleşmesi, K1-K5, K14 ve K8'in
@@ -1756,7 +1766,9 @@ backend `Controllers/EmergenciesController.cs`, `Controllers/NotificationsContro
 
 ---
 
-## Faz 9: Raporlar, denetim çıktısı ve sistem ayarları (Salı sonrası)
+## Faz 9: Raporlar, denetim çıktısı ve sistem ayarları (KAPSAM DIŞI, O-14)
+
+> **KAPSAM DIŞI (O-14, 2026-11-16).** Kullanıcı: "faz 7 ve sonrasına gerek yok". Bu bölüm kayıt için durur, iş verilmez. Devredilmiş kalemlerin kararı PL-101.
 
 **Amaç:** Makine ve faz bazında süre, efor ve minimum uyumunun raporlanması, lot izlenebilirliği, denetimde sunulacak yazdırılabilir kayıt
 çıktısı ve sistem ayarlarının ekrandan değiştirilmesi (K-47).

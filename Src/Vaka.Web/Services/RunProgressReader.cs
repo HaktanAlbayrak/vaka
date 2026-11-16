@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Vaka.Web.Data;
+using Vaka.Web.Domain.Entities;
 using Vaka.Web.ViewModels.Procedures;
 using Vaka.Web.ViewModels.Records;
 
@@ -25,6 +26,7 @@ public sealed class RunProgressReader : IRunProgressReader
     {
         var rows = await ReadRowsAsync(context.RecordId, cancellationToken);
         var addedAt = await ReadAddedMomentsAsync(context.RecordId, cancellationToken);
+        var lookups = await ReadLookupsAsync(rows, cancellationToken);
         var hasMaterial = !context.MaterialRequired
             || await _db.RecordMaterials.AnyAsync(item => item.CleaningRecordId == context.RecordId && item.RemovedAtUtc == null, cancellationToken);
 
@@ -43,7 +45,7 @@ public sealed class RunProgressReader : IRunProgressReader
             var models = new List<RecordStepViewModel>();
             foreach (var step in phase.Steps)
             {
-                var model = MapStep(step, context, openBreak, isActive, isOwner, anyInProgress, index == nextIndex, index == 0 && !hasMaterial, breaks.Spans, addedAt, openedAtUtc);
+                var model = MapStep(step, context, openBreak, isActive, isOwner, anyInProgress, index == nextIndex, index == 0 && !hasMaterial, breaks.Spans, addedAt, lookups, openedAtUtc);
                 model.IsLastOfPhase = step == phase.Steps[^1];
                 if (index == nextIndex)
                 {
@@ -74,9 +76,10 @@ public sealed class RunProgressReader : IRunProgressReader
         bool missingMaterial,
         IReadOnlyList<BreakSpan> spans,
         Dictionary<(int StepId, int UserId), DateTime> addedAt,
+        ParticipantLookups lookups,
         DateTime openedAtUtc)
     {
-        var isMember = isOwner || step.Participants.Any(item => item.UserId == context.ViewerUserId);
+        var isMember = isOwner || step.Participants.Any(item => item.UserId == context.ViewerUserId && !(item.HasInterval && item.IntervalEndKind == StepIntervalEndKind.Left));
         var model = new RecordStepViewModel
         {
             Id = step.Id,
@@ -98,16 +101,13 @@ public sealed class RunProgressReader : IRunProgressReader
             StartedByName = step.StartedByName,
             EndedAtLocal = step.EndedAtUtc is { } ended ? _clock.ToLocal(ended) : null,
             EndedByName = step.EndedByName,
-            Participants = [.. step.Participants.Select(item => new StepParticipantViewModel
-            {
-                UserId = item.UserId,
-                FullName = item.FullName,
-                RegistryNo = item.RegistryNo,
-                IsOwner = item.UserId == context.OwnerUserId,
-                AddedAtLocal = _clock.ToLocal(addedAt.GetValueOrDefault((step.Id, item.UserId), openedAtUtc))
-            })],
-            CanManageParticipants = isOwner && isActive && !openBreak && step.Status == StepStatus.Waiting
+            CanManageParticipants = isOwner && isActive && !openBreak && step.Status is StepStatus.Waiting or StepStatus.InProgress
         };
+
+        model.Participants = MapParticipants(step, context, isActive && !openBreak, addedAt, lookups, openedAtUtc);
+        model.PendingNames = step.Status == StepStatus.InProgress
+            ? [.. model.Participants.Where(item => item.State == ParticipantState.Pending && !item.IsOwner).Select(item => item.FullName).Order(StringComparer.CurrentCulture)]
+            : [];
 
         if (step.Status == StepStatus.Waiting)
         {
@@ -116,7 +116,8 @@ public sealed class RunProgressReader : IRunProgressReader
         }
         else if (step.Status == StepStatus.InProgress)
         {
-            model.CannotFinishReason = RunActionRules.FinishBlock(context, openBreak, isMember);
+            model.CannotFinishReason = RunActionRules.FinishBlock(context, openBreak, isMember)
+                ?? (model.PendingNames.Length > 0 ? ParticipantStateRules.PendingMessage(model.PendingNames) : null);
             model.CanFinish = model.CannotFinishReason is null;
             model.LiveElapsedSeconds = _calculator.CalculateLiveElapsed(UtcMoments.Of(step.StartedAtUtc!.Value), context.Now, spans);
         }
@@ -128,6 +129,64 @@ public sealed class RunProgressReader : IRunProgressReader
         }
 
         return model;
+    }
+
+    private StepParticipantViewModel[] MapParticipants(
+        StepRow step,
+        RunContext context,
+        bool canAct,
+        Dictionary<(int StepId, int UserId), DateTime> addedAt,
+        ParticipantLookups lookups,
+        DateTime openedAtUtc)
+    {
+        var viewerIsOwner = context.ViewerUserId == context.OwnerUserId;
+        var finished = step.Status is StepStatus.Completed or StepStatus.Interrupted;
+        var stepHasIntervals = step.Participants.Any(item => item.HasInterval);
+        var editable = canAct && step.Status is StepStatus.Waiting or StepStatus.InProgress;
+        var workingCount = step.Participants.Count(item => item.IsWorking);
+
+        return [.. step.Participants.Select(item =>
+        {
+            var isOwnerRow = item.UserId == context.OwnerUserId;
+            var left = item.HasInterval && item.IntervalEndKind == StepIntervalEndKind.Left;
+            var state = ParticipantStateRules.StateOf(step.Status, item.HasInterval, left, item.IsWorking, finished && !item.HasInterval && !stepHasIntervals, isOwnerRow, item.ConfirmedAtUtc is not null);
+            var entitled = viewerIsOwner || context.ViewerUserId == item.UserId;
+            var model = new StepParticipantViewModel
+            {
+                UserId = item.UserId,
+                FullName = item.FullName,
+                RegistryNo = item.RegistryNo,
+                IsOwner = isOwnerRow,
+                AddedAtLocal = _clock.ToLocal(addedAt.GetValueOrDefault((step.Id, item.UserId), openedAtUtc)),
+                State = state,
+                JoinedAtLocal = item.HasInterval && item.IntervalStartedAtUtc is { } joined ? _clock.ToLocal(joined) : null,
+                LeftAtLocal = left && item.IntervalEndedAtUtc is { } ended ? _clock.ToLocal(ended) : null,
+                WorkSeconds = item.IntervalWorkSeconds
+            };
+
+            if (editable && entitled && state == ParticipantState.Pending && !isOwnerRow)
+            {
+                var busyElsewhere = lookups.WorkingStep.TryGetValue(item.UserId, out var workingStepId) && workingStepId != step.Id;
+                model.BlockedReason = ParticipantStateRules.JoinBlock(item.FullName, item.IsActive, item.PinLocked, lookups.OnBreak.Contains(item.UserId), busyElsewhere);
+                model.CanJoin = model.BlockedReason is null;
+            }
+            else if (editable && entitled && state == ParticipantState.Working && step.Status == StepStatus.InProgress)
+            {
+                model.CanLeave = workingCount > 1;
+                model.BlockedReason = model.CanLeave ? null : "Adımda çalışan son kişi ayrılamaz. Adımı bitirin.";
+            }
+
+            model.CanRemove = editable && viewerIsOwner && state is ParticipantState.Pending or ParticipantState.Confirmed && step.Participants.Count > 1;
+            return model;
+        })];
+    }
+
+    private async Task<ParticipantLookups> ReadLookupsAsync(List<PhaseRow> rows, CancellationToken cancellationToken)
+    {
+        var ids = rows.SelectMany(phase => phase.Steps).SelectMany(step => step.Participants).Select(item => item.UserId).Distinct().ToArray();
+        var onBreak = await _db.RecordBreaks.AsNoTracking().Where(item => item.EndedAtUtc == null && ids.Contains(item.StartedByUserId)).Select(item => item.StartedByUserId).ToListAsync(cancellationToken);
+        var working = await _db.StepParticipants.AsNoTracking().Where(item => item.IsWorking && ids.Contains(item.UserId)).Select(item => new { item.UserId, item.RecordStepId }).ToListAsync(cancellationToken);
+        return new ParticipantLookups([.. onBreak], working.ToDictionary(item => item.UserId, item => item.RecordStepId));
     }
 
     private RecordPhaseViewModel MapPhase(PhaseRow phase, RecordStepViewModel[] steps, RunContext context, IReadOnlyList<BreakSpan> spans)
@@ -191,7 +250,21 @@ public sealed class RunProgressReader : IRunProgressReader
                         DurationSeconds = step.DurationSeconds,
                         EffortSeconds = step.EffortSeconds,
                         Media = step.ProcedureStep.Media.OrderBy(media => media.Id).Select(media => new MediaRow(media.Id, media.MediaType, media.OriginalFileName)).ToList(),
-                        Participants = step.Participants.OrderBy(item => item.Id).Select(item => new ParticipantRow(item.UserId, item.User.FullName, item.User.RegistryNo)).ToList()
+                        Participants = step.Participants.OrderBy(item => item.Id).Select(item => new ParticipantRow
+                        {
+                            UserId = item.UserId,
+                            FullName = item.User.FullName,
+                            RegistryNo = item.User.RegistryNo,
+                            IsActive = item.User.IsActive,
+                            PinLocked = item.User.PinLockedAtUtc != null,
+                            IsWorking = item.IsWorking,
+                            ConfirmedAtUtc = item.ConfirmedAtUtc,
+                            HasInterval = item.WorkInterval != null,
+                            IntervalStartedAtUtc = item.WorkInterval == null ? null : item.WorkInterval.StartedAtUtc,
+                            IntervalEndedAtUtc = item.WorkInterval == null ? null : item.WorkInterval.EndedAtUtc,
+                            IntervalEndKind = item.WorkInterval == null ? null : item.WorkInterval.EndKind,
+                            IntervalWorkSeconds = item.WorkInterval == null ? null : item.WorkInterval.WorkSeconds
+                        }).ToList()
                     })
                     .ToList()
             })
@@ -270,5 +343,21 @@ public sealed class RunProgressReader : IRunProgressReader
 
     private sealed record MediaRow(int Id, StepMediaType MediaType, string OriginalFileName);
 
-    private sealed record ParticipantRow(int UserId, string FullName, string RegistryNo);
+    private sealed class ParticipantRow
+    {
+        public int UserId { get; init; }
+        public string FullName { get; init; } = string.Empty;
+        public string RegistryNo { get; init; } = string.Empty;
+        public bool IsActive { get; init; }
+        public bool PinLocked { get; init; }
+        public bool IsWorking { get; init; }
+        public DateTime? ConfirmedAtUtc { get; init; }
+        public bool HasInterval { get; init; }
+        public DateTime? IntervalStartedAtUtc { get; init; }
+        public DateTime? IntervalEndedAtUtc { get; init; }
+        public StepIntervalEndKind? IntervalEndKind { get; init; }
+        public int? IntervalWorkSeconds { get; init; }
+    }
+
+    private sealed record ParticipantLookups(HashSet<int> OnBreak, Dictionary<int, int> WorkingStep);
 }

@@ -9,6 +9,8 @@ public enum TimelineEntryKind
     MaterialRemoved,
     ParticipantAdded,
     ParticipantRemoved,
+    ParticipantJoined,
+    ParticipantLeft,
     StepStarted,
     StepFinished,
     StepInterrupted,

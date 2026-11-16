@@ -13,6 +13,7 @@ public sealed class InterventionService : IInterventionService
     private readonly ICleaningEventWriter _events;
     private readonly IProcessedCommands _commands;
     private readonly IDurationCalculator _calculator;
+    private readonly IStepWorkCloser _work;
     private readonly TimeProvider _time;
 
     public InterventionService(
@@ -23,6 +24,7 @@ public sealed class InterventionService : IInterventionService
         ICleaningEventWriter events,
         IProcessedCommands commands,
         IDurationCalculator calculator,
+        IStepWorkCloser work,
         TimeProvider time)
     {
         _db = db;
@@ -32,6 +34,7 @@ public sealed class InterventionService : IInterventionService
         _events = events;
         _commands = commands;
         _calculator = calculator;
+        _work = work;
         _time = time;
     }
 
@@ -51,7 +54,7 @@ public sealed class InterventionService : IInterventionService
             }
 
             var record = await _db.CleaningRecords
-                .Include(item => item.Phases).ThenInclude(phase => phase.Steps).ThenInclude(step => step.Participants)
+                .Include(item => item.Phases).ThenInclude(phase => phase.Steps).ThenInclude(step => step.Participants).ThenInclude(participant => participant.WorkInterval)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(item => item.Id == recordId, token);
             if (record is null)
@@ -195,14 +198,15 @@ public sealed class InterventionService : IInterventionService
         step.EndedByUserId = actorUserId;
         step.BreakSeconds = stepBreaks;
         step.DurationSeconds = duration;
-        step.EffortSeconds = _calculator.CalculateStepEffort(duration, step.Participants.Count);
+        var work = _work.Close(step, StepIntervalEndKind.Interrupted, actorUserId, now, spans);
+        step.EffortSeconds = _calculator.CalculateStepEffort(work.WorkSeconds);
         await _db.SaveChangesAsync(cancellationToken);
 
         await _events.AppendAsync(
             new EventDraft(
                 recordId,
                 EventTypes.StepInterrupted,
-                new { StepId = step.Id, step.DurationSeconds, step.EffortSeconds, step.BreakSeconds, ParticipantUserIds = step.Participants.Select(item => item.UserId).ToArray() },
+                new { StepId = step.Id, step.DurationSeconds, step.EffortSeconds, step.BreakSeconds, ParticipantUserIds = work.UserIds, ParticipantWorkSeconds = work.WorkSeconds },
                 actorUserId,
                 commandId,
                 now),

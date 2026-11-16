@@ -8,6 +8,7 @@ import { LiveCounter } from "./LiveCounter.js";
 import { LiveTimer } from "./LiveTimer.js";
 import { ParticipantPicker } from "./ParticipantPicker.js";
 import { FormValidation } from "./FormValidation.js";
+import { focusFirstError } from "./FocusFirst.js";
 import { FormBusy, bindBusyLinks } from "./FormBusy.js";
 import { UnsavedGuard } from "./UnsavedGuard.js";
 import { CascadeSelect } from "./CascadeSelect.js";
@@ -51,4 +52,4 @@ document.addEventListener("vaka:content", (event) => {
   const root = event.detail?.root ?? document.getElementById("main");
   if (root) bindContent(root);
 });
-(document.querySelector('main [aria-invalid="true"]') ?? document.querySelector("main [data-form-summary]"))?.focus();
+focusFirstError(document.getElementById("main") ?? document);

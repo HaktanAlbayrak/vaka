@@ -73,7 +73,7 @@ public sealed class StepStarter : IStepStarter
             var isFirst = ordered[0].Id == stepId;
             var failure = await CheckOrderAsync(record, ordered, step, actorUserId, token)
                 ?? await CheckMaterialsAsync(record, isFirst, token)
-                ?? await _applier.CheckParticipantsAsync(step, token);
+                ?? await _applier.CheckParticipantsAsync(step, actorUserId, record.OwnerUserId, token);
             if (failure is not null)
             {
                 return failure;

@@ -16,6 +16,7 @@ public sealed class StepFinisher : IStepFinisher
     private readonly ICleaningEventWriter _events;
     private readonly IProcessedCommands _commands;
     private readonly IDurationCalculator _calculator;
+    private readonly IStepWorkCloser _work;
     private readonly IRunCompletion _completion;
     private readonly TimeProvider _time;
 
@@ -28,6 +29,7 @@ public sealed class StepFinisher : IStepFinisher
         ICleaningEventWriter events,
         IProcessedCommands commands,
         IDurationCalculator calculator,
+        IStepWorkCloser work,
         IRunCompletion completion,
         TimeProvider time)
     {
@@ -39,6 +41,7 @@ public sealed class StepFinisher : IStepFinisher
         _events = events;
         _commands = commands;
         _calculator = calculator;
+        _work = work;
         _completion = completion;
         _time = time;
     }
@@ -90,6 +93,11 @@ public sealed class StepFinisher : IStepFinisher
             return new FinishOutcome(failure, null);
         }
 
+        if (await CheckPendingAsync(record, step, cancellationToken) is { } gate)
+        {
+            return new FinishOutcome(gate, null);
+        }
+
         var now = _time.GetUtcNow().UtcDateTime;
         var breaks = await _db.GetBreakSpansAsync(record.Id, cancellationToken);
         var phase = step.Phase;
@@ -123,7 +131,7 @@ public sealed class StepFinisher : IStepFinisher
 
     private async Task<CommandResult?> CheckFinishableAsync(CleaningRecord record, RecordStep step, int actorUserId, CancellationToken cancellationToken)
     {
-        if (record.OwnerUserId != actorUserId && step.Participants.All(item => item.UserId != actorUserId))
+        if (record.OwnerUserId != actorUserId && step.Participants.All(item => item.UserId != actorUserId || item.WorkInterval is { EndKind: StepIntervalEndKind.Left }))
         {
             return CommandResult.Forbidden();
         }
@@ -143,6 +151,22 @@ public sealed class StepFinisher : IStepFinisher
             : CommandResult.Rejected(string.Empty, "Adım devam etmiyor, bitirilemez.");
     }
 
+    /// <summary>Kapı (O-11): sahip dışında girişini yapmamış görevli varsa adım bitmez.</summary>
+    private async Task<CommandResult?> CheckPendingAsync(CleaningRecord record, RecordStep step, CancellationToken cancellationToken)
+    {
+        var pendingIds = step.Participants
+            .Where(item => item.UserId != record.OwnerUserId && item.WorkInterval is null && !item.IsWorking)
+            .Select(item => item.UserId)
+            .ToArray();
+        if (pendingIds.Length == 0)
+        {
+            return null;
+        }
+
+        var names = await _db.Users.AsNoTracking().Where(user => pendingIds.Contains(user.Id)).OrderBy(user => user.FullName).Select(user => user.FullName).ToListAsync(cancellationToken);
+        return CommandResult.Rejected(string.Empty, ParticipantStateRules.PendingMessage(names));
+    }
+
     private async Task ApplyAsync(
         CleaningRecord record,
         RecordStep step,
@@ -158,25 +182,21 @@ public sealed class StepFinisher : IStepFinisher
         var end = UtcMoments.Of(now);
         var stepBreaks = _calculator.CalculateStepBreaks(start, end, breaks);
         var duration = _calculator.CalculateStepDuration(start, end, stepBreaks);
-        var participantCount = step.Participants.Count;
 
         step.Status = StepStatus.Completed;
         step.EndedAtUtc = now;
         step.EndedByUserId = actorUserId;
         step.BreakSeconds = stepBreaks;
         step.DurationSeconds = duration;
-        step.EffortSeconds = _calculator.CalculateStepEffort(duration, participantCount);
-        foreach (var participant in step.Participants)
-        {
-            participant.IsWorking = false;
-        }
+        var work = _work.Close(step, StepIntervalEndKind.StepFinished, actorUserId, now, breaks);
+        step.EffortSeconds = _calculator.CalculateStepEffort(work.WorkSeconds);
 
         await _db.SaveChangesAsync(cancellationToken);
         await _events.AppendAsync(
             new EventDraft(
                 record.Id,
                 EventTypes.StepFinished,
-                new { StepId = step.Id, step.DurationSeconds, step.EffortSeconds, step.BreakSeconds, ParticipantUserIds = step.Participants.Select(item => item.UserId).ToArray() },
+                new { StepId = step.Id, step.DurationSeconds, step.EffortSeconds, step.BreakSeconds, ParticipantUserIds = work.UserIds, ParticipantWorkSeconds = work.WorkSeconds },
                 actorUserId,
                 commandId,
                 now),

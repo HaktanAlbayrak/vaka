@@ -125,11 +125,23 @@ public interface IDurationCalculator
     int CalculateStepDuration(DateTimeOffset start, DateTimeOffset end, int stepBreakSeconds);
 
     /// <summary>
-    /// Adım eforu, saniye (SH-02).
-    /// Efor = SH-01 adım süresi x adımın görevli sayısı (adım başlarken listedeki kişiler)
+    /// Kişinin adımdaki çalışma süresi, saniye (SH-02a, O-11).
+    /// Kişi başlangıcı = en geç (katılma anı, adım başlangıcı); kişi bitişi = en erken (ayrılma anı, adım bitişi); ayrılmamışsa adım bitişi
+    /// Çalışma = (Kişi bitişi - Kişi başlangıcı) - Σ max(0, min(Mola bitişi, Kişi bitişi) - max(Mola başlangıcı, Kişi başlangıcı)), yalnız kapanmış kayıt molaları; saniyeye aşağı yuvarlanır, 0'ın altına inmez
     /// </summary>
-    /// <remarks>Faz 8'de görevli düzeltmesi geldiğinde orijinal sayı korunur ve düzeltilmiş efor ayrıca gösterilir (PL-09).</remarks>
-    int CalculateStepEffort(int durationSeconds, int participantCount);
+    /// <remarks>
+    /// Adımın tamamında çalışan kişide sonuç SH-01 adım süresine eşittir (aynı yuvarlama). Katılma anı adım başlangıcından önceyse adım başlangıcı geçerlidir.
+    /// </remarks>
+    int CalculateParticipantWork(DateTimeOffset stepStart, DateTimeOffset stepEnd, DateTimeOffset joinedAt, DateTimeOffset? leftAt, IReadOnlyList<BreakSpan> breaks);
+
+    /// <summary>
+    /// Adım eforu, saniye (SH-02, O-11).
+    /// Efor = Σ adımdaki kişilerin SH-02a çalışma süreleri
+    /// </summary>
+    /// <remarks>
+    /// Adımın tamamında çalışan iki kişide efor = süre x 2. Girişi yapmamış kişi efor almaz. Faz 8'de görevli düzeltmesi geldiğinde orijinal değer korunur ve düzeltilmiş efor ayrıca gösterilir (PL-09).
+    /// </remarks>
+    int CalculateStepEffort(IReadOnlyList<int> participantWorkSeconds);
 
     /// <summary>
     /// Faz brüt süresi, saniye (SH-03).

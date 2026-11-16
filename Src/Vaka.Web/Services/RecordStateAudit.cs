@@ -69,7 +69,7 @@ public sealed class RecordStateAudit : IRecordStateAudit
                 step.EndedAtUtc,
                 step.EndedByUserId,
                 step.DurationSeconds,
-                Participants = step.Participants.Select(item => item.UserId).ToList()
+                Participants = step.Participants.Select(item => new { item.UserId, item.IsWorking, HasInterval = item.WorkInterval != null }).ToList()
             })
             .ToListAsync(cancellationToken);
 
@@ -94,10 +94,21 @@ public sealed class RecordStateAudit : IRecordStateAudit
 
         return new StateFacts(
             record,
-            [.. steps.Select(step => new StepFacts(step.Id, step.PhaseOrder, step.StepOrder, step.Title, step.StartedAtUtc, step.StartedByUserId, step.EndedAtUtc, step.EndedByUserId, step.DurationSeconds, [.. step.Participants]))],
+            [.. steps.Select(step => new StepFacts(step.Id, step.PhaseOrder, step.StepOrder, step.Title, step.StartedAtUtc, step.StartedByUserId, step.EndedAtUtc, step.EndedByUserId, step.DurationSeconds, [.. WorkingParticipants(step.EndedAtUtc is not null, step.Participants.Select(item => (item.UserId, item.IsWorking, item.HasInterval)))]))],
             phases,
             materials,
             breaks);
+    }
+
+    /// <summary>
+    /// Adımda çalışmış kişiler: aralığı olan, şu an çalışan ve Faz 6E öncesi biten adımda (hiçbir kişinin aralığı yok) tüm görevliler.
+    /// Hiç katılmamış kişi çalışmış sayılmaz; olay tarafı <c>StepStarted</c> görevlileri ile adım sürerken <c>ParticipantJoined</c> olaylarıdır.
+    /// </summary>
+    private static IEnumerable<int> WorkingParticipants(bool ended, IEnumerable<(int UserId, bool IsWorking, bool HasInterval)> participants)
+    {
+        var list = participants.ToList();
+        var legacyEnded = ended && list.All(item => !item.HasInterval);
+        return list.Where(item => item.HasInterval || item.IsWorking || legacyEnded).Select(item => item.UserId);
     }
 
     private async Task<Dictionary<int, string>> LoadUserNamesAsync(StateFacts facts, IReadOnlyList<ParsedEvent> events, CancellationToken cancellationToken)

@@ -1,0 +1,174 @@
+Responsive matris ve G11 imzası (QA kopyası, port 5871, Chromium/Playwright 1.61). Her hücrede UiDelivery §3 eval; konsol hata ve uyarı, 4xx/5xx yanıt sayıldı.
+Sütunlar: kullanıcı, sayfa (#open = tüm details açık), genişlik, tema, eval özeti, kart imzaları (adet), Bitir kapısı (uyarı sol/genişlik, düğme sol/genişlik).
+
+== Kayıt 34 (adım 3.1 devam ediyor, 3 nedenli ve 1 bekleyen kişi) + İşlerim + detay (qm.json), hücre 112
+2002 /records/run/34 320 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 48/229 - 48/229 | kv: -
+2002 /records/run/34#open 320 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 48/229 - 48/229 | kv: -
+2002 /records/run/34 360 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 48/264 - 48/264 | kv: -
+2002 /records/run/34#open 360 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 48/264 - 48/264 | kv: -
+2002 /records/run/34 768 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 124/448 - 124/448 | kv: -
+2002 /records/run/34#open 768 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 124/448 - 124/448 | kv: -
+2002 /records/run/34 1024 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 372/248 - 372/248 | kv: -
+2002 /records/run/34#open 1024 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 372/248 - 372/248 | kv: -
+2002 /records/run/34 1280 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 380/424 - 380/424 | kv: -
+2002 /records/run/34#open 1280 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 380/424 - 380/424 | kv: -
+2002 /records/run/34 1440 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 380/448 - 380/448 | kv: -
+2002 /records/run/34#open 1440 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 380/448 - 380/448 | kv: -
+2002 /records/run/34 1920 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 416/448 - 416/448 | kv: -
+2002 /records/run/34#open 1920 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 416/448 - 416/448 | kv: -
+2002 /records/run/34 320 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 48/229 - 48/229 | kv: -
+2002 /records/run/34#open 320 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 48/229 - 48/229 | kv: -
+2002 /records/run/34 360 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 48/264 - 48/264 | kv: -
+2002 /records/run/34#open 360 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 48/264 - 48/264 | kv: -
+2002 /records/run/34 768 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 124/448 - 124/448 | kv: -
+2002 /records/run/34#open 768 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 124/448 - 124/448 | kv: -
+2002 /records/run/34 1024 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 372/248 - 372/248 | kv: -
+2002 /records/run/34#open 1024 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 372/248 - 372/248 | kv: -
+2002 /records/run/34 1280 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 380/424 - 380/424 | kv: -
+2002 /records/run/34#open 1280 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 380/424 - 380/424 | kv: -
+2002 /records/run/34 1440 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 380/448 - 380/448 | kv: -
+2002 /records/run/34#open 1440 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 380/448 - 380/448 | kv: -
+2002 /records/run/34 1920 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 416/448 - 416/448 | kv: -
+2002 /records/run/34#open 1920 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 416/448 - 416/448 | kv: -
+2004 /my-work 320 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 320 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 48/229 - 48/229 | kv: -
+2004 /my-work 360 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 360 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 48/264 - 48/264 | kv: -
+2004 /my-work 768 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 768 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 124/448 - 124/448 | kv: -
+2004 /my-work 1024 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 1024 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 372/248 - 372/248 | kv: -
+2004 /my-work 1280 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 1280 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 380/424 - 380/424 | kv: -
+2004 /my-work 1440 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 1440 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 380/448 - 380/448 | kv: -
+2004 /my-work 1920 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 1920 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 416/448 - 416/448 | kv: -
+2004 /my-work 320 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 320 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 48/229 - 48/229 | kv: -
+2004 /my-work 360 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 360 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 48/264 - 48/264 | kv: -
+2004 /my-work 768 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 768 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 124/448 - 124/448 | kv: -
+2004 /my-work 1024 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 1024 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 372/248 - 372/248 | kv: -
+2004 /my-work 1280 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 1280 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 380/424 - 380/424 | kv: -
+2004 /my-work 1440 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 1440 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 380/448 - 380/448 | kv: -
+2004 /my-work 1920 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /records/run/34#open 1920 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x1 | kapı: 416/448 - 416/448 | kv: -
+2003 /records/run/34 320 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 48/229 - 48/229 | kv: -
+2003 /my-work 320 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 360 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 48/264 - 48/264 | kv: -
+2003 /my-work 360 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 768 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 124/448 - 124/448 | kv: -
+2003 /my-work 768 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 1024 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 372/248 - 372/248 | kv: -
+2003 /my-work 1024 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 1280 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 380/424 - 380/424 | kv: -
+2003 /my-work 1280 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 1440 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 380/448 - 380/448 | kv: -
+2003 /my-work 1440 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 1920 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 416/448 - 416/448 | kv: -
+2003 /my-work 1920 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 320 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 48/229 - 48/229 | kv: -
+2003 /my-work 320 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 360 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 48/264 - 48/264 | kv: -
+2003 /my-work 360 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 768 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 124/448 - 124/448 | kv: -
+2003 /my-work 768 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 1024 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 372/248 - 372/248 | kv: -
+2003 /my-work 1024 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 1280 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 380/424 - 380/424 | kv: -
+2003 /my-work 1280 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 1440 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 380/448 - 380/448 | kv: -
+2003 /my-work 1440 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2003 /records/run/34 1920 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x13; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1 | kapı: 416/448 - 416/448 | kv: -
+2003 /my-work 1920 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+1001 /records/details/34 320 light 200 | eval: overflowing=['TR.', 'TH.'] | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:1@2 Çalışma:2@2
+1001 /records/details/8 320 light 200 | eval: overflowing=['TR.', 'TH.'] | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:1@2
+1001 /records/details/34 360 light 200 | eval: overflowing=['TR.', 'TH.'] | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:1@2 Çalışma:2@2
+1001 /records/details/8 360 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:1@2
+1001 /records/details/34 768 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:1@2 Çalışma:2@2
+1001 /records/details/8 768 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:1@2
+1001 /records/details/34 1024 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:1@2 Çalışma:2@2
+1001 /records/details/8 1024 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:1@2
+1001 /records/details/34 1280 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:3@1 Çalışma:4@1
+1001 /records/details/8 1280 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:2@1
+1001 /records/details/34 1440 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:3@1 Çalışma:4@1
+1001 /records/details/8 1440 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:2@1
+1001 /records/details/34 1920 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:3@1 Çalışma:4@1
+1001 /records/details/8 1920 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:2@1
+1001 /records/details/34 320 dark 200 | eval: overflowing=['TR.', 'TH.'] | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:1@2 Çalışma:2@2
+1001 /records/details/8 320 dark 200 | eval: overflowing=['TR.', 'TH.'] | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:1@2
+1001 /records/details/34 360 dark 200 | eval: overflowing=['TR.', 'TH.'] | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:1@2 Çalışma:2@2
+1001 /records/details/8 360 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:1@2
+1001 /records/details/34 768 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:1@2 Çalışma:2@2
+1001 /records/details/8 768 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:1@2
+1001 /records/details/34 1024 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:1@2 Çalışma:2@2
+1001 /records/details/8 1024 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:1@2
+1001 /records/details/34 1280 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:3@1 Çalışma:4@1
+1001 /records/details/8 1280 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:2@1
+1001 /records/details/34 1440 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:3@1 Çalışma:4@1
+1001 /records/details/8 1440 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:2@1
+1001 /records/details/34 1920 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:3@1 Çalışma:4@1
+1001 /records/details/8 1920 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Çalışma:2@1
+
+== Kayıt 36 (adım 1.2 devam ediyor, girişi bekleyen 2006 ve PIN i kilitli 2003) (qm-36.json), hücre 28
+2002 /records/run/36 320 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 48/229 - 48/229 | kv: -
+2002 /records/run/36#open 320 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 48/229 - 48/229 | kv: -
+2002 /records/run/36 360 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 48/264 - 48/264 | kv: -
+2002 /records/run/36#open 360 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 48/264 - 48/264 | kv: -
+2002 /records/run/36 768 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 124/448 - 124/448 | kv: -
+2002 /records/run/36#open 768 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 124/448 - 124/448 | kv: -
+2002 /records/run/36 1024 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 372/248 - 372/248 | kv: -
+2002 /records/run/36#open 1024 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 372/248 - 372/248 | kv: -
+2002 /records/run/36 1280 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 380/424 - 380/424 | kv: -
+2002 /records/run/36#open 1280 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 380/424 - 380/424 | kv: -
+2002 /records/run/36 1440 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 380/448 - 380/448 | kv: -
+2002 /records/run/36#open 1440 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 380/448 - 380/448 | kv: -
+2002 /records/run/36 1920 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 416/448 - 416/448 | kv: -
+2002 /records/run/36#open 1920 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 416/448 - 416/448 | kv: -
+2002 /records/run/36 320 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 48/229 - 48/229 | kv: -
+2002 /records/run/36#open 320 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 48/229 - 48/229 | kv: -
+2002 /records/run/36 360 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 48/264 - 48/264 | kv: -
+2002 /records/run/36#open 360 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 48/264 - 48/264 | kv: -
+2002 /records/run/36 768 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 124/448 - 124/448 | kv: -
+2002 /records/run/36#open 768 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 124/448 - 124/448 | kv: -
+2002 /records/run/36 1024 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 372/248 - 372/248 | kv: -
+2002 /records/run/36#open 1024 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 372/248 - 372/248 | kv: -
+2002 /records/run/36 1280 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 380/424 - 380/424 | kv: -
+2002 /records/run/36#open 1280 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 380/424 - 380/424 | kv: -
+2002 /records/run/36 1440 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 380/448 - 380/448 | kv: -
+2002 /records/run/36#open 1440 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 380/448 - 380/448 | kv: -
+2002 /records/run/36 1920 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 416/448 - 416/448 | kv: -
+2002 /records/run/36#open 1920 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 416/448 - 416/448 | kv: -
+
+== 640 px (%200 yakınlaştırma karşılığı) (qm-640.json), hücre 10
+2002 /records/run/36 640 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 48/544 - 48/544 | kv: -
+2002 /records/run/36#open 640 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 48/544 - 48/544 | kv: -
+2002 /records/run/34 640 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9 | kapı: - | kv: -
+2002 /records/run/36 640 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 48/544 - 48/544 | kv: -
+2002 /records/run/36#open 640 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x4; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 Eylem:1@5 x1; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x1 | kapı: 48/544 - 48/544 | kv: -
+2002 /records/run/34 640 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9 | kapı: - | kv: -
+2004 /my-work 640 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+2004 /my-work 640 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: -
+1001 /records/details/34 640 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:1@2 Çalışma:2@2
+1001 /records/details/34 640 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:1@2 Çalışma:2@2
+
+== prefers-reduced-motion: reduce (qm-rm.json), hücre 12
+2002 /records/run/34 360 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 48/264 - 48/264 | kv: - | anim: []
+2002 /records/run/34 1440 light 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 380/448 - 380/448 | kv: - | anim: []
+2002 /records/run/34 360 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 48/264 - 48/264 | kv: - | anim: []
+2002 /records/run/34 1440 dark 200 | eval: beklenen | konsol 0 | kart: Ad:1@1 Rozet:1@2 Durum:1@3 x9; Ad:1@1 Rozet:1@2 Durum:1@3 Eylem:1@4 x2; Ad:1@1 Rozet:1@2 Durum:1@3 Neden:1@4 Eylem:1@5 x3 | kapı: 380/448 - 380/448 | kv: - | anim: []
+2004 /my-work 360 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: - | anim: []
+2004 /my-work 1440 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: - | anim: []
+2004 /my-work 360 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: - | anim: []
+2004 /my-work 1440 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: - | anim: []
+1001 /records/details/34 360 light 200 | eval: overflowing=['TR.', 'TH.'] | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:1@2 Çalışma:2@2 | anim: []
+1001 /records/details/34 1440 light 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:3@1 Çalışma:4@1 | anim: []
+1001 /records/details/34 360 dark 200 | eval: overflowing=['TR.', 'TH.'] | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:1@2 Çalışma:2@2 | anim: []
+1001 /records/details/34 1440 dark 200 | eval: beklenen | konsol 0 | kart: - | kapı: - | kv: Eklenme:1@1 Katılma:2@1 Ayrılma:3@1 Çalışma:4@1 | anim: []
+
+Not: detay sayfasında 320 ve 360 px'teki overflowing 'TR, TH' kart modunda görsel olarak gizli başlık satırıdır (thead position:absolute, clip rect(0)); malzeme ve mola tablosu, Faz 6E dışı, Faz 6C/6D ile aynı yöntemle sayımdan çıkarıldı. hScroll her hücrede false.

@@ -19,7 +19,7 @@ public static class StepQueries
         db.CleaningRecords
             .Include(record => record.Phases).ThenInclude(phase => phase.ProcedurePhase)
             .Include(record => record.Phases).ThenInclude(phase => phase.Steps).ThenInclude(step => step.ProcedureStep)
-            .Include(record => record.Phases).ThenInclude(phase => phase.Steps).ThenInclude(step => step.Participants)
+            .Include(record => record.Phases).ThenInclude(phase => phase.Steps).ThenInclude(step => step.Participants).ThenInclude(participant => participant.WorkInterval)
             .AsSplitQuery()
             .FirstOrDefaultAsync(record => record.Phases.Any(phase => phase.Steps.Any(step => step.Id == stepId)), cancellationToken);
 
